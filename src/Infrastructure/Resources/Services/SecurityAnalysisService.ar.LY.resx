@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccountBruteForceFactor" xml:space="preserve">
+    <value>تم اكتشاف هجوم غاشم على الحساب: {0} محاولات تسجيل دخول فاشلة خلال {1} دقيقة</value>
+  </data>
+  <data name="IpBruteForceFactor" xml:space="preserve">
+    <value>تم اكتشاف هجوم غاشم المستند إلى IP: {0} محاولة فاشلة من IP {1} تستهدف {2} حسابًا مختلفًا</value>
+  </data>
+  <data name="NewIpFactor" xml:space="preserve">
+    <value>عنوان IP الجديد ({0})</value>
+  </data>
+  <data name="NewRegionFactor" xml:space="preserve">
+    <value>الموقع الجغرافي الجديد ({0})</value>
+  </data>
+  <data name="NewBrowserFactor" xml:space="preserve">
+    <value>جهاز/متصفح جديد ({0})</value>
+  </data>
+  <data name="LoginFromFactors" xml:space="preserve">
+    <value>تسجيل الدخول من {0}</value>
+  </data>
+  <data name="UnusualHoursFactor" xml:space="preserve">
+    <value>تسجيل الدخول خلال ساعات غير عادية ({0} UTC)</value>
+  </data>
+  <data name="Advice_Critical_ImmediateAction" xml:space="preserve">
+    <value>الإجراء الفوري مطلوب: تأمين حسابك على الفور</value>
+  </data>
+  <data name="Advice_Critical_ChangePassword" xml:space="preserve">
+    <value>قم بتغيير كلمة المرور الخاصة بك الآن</value>
+  </data>
+  <data name="Advice_Critical_Enable2FA" xml:space="preserve">
+    <value>تمكين المصادقة الثنائية على الفور</value>
+  </data>
+  <data name="Advice_Critical_ReviewDevices" xml:space="preserve">
+    <value>مراجعة وإلغاء الوصول لجميع الأجهزة</value>
+  </data>
+  <data name="Advice_Critical_ContactSecurity" xml:space="preserve">
+    <value>اتصل بفريق الأمن إذا لم يتم التصريح بهذا النشاط</value>
+  </data>
+  <data name="Advice_High_ReviewActivity" xml:space="preserve">
+    <value>مراجعة نشاط الحساب الأخير على الفور</value>
+  </data>
+  <data name="Advice_High_ChangePasswordConsider" xml:space="preserve">
+    <value>فكر في تغيير كلمة المرور الخاصة بك</value>
+  </data>
+  <data name="Advice_High_Enable2FA" xml:space="preserve">
+    <value>قم بتمكين المصادقة الثنائية إذا لم تكن نشطة بالفعل</value>
+  </data>
+  <data name="Advice_High_MonitorAccount" xml:space="preserve">
+    <value>راقب حسابك عن كثب خلال الأيام القليلة القادمة</value>
+  </data>
+  <data name="Advice_Medium_Monitor" xml:space="preserve">
+    <value>راقب حسابك بحثًا عن أي نشاط غير عادي</value>
+  </data>
+  <data name="Advice_Medium_Enable2FAConsider" xml:space="preserve">
+    <value>فكر في تمكين المصادقة الثنائية</value>
+  </data>
+  <data name="Advice_Medium_ReviewLoginHistory" xml:space="preserve">
+    <value>قم بمراجعة سجل تسجيل الدخول الأخير الخاص بك</value>
+  </data>
+  <data name="Advice_Low_Normal" xml:space="preserve">
+    <value>يبدو أن أمان حسابك طبيعي</value>
+  </data>
+  <data name="Advice_Factor_BruteForce_ChangePassword" xml:space="preserve">
+    <value>قم بتغيير كلمة المرور الخاصة بك على الفور - تم اكتشاف هجوم غاشم</value>
+  </data>
+  <data name="Advice_Factor_BruteForce_ReviewDevices" xml:space="preserve">
+    <value>مراجعة وإلغاء الوصول لأي أجهزة غير معروفة</value>
+  </data>
+  <data name="Advice_Factor_BruteForce_StrongerPassword" xml:space="preserve">
+    <value>فكر في استخدام كلمة مرور أو عبارة مرور أكثر تعقيدًا</value>
+  </data>
+  <data name="Advice_Factor_NewLocation_Verify" xml:space="preserve">
+    <value>تأكد من أن تسجيل الدخول هذا تم بواسطك من الموقع الجديد</value>
+  </data>
+  <data name="Advice_Factor_NewLocation_SecureIfUnrecognized" xml:space="preserve">
+    <value>إذا لم يتم التعرف عليك، قم بتأمين حسابك وتغيير بيانات التحقق على الفور</value>
+  </data>
+  <data name="Advice_Factor_NewDevice_Verify" xml:space="preserve">
+    <value>تأكد من أن تسجيل الدخول هذا تم من جهازك</value>
+  </data>
+  <data name="Advice_Factor_NewDevice_PublicDevice" xml:space="preserve">
+    <value>إذا كنت تستخدم جهازًا عامًا أو مشتركًا، فتأكد من تسجيل الخروج بالكامل</value>
+  </data>
+  <data name="Advice_Factor_UnusualHours_Secure" xml:space="preserve">
+    <value>إذا لم تكن أنت من يقوم بتسجيل الدخول خلال ساعات غير عادية، فقم بتأمين حسابك على الفور</value>
+  </data>
+</root>
