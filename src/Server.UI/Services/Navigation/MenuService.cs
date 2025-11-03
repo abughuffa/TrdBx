@@ -67,6 +67,8 @@ public class MenuService : IMenuService
                 }
             }
         },
+
+        TrdBxMenu.TrdBxMenuSection,
         new MenuSectionModel
         {
             Title = "MANAGEMENT",

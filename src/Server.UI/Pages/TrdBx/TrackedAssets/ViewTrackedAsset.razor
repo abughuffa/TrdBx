@@ -1,0 +1,97 @@
+﻿@page "/pages/TrdBx/TrackedAssets/{id:int}/view"
+
+@using CleanArchitecture.Blazor.Application.Features.TrackedAssets.DTOs
+@using CleanArchitecture.Blazor.Application.Features.TrackedAssets.Queries.GetById
+
+
+@inherits MudComponentBase
+@inject IStringLocalizer<TrackedAssets> L
+@inject NavigationManager Navigation
+@attribute [Authorize(Policy = Permissions.TrackedAssets.View)]
+
+<PageTitle>@Title</PageTitle>
+
+<MudContainer Class="mt-3" MaxWidth="MaxWidth.Medium">
+    @if (model != null)
+    {
+        <MudCard Class="pa-2">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">@Title</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudGrid Spacing="3" Class="readonly-grid">
+                    <MudItem md="12">
+                        <ReadOnlyField Label="@L[model.GetMemberDescription(x => x.TrackedAssetNo)]" Value="model.TrackedAssetNo"></ReadOnlyField>
+                    </MudItem>
+                    <MudItem md="12">
+                        <ReadOnlyField Label="@L[model.GetMemberDescription(x => x.TrackedAssetDesc)]" Value="model.TrackedAssetDesc"></ReadOnlyField>
+                    </MudItem>
+                    <MudItem md="4">
+                        <ReadOnlyField Label="@L[model.GetMemberDescription(x => x.TrackedAssetCode)]" Value="model.TrackedAssetCode"></ReadOnlyField>
+                    </MudItem>
+                    <MudItem md="4">
+                        <ReadOnlyField Label="@L[model.GetMemberDescription(x => x.PlateNo)]" Value="model.PlateNo"></ReadOnlyField>
+                    </MudItem>
+                    <MudItem md="6">
+                        <ReadOnlyField Label="@L[model.GetMemberDescription(x => x.VinSerNo)]" Value="model.VinSerNo"></ReadOnlyField>
+                    </MudItem>
+                    <MudItem md="6">
+                        <ReadOnlyField Label="@L[model.GetMemberDescription(x => x.IsAvaliable)]" Value="model.IsAvaliable" CheckBox="true"></ReadOnlyField>
+                    </MudItem>
+                </MudGrid>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Color="Color.Primary" DropShadow="false" OnClick="OnGoBack">@AppStrings.GoBack</MudButton>
+            </MudCardActions>
+        </MudCard>
+    }
+</MudContainer>
+
+
+@code {
+    public string? Title { get; private set; }
+    [Parameter]
+    public int Id { get; set; }
+    private TrackedAssetDto? model;
+
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string? ReturnUrl { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Title = L["TrackedAsset"];
+
+        var result = await Mediator.Send(new GetTrackedAssetByIdQuery() { Id = Id });
+
+
+        result.Map(data =>
+        {
+        model = data;
+        return data;
+        }).Match(data => { }, errors =>
+        {
+        Snackbar.Add(errors, MudBlazor.Severity.Error);
+        });
+
+
+
+    }
+
+
+    void OnGoBack()
+    {
+        ReturnBack();
+    }
+
+    void ReturnBack()
+    {
+        var target = !string.IsNullOrWhiteSpace(ReturnUrl)
+            ? ReturnUrl
+            : Navigation.ToBaseRelativePath(Navigation.Uri);
+        Navigation.NavigateTo(target);
+    }
+}

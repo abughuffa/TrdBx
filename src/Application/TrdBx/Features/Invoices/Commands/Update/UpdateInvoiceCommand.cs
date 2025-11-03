@@ -1,0 +1,57 @@
+﻿using CleanArchitecture.Blazor.Application.Features.Invoices.Caching;
+using CleanArchitecture.Blazor.Application.Features.Invoices.DTOs;
+using CleanArchitecture.Blazor.Domain.Entities;
+using CleanArchitecture.Blazor.Domain.Events;
+
+namespace CleanArchitecture.Blazor.Application.Features.Invoices.Commands.Update;
+
+public class UpdateInvoiceCommand : ICacheInvalidatorRequest<Result<int>>
+{
+    [Description("Id")]
+    public int Id { get; set; }
+    public DateOnly InvDate { get; set; }
+    [Description("DueDate")]
+    public DateOnly DueDate { get; set; }
+
+
+    public string CacheKey => InvoiceCacheKey.GetAllCacheKey;
+     public IEnumerable<string> Tags => InvoiceCacheKey.Tags;
+
+    private class Mapping : Profile
+    {
+        public Mapping()
+        {
+            CreateMap<UpdateInvoiceCommand, Invoice>(MemberList.None);
+            CreateMap<InvoiceDto, UpdateInvoiceCommand>(MemberList.None);
+        }
+    }
+
+}
+
+public class UpdateInvoiceCommandHandler : IRequestHandler<UpdateInvoiceCommand, Result<int>>
+{
+    private readonly IApplicationDbContextFactory _dbContextFactory;
+    private readonly IMapper _mapper;
+    public UpdateInvoiceCommandHandler(
+        IApplicationDbContextFactory dbContextFactory,
+        IMapper mapper
+    )
+    {
+        _dbContextFactory = dbContextFactory;
+        _mapper = mapper;
+    }
+    public async Task<Result<int>> Handle(UpdateInvoiceCommand request, CancellationToken cancellationToken)
+    {
+        await using var db = await _dbContextFactory.CreateAsync(cancellationToken);
+        var item = await db.Invoices.FindAsync(request.Id, cancellationToken);
+        if (item == null) return await Result<int>.FailureAsync("Invoice not found");
+
+        item = _mapper.Map(request, item);
+
+        // raise a update domain event
+        item.AddDomainEvent(new InvoiceUpdatedEvent(item));
+        await db.SaveChangesAsync(cancellationToken);
+        return await Result<int>.SuccessAsync(item.Id);
+    }
+}
+

@@ -1,0 +1,204 @@
+﻿@page "/pages/TrdBx/ServicePrices"
+
+@using CleanArchitecture.Blazor.Application.Features.ServicePrices.Caching
+@using CleanArchitecture.Blazor.Application.Features.ServicePrices.Commands.Update
+@using CleanArchitecture.Blazor.Application.Features.ServicePrices.DTOs
+@using CleanArchitecture.Blazor.Application.Features.ServicePrices.Queries.Export
+@using CleanArchitecture.Blazor.Application.Features.ServicePrices.Queries.Pagination
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.ServicePrices.Components
+
+@inject IStringLocalizer<ServicePrices> L
+@attribute [Authorize(Policy = Permissions.ServicePrices.View)]
+@inject BlazorDownloadFileService BlazorDownloadFileService
+
+<PageTitle>@Title</PageTitle>
+
+<MudDataGrid ServerData="@(ServerReload)"
+             FixedHeader="true"
+             FixedFooter="false"
+             @bind-RowsPerPage="_defaultPageSize"
+             Loading="@_loading"
+             MultiSelection="true"
+             @bind-SelectedItems="_selectedItems"
+             ColumnResizeMode="ResizeMode.Column"
+             Hover="true" @ref="_table">
+    <ToolBarContent>
+        <MudStack Row Spacing="0" Class="flex-grow-1" Justify="Justify.SpaceBetween">
+            <MudStack Row AlignItems="AlignItems.Start">
+                <MudIcon Icon="@Icons.Material.Filled.Window" Size="Size.Large" />
+                
+            </MudStack>
+            <MudStack Spacing="0" AlignItems="AlignItems.End">
+                <MudToolBar Dense WrapContent="true" Class="py-1 px-0">
+                    <MudButton Disabled="@_loading"
+                               OnClick="@(() => OnRefresh())"
+                               StartIcon="@Icons.Material.Outlined.Refresh">
+                        @AppStrings.Refresh
+                    </MudButton>
+      
+                    <MudMenu TransformOrigin="Origin.BottomRight" AnchorOrigin="Origin.BottomRight" EndIcon="@Icons.Material.Filled.MoreVert" Label="@AppStrings.More">
+
+                        @if (_accessRights.Export)
+                        {
+                            <MudMenuItem Disabled="@_exporting"
+                                         OnClick="OnExport">
+                                @AppStrings.Export
+                            </MudMenuItem>
+                        }
+                    </MudMenu>
+                </MudToolBar>
+            </MudStack>
+        </MudStack>
+    </ToolBarContent>
+    <Columns>
+        <SelectColumn ShowInFooter="false"></SelectColumn>
+        <TemplateColumn HeaderStyle="width:60px" Title="@AppStrings.Actions" Sortable="false">
+            <CellTemplate>
+                @if (_accessRights.Edit)
+                {
+                    <MudIconButton Variant="Variant.Outlined"
+                                   Disabled="false"
+                                   Icon="@Icons.Material.Filled.Edit"
+                                   Size="Size.Small"
+                                   Color="Color.Surface"
+                                   OnClick="@(() => OnEdit(context.Item))">
+                        @AppStrings.Edit
+                    </MudIconButton>
+                }
+                else
+                {
+                    <MudIconButton Variant="Variant.Filled"
+                                   Disabled="true"
+                                   Icon="@Icons.Material.Filled.DoNotTouch"
+                                   Size="Size.Small"
+                                   Color="Color.Surface">
+                        @AppStrings.NoAllowed
+                    </MudIconButton>
+                }
+            </CellTemplate>
+        </TemplateColumn>
+
+        <PropertyColumn Property="x => x.ServiceTask" Title="@L[_currentDto.GetMemberDescription(x=>x.ServiceTask)]" />
+        <PropertyColumn Property="x => x.Price" Title="@L[_currentDto.GetMemberDescription(x=>x.Price)]" />
+
+
+    </Columns>
+    <NoRecordsContent>
+        <MudText>@AppStrings.NoRecords</MudText>
+    </NoRecordsContent>
+    <LoadingContent>
+        <MudText>@AppStrings.Loading</MudText>
+    </LoadingContent>
+    <PagerContent>
+        <MudDataGridPager PageSizeOptions="@(new int[]{5,10,15})" />
+    </PagerContent>
+</MudDataGrid>
+
+
+
+@code {
+    [CascadingParameter] private UserProfile? UserProfile { get; set; }
+    public string? Title { get; private set; }
+    private HashSet<ServicePriceDto> _selectedItems = new();
+    private MudDataGrid<ServicePriceDto> _table = default!;
+    private ServicePriceDto _currentDto = new();
+    private ServicePricesAccessRights _accessRights = new();
+    private int _defaultPageSize = 15;
+    private bool _loading;
+    private bool _exporting;
+
+    private ServicePricesWithPaginationQuery Query { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Title = L[_currentDto.GetClassDescription()];
+        _accessRights = await PermissionService.GetAccessRightsAsync<ServicePricesAccessRights>();
+
+    }
+
+    private async Task<GridData<ServicePriceDto>> ServerReload(GridState<ServicePriceDto> state)
+    {
+        try
+        {
+             _loading = true;
+            // Query.CurrentUser = UserProfile;
+            Query.OrderBy = state.SortDefinitions.FirstOrDefault()?.SortBy ?? "Id";
+            Query.SortDirection = state.SortDefinitions.FirstOrDefault()?.Descending ?? true
+                                              ? SortDirection.Descending.ToString()
+                                              : SortDirection.Ascending.ToString();
+            Query.PageNumber = state.Page + 1;
+            Query.PageSize = state.PageSize;
+            var result = await Mediator.Send(Query).ConfigureAwait(false);
+            return new GridData<ServicePriceDto> { TotalItems = result.TotalItems, Items = result.Items };
+
+
+        }
+        finally
+        {
+            _loading = false;
+        }
+
+    }
+
+    private async Task OnRefresh()
+    {
+        ServicePriceCacheKey.Refresh();
+        _selectedItems = new HashSet<ServicePriceDto>();
+        Query.Keyword = string.Empty;
+        await _table.ReloadServerData();
+    }
+
+    private Task OnEdit(ServicePriceDto dto)
+    {
+        var command = Mapper.Map<UpdateServicePriceCommand>(dto);
+        return DialogServiceHelper.ShowFormDialogAsync<ServicePriceEditFormDialog, UpdateServicePriceCommand>(
+            L["Update Service Price"],
+           new DialogParameters<ServicePriceEditFormDialog>
+           {
+                            { x=>x._model,command}
+           },
+           async () =>
+           {
+               await _table.ReloadServerData();
+               _selectedItems.Clear();
+           });
+    }
+
+    private async Task OnExport()
+    {
+        _exporting = true;
+
+        var request = new ExportServicePricesQuery()
+            {
+                Keyword = Query.Keyword,
+                // ListView = Query.ListView,
+                OrderBy = _table.SortDefinitions.Values.FirstOrDefault()?.SortBy ?? "Id",
+                SortDirection = _table.SortDefinitions.Values.FirstOrDefault()?.Descending ?? false
+                                    ? SortDirection.Descending.ToString()
+                                    : SortDirection.Ascending.ToString(),
+                // CurrentUser = UserProfile,
+            };
+
+        var result = await Mediator.Send(request);
+        await result.MatchAsync(
+            async data =>
+            {
+                if (result.Data != null)
+                {
+                    await BlazorDownloadFileService.DownloadFileAsync($"{L[_currentDto.GetClassDescription()]}.xlsx", result.Data, contentType: "application/octet-stream");
+                    Snackbar.Add($"{AppStrings.ExportSuccess}", MudBlazor.Severity.Info);
+                }
+                else
+                {
+                    Snackbar.Add($"{AppStrings.ExecuteFail}", MudBlazor.Severity.Error);
+                }
+            },
+            errors =>
+            {
+                Snackbar.Add($"{errors}", MudBlazor.Severity.Error);
+                return Task.CompletedTask;
+            });
+        _exporting = false;
+
+    }
+}

@@ -1,0 +1,109 @@
+﻿@page "/pages/TrdBx/FakeData"
+@using CleanArchitecture.Blazor.Application.Features.TestCases.Commands
+
+
+
+@inherits MudComponentBase
+@inject IValidationService Validator
+@inject IStringLocalizer<FakeData> L
+@attribute [Authorize(Policy = Permissions.ActivateTestCases.View)]
+<PageTitle>@Title</PageTitle>
+<style>
+    .mud-table-toolbar {
+        height: 120px !important;
+    }
+</style>
+<PageTitle>@Title</PageTitle>
+<MudContainer Class="mt-3" MaxWidth="MaxWidth.Small">
+    <MudCard Class="pa-2">
+        <MudCardHeader>
+            <CardHeaderContent>
+                 <MudText Typo="Typo.h6">@Title</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent>
+
+        </MudCardContent>
+        <MudCardActions Class="d-flex justify-end gap-2">
+            <MudLoadingButton Color="Color.Primary" DropShadow="false" Loading="@_deleting" OnClick="DeleteAllData">DeleteAllData</MudLoadingButton>
+            <MudFileUpload T="IBrowserFile" FilesChanged="ImportFakeData" Accept=".xlsx">
+                    <ActivatorContent>
+                    <MudLoadingButton Class="pa-0 ma-0" Style="font-weight:400;text-transform:none;"
+                                   Variant="Variant.Text"
+                                   Loading="@_uploading">
+                            @AppStrings.Import
+                        </MudLoadingButton>
+                    </ActivatorContent>
+                </MudFileUpload>
+        </MudCardActions>
+        </MudCard>
+</MudContainer>
+
+@code {
+
+
+
+    public string? Title { get; private set; }
+
+    private bool _deleting = false;
+    private bool _uploading = false;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Title = L["Fake Data"];
+    }
+    async Task DeleteAllData()
+    {
+        try
+        {
+            _deleting = true;
+            var model = new DeleteAllDataCommand();
+            var result = await Mediator.Send(model);
+            if(result.Succeeded)
+                Snackbar.Add(AppStrings.DeleteSuccess, MudBlazor.Severity.Info);
+                else
+                Snackbar.Add("DeleteFail", MudBlazor.Severity.Error);
+        }
+        finally
+        {
+            _deleting = false;
+        }
+    }
+
+
+    private async Task ImportFakeData(IBrowserFile file)
+    {
+        _uploading = true;
+        // Read the stream here, for example into a MemoryStream or process it.
+        var memoryStream = new MemoryStream();
+        await file.OpenReadStream(maxAllowedSize: 2097152).CopyToAsync(memoryStream);
+        var command = new ImportDataCommand(file.Name, memoryStream.ToArray(), Mediator);
+        var result = await Mediator.Send(command);
+        if (result.Succeeded)
+            Snackbar.Add(AppStrings.ImportSuccess, MudBlazor.Severity.Info);
+        else
+            Snackbar.Add(AppStrings.ImportFail, MudBlazor.Severity.Error);
+        _uploading = false;
+
+
+
+        // // _uploading = true;
+        // // var stream = new MemoryStream();
+        // // await file.OpenReadStream().CopyToAsync(stream);
+        // // var command = new ImportDataCommand(file.Name, stream.ToArray(), Mediator);
+        // // var result = await Mediator.Send(command);
+        // // if(result.Succeeded)
+        // //         Snackbar.Add(AppStrings.ImportSuccess, MudBlazor.Severity.Info);
+        // //         else
+        // //     Snackbar.Add(AppStrings.ImportFail, MudBlazor.Severity.Error);
+        // // _uploading = false;
+    }
+
+}
+
+@* I'm using the method:
+OpenReadStream(long maxAllowedSize = 512000L, CancellationToken cancellationToken = default(CancellationToken));
+from the namespace Microsoft.AspNetCore.Components.Forms;
+but it's limited to read files of 500 Kilo Bytes, but i have a larger files to read, which are about 2 Mega Bytes in size, so can you help me to preform that?
+ *@

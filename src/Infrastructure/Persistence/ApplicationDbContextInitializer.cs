@@ -45,7 +45,13 @@ public partial class ApplicationDbContextInitializer
             await SeedTenantsAsync();
             await SeedRolesAsync();
             await SeedUsersAsync();
+
+            await SeedTrdBxRolesAsync();
+            await SeedTrdBxUsersAsync();
+
             await SeedDataAsync();
+            await SeedServicePrices();
+
             _context.ChangeTracker.Clear();
         }
         catch (Exception ex)
