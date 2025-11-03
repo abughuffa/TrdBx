@@ -117,37 +117,70 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Japanese" xml:space="preserve">
-    <value>Japanisch</value>
+  <data name="Graphite on roof" xml:space="preserve">
+    <value>الجرافيت على السطح</value>
   </data>
-  <data name="English" xml:space="preserve">
-    <value>Englisch</value>
+  <data name="Global Spread" xml:space="preserve">
+    <value>الانتشار العالمي</value>
   </data>
-  <data name="French" xml:space="preserve">
-    <value>Französisch</value>
+  <data name="Roentgen" xml:space="preserve">
+    <value>رونتجن</value>
   </data>
-  <data name="German" xml:space="preserve">
-    <value>Deutsch</value>
+  <data name="Uranium-235" xml:space="preserve">
+    <value>اليورانيوم-235</value>
   </data>
-  <data name="Khmer" xml:space="preserve">
-    <value>Khmer</value>
+  <data name="See all 137 reviews" xml:space="preserve">
+    <value>شاهد جميع التقييمات الـ 137</value>
   </data>
-  <data name="Russian" xml:space="preserve">
-    <value>Russisch</value>
+  <data name="This is the type of uranium used in the RBMK reactors." xml:space="preserve">
+    <value>هذا هو نوع اليورانيوم المستخدم في مفاعلات ار ام بي كي.</value>
   </data>
-  <data name="Simplified Chinese" xml:space="preserve">
-    <value>Vereinfachtes Chinesisch</value>
+  <data name="Reactor Type" xml:space="preserve">
+    <value>نوع المفاعل</value>
   </data>
-  <data name="Spanish" xml:space="preserve">
-    <value>Spanisch</value>
+  <data name="Read More" xml:space="preserve">
+    <value>اقرأ المزيد</value>
   </data>
-  <data name="Arabic" xml:space="preserve">
-    <value>Arabisch</value>
+  <data name="Global scale" xml:space="preserve">
+    <value>النطاق العالمي</value>
   </data>
-  <data name="Korean" xml:space="preserve">
-    <value>Koreanisch</value>
+  <data name="MudBlazor is growing quickly" xml:space="preserve">
+    <value>مدبلازر ينمو بسرعة</value>
   </data>
-  <data name="Catalan" xml:space="preserve">
-    <value>Katalanisch</value>
+  <data name="We are growing every day, developers from all over the world are using MudBlazor and are engaged with the community." xml:space="preserve">
+    <value>نحن ننمو كل يوم، والمطورون من جميع أنحاء العالم يستخدمون مدبلازر ويتفاعلون مع المجتمع.</value>
+  </data>
+  <data name="We are dedicated to improving every aspect of MudBlazor to be your number one choice when looking for a Blazor component library." xml:space="preserve">
+    <value>نحن ملتزمون بتحسين كل جانب من جوانب مدبلازر ليكون خيارك الأول عند البحث عن مكتبة مكونات بلازر.</value>
+  </data>
+  <data name="Join us and be part of the library’s success!" xml:space="preserve">
+    <value>انضم إلينا وكن جزءًا من نجاح المكتبة!</value>
+  </data>
+  <data name="Total Downloads" xml:space="preserve">
+    <value>إجمالي التنزيلات</value>
+  </data>
+  <data name="GitHub Stars" xml:space="preserve">
+    <value>نجوم جيثهب</value>
+  </data>
+  <data name="Contributors" xml:space="preserve">
+    <value>المساهمين</value>
+  </data>
+  <data name="Discord Members" xml:space="preserve">
+    <value>أعضاء الخلاف</value>
+  </data>
+  <data name="Nr" xml:space="preserve">
+    <value>ت</value>
+  </data>
+  <data name="Sign" xml:space="preserve">
+    <value>لافتة</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>اسم</value>
+  </data>
+  <data name="Position" xml:space="preserve">
+    <value>موضع</value>
+  </data>
+  <data name="Molar mass" xml:space="preserve">
+    <value>الكتلة المولية</value>
   </data>
 </root>

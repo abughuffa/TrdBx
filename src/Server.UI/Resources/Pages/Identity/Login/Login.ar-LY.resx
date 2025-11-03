@@ -117,37 +117,46 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Japanese" xml:space="preserve">
-    <value>Japanisch</value>
+  <data name="Sign In" xml:space="preserve">
+    <value>تسجيل الدخول</value>
   </data>
-  <data name="English" xml:space="preserve">
-    <value>Englisch</value>
+  <data name="Do not have an account?" xml:space="preserve">
+    <value>ليس لديك حساب؟</value>
   </data>
-  <data name="French" xml:space="preserve">
-    <value>Französisch</value>
+  <data name="Sign Up" xml:space="preserve">
+    <value>اشتراك</value>
   </data>
-  <data name="German" xml:space="preserve">
-    <value>Deutsch</value>
+  <data name="User name" xml:space="preserve">
+    <value>اسم المستخدم</value>
   </data>
-  <data name="Khmer" xml:space="preserve">
-    <value>Khmer</value>
+  <data name="Enter your user name" xml:space="preserve">
+    <value>أدخل اسم المستخدم الخاص بك</value>
   </data>
-  <data name="Russian" xml:space="preserve">
-    <value>Russisch</value>
+  <data name="User name is required" xml:space="preserve">
+    <value>اسم المستخدم مطلوب</value>
   </data>
-  <data name="Simplified Chinese" xml:space="preserve">
-    <value>Vereinfachtes Chinesisch</value>
+  <data name="Password" xml:space="preserve">
+    <value>كلمة المرور</value>
   </data>
-  <data name="Spanish" xml:space="preserve">
-    <value>Spanisch</value>
+  <data name="Enter your password" xml:space="preserve">
+    <value>أدخل كلمة المرور الخاصة بك</value>
   </data>
-  <data name="Arabic" xml:space="preserve">
-    <value>Arabisch</value>
+  <data name="Password is required" xml:space="preserve">
+    <value>كلمة المرور مطلوبة</value>
   </data>
-  <data name="Korean" xml:space="preserve">
-    <value>Koreanisch</value>
+  <data name="Remember me" xml:space="preserve">
+    <value>تذكرنى</value>
   </data>
-  <data name="Catalan" xml:space="preserve">
-    <value>Katalanisch</value>
+  <data name="Forgot password?" xml:space="preserve">
+    <value>هل نسيت كلمة السر؟</value>
+  </data>
+  <data name="The specified user does not exist." xml:space="preserve">
+    <value>المستخدم المحدد غير موجود.</value>
+  </data>
+  <data name="Your account is inactive. Please contact support for assistance." xml:space="preserve">
+    <value>حسابك غير نشط. يُرجى التواصل مع الدعم الفني للحصول على المساعدة.</value>
+  </data>
+  <data name="The username or password is incorrect. Please try again." xml:space="preserve">
+    <value>اسم المستخدم أو كلمة المرور غير صحيحة. يُرجى المحاولة مرة أخرى.</value>
   </data>
 </root>

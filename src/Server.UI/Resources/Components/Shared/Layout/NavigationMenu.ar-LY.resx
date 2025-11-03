@@ -117,37 +117,100 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Japanese" xml:space="preserve">
-    <value>Japanisch</value>
+  <data name="Blazor" xml:space="preserve">
+    <value>بليزر</value>
   </data>
-  <data name="English" xml:space="preserve">
-    <value>Englisch</value>
+  <data name="Blazor Dashboard" xml:space="preserve">
+    <value>لوحة تحكم بليزر</value>
   </data>
-  <data name="French" xml:space="preserve">
-    <value>Französisch</value>
+  <data name="Company" xml:space="preserve">
+    <value>شركة</value>
   </data>
-  <data name="German" xml:space="preserve">
-    <value>Deutsch</value>
+  <data name="@2024 Copyright" xml:space="preserve">
+    <value>@2024 حقوق الطبع والنشر</value>
   </data>
-  <data name="Khmer" xml:space="preserve">
-    <value>Khmer</value>
+  <data name="version" xml:space="preserve">
+    <value>إصدار</value>
   </data>
-  <data name="Russian" xml:space="preserve">
-    <value>Russisch</value>
+  <data name="Coming Soon" xml:space="preserve">
+    <value>قريباً</value>
   </data>
-  <data name="Simplified Chinese" xml:space="preserve">
-    <value>Vereinfachtes Chinesisch</value>
+  <data name="WIP" xml:space="preserve">
+    <value>قيد التنفيذ</value>
   </data>
-  <data name="Spanish" xml:space="preserve">
-    <value>Spanisch</value>
+  <data name="New" xml:space="preserve">
+    <value>جديد</value>
   </data>
-  <data name="Arabic" xml:space="preserve">
-    <value>Arabisch</value>
+  <data name="Completed" xml:space="preserve">
+    <value>مكتمل</value>
   </data>
-  <data name="Korean" xml:space="preserve">
-    <value>Koreanisch</value>
+  <data name="Application" xml:space="preserve">
+    <value>تطبيق</value>
   </data>
-  <data name="Catalan" xml:space="preserve">
-    <value>Katalanisch</value>
+  <data name="Home" xml:space="preserve">
+    <value>الرئيسية</value>
+  </data>
+  <data name="E-Commerce" xml:space="preserve">
+    <value>التجارة الإلكترونية</value>
+  </data>
+  <data name="Products" xml:space="preserve">
+    <value>منتجات</value>
+  </data>
+  <data name="Documents" xml:space="preserve">
+    <value>وثائق</value>
+  </data>
+  <data name="Analytics" xml:space="preserve">
+    <value>التحليلات</value>
+  </data>
+  <data name="Banking" xml:space="preserve">
+    <value>الخدمات المصرفية</value>
+  </data>
+  <data name="Booking" xml:space="preserve">
+    <value>الحجز</value>
+  </data>
+  <data name="MANAGEMENT" xml:space="preserve">
+    <value>إدارة</value>
+  </data>
+  <data name="Authorization" xml:space="preserve">
+    <value>تفويض</value>
+  </data>
+  <data name="Multi-Tenant" xml:space="preserve">
+    <value>متعدد المستأجرين</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>المستخدمين</value>
+  </data>
+  <data name="Roles" xml:space="preserve">
+    <value>الأدوار</value>
+  </data>
+  <data name="Login Audits" xml:space="preserve">
+    <value>عمليات تدقيق تسجيل الدخول</value>
+  </data>
+  <data name="Profile" xml:space="preserve">
+    <value>حساب تعريفي</value>
+  </data>
+  <data name="System" xml:space="preserve">
+    <value>نظام</value>
+  </data>
+  <data name="Picklist" xml:space="preserve">
+    <value>قائمة الاختيار</value>
+  </data>
+  <data name="Audit Trails" xml:space="preserve">
+    <value>مسارات التدقيق</value>
+  </data>
+  <data name="Logs" xml:space="preserve">
+    <value>سجلات</value>
+  </data>
+  <data name="Jobs" xml:space="preserve">
+    <value>وظائف</value>
+  </data>
+  <data name="Contacts" xml:space="preserve">
+    <value>جهات اتصال</value>
+  </data>
+  <data name="Login History" xml:space="preserve">
+    <value>سجل تسجيل الدخول</value>
+  </data>
+  <data name="Email Templates" xml:space="preserve">
+    <value>قوالب البريد الإلكتروني</value>
   </data>
 </root>

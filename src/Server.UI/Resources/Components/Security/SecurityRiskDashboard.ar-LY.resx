@@ -117,37 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Japanese" xml:space="preserve">
-    <value>Japanisch</value>
+  <data name="High Risk" xml:space="preserve">
+    <value>مخاطر عالية</value>
   </data>
-  <data name="English" xml:space="preserve">
-    <value>Englisch</value>
+  <data name="Low Risk" xml:space="preserve">
+    <value>مخاطر منخفضة</value>
   </data>
-  <data name="French" xml:space="preserve">
-    <value>Französisch</value>
+  <data name="Medium Risk" xml:space="preserve">
+    <value>مخاطر متوسطة</value>
   </data>
-  <data name="German" xml:space="preserve">
-    <value>Deutsch</value>
+  <data name="No security analysis data available" xml:space="preserve">
+    <value>لا تتوفر بيانات تحليل الأمان</value>
   </data>
-  <data name="Khmer" xml:space="preserve">
-    <value>Khmer</value>
+  <data name="Security Risk Analysis Dashboard" xml:space="preserve">
+    <value>لوحة معلومات تحليل المخاطر الأمنية</value>
   </data>
-  <data name="Russian" xml:space="preserve">
-    <value>Russisch</value>
+  <data name="Refresh Dashboard" xml:space="preserve">
+    <value>تحديث لوحة المعلومات</value>
   </data>
-  <data name="Simplified Chinese" xml:space="preserve">
-    <value>Vereinfachtes Chinesisch</value>
-  </data>
-  <data name="Spanish" xml:space="preserve">
-    <value>Spanisch</value>
-  </data>
-  <data name="Arabic" xml:space="preserve">
-    <value>Arabisch</value>
-  </data>
-  <data name="Korean" xml:space="preserve">
-    <value>Koreanisch</value>
-  </data>
-  <data name="Catalan" xml:space="preserve">
-    <value>Katalanisch</value>
+  <data name="Total Users" xml:space="preserve">
+    <value>إجمالي المستخدمين</value>
   </data>
 </root>

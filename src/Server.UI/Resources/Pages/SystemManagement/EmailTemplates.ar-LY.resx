@@ -117,37 +117,37 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Japanese" xml:space="preserve">
-    <value>Japanisch</value>
+  <data name="Email Templates" xml:space="preserve">
+    <value>قوالب البريد الإلكتروني</value>
   </data>
-  <data name="English" xml:space="preserve">
-    <value>Englisch</value>
+  <data name="Email Templates Demo" xml:space="preserve">
+    <value>عرض تجريبي لقوالب البريد الإلكتروني</value>
   </data>
-  <data name="French" xml:space="preserve">
-    <value>Französisch</value>
+  <data name="Preview all available email templates in the system." xml:space="preserve">
+    <value>معاينة جميع قوالب البريد الإلكتروني المتوفرة في النظام.</value>
   </data>
-  <data name="German" xml:space="preserve">
-    <value>Deutsch</value>
+  <data name="Authenticator Code" xml:space="preserve">
+    <value>رمز المصادقة</value>
   </data>
-  <data name="Khmer" xml:space="preserve">
-    <value>Khmer</value>
+  <data name="Two-factor authentication verification code email" xml:space="preserve">
+    <value>رمز التحقق من المصادقة الثنائية عبر البريد الإلكتروني</value>
   </data>
-  <data name="Russian" xml:space="preserve">
-    <value>Russisch</value>
+  <data name="Password Recovery" xml:space="preserve">
+    <value>استعادة كلمة المرور</value>
   </data>
-  <data name="Simplified Chinese" xml:space="preserve">
-    <value>Vereinfachtes Chinesisch</value>
+  <data name="Password reset request email with secure link" xml:space="preserve">
+    <value>طلب إعادة تعيين كلمة المرور عبر البريد الإلكتروني مع رابط آمن</value>
   </data>
-  <data name="Spanish" xml:space="preserve">
-    <value>Spanisch</value>
+  <data name="User Activation" xml:space="preserve">
+    <value>تفعيل المستخدم</value>
   </data>
-  <data name="Arabic" xml:space="preserve">
-    <value>Arabisch</value>
+  <data name="Account activation email for new users" xml:space="preserve">
+    <value>بريد إلكتروني لتفعيل الحساب للمستخدمين الجدد</value>
   </data>
-  <data name="Korean" xml:space="preserve">
-    <value>Koreanisch</value>
+  <data name="Welcome" xml:space="preserve">
+    <value>ترحيب</value>
   </data>
-  <data name="Catalan" xml:space="preserve">
-    <value>Katalanisch</value>
+  <data name="Welcome email for newly registered users" xml:space="preserve">
+    <value>رسالة ترحيبية للمستخدمين المسجلين حديثًا</value>
   </data>
 </root>

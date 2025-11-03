@@ -117,37 +117,58 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Japanese" xml:space="preserve">
-    <value>Japanisch</value>
+  <data name="Login Audits" xml:space="preserve">
+    <value>عمليات تدقيق تسجيل الدخول</value>
   </data>
-  <data name="English" xml:space="preserve">
-    <value>Englisch</value>
+  <data name="View recent login activities and audit information" xml:space="preserve">
+    <value>عرض أنشطة تسجيل الدخول الأخيرة ومعلومات التدقيق</value>
   </data>
-  <data name="French" xml:space="preserve">
-    <value>Französisch</value>
+  <data name="Login Time" xml:space="preserve">
+    <value>وقت تسجيل الدخول</value>
   </data>
-  <data name="German" xml:space="preserve">
-    <value>Deutsch</value>
+  <data name="User Name" xml:space="preserve">
+    <value>اسم المستخدم</value>
   </data>
-  <data name="Khmer" xml:space="preserve">
-    <value>Khmer</value>
+  <data name="IP Address" xml:space="preserve">
+    <value>عنوان IP</value>
   </data>
-  <data name="Russian" xml:space="preserve">
-    <value>Russisch</value>
+  <data name="Region" xml:space="preserve">
+    <value>منطقة</value>
   </data>
-  <data name="Simplified Chinese" xml:space="preserve">
-    <value>Vereinfachtes Chinesisch</value>
+  <data name="Provider" xml:space="preserve">
+    <value>مزود</value>
   </data>
-  <data name="Spanish" xml:space="preserve">
-    <value>Spanisch</value>
+  <data name="Browser" xml:space="preserve">
+    <value>المتصفح</value>
   </data>
-  <data name="Arabic" xml:space="preserve">
-    <value>Arabisch</value>
+  <data name="Success" xml:space="preserve">
+    <value>نجاح</value>
   </data>
-  <data name="Korean" xml:space="preserve">
-    <value>Koreanisch</value>
+  <data name="Failed" xml:space="preserve">
+    <value>فشل</value>
   </data>
-  <data name="Catalan" xml:space="preserve">
-    <value>Katalanisch</value>
+  <data name="No login audit records found" xml:space="preserve">
+    <value>لم يتم العثور على سجلات تدقيق تسجيل الدخول</value>
+  </data>
+  <data name="Browser Info" xml:space="preserve">
+    <value>معلومات المتصفح</value>
+  </data>
+  <data name="Login Status" xml:space="preserve">
+    <value>حالة تسجيل الدخول</value>
+  </data>
+  <data name="Successful" xml:space="preserve">
+    <value>ناجح</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>بحث</value>
+  </data>
+  <data name="List View" xml:space="preserve">
+    <value>عرض القائمة</value>
+  </data>
+  <data name="Local" xml:space="preserve">
+    <value>محلي</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>آخر</value>
   </data>
 </root>

@@ -117,37 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Japanese" xml:space="preserve">
-    <value>Japanisch</value>
+  <data name="Two-factor authentication" xml:space="preserve">
+    <value>المصادقة الثنائية</value>
   </data>
-  <data name="English" xml:space="preserve">
-    <value>Englisch</value>
+  <data name="Your login is secured with two-factor authentication. Please enter the verification code from your authenticator app on your mobile device." xml:space="preserve">
+    <value>تسجيل دخولك مؤمّن بمصادقة ثنائية. يُرجى إدخال رمز التحقق من تطبيق المصادقة على جهازك المحمول.</value>
   </data>
-  <data name="French" xml:space="preserve">
-    <value>Französisch</value>
+  <data name="Authenticator code" xml:space="preserve">
+    <value>رمز المصادقة</value>
   </data>
-  <data name="German" xml:space="preserve">
-    <value>Deutsch</value>
+  <data name="Enter your authenticator code" xml:space="preserve">
+    <value>أدخل رمز المصادقة الخاص بك</value>
   </data>
-  <data name="Khmer" xml:space="preserve">
-    <value>Khmer</value>
+  <data name="Authenticator code is required." xml:space="preserve">
+    <value>يجب إدخال رمز المصادقة.</value>
   </data>
-  <data name="Russian" xml:space="preserve">
-    <value>Russisch</value>
+  <data name="Enter the 6-7 digit code from your mobile authenticator app" xml:space="preserve">
+    <value>أدخل الرمز المكون من 6 إلى 7 أرقام من تطبيق المصادقة على هاتفك المحمول</value>
   </data>
-  <data name="Simplified Chinese" xml:space="preserve">
-    <value>Vereinfachtes Chinesisch</value>
+  <data name="Remember this machine" xml:space="preserve">
+    <value>تذكر هذا الجهاز</value>
   </data>
-  <data name="Spanish" xml:space="preserve">
-    <value>Spanisch</value>
+  <data name="Sign In" xml:space="preserve">
+    <value>تسجيل الدخول</value>
   </data>
-  <data name="Arabic" xml:space="preserve">
-    <value>Arabisch</value>
+  <data name="If you do not have access to your authenticator device, you may" xml:space="preserve">
+    <value>إذا لم يكن لديك حق الوصول إلى جهاز المصادقة الخاص بك، فقد</value>
   </data>
-  <data name="Korean" xml:space="preserve">
-    <value>Koreanisch</value>
-  </data>
-  <data name="Catalan" xml:space="preserve">
-    <value>Katalanisch</value>
+  <data name="Log in with a recovery code" xml:space="preserve">
+    <value>تسجيل الدخول باستخدام رمز الاسترداد</value>
   </data>
 </root>

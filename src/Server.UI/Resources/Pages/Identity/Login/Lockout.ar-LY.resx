@@ -117,37 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Japanese" xml:space="preserve">
-    <value>Japanisch</value>
+  <data name="Locked out" xml:space="preserve">
+    <value>مغلق</value>
   </data>
-  <data name="English" xml:space="preserve">
-    <value>Englisch</value>
-  </data>
-  <data name="French" xml:space="preserve">
-    <value>Französisch</value>
-  </data>
-  <data name="German" xml:space="preserve">
-    <value>Deutsch</value>
-  </data>
-  <data name="Khmer" xml:space="preserve">
-    <value>Khmer</value>
-  </data>
-  <data name="Russian" xml:space="preserve">
-    <value>Russisch</value>
-  </data>
-  <data name="Simplified Chinese" xml:space="preserve">
-    <value>Vereinfachtes Chinesisch</value>
-  </data>
-  <data name="Spanish" xml:space="preserve">
-    <value>Spanisch</value>
-  </data>
-  <data name="Arabic" xml:space="preserve">
-    <value>Arabisch</value>
-  </data>
-  <data name="Korean" xml:space="preserve">
-    <value>Koreanisch</value>
-  </data>
-  <data name="Catalan" xml:space="preserve">
-    <value>Katalanisch</value>
+  <data name="This account has been locked due to multiple unsuccessful login attempts. Please try again later or contact support if you need assistance." xml:space="preserve">
+    <value>تم قفل هذا الحساب بسبب عدة محاولات تسجيل دخول فاشلة. يُرجى المحاولة لاحقًا أو التواصل مع الدعم الفني إذا احتجت إلى مساعدة.</value>
   </data>
 </root>

@@ -117,37 +117,58 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Japanese" xml:space="preserve">
-    <value>Japanisch</value>
+  <data name="Audit Trails" xml:space="preserve">
+    <value>مسارات التدقيق</value>
   </data>
-  <data name="English" xml:space="preserve">
-    <value>Englisch</value>
+  <data name="Audit Type" xml:space="preserve">
+    <value>نوع التدقيق</value>
   </data>
-  <data name="French" xml:space="preserve">
-    <value>Französisch</value>
+  <data name="Created DateTime" xml:space="preserve">
+    <value>تاريخ الإنشاء</value>
   </data>
-  <data name="German" xml:space="preserve">
-    <value>Deutsch</value>
+  <data name="Hide Details" xml:space="preserve">
+    <value>إخفاء التفاصيل</value>
   </data>
-  <data name="Khmer" xml:space="preserve">
-    <value>Khmer</value>
+  <data name="Primary Key" xml:space="preserve">
+    <value>المفتاح الأساسي</value>
   </data>
-  <data name="Russian" xml:space="preserve">
-    <value>Russisch</value>
+  <data name="Show Details" xml:space="preserve">
+    <value>إظهار التفاصيل</value>
   </data>
-  <data name="Simplified Chinese" xml:space="preserve">
-    <value>Vereinfachtes Chinesisch</value>
+  <data name="Table Name" xml:space="preserve">
+    <value>اسم الجدول</value>
   </data>
-  <data name="Spanish" xml:space="preserve">
-    <value>Spanisch</value>
+  <data name="User Id" xml:space="preserve">
+    <value>معرف المستخدم</value>
   </data>
-  <data name="Arabic" xml:space="preserve">
-    <value>Arabisch</value>
+  <data name="Search by audit type" xml:space="preserve">
+    <value>البحث عن نوع التدقيق</value>
   </data>
-  <data name="Korean" xml:space="preserve">
-    <value>Koreanisch</value>
+  <data name="Field Name" xml:space="preserve">
+    <value>اسم الحقل</value>
   </data>
-  <data name="Catalan" xml:space="preserve">
-    <value>Katalanisch</value>
+  <data name="Old Values" xml:space="preserve">
+    <value>القيم القديمة</value>
+  </data>
+  <data name="New Values" xml:space="preserve">
+    <value>قيم جديدة</value>
+  </data>
+  <data name="Affected Columns" xml:space="preserve">
+    <value>الأعمدة المتأثرة</value>
+  </data>
+  <data name="Owner" xml:space="preserve">
+    <value>مالك</value>
+  </data>
+  <data name="Document" xml:space="preserve">
+    <value>وثيقة</value>
+  </data>
+  <data name="KeyValue" xml:space="preserve">
+    <value>قيمة المفتاح</value>
+  </data>
+  <data name="Product" xml:space="preserve">
+    <value>منتج</value>
+  </data>
+  <data name="Tenant" xml:space="preserve">
+    <value>مستأجر</value>
   </data>
 </root>

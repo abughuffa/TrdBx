@@ -118,36 +118,36 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Japanese" xml:space="preserve">
-    <value>Japanisch</value>
+    <value>اليابانية</value>
   </data>
   <data name="English" xml:space="preserve">
-    <value>Englisch</value>
+    <value>إنجليزي</value>
   </data>
   <data name="French" xml:space="preserve">
-    <value>Französisch</value>
+    <value>فرنسي</value>
   </data>
   <data name="German" xml:space="preserve">
-    <value>Deutsch</value>
+    <value>الألمانية</value>
   </data>
   <data name="Khmer" xml:space="preserve">
-    <value>Khmer</value>
+    <value>الخمير</value>
   </data>
   <data name="Russian" xml:space="preserve">
-    <value>Russisch</value>
+    <value>الروسية</value>
   </data>
   <data name="Simplified Chinese" xml:space="preserve">
-    <value>Vereinfachtes Chinesisch</value>
+    <value>الصينية المبسطة</value>
   </data>
   <data name="Spanish" xml:space="preserve">
-    <value>Spanisch</value>
+    <value>الأسبانية</value>
   </data>
   <data name="Arabic" xml:space="preserve">
-    <value>Arabisch</value>
+    <value>عربي</value>
   </data>
   <data name="Korean" xml:space="preserve">
-    <value>Koreanisch</value>
+    <value>كوري</value>
   </data>
   <data name="Catalan" xml:space="preserve">
-    <value>Katalanisch</value>
+    <value>الكاتالونية</value>
   </data>
 </root>

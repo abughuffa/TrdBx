@@ -117,37 +117,49 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Japanese" xml:space="preserve">
-    <value>Japanisch</value>
+  <data name="Create a new Tenant" xml:space="preserve">
+    <value>إنشاء مستأجر جديد</value>
   </data>
-  <data name="English" xml:space="preserve">
-    <value>Englisch</value>
+  <data name="Edit the Tenant" xml:space="preserve">
+    <value>تحرير المستأجر</value>
   </data>
-  <data name="French" xml:space="preserve">
-    <value>Französisch</value>
+  <data name="Multi-Tenant" xml:space="preserve">
+    <value>متعدد المستأجرين</value>
   </data>
-  <data name="German" xml:space="preserve">
-    <value>Deutsch</value>
+  <data name="Tenant" xml:space="preserve">
+    <value>مستأجر</value>
   </data>
-  <data name="Khmer" xml:space="preserve">
-    <value>Khmer</value>
+  <data name="Tenant Id" xml:space="preserve">
+    <value>معرف المستأجر</value>
   </data>
-  <data name="Russian" xml:space="preserve">
-    <value>Russisch</value>
+  <data name="Tenant id is required." xml:space="preserve">
+    <value>Tenant id is required!</value>
   </data>
-  <data name="Simplified Chinese" xml:space="preserve">
-    <value>Vereinfachtes Chinesisch</value>
+  <data name="Tenant Name" xml:space="preserve">
+    <value>مطلوب معرف المستأجر!</value>
   </data>
-  <data name="Spanish" xml:space="preserve">
-    <value>Spanisch</value>
+  <data name="Tenant name is required." xml:space="preserve">
+    <value>اسم المستأجر مطلوب!</value>
   </data>
-  <data name="Arabic" xml:space="preserve">
-    <value>Arabisch</value>
+  <data name="Tenants" xml:space="preserve">
+    <value>المستأجرين</value>
   </data>
-  <data name="Korean" xml:space="preserve">
-    <value>Koreanisch</value>
+  <data name="Description" xml:space="preserve">
+    <value>وصف</value>
   </data>
-  <data name="Catalan" xml:space="preserve">
-    <value>Katalanisch</value>
+  <data name="No available tenants" xml:space="preserve">
+    <value>لا يوجد مستأجرين متاحين</value>
+  </data>
+  <data name="Auto-generated tenant id" xml:space="preserve">
+    <value>معرف المستأجر الذي تم إنشاؤه تلقائيًا</value>
+  </data>
+  <data name="This identifier cannot be changed" xml:space="preserve">
+    <value>لا يمكن تغيير هذا المعرف</value>
+  </data>
+  <data name="Enter tenant name" xml:space="preserve">
+    <value>أدخل اسم المستأجر</value>
+  </data>
+  <data name="Enter tenant description" xml:space="preserve">
+    <value>أدخل وصف المستأجر</value>
   </data>
 </root>

@@ -117,37 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Japanese" xml:space="preserve">
-    <value>Japanisch</value>
+  <data name="Forgot Password?" xml:space="preserve">
+    <value>هل نسيت كلمة السر؟</value>
   </data>
-  <data name="English" xml:space="preserve">
-    <value>Englisch</value>
+  <data name="Please enter your registered email address. We will send you a password reset link if the account exists." xml:space="preserve">
+    <value>يرجى إدخال بريدك الإلكتروني المسجل. سنرسل لك رابط إعادة تعيين كلمة المرور إذا كان حسابك موجودًا.</value>
   </data>
-  <data name="French" xml:space="preserve">
-    <value>Französisch</value>
+  <data name="E-mail" xml:space="preserve">
+    <value>بريد إلكتروني</value>
   </data>
-  <data name="German" xml:space="preserve">
-    <value>Deutsch</value>
+  <data name="Enter your email address" xml:space="preserve">
+    <value>أدخل عنوان بريدك الإلكتروني</value>
   </data>
-  <data name="Khmer" xml:space="preserve">
-    <value>Khmer</value>
+  <data name="Email address is required" xml:space="preserve">
+    <value>عنوان البريد الإلكتروني مطلوب</value>
   </data>
-  <data name="Russian" xml:space="preserve">
-    <value>Russisch</value>
+  <data name="Please enter a valid email address" xml:space="preserve">
+    <value>يرجى إدخال عنوان بريد إلكتروني صالح</value>
   </data>
-  <data name="Simplified Chinese" xml:space="preserve">
-    <value>Vereinfachtes Chinesisch</value>
+  <data name="Send E-mail" xml:space="preserve">
+    <value>إرسال البريد الإلكتروني</value>
   </data>
-  <data name="Spanish" xml:space="preserve">
-    <value>Spanisch</value>
+  <data name="Forgot Password" xml:space="preserve">
+    <value>نسيت كلمة السر</value>
   </data>
-  <data name="Arabic" xml:space="preserve">
-    <value>Arabisch</value>
+  <data name="If an account with this email exists, a password reset link will be sent." xml:space="preserve">
+    <value>إذا كان هناك حساب بهذا البريد الإلكتروني، فسيتم إرسال رابط إعادة تعيين كلمة المرور.</value>
   </data>
-  <data name="Korean" xml:space="preserve">
-    <value>Koreanisch</value>
-  </data>
-  <data name="Catalan" xml:space="preserve">
-    <value>Katalanisch</value>
+  <data name="Your email address has not been confirmed. Please check your inbox for a confirmation email or request a new one." xml:space="preserve">
+    <value>لم يتم تأكيد بريدك الإلكتروني. يُرجى مراجعة بريدك الوارد لتلقي رسالة تأكيد أو طلب رسالة جديدة.</value>
   </data>
 </root>

@@ -117,37 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Japanese" xml:space="preserve">
-    <value>Japanisch</value>
+  <data name="Hide Details" xml:space="preserve">
+    <value>إخفاء التفاصيل</value>
   </data>
-  <data name="English" xml:space="preserve">
-    <value>Englisch</value>
+  <data name="Level" xml:space="preserve">
+    <value>مستوى</value>
   </data>
-  <data name="French" xml:space="preserve">
-    <value>Französisch</value>
+  <data name="Logs" xml:space="preserve">
+    <value>سجلات</value>
   </data>
-  <data name="German" xml:space="preserve">
-    <value>Deutsch</value>
+  <data name="Message" xml:space="preserve">
+    <value>رسالة</value>
   </data>
-  <data name="Khmer" xml:space="preserve">
-    <value>Khmer</value>
+  <data name="Show Details" xml:space="preserve">
+    <value>إظهار التفاصيل</value>
   </data>
-  <data name="Russian" xml:space="preserve">
-    <value>Russisch</value>
+  <data name="Datetime" xml:space="preserve">
+    <value>التاريخ والوقت</value>
   </data>
-  <data name="Simplified Chinese" xml:space="preserve">
-    <value>Vereinfachtes Chinesisch</value>
+  <data name="User name" xml:space="preserve">
+    <value>اسم المستخدم</value>
   </data>
-  <data name="Spanish" xml:space="preserve">
-    <value>Spanisch</value>
+  <data name="List View" xml:space="preserve">
+    <value>عرض القائمة</value>
   </data>
-  <data name="Arabic" xml:space="preserve">
-    <value>Arabisch</value>
+  <data name="Clear Logs" xml:space="preserve">
+    <value>مسح السجلات</value>
   </data>
-  <data name="Korean" xml:space="preserve">
-    <value>Koreanisch</value>
-  </data>
-  <data name="Catalan" xml:space="preserve">
-    <value>Katalanisch</value>
+  <data name="Search by level" xml:space="preserve">
+    <value>البحث حسب المستوى</value>
   </data>
 </root>

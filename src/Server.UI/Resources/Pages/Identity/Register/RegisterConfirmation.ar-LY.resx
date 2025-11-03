@@ -117,37 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Japanese" xml:space="preserve">
-    <value>Japanisch</value>
+  <data name="Register confirmation" xml:space="preserve">
+    <value>تأكيد التسجيل</value>
   </data>
-  <data name="English" xml:space="preserve">
-    <value>Englisch</value>
+  <data name="For testing purposes, you can directly access the email confirmation link below." xml:space="preserve">
+    <value>لأغراض الاختبار، يمكنك الوصول مباشرة إلى رابط تأكيد البريد الإلكتروني أدناه.</value>
   </data>
-  <data name="French" xml:space="preserve">
-    <value>Französisch</value>
+  <data name="Confirm Account" xml:space="preserve">
+    <value>تأكيد الحساب</value>
   </data>
-  <data name="German" xml:space="preserve">
-    <value>Deutsch</value>
+  <data name="Please check your email and follow the instructions to confirm your account." xml:space="preserve">
+    <value>يرجى التحقق من بريدك الإلكتروني واتباع التعليمات لتأكيد حسابك.</value>
   </data>
-  <data name="Khmer" xml:space="preserve">
-    <value>Khmer</value>
-  </data>
-  <data name="Russian" xml:space="preserve">
-    <value>Russisch</value>
-  </data>
-  <data name="Simplified Chinese" xml:space="preserve">
-    <value>Vereinfachtes Chinesisch</value>
-  </data>
-  <data name="Spanish" xml:space="preserve">
-    <value>Spanisch</value>
-  </data>
-  <data name="Arabic" xml:space="preserve">
-    <value>Arabisch</value>
-  </data>
-  <data name="Korean" xml:space="preserve">
-    <value>Koreanisch</value>
-  </data>
-  <data name="Catalan" xml:space="preserve">
-    <value>Katalanisch</value>
+  <data name="Error finding user for unspecified email" xml:space="preserve">
+    <value>خطأ في العثور على مستخدم لبريد إلكتروني غير محدد</value>
   </data>
 </root>
