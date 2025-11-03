@@ -1,4 +1,4 @@
-
+﻿
 @using CleanArchitecture.Blazor.Application.Features.CusPrices.Commands.Update
 @using CleanArchitecture.Blazor.Application.Features.CusPrices.Queries.GetById
 
@@ -12,7 +12,7 @@
         <MudForm Model="@_model" @ref="@_contactForm" Validation="@(Validator.ValidateValue(_model))">
             <MudGrid>
                 <MudItem md="4">
-                    <MudTextField Label="@L[_model.GetMemberDescription(x => x.Gprs)]" @bind-Value="_model.Gprs" For="@(() => _model.Gprs)" Required="false" RequiredError="@L["CusPrice name is required!"]"></MudTextField>
+                    <MudTextField Label="@L[_model.GetMemberDescription(x => x.Gprs)]" @bind-Value="_model.Gprs" For="@(() => _model.Gprs)" Required="false" RequiredError="@L["Gprs is required!"]"></MudTextField>
                 </MudItem>
                 <MudItem md="4">
                     <MudTextField Label="@L[_model.GetMemberDescription(x => x.Host)]" @bind-Value="_model.Host"></MudTextField>

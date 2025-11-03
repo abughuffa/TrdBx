@@ -98,11 +98,13 @@
 
                         <MudMenuItem OnClick="@(() => OnCreateCusPrice(context.Item))"
                                      Disabled="((!(context.Item.ParentId is null) && (context.Item.BillingPlan == BillingPlan.Advanced))) || (((context.Item.ParentId is null) && (context.Item.BillingPlan == BillingPlan.Basic)))">
-                                     Create CusPrice </MudMenuItem>
+                            @L["Create CusPrice"]
+                        </MudMenuItem>
 
                         <MudMenuItem OnClick="@(() => OnViewCusPrice(context.Item))"
                                      Disabled="((!(context.Item.ParentId is null) && (context.Item.BillingPlan == BillingPlan.Advanced))) || (((context.Item.ParentId is null) && (context.Item.BillingPlan == BillingPlan.Basic)))">
-                                     View CusPrices </MudMenuItem>
+                            @L["View CusPrices"]
+                        </MudMenuItem>
 
                         @if (_accessRights.Edit)
                         {
@@ -129,10 +131,12 @@
             </CellTemplate>
         </TemplateColumn>
 
-        <PropertyColumn Property="x => x.Account" Title="@L[_currentDto.GetMemberDescription(x => x.Account)]" Groupable="true" />
+       
        @*  <PropertyColumn Property="x => x.ParentId" Title="@L[_currentDto.GetMemberDescription(x => x.ParentId)]" /> *@
-        <PropertyColumn Property="x => x.Parent" Title="@L[_currentDto.GetMemberDescription(x => x.Parent)]" />
         <PropertyColumn Property="x => x.Name" Title="@L[_currentDto.GetMemberDescription(x => x.Name)]" />
+        <PropertyColumn Property="x => x.Parent" Title="@L[_currentDto.GetMemberDescription(x => x.Parent)]" />
+        <PropertyColumn Property="x => x.Account" Title="@L[_currentDto.GetMemberDescription(x => x.Account)]" Groupable="true" />
+        
         <PropertyColumn Property="x => x.UserName" Title="@L[_currentDto.GetMemberDescription(x => x.UserName)]" />
         <PropertyColumn Property="x => x.BillingPlan" Title="@L[_currentDto.GetMemberDescription(x => x.BillingPlan)]" />
         <PropertyColumn Property="x => x.IsTaxable" Title="@L[_currentDto.GetMemberDescription(x => x.IsTaxable)]" />
@@ -268,7 +272,7 @@
         {
              var command = Mapper.Map<UpdateParentCommand>(dto);
             return DialogServiceHelper.ShowFormDialogAsync<ParentCustomerEditFormDialog, UpdateParentCommand>(
-            L["Update Child"],
+            L["Update Parent"],
             new DialogParameters<ParentCustomerEditFormDialog>
             {
                             { x=>x._model,command}

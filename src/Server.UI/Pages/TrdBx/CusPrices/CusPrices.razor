@@ -95,13 +95,14 @@
                         @if (_accessRights.Edit)
                         {
                             <MudMenuItem OnClick="@(() => OnEdit(context.Item))">
-                                @AppStrings.Edit
+                                L(@AppStrings.Edit)
+                                
                             </MudMenuItem>
                         }
                         @if (_accessRights.Delete)
                         {
                             <MudMenuItem OnClick="@(() => OnDelete(context.Item))">
-                                @AppStrings.Delete
+                                L(@AppStrings.Delete)
                             </MudMenuItem>
                         }
                     </MudMenu>
@@ -251,7 +252,7 @@
         return DialogServiceHelper.ShowDeleteConfirmationDialogAsync(
             command,
             AppStrings.DeleteConfirmationTitle,
-            contentText,
+        contentText,
             async () =>
             {
                 await _table.ReloadServerData();
@@ -280,7 +281,7 @@
             {
                 if (result.Data != null)
                 {
-                    await BlazorDownloadFileService.DownloadFileAsync($"{L[_currentDto.GetClassDescription()]}.xlsx", result.Data, contentType: "application/octet-stream");
+                    await BlazorDownloadFileService.DownloadFileAsync($"{_currentDto.GetClassDescription()}.xlsx", result.Data, contentType: "application/octet-stream");
                     Snackbar.Add($"{AppStrings.ExportSuccess}", MudBlazor.Severity.Info);
                 }
                 else
