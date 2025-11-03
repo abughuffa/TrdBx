@@ -1,4 +1,4 @@
-using CleanArchitecture.Blazor.Application;
+﻿using CleanArchitecture.Blazor.Application;
 using CleanArchitecture.Blazor.Infrastructure;
 using CleanArchitecture.Blazor.Infrastructure.Extensions;
 using CleanArchitecture.Blazor.Server.UI;
@@ -11,6 +11,7 @@ builder.WebHost.UseStaticWebAssets();
 builder.Services
     .AddApplication()
     .AddInfrastructure(builder.Configuration)
+    //.AddTrdBxInfrastructure(builder.Configuration)
     .AddServerUI(builder.Configuration);
 var app = builder.Build();
 

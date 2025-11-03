@@ -1,11 +1,11 @@
-using QuestPDF.Fluent;
+﻿using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using Document = QuestPDF.Fluent.Document;
 
 namespace CleanArchitecture.Blazor.Infrastructure.Services;
 
-public class PDFService : IPDFService
+public partial class PDFService : IPDFService
 {
     private const int MarginPTs = 56;
     private const string FontFamilyName = Fonts.Arial;

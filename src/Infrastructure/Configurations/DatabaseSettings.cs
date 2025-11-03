@@ -1,11 +1,11 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace CleanArchitecture.Blazor.Infrastructure.Configurations;
 
 /// <summary>
 ///     Configuration wrapper for the database section
 /// </summary>
-public class DatabaseSettings : IValidatableObject
+public partial class DatabaseSettings : IValidatableObject
 {
     /// <summary>
     ///     Database key constraint

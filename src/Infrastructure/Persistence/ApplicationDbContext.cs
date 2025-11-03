@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 namespace CleanArchitecture.Blazor.Infrastructure.Persistence;
 
 #nullable disable
-public class ApplicationDbContext : IdentityDbContext<
+public partial class ApplicationDbContext : IdentityDbContext<
     ApplicationUser, ApplicationRole, string,
     ApplicationUserClaim, ApplicationUserRole, ApplicationUserLogin,
     ApplicationRoleClaim, ApplicationUserToken>, IApplicationDbContext, IDataProtectionKeyContext
