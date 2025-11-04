@@ -33,10 +33,6 @@
                     <MudItem md="6">
                         <ReadOnlyField Label="@L[model.GetMemberDescription(x => x.SPackage)]" Value="model.SPackage"></ReadOnlyField>
                     </MudItem>
-   @*                  <MudItem md="6">
-                        <ReadOnlyField Label="@L[model.GetMemberDescription(x=>x.SPackageId)]" Value="model.SPackageId"></ReadOnlyField>
-                    </MudItem> *@
-
                     <MudItem md="6">
                         <ReadOnlyField Label="@L[model.GetMemberDescription(x=>x.ExDate)]" Value="model.ExDate"></ReadOnlyField>
                     </MudItem>
@@ -65,10 +61,7 @@
     protected override async Task OnInitializedAsync()
     {
         Title = L["SimCard"];
-
         var result = await Mediator.Send(new GetSimCardByIdQuery() { Id = Id });
-
-
         result.Map(data =>
         {
         model = data;
@@ -77,9 +70,6 @@
         {
         Snackbar.Add(errors, MudBlazor.Severity.Error);
         });
-
-
-
     }
 
 

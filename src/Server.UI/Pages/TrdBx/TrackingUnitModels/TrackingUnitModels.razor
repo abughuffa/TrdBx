@@ -109,19 +109,19 @@
 
     private async Task OnView(TrackingUnitModelDto dto)
     {
-        await ShowViewFormDialog("TrackingUnitModel",dto);
+        await ShowViewFormDialog(L["TrackingUnitModel"],dto);
     }
 
     private async Task OnCreate()
     {
         var command = Mapper.Map<AddEditTrackingUnitModelCommand>(new TrackingUnitModelDto());
-        await ShowAddEditFormDialog(string.Format(AppStrings.CreateAnItem, L["TrackingUnitModel"]), command);
+        await ShowAddEditFormDialog(L["Create TrackingUnitModel"], command);
     }
 
     private async Task OnEdit(TrackingUnitModelDto dto)
     {
         var command = Mapper.Map<AddEditTrackingUnitModelCommand>(dto);
-        await ShowAddEditFormDialog(string.Format(AppStrings.EditTheItem, L["TrackingUnitModel"]), command);
+        await ShowAddEditFormDialog(L["Update TrackingUnitModel"], command);
     }
 
     private Task OnDelete(TrackingUnitModelDto dto)

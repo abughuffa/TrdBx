@@ -11,7 +11,7 @@
         <MudForm Model="@_model" @ref="@_contactForm" Validation="@(Validator.ValidateValue(_model))">
             <MudGrid Spacing="2">
                 <MudItem md="12">
-                    <MudTextField Label="@L[_model.GetMemberDescription(x => x.TrackedAssetDesc)]" @bind-Value="_model.TrackedAssetDesc" For="@(() => _model.TrackedAssetDesc)" Required="true" RequiredError="@L["TrackedAsset Desc is required!"]" />
+                    <MudTextField Label="@L[_model.GetMemberDescription(x => x.TrackedAssetDesc)]" @bind-Value="_model.TrackedAssetDesc" For="@(() => _model.TrackedAssetDesc)" Required="true" RequiredError="@L["Desc is required!"]" />
                 </MudItem>
                 <MudItem md="4">
                     <MudTextField Label="@L[_model.GetMemberDescription(x => x.TrackedAssetCode)]" @bind-Value="_model.TrackedAssetCode" />
