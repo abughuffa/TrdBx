@@ -1,0 +1,501 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Set Permissions" xml:space="preserve">
+    <value>تعيين الأذونات</value>
+  </data>
+  <data name="Assign / Unassign all permission set" xml:space="preserve">
+    <value>تعيين/إلغاء تعيين كافة مجموعات الأذونات</value>
+  </data>
+  <data name="Contact Permissions" xml:space="preserve">
+    <value>أذونات جهة الاتصال</value>
+  </data>
+  <data name="Product Permissions" xml:space="preserve">
+    <value>أذونات المنتج</value>
+  </data>
+  <data name="Allows viewing product details" xml:space="preserve">
+    <value>السماح بعرض تفاصيل المنتج</value>
+  </data>
+  <data name="Allows creating new product records" xml:space="preserve">
+    <value>السماح بإنشاء سجلات منتج جديدة</value>
+  </data>
+  <data name="Allows modifying existing product details" xml:space="preserve">
+    <value>السماح بتعديل تفاصيل المنتج الحالي</value>
+  </data>
+  <data name="Allows deleting product records" xml:space="preserve">
+    <value>السماح بحذف سجلات المنتج</value>
+  </data>
+  <data name="Allows printing product details" xml:space="preserve">
+    <value>السماح بطباعة تفاصيل المنتج</value>
+  </data>
+  <data name="Allows searching for product records" xml:space="preserve">
+    <value>السماح بالبحث عن سجلات المنتج</value>
+  </data>
+  <data name="Allows exporting product records" xml:space="preserve">
+    <value>السماح بتصدير سجلات المنتج</value>
+  </data>
+  <data name="Allows importing product records" xml:space="preserve">
+    <value>السماح باستيراد سجلات المنتج</value>
+  </data>
+  <data name="Audit Permissions" xml:space="preserve">
+    <value>أذونات التدقيق</value>
+  </data>
+  <data name="Allows viewing audit trail details" xml:space="preserve">
+    <value>السماح بعرض تفاصيل مسار التدقيق</value>
+  </data>
+  <data name="Allows searching for audit trail records" xml:space="preserve">
+    <value>السماح بالبحث عن سجلات مسار التدقيق</value>
+  </data>
+  <data name="Allows exporting audit trail records" xml:space="preserve">
+    <value>السماح بتصدير سجلات مسار التدقيق</value>
+  </data>
+  <data name="Log Permissions" xml:space="preserve">
+    <value>أذونات السجل</value>
+  </data>
+  <data name="Allows viewing log details" xml:space="preserve">
+    <value>السماح بعرض تفاصيل السجل</value>
+  </data>
+  <data name="Allows searching for log records" xml:space="preserve">
+    <value>السماح بالبحث عن سجلات السجل</value>
+  </data>
+  <data name="Allows exporting log records" xml:space="preserve">
+    <value>السماح بتصدير سجلات السجل</value>
+  </data>
+  <data name="Allows purging log records" xml:space="preserve">
+    <value>السماح بمسح سجلات السجل</value>
+  </data>
+  <data name="Picklist Permissions" xml:space="preserve">
+    <value>أذونات قائمة الاختيار</value>
+  </data>
+  <data name="Allows viewing picklist set details" xml:space="preserve">
+    <value>السماح بعرض تفاصيل مجموعة قائمة الاختيار</value>
+  </data>
+  <data name="Allows creating new picklist sets" xml:space="preserve">
+    <value>السماح بإنشاء مجموعات قوائم اختيار جديدة</value>
+  </data>
+  <data name="Allows modifying existing picklist sets" xml:space="preserve">
+    <value>السماح بتعديل مجموعات قائمة الاختيار الحالية</value>
+  </data>
+  <data name="Allows deleting picklist sets" xml:space="preserve">
+    <value>السماح بحذف مجموعات قائمة الاختيار</value>
+  </data>
+  <data name="Allows searching for picklist set records" xml:space="preserve">
+    <value>السماح بالبحث عن سجلات مجموعة قائمة الاختيار</value>
+  </data>
+  <data name="Allows exporting picklist set records" xml:space="preserve">
+    <value>السماح بتصدير سجلات مجموعة قائمة الأختيار</value>
+  </data>
+  <data name="Allows importing picklist set records" xml:space="preserve">
+    <value>السماح باستيراد سجلات مجموعة القائمة الاختيار</value>
+  </data>
+  <data name="User Permissions" xml:space="preserve">
+    <value>أذونات المستخدم</value>
+  </data>
+  <data name="Allows viewing user details" xml:space="preserve">
+    <value>السماح بعرض تفاصيل المستخدم</value>
+  </data>
+  <data name="Allows creating new user accounts" xml:space="preserve">
+    <value>السماح بإنشاء حسابات مستخدم جديدة</value>
+  </data>
+  <data name="Allows modifying existing user details" xml:space="preserve">
+    <value>السماح بتعديل تفاصيل المستخدم الحالي</value>
+  </data>
+  <data name="Allows deleting user accounts" xml:space="preserve">
+    <value>السماح بحذف حسابات المستخدم</value>
+  </data>
+  <data name="Allows searching for user records" xml:space="preserve">
+    <value>السماح بالبحث عن سجلات المستخدم</value>
+  </data>
+  <data name="Allows importing user records" xml:space="preserve">
+    <value>السماح باستيراد سجلات المستخدم</value>
+  </data>
+  <data name="Allows exporting user records" xml:space="preserve">
+    <value>السماح بتصدير سجلات المستخدم</value>
+  </data>
+  <data name="Allows managing user roles" xml:space="preserve">
+    <value>السماح بإدارة أدوار المستخدم</value>
+  </data>
+  <data name="Allows resetting user passwords" xml:space="preserve">
+    <value>السماح بإعادة تعيين كلمات مرور المستخدم</value>
+  </data>
+  <data name="Allows sending password reset emails" xml:space="preserve">
+    <value>السماح بإرسال رسائل البريد الإلكتروني لإعادة تعيين كلمة المرور</value>
+  </data>
+  <data name="Allows managing user permissions" xml:space="preserve">
+    <value>السماح بإدارة أذونات المستخدم</value>
+  </data>
+  <data name="Allows deactivating user accounts" xml:space="preserve">
+    <value>السماح بإلغاء تنشيط حسابات المستخدم</value>
+  </data>
+  <data name="Allows viewing users' online status" xml:space="preserve">
+    <value>السماح بعرض حالة اتصال المستخدمين بالإنترنت</value>
+  </data>
+  <data name="Role Permissions" xml:space="preserve">
+    <value>أذونات الدور</value>
+  </data>
+  <data name="Allows viewing role details" xml:space="preserve">
+    <value>السماح بعرض تفاصيل الدور</value>
+  </data>
+  <data name="Allows creating new roles" xml:space="preserve">
+    <value>السماح بإنشاء أدوار جديدة</value>
+  </data>
+  <data name="Allows modifying existing role details" xml:space="preserve">
+    <value>السماح بتعديل تفاصيل الدور الحالي</value>
+  </data>
+  <data name="Allows deleting roles" xml:space="preserve">
+    <value>السماح بحذف الأدوار</value>
+  </data>
+  <data name="Allows searching for role records" xml:space="preserve">
+    <value>السماح بالبحث عن سجلات الأدوار</value>
+  </data>
+  <data name="Allows exporting role records" xml:space="preserve">
+    <value>السماح بتصدير سجلات الأدوار</value>
+  </data>
+  <data name="Allows importing role records" xml:space="preserve">
+    <value>السماح باستيراد سجلات الأدوار</value>
+  </data>
+  <data name="Allows managing permissions for roles" xml:space="preserve">
+    <value>السماح بإدارة الأذونات للأدوار</value>
+  </data>
+  <data name="Allows managing role-specific navigation menus" xml:space="preserve">
+    <value>السماح بإدارة قوائم التنقل الخاصة بالدور</value>
+  </data>
+  <data name="Tenant Permissions" xml:space="preserve">
+    <value>أذونات المستأجر</value>
+  </data>
+  <data name="Allows viewing tenant details" xml:space="preserve">
+    <value>السماح بعرض تفاصيل المستأجر</value>
+  </data>
+  <data name="Allows creating new tenants" xml:space="preserve">
+    <value>السماح بإنشاء مستأجرين جدد</value>
+  </data>
+  <data name="Allows modifying existing tenant details" xml:space="preserve">
+    <value>السماح بتعديل تفاصيل المستأجر الحالي</value>
+  </data>
+  <data name="Allows deleting tenant records" xml:space="preserve">
+    <value>السماح بحذف سجلات المستأجرين</value>
+  </data>
+  <data name="Allows searching for tenant records" xml:space="preserve">
+    <value>السماح بالبحث عن سجلات المستأجرين</value>
+  </data>
+  <data name="Dashboard Permissions" xml:space="preserve">
+    <value>أذونات لوحة المعلومات</value>
+  </data>
+  <data name="Allows viewing dashboard data" xml:space="preserve">
+    <value>السماح بعرض بيانات لوحة المعلومات</value>
+  </data>
+  <data name="Document Permissions" xml:space="preserve">
+    <value>أذونات المستند</value>
+  </data>
+  <data name="Allows viewing document details" xml:space="preserve">
+    <value>السماح بعرض تفاصيل المستند</value>
+  </data>
+  <data name="Allows creating new document records" xml:space="preserve">
+    <value>السماح بإنشاء سجلات مستند جديدة</value>
+  </data>
+  <data name="Allows modifying existing document details" xml:space="preserve">
+    <value>السماح بتعديل تفاصيل المستند الحالي</value>
+  </data>
+  <data name="Allows deleting document records" xml:space="preserve">
+    <value>السماح بحذف سجلات المستندات</value>
+  </data>
+  <data name="Allows searching for document records" xml:space="preserve">
+    <value>السماح بالبحث عن سجلات المستندات</value>
+  </data>
+  <data name="Allows exporting document records" xml:space="preserve">
+    <value>السماح بتصدير سجلات المستندات</value>
+  </data>
+  <data name="Allows importing document records" xml:space="preserve">
+    <value>السماح باستيراد سجلات المستندات</value>
+  </data>
+  <data name="Allows downloading documents" xml:space="preserve">
+    <value>السماح بتنزيل المستندات</value>
+  </data>
+  <data name="Allows viewing contact details" xml:space="preserve">
+    <value>السماح بعرض تفاصيل جهة الاتصال</value>
+  </data>
+  <data name="Allows creating new contact records" xml:space="preserve">
+    <value>السماح بإنشاء سجلات جهة اتصال جديدة</value>
+  </data>
+  <data name="Allows modifying existing contact details" xml:space="preserve">
+    <value>السماح بتعديل تفاصيل جهة الاتصال الحالية</value>
+  </data>
+  <data name="Allows deleting contact records" xml:space="preserve">
+    <value>السماح بحذف سجلات الاتصال</value>
+  </data>
+  <data name="Allows printing contact details" xml:space="preserve">
+    <value>السماح بطباعة تفاصيل جهة الاتصال</value>
+  </data>
+  <data name="Allows searching for contact records" xml:space="preserve">
+    <value>السماح بالبحث عن سجلات جهة  الاتصال</value>
+  </data>
+  <data name="Allows exporting contact records" xml:space="preserve">
+    <value>السماح بتصدير سجلات جهات الاتصال</value>
+  </data>
+  <data name="Allows importing contact records" xml:space="preserve">
+    <value>السماح باستيراد سجلات جهات الاتصال</value>
+  </data>
+  <data name="Set permissions for product operations" xml:space="preserve">
+    <value>تعيين الأذونات لعمليات المنتج</value>
+  </data>
+  <data name="Set permissions for audit operations" xml:space="preserve">
+    <value>تعيين الأذونات لعمليات التدقيق</value>
+  </data>
+  <data name="Set permissions for log operations" xml:space="preserve">
+    <value>تعيين الأذونات لعمليات السجل</value>
+  </data>
+  <data name="Set permissions for picklist operations" xml:space="preserve">
+    <value>تعيين الأذونات لعمليات قائمة الاختيار</value>
+  </data>
+  <data name="Set permissions for user operations" xml:space="preserve">
+    <value>تعيين الأذونات لعمليات المستخدم</value>
+  </data>
+  <data name="Set permissions for role operations" xml:space="preserve">
+    <value>تعيين الأذونات لعمليات الدور</value>
+  </data>
+  <data name="Set permissions for tenant operations" xml:space="preserve">
+    <value>تعيين الأذونات لعمليات المستأجر</value>
+  </data>
+  <data name="Set permissions for dashboard operations" xml:space="preserve">
+    <value>تعيين الأذونات لعمليات لوحة المعلومات</value>
+  </data>
+  <data name="Set permissions for document operations" xml:space="preserve">
+    <value>تعيين الأذونات لعمليات المستند</value>
+  </data>
+  <data name="Set permissions for contact operations" xml:space="preserve">
+    <value>تعيين الأذونات لعمليات جهات الاتصال</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>عرض</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>إنشاء</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>تحرير</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>حدف</value>
+  </data>
+  <data name="Print" xml:space="preserve">
+    <value>طباعة</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>بحث</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>تصدير</value>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>استيراد</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>تنزيل</value>
+  </data>
+  <data name="Purge" xml:space="preserve">
+    <value>تطهير</value>
+  </data>
+  <data name="ManageNavigation" xml:space="preserve">
+    <value>إدارة التنقل</value>
+  </data>
+  <data name="Allows managing role claims" xml:space="preserve">
+    <value>السماح بإدارة مطالبات الأدوار</value>
+  </data>
+  <data name="Allows managing users in role" xml:space="preserve">
+    <value>السماح بإدارة المستخدمين في الدور</value>
+  </data>
+  <data name="Allows viewing role permissions" xml:space="preserve">
+    <value>السماح بعرض أذونات الدور</value>
+  </data>
+  <data name="Allows viewing role claims" xml:space="preserve">
+    <value>السماح بعرض مطالبات الأدوار</value>
+  </data>
+  <data name="Allows viewing users in role" xml:space="preserve">
+    <value>السماح بعرض المستخدمين في الدور</value>
+  </data>
+  <data name="Suppress broadcasting login notifications to other users" xml:space="preserve">
+    <value>منع بث إشعارات تسجيل الدخول للمستخدمين الآخرين</value>
+  </data>
+  <data name="Allows switching between available tenants" xml:space="preserve">
+    <value>السماح بالتبديل بين المستأجرين المتاحين</value>
+  </data>
+  <data name="Allows switching to any tenant (admin privilege)" xml:space="preserve">
+    <value>السماح بالتبديل إلى أي مستأجر (امتياز المسؤول)</value>
+  </data>
+  <data name="Allows viewing dashboard details" xml:space="preserve">
+    <value>السماح بعرض تفاصيل لوحة المعلومات</value>
+  </data>
+  <data name="Allows modifying existing roles" xml:space="preserve">
+    <value>السماح بتعديل الأدوار الحالية</value>
+  </data>
+  <data name="Allows importing role data" xml:space="preserve">
+    <value>السماح باستيراد بيانات الدور</value>
+  </data>
+  <data name="Allows exporting role data" xml:space="preserve">
+    <value>السماح بتصدير بيانات الدور</value>
+  </data>
+  <data name="Allows managing role permissions" xml:space="preserve">
+    <value>السماح بإدارة أذونات الأدوار</value>
+  </data>
+  <data name="Manage claims in role" xml:space="preserve">
+    <value>إدارة المطالبات في الدور</value>
+  </data>
+  <data name="Manage users in role" xml:space="preserve">
+    <value>إدارة المستخدمين في الدور</value>
+  </data>
+  <data name="View permissions" xml:space="preserve">
+    <value>عرض الأذونات</value>
+  </data>
+  <data name="View claims in role" xml:space="preserve">
+    <value>عرض المطالبات في الدور</value>
+  </data>
+  <data name="View users in role" xml:space="preserve">
+    <value>عرض المستخدمين في الدور</value>
+  </data>
+  <data name="Manage roles" xml:space="preserve">
+    <value>إدارة الأدوار</value>
+  </data>
+  <data name="Rest password" xml:space="preserve">
+    <value>إعادة تعيين كلمة المرور</value>
+  </data>
+  <data name="Send rest password mail" xml:space="preserve">
+    <value>إرسال بريد إعادة تعيين كلمة المرور</value>
+  </data>
+  <data name="Manage permissions" xml:space="preserve">
+    <value>إدارة الأذونات</value>
+  </data>
+  <data name="View online status" xml:space="preserve">
+    <value>عرض حالة الاتصال بالإنترنت</value>
+  </data>
+  <data name="Suppress login notification" xml:space="preserve">
+    <value>قمع إشعار تسجيل الدخول</value>
+  </data>
+  <data name="Switch tenants" xml:space="preserve">
+    <value>تبديل المستأجرين</value>
+  </data>
+  <data name="Switch to any tenant" xml:space="preserve">
+    <value>التبديل إلى أي مستأجر</value>
+  </data>
+  <data name="View all" xml:space="preserve">
+    <value>عرض الكل</value>
+  </data>
+  <data name="Deactivation" xml:space="preserve">
+    <value>تعطيل</value>
+  </data>
+</root>
