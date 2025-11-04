@@ -110,6 +110,7 @@ public enum AssignedTo
 }
 public enum BillingPlan
 {
+    [Description("Unkown")] Unkown = 0,
     [Description("Basic")] Basic = 1,
     [Description("Advanced")] Advanced = 2
 }

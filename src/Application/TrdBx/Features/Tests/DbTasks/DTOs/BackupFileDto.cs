@@ -1,4 +1,4 @@
-﻿namespace CleanArchitecture.Blazor.Application.Features.DbAdmininstraion.DTOs;
+﻿namespace CleanArchitecture.Blazor.Application.Features.DbTasks.DTOs;
 public class BackupFileDto
 {
     public required string Name { get; set; }

@@ -120,16 +120,25 @@
   <data name="CusPrices" xml:space="preserve">
     <value>Custom Prices</value>
   </data>
+  <data name="Enter Gprs fees" xml:space="preserve">
+    <value>Enter Gprs fees</value>
+  </data>
+  <data name="Enter Host fees" xml:space="preserve">
+    <value>Enter Host fees</value>
+  </data>
+  <data name="Enter Unit Price" xml:space="preserve">
+    <value>Enter Unit Price</value>
+  </data>
   <data name="Gprs" xml:space="preserve">
     <value>Gprs fees</value>
   </data>
-  <data name="Gprs fees is required" xml:space="preserve">
+  <data name="Gprs fees is required!" xml:space="preserve">
     <value>Gprs fees is required!</value>
   </data>
   <data name="Host" xml:space="preserve">
     <value>Host fees</value>
   </data>
-  <data name="Host fees is required" xml:space="preserve">
+  <data name="Host fees is required!" xml:space="preserve">
     <value>Host fees is required!</value>
   </data>
   <data name="Price" xml:space="preserve">
@@ -138,7 +147,7 @@
   <data name="TrackingUnitModel" xml:space="preserve">
     <value>Tracking Unit Model</value>
   </data>
-  <data name="Unit Price is required" xml:space="preserve">
+  <data name="Unit Price is required!" xml:space="preserve">
     <value>Unit Price is required!</value>
   </data>
   <data name="Update CusPrice" xml:space="preserve">

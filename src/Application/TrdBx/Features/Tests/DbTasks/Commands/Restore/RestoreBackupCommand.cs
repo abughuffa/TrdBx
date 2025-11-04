@@ -1,4 +1,4 @@
-﻿namespace CleanArchitecture.Blazor.Application.Features.DbAdmininstraion.Commands.Restore;
+﻿namespace CleanArchitecture.Blazor.Application.Features.DbTasks.Commands.Restore;
 
 public record RestoreBackupCommand(string BackupName) : IRequest<Result>;
 

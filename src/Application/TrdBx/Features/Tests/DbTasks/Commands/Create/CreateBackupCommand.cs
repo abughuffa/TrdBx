@@ -1,4 +1,4 @@
-﻿namespace CleanArchitecture.Blazor.Application.Features.DbAdmininstraion.Commands.Create;
+﻿namespace CleanArchitecture.Blazor.Application.Features.DbTasks.Commands.Create;
 
 public record CreateBackupCommand(string BackupName) : IRequest<bool>;
 

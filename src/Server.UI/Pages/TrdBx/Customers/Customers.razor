@@ -97,12 +97,12 @@
                              Dense="true" EndIcon="@Icons.Material.Filled.KeyboardArrowDown" IconColor="Color.Info" AnchorOrigin="Origin.CenterLeft">
 
                         <MudMenuItem OnClick="@(() => OnCreateCusPrice(context.Item))"
-                                     Disabled="((!(context.Item.ParentId is null) && (context.Item.BillingPlan == BillingPlan.Advanced))) || (((context.Item.ParentId is null) && (context.Item.BillingPlan == BillingPlan.Basic)))">
+                                     Disabled="IsCusPriceCreateDisabled(context.Item)">
                             @L["Create CusPrice"]
                         </MudMenuItem>
 
                         <MudMenuItem OnClick="@(() => OnViewCusPrice(context.Item))"
-                                     Disabled="((!(context.Item.ParentId is null) && (context.Item.BillingPlan == BillingPlan.Advanced))) || (((context.Item.ParentId is null) && (context.Item.BillingPlan == BillingPlan.Basic)))">
+                                     Disabled="IsCusPriceViewDisabled(context.Item)">
                             @L["View CusPrices"]
                         </MudMenuItem>
 
@@ -216,6 +216,10 @@
         Query.Keyword  = string.Empty;
         await _table.ReloadServerData();
     }
+
+    private bool IsCusPriceCreateDisabled(CustomerDto dto) => (dto.BillingPlan == BillingPlan.Unkown) || (dto.ParentId is not null) && (dto.BillingPlan == BillingPlan.Advanced);
+
+    private bool IsCusPriceViewDisabled(CustomerDto dto) => (dto.ParentId is not null) && (dto.BillingPlan == BillingPlan.Advanced);
 
     private Task OnView(CustomerDto dto)
     {

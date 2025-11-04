@@ -11,9 +11,13 @@
 <MudGrid>
 
     <MudItem md="8">
-        <MudSelect T="int"
-                   Required="true" RequiredError="@L["TrackingUnitModel is required!"]" Value="SelectedItemId" ValueChanged="OnTrackingUnitModelChanged">
-            <MudSelectItem Value=0>Select a TrackingUnitModel</MudSelectItem>
+        @* Placeholder="@L["Select TrackingUnitModel"]" *@
+        <MudSelect T="int"  
+                   Value="SelectedItemId" 
+                   ValueChanged="OnTrackingUnitModelChanged"
+                   Required="true"
+                   RequiredError="@L["TrackingUnitModel is required!"]" >
+                   <MudSelectItem Value=0>@L["Select TrackingUnitModel"]</MudSelectItem>
             @foreach (var doc1type in items)
             {
                 <MudSelectItem Value="doc1type.Id">@doc1type.Name</MudSelectItem>  
@@ -65,7 +69,7 @@
 
 @code {
 
-    [Parameter] public EventCallback<int> TrackingUnitModelIdChanged { get; set; }
+    [Parameter] public EventCallback<int> SelectedItemIdChanged { get; set; }
 
     private int selectedItemId;
 
@@ -81,7 +85,7 @@
             if (selectedItemId != value)
             {
                 selectedItemId = value;
-                TrackingUnitModelIdChanged.InvokeAsync(value);
+                SelectedItemIdChanged.InvokeAsync((int)value);
             }
         }
     }
@@ -97,7 +101,7 @@
 
     private void OnTrackingUnitModelChanged(int id)
     {
-        SelectedItemId = id;
+        SelectedItemId = id; // is null ? null: id;
         SelectedItem = items.FirstOrDefault(m => m.Id == id);
     }
 

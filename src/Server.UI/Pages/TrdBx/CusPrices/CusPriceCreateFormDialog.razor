@@ -11,30 +11,38 @@
     <DialogContent>
         <MudForm Model="@_model" @ref="@_contactForm" Validation="@(Validator.ValidateValue(_model))">
             <MudGrid>
-                   <MudItem md="12">
 
-                             <TrackingUnitModels @bind-TrackingUnitModelId="_model.TrackingUnitModelId"></TrackingUnitModels>
+                 <MudItem md="12">
+                    <TrackingUnitModels @bind-TrackingUnitModelId="_model.TrackingUnitModelId">
+                        </TrackingUnitModels>
+                 </MudItem>
 
-                             </MudItem>
+                 <MudItem md="4">
+                        <MudTextField Label="@L[_model.GetMemberDescription(x => x.Gprs)]" @bind-Value="_model.Gprs"
+                            For="@(() => _model.Gprs)" 
+                            Required="true"
+                            RequiredError="@L["Gprs fees is required!"]"
+                            Placeholder="@L["Enter Gprs fees"]">
+                        </MudTextField>
+                 </MudItem>
 
-                        <MudItem md="4">
-                            <MudTextField Label="@L[_model.GetMemberDescription(x=>x.Gprs)]" @bind-Value="_model.Gprs" 
-                                For="@(() => _model.Gprs)" 
-                                Required="false"
-                                      RequiredError="@L["Gprs fees is required!"]"></MudTextField>
-                        </MudItem>
-                        <MudItem md="4">
+                 <MudItem md="4">
                         <MudTextField Label="@L[_model.GetMemberDescription(x=>x.Host)]" @bind-Value="_model.Host"
-                                      For="@(() => _model.Host)"
-                                      Required="false"
-                                      RequiredError="@L["Host fees is required!"]"></MudTextField>
-                        </MudItem>
-                    <MudItem md="4">
+                            For="@(() => _model.Host)"
+                            Required="true"
+                            RequiredError="@L["Host fees is required!"]"
+                            Placeholder="@L["Enter Host fees"]">
+                        </MudTextField>
+                 </MudItem>
+
+                 <MudItem md="4">
                         <MudTextField Label="@L[_model.GetMemberDescription(x=>x.Price)]" @bind-Value="_model.Price"
-                                      For="@(() => _model.Price)"
-                                      Required="false"
-                                      RequiredError="@L["Unit Price is required!"]"></MudTextField>
-                    </MudItem>
+                            For="@(() => _model.Price)"
+                            Required="true"
+                            RequiredError="@L["Unit Price is required!"]"
+                            Placeholder="@L["Enter Unit Price"]">
+                        </MudTextField>
+                 </MudItem>
 
             </MudGrid>
         </MudForm>

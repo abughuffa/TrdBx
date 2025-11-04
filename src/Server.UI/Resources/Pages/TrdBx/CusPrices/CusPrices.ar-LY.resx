@@ -120,16 +120,25 @@
   <data name="CusPrices" xml:space="preserve">
     <value>الأسعار المخصصة</value>
   </data>
+  <data name="Enter Gprs fees" xml:space="preserve">
+    <value>أدخل رسوم التمديد</value>
+  </data>
+  <data name="Enter Host fees" xml:space="preserve">
+    <value>أدخل رسوم الأستضافة</value>
+  </data>
+  <data name="Enter Unit Price" xml:space="preserve">
+    <value>أدخل سعر الوحدة</value>
+  </data>
   <data name="Gprs" xml:space="preserve">
     <value>رسوم جي بي ار اس</value>
   </data>
-  <data name="Gprs fees is required" xml:space="preserve">
+  <data name="Gprs fees is required!" xml:space="preserve">
     <value>رسوم جي بي ار اس مطلوبة!</value>
   </data>
   <data name="Host" xml:space="preserve">
     <value>رسوم الاستضافة</value>
   </data>
-  <data name="Host fees is required" xml:space="preserve">
+  <data name="Host fees is required!" xml:space="preserve">
     <value>رسوم الاستضافة مطلوبة!</value>
   </data>
   <data name="Price" xml:space="preserve">
@@ -138,7 +147,7 @@
   <data name="TrackingUnitModel" xml:space="preserve">
     <value>طراز وحدة التتبع</value>
   </data>
-  <data name="Unit Price is required" xml:space="preserve">
+  <data name="Unit Price is required!" xml:space="preserve">
     <value>سعر وحدة التتبع مطلوب!</value>
   </data>
   <data name="Update CusPrice" xml:space="preserve">

@@ -1,4 +1,4 @@
-﻿namespace CleanArchitecture.Blazor.Application.Features.DbAdmininstraion.Commands.Delete;
+﻿namespace CleanArchitecture.Blazor.Application.Features.DbTasks.Commands.Delete;
 // Application.Features.TrdBx.DbAdministration.Commands.DeleteBackup
 public record DeleteBackupCommand(string BackupName) : IRequest<Result>;
 

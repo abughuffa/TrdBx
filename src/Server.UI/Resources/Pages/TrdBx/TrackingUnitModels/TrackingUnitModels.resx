@@ -147,6 +147,9 @@
   <data name="PortNo2 is required!" xml:space="preserve">
     <value>PortNo2 is required!</value>
   </data>
+  <data name="Select TrackingUnitModel" xml:space="preserve">
+    <value>Select Tracking Unit Model</value>
+  </data>
   <data name="TrackingUnitModel" xml:space="preserve">
     <value>Tracking Unit Model</value>
   </data>

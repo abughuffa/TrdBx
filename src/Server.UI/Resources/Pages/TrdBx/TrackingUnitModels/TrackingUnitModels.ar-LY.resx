@@ -147,6 +147,9 @@
   <data name="PortNo2 is required!" xml:space="preserve">
     <value>رقم المنفذ 2 مطلوب!</value>
   </data>
+  <data name="Select TrackingUnitModel" xml:space="preserve">
+    <value>اختر طراز وحدة التتبع</value>
+  </data>
   <data name="TrackingUnitModel" xml:space="preserve">
     <value>طراز وحدة التتبع</value>
   </data>

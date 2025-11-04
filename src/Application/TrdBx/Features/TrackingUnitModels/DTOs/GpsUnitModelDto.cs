@@ -5,7 +5,7 @@ namespace CleanArchitecture.Blazor.Application.Features.TrackingUnitModels.DTOs;
 [Description("TrackingUnitModels")]
 public class TrackingUnitModelDto
 {
-    [Description("Id")] public int Id { get; set; } = 0;
+    [Description("Id")] public int Id { get; set; }
     [Description("WialonName")] public string? WialonName { get; set; }
     [Description("Name")] public string? Name { get; set; }
     [Description("WhwTypeId")] public int WhwTypeId { get; set; }

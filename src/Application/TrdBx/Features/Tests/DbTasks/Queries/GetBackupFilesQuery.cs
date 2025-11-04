@@ -1,6 +1,6 @@
-﻿using CleanArchitecture.Blazor.Application.Features.DbAdmininstraion.DTOs;
+﻿using CleanArchitecture.Blazor.Application.Features.DbTasks.DTOs;
 
-namespace CleanArchitecture.Blazor.Application.Features.DbAdmininstraion.Queries;
+namespace CleanArchitecture.Blazor.Application.Features.DbTasks.Queries;
 
 public record GetBackupsQuery : IRequest<List<BackupFileDto>>;
 
