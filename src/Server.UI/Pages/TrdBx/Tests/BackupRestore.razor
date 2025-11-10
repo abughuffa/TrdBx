@@ -144,7 +144,7 @@
 
     private async Task OnRestore(string backupName)
     {
-        var contentText = string.Format(AppStrings.ExecuteConfirmation, backupName);
+        var contentText = string.Format(AppStrings.ExecuteConfirmation, "Restore", backupName);
         var command = new RestoreBackupCommand(backupName);
         await DialogServiceHelper.ShowExecuteConfirmationDialogAsync(command, AppStrings.ExecuteConfirmationTitle, contentText, async () =>
         {

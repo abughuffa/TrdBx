@@ -1,5 +1,5 @@
 ﻿using CleanArchitecture.Blazor.Application.Common.Models;
-using CleanArchitecture.Blazor.Application.Features.DbAdmininstraion.DTOs;
+using CleanArchitecture.Blazor.Application.Features.DbTasks.DTOs;
 
 namespace CleanArchitecture.Blazor.Application.Common.Interfaces;
 public interface IBackupRestoreService

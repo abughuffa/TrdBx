@@ -1,5 +1,5 @@
 ﻿// Infrastructure.Services
-using CleanArchitecture.Blazor.Application.Features.DbAdmininstraion.DTOs;
+using CleanArchitecture.Blazor.Application.Features.DbTasks.DTOs;
 using CleanArchitecture.Blazor.Infrastructure.Configurations;
 using Microsoft.AspNetCore.Hosting;
 

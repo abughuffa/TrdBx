@@ -141,6 +141,14 @@ internal static class TrdBxMenu
                             Href = "/pages/TrdBx/FakeData",
                             PageStatus = PageStatus.Completed
                         },
+                        new()
+                        {
+                            Title = "Backup & Restore",
+                            Href = "/pages/TrdBx/BackupRestore",
+                            PageStatus = PageStatus.Completed
+                        },
+
+                        
                         //new()
                         //{
                         //   Title = "Activate Cases",
