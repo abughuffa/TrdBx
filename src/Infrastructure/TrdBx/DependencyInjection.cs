@@ -4,6 +4,7 @@ using CleanArchitecture.Blazor.Infrastructure.Services.BackupRestoreStrategies;
 using CleanArchitecture.Blazor.Infrastructure.Services.Wialon;
 using CleanArchitecture.Blazor.Infrastructure.Services.Wialon.Implementation;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CleanArchitecture.Blazor.Infrastructure;
 public static partial class DependencyInjection

@@ -5,8 +5,8 @@ namespace CleanArchitecture.Blazor.Application.Common.Interfaces;
 public interface IBackupRestoreService
 {
     Task<List<BackupFileDto>> GetBackupsAsync();
-    Task<bool> CreateBackupAsync(string backupName);
+    Task<bool> CreateBackupAsync(string? backupName);
     Task<Result> RestoreBackupAsync(string backupName);
-    Task<string> GetBackupPathAsync();
+    //Task<string> GetBackupPathAsync();
     Task<Result> DeleteBackupAsync(string backupName);
 }

@@ -21,6 +21,14 @@ public partial class DatabaseSettings : IValidatableObject
     ///     The connection string being used to connect with the given database provider
     /// </summary>
     public string ConnectionString { get; set; } = string.Empty;
+    /// <summary>
+    ///     Represents the Path of database backup files
+    /// </summary>
+    public string BackupPath { get; set; } = string.Empty;
+    /// <summary>
+    ///     Represents Retention Days of database backup files to delete
+    /// </summary>
+    public int BackupRetentionDays { get; set; } = 30;
 
     /// <summary>
     ///     Validates the entered configuration
@@ -39,6 +47,13 @@ public partial class DatabaseSettings : IValidatableObject
                 $"{nameof(DatabaseSettings)}.{nameof(ConnectionString)} is not configured",
                 new[] { nameof(ConnectionString) });
 
-        TrdBxValidate(validationContext);
+        if (BackupPath is null)
+            yield return new ValidationResult(
+                $"{nameof(BackupPath)}.{nameof(BackupPath)} is not configured",
+                new[] { nameof(BackupPath) });
+        if (BackupRetentionDays == 0)
+            yield return new ValidationResult(
+                $"{nameof(BackupRetentionDays)}.{nameof(BackupRetentionDays)} is not configured",
+                new[] { nameof(BackupRetentionDays) });
     }
 }

@@ -17,18 +17,20 @@ public class BackupRestoreService : IBackupRestoreService
         IOptions<DatabaseSettings> databaseSettings,
         ILogger<BackupRestoreService> logger)
     {
-        _strategy = strategy;
         _environment = environment;
+        _strategy = strategy;
         _databaseSettings = databaseSettings.Value;
         _logger = logger;
     }
+
+    public DatabaseSettings DatabaseSettings => _databaseSettings;
+
 
     public async Task<List<BackupFileDto>> GetBackupsAsync()
     {
         try
         {
-            var backupPath = GetBackupPath();
-            return await _strategy.GetBackupsAsync(backupPath);
+            return await _strategy.GetBackupsAsync();
         }
         catch (Exception ex)
         {
@@ -41,11 +43,13 @@ public class BackupRestoreService : IBackupRestoreService
     {
         try
         {
-            var backupPath = GetBackupPath();
+            //var backupPath = GetBackupPath();
             var result = await _strategy.CreateBackupAsync(
-                _databaseSettings.ConnectionString,
-                backupPath,
                 backupName);
+            //var result = await _strategy.CreateBackupAsync(
+            //    _databaseSettings.ConnectionString,
+            //    backupPath,
+            //    backupName);
 
             if (result)
             {
@@ -73,10 +77,13 @@ public class BackupRestoreService : IBackupRestoreService
         try
         {
             var backupPath = GetBackupPath();
+
             var result = await _strategy.RestoreBackupAsync(
-                _databaseSettings.ConnectionString,
-                backupPath,
                 backupName);
+            //var result = await _strategy.RestoreBackupAsync(
+            //    _databaseSettings.ConnectionString,
+            //    backupPath,
+            //    backupName);
 
             if (result)
             {
@@ -99,8 +106,11 @@ public class BackupRestoreService : IBackupRestoreService
     {
         try
         {
-            var backupPath = GetBackupPath();
+            var backupPath = _databaseSettings.BackupPath;
             var backupFile = Path.Combine(backupPath, backupName);
+
+            //var backupPath = GetBackupPath();
+            //var backupFile = Path.Combine(backupPath, backupName);
 
             if (File.Exists(backupFile))
             {
@@ -126,7 +136,7 @@ public class BackupRestoreService : IBackupRestoreService
 
     private string GetBackupPath()
     {
-        var basePath = _databaseSettings.BackupSettings?.Path ?? "Backups";
+        var basePath = _databaseSettings.BackupPath ?? "Backups";
 
         // If it's a relative path, combine with content root
         if (!Path.IsPathRooted(basePath))
