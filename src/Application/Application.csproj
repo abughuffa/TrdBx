@@ -8,24 +8,28 @@
         <LangVersion>default</LangVersion>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="AutoMapper" Version="14.0.0" />
-        <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
+   
         <PackageReference Include="Ardalis.Specification" Version="9.3.1" />
         <PackageReference Include="Ardalis.Specification.EntityFrameworkCore" Version="9.3.1" />
         <PackageReference Include="ClosedXML" Version="0.105.0" />
-    
-        <PackageReference Include="MailKit" Version="4.14.1" />
-        <PackageReference Include="MimeKit" Version="4.14.0" />
-        <PackageReference Include="Scriban" Version="6.5.0" />
-        
-        <PackageReference Include="FluentValidation" Version="12.0.0" />
-        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.0.0" />
+        <PackageReference Include="jcamp.FluentEmail.Core" Version="4.0.0" />
+        <PackageReference Include="jcamp.FluentEmail.MailKit" Version="4.0.0" />
+        <PackageReference Include="jcamp.FluentEmail.Razor" Version="4.0.0" />
+        <PackageReference Include="FluentValidation" Version="12.1.0" />
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.0" />
         <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.10" />
         <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="9.0.10" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-        <PackageReference Include="Hangfire.Core" Version="1.8.21" />
+        <PackageReference Include="Riok.Mapperly" Version="4.3.0" />
+        <PackageReference Include="System.Linq.Dynamic.Core" Version="1.6.10" />
+        <PackageReference Include="Hangfire.Core" Version="1.8.22" />
         <PackageReference Include="ZiggyCreatures.FusionCache" Version="2.4.0" />
-     
+           <PackageReference Include="ActualLab.Fusion" Version="11.1.4" />
+        <PackageReference Include="ActualLab.Fusion.Blazor" Version="11.1.4" />
+        <PackageReference Include="ActualLab.Generators" Version="11.1.4">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Domain\Domain.csproj" />

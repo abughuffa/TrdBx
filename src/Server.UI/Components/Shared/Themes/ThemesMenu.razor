@@ -211,10 +211,16 @@ Variant="@DrawerVariant.Temporary">
         color: var(--mud-palette-primary) !important;
     }
 
-    .section-divider {
-        margin: 24px 0;
-        opacity: 0.6;
-    }
+        </MudGrid>
+     
+     
+    </div>
+</MudDrawer>
+<MudOverlay DarkBackground="true" Absolute="true"
+            AutoClose="true"
+            OnClosed="_=> ThemingDrawerOpenChanged.InvokeAsync(false)"
+            @bind-Visible="ThemingDrawerOpen" />
+<style>
 
     /* Mode Button Styles */
     .mode-button {
