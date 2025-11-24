@@ -1,0 +1,135 @@
+﻿@page "/pages/Warehouses/create"
+@using CleanArchitecture.Blazor.Application.Features.Delivery.Coordinates.Models
+@using CleanArchitecture.Blazor.Application.Features.Warehouses.Commands.Create
+@using CleanArchitecture.Blazor.Server.UI.Pages.Coordinates.Components
+
+@inherits MudComponentBase
+@inject IValidationService Validator
+@inject IStringLocalizer<Warehouses> L
+
+<PageTitle>@Title</PageTitle>
+<Breadcrumbs OnSaveButtonClick="Submit" Saving="_submitting" BreadcrumbItems="_breadcrumbItems"></Breadcrumbs>
+<MudContainer Class="mt-3" MaxWidth="MaxWidth.Small">
+    <MudCard Class="pa-2">
+        <MudCardHeader>
+            <CardHeaderContent>
+                 <MudText Typo="Typo.h6">@Title</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent>
+        <MudForm Model="@model" @ref="@_form" Validation="@(Validator.ValidateValue(model))">
+            <MudGrid Spacing="2">
+                    <MudItem xs="12" md="12">
+                        <MudTextField Label="@L[model.GetMemberDescription(x => x.Name)]" @bind-Value="model.Name" For="@(() => model.Name)" Required="true" RequiredError="@L["Name is required!"]"></MudTextField>
+                    </MudItem>
+
+                    <MudGrid>
+                        <MudItem xs="12" md="4">
+                            <MudTextField Label="@L[model.GetMemberDescription(x => x.Latitude)]" @bind-Value="model.Latitude"/>
+                        </MudItem>
+                        <MudItem xs="12" md="4">
+                            <MudTextField Label="@L[model.GetMemberDescription(x => x.Longitude)]" @bind-Value="model.Longitude" />
+                        </MudItem>
+                        <MudItem xs="12" md="4">
+                            <MudButton Variant="Variant.Outlined"
+                                       Color="Color.Primary"
+                                       StartIcon="@Icons.Material.Filled.Map"
+                                       OnClick="OpenMapDialog">
+                            </MudButton>
+                        </MudItem>
+                    </MudGrid>
+
+
+            </MudGrid>
+        </MudForm>
+        </MudCardContent>
+         <MudCardActions Class="d-flex justify-end gap-2">
+            <MudLoadingButton Color="Color.Primary" DropShadow="false" Loading="@_submitting" OnClick="Submit">@ConstantString.Save</MudLoadingButton>
+         </MudCardActions>
+        </MudCard>
+</MudContainer>
+ 
+
+@code {
+    public string? Title { get; private set; }
+    MudForm? _form;
+    private bool _submitting = false;
+
+
+
+    private async Task OpenMapDialog()
+    {
+        var initialCoordinate = !string.IsNullOrEmpty(model.Latitude.ToString()) &&
+                               !string.IsNullOrEmpty(model.Longitude.ToString())
+            ? new Coordinate { Latitude = model.Latitude, Longitude = model.Longitude } : null;
+
+        var parameters = new DialogParameters<MapLocationDialog>
+            {
+                { x=>x.InitialCoordinate,initialCoordinate },
+            };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        var dialog = await DialogService.ShowAsync<MapLocationDialog>("Select Location", parameters, options);
+
+        var state = await dialog.Result;
+
+        if (state != null && !state.Canceled)
+        {
+            // await _table.ReloadServerData();
+            // _selectedItems.Clear();
+
+            var result = state.Data as Coordinate;
+
+            model.Latitude = result.Latitude;
+            model.Longitude = result.Longitude;
+            Snackbar.Add("Location selected successfully!", Severity.Success);
+            StateHasChanged();
+
+        }
+    }
+
+
+
+
+
+    private List<BreadcrumbItem> _breadcrumbItems = new List<BreadcrumbItem>
+    {
+        new BreadcrumbItem("Home", href: "/"),
+        new BreadcrumbItem("Warehouses", href: "/pages/Warehouses"),
+        new BreadcrumbItem("Create Warehouse", href:null, disabled:true)
+    };
+
+    private CreateWarehouseCommand model = new();
+
+    protected override Task OnInitializedAsync()
+    {
+        Title = L["Create Warehouse"];
+        return Task.CompletedTask;
+    }
+    async Task Submit()
+    {
+        try
+        {
+            _submitting = true;
+            await _form!.Validate().ConfigureAwait(false);
+            if (!_form!.IsValid)
+                return;
+            var result = await Mediator.Send(model);
+            result.Match(
+                data=>
+                {
+                    Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+                    Navigation.NavigateTo($"/pages/Warehouses");
+                    return data;
+                },
+                errors=>
+                {
+                    Snackbar.Add(errors, MudBlazor.Severity.Error);
+                    return -1;
+                });
+        }
+        finally
+        {
+            _submitting = false;
+        }
+    }
+}

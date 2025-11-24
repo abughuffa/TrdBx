@@ -18,6 +18,13 @@ public interface IApplicationDbContext
     DbSet<Contact> Contacts { get; set; }
     ChangeTracker ChangeTracker { get; }
 
+
+    DbSet<Warehouse> Warehouses { get; set; }
+    DbSet<Vehicle> Vehicles { get; set; }
+
+    DbSet<VehicleType> VehicleTypes { get; set; }
+    DbSet<Shipment> Shipments { get; set; }
+
     DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

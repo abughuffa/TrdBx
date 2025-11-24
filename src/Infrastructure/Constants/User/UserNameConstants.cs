@@ -8,5 +8,10 @@ public abstract class UserName
     public const string Administrator = nameof(Administrator);
     public const string Demo = nameof(Demo);
     public const string Users = nameof(Users);
+
+    public const string Trader = nameof(Trader);
+    public const string Transporter = nameof(Transporter);
+    public const string Driver = nameof(Driver);
+
     public const string DefaultPassword = "Password123!";
 }

@@ -1,0 +1,117 @@
+﻿@page "/pages/Shipments/edit/{id:int}"
+@using CleanArchitecture.Blazor.Application.Features.Shipments.Commands.Update
+@using CleanArchitecture.Blazor.Application.Features.Shipments.Mappers
+@using CleanArchitecture.Blazor.Application.Features.Shipments.Queries.GetById
+@using CleanArchitecture.Blazor.Server.UI.Components.Fusion
+
+@inherits MudComponentBase
+@inject IValidationService Validator
+@inject IStringLocalizer<Shipments> L
+
+<PageTitle>@Title</PageTitle>
+<Breadcrumbs OnSaveButtonClick="Submit" Saving="_saving" BreadcrumbItems="_breadcrumbItems"></Breadcrumbs>
+<MudContainer Class="mt-3" MaxWidth="MaxWidth.Small">
+@if (model != null)
+{
+    <MudCard Class="pa-2">
+        <MudCardHeader>
+            <CardHeaderContent>
+                 <MudText Typo="Typo.h6">@Title</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent>
+        <ActiveUserSession PageComponent="@($"{nameof(EditShipment)}/{ model.Id }")" />
+        <MudForm Model="@model" @ref="@_form" Validation="@(Validator.ValidateValue(model))">
+            <MudGrid Spacing="2">
+                        <MudItem xs="12" md="12">
+                            <MudTextField Label="@L[model.GetMemberDescription(x => x.ShipmentNo)]" @bind-Value="model.ShipmentNo" For="@(() => model.ShipmentNo)" Required="true" RequiredError="@L["ShipmentNo is required!"]"></MudTextField>
+                        </MudItem>
+
+                        <MudItem xs="12" md="6">
+                            <MudTextField Label="@L[model.GetMemberDescription(x => x.StartLocation)]" @bind-Value="model.StartLocation" For="@(() => model.StartLocation)" Required="true" RequiredError="@L["StartLocation is required!"]"></MudTextField>
+                        </MudItem>
+                        <MudItem xs="12" md="6">
+                            <MudTextField Label="@L[model.GetMemberDescription(x => x.EndLocation)]" @bind-Value="model.EndLocation" For="@(() => model.EndLocation)" Required="true" RequiredError="@L["EndLocation is required!"]"></MudTextField>
+                        </MudItem>
+
+                        <MudItem xs="12" md="6">
+                            <MudTextField Label="@L[model.GetMemberDescription(x => x.Price)]" @bind-Value="model.Price" For="@(() => model.Price)" Required="true" RequiredError="@L["Price is required!"]"></MudTextField>
+                        </MudItem>
+
+                        <MudItem xs="12" md="6">
+                            <MudTextField Label="@L[model.GetMemberDescription(x => x.IsBidable)]" For="@(() => model.IsBidable)" @bind-Value="model.IsBidable"></MudTextField>
+                        </MudItem>
+
+                        <MudItem xs="12" md="12">
+                            <MudTextField Label="@L[model.GetMemberDescription(x => x.RecVehicleType)]" For="@(() => model.RecVehicleType)" @bind-Value="model.RecVehicleType"></MudTextField>
+                        </MudItem>
+
+            </MudGrid>
+        </MudForm>
+        </MudCardContent>
+        <MudCardActions Class="d-flex justify-end gap-2">
+                    <MudLoadingButton Color="Color.Primary" DropShadow="false" Loading="@_saving" OnClick="Submit">@ConstantString.Save</MudLoadingButton>
+        </MudCardActions>
+        </MudCard>
+    }
+</MudContainer>
+ 
+
+@code {
+    public string? Title { get; private set; }
+    [Parameter]
+    public int Id { get; set; }
+    MudForm? _form;
+    private bool _saving = false;
+    private List<BreadcrumbItem> _breadcrumbItems = new List<BreadcrumbItem>
+    {
+        new BreadcrumbItem("Home", href: "/"),
+        new BreadcrumbItem("Shipments", href: "/pages/Shipments")
+    };
+    private UpdateShipmentCommand? model;
+    protected override async Task OnInitializedAsync()
+    {
+        Title = L["Edit Shipment"];
+        var result = await Mediator.Send(new GetShipmentByIdQuery() { Id = Id });
+        result.Map(data =>
+        {
+            model = ShipmentMapper.ToUpdateCommand(data);
+            return data;
+        }).Match(data =>
+        {
+            _breadcrumbItems.Add(new BreadcrumbItem(data.ShipmentNo, href: $"/pages/Shipments/edit/{Id}"));
+            return data;
+        }, errors =>
+        {
+            Snackbar.Add($"{errors}", Severity.Error);
+            return null!;
+        });
+
+    }
+    async Task Submit()
+    {
+        try
+        {
+            _saving = true;
+            await _form!.Validate().ConfigureAwait(false);
+            if (!_form!.IsValid)
+                return;
+            var result = await Mediator.Send(model);
+            result.Match(
+                data=>
+                {
+                    Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+                    return data;
+                },
+                errors=>
+                {
+                    Snackbar.Add(errors, MudBlazor.Severity.Error);
+                    return 0;
+                });
+        }
+        finally
+        {
+            _saving = false;
+        }
+    }
+}

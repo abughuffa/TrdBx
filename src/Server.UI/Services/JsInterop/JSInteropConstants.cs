@@ -11,4 +11,9 @@ public static class JSInteropConstants
     public const string GetTimezoneOffset = "getTimezoneOffset";
     public const string GetTimezoneOffsetByTimeZone = "getTimezoneOffsetByTimeZone";
     public const string HistoryGo = "historyGo";
+
+    public const string InitializeMap = "initializeMap";
+    public const string UpdateMapView = "updateMapView";
+    public const string GetCurrentLocation = "getCurrentLocation";
+
 }

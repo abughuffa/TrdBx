@@ -1,0 +1,232 @@
+﻿
+@using CleanArchitecture.Blazor.Application.Features.Delivery.Coordinates.Models
+@using CleanArchitecture.Blazor.Server.UI.Services.JsInterop
+@using Microsoft.JSInterop
+@implements IAsyncDisposable
+@inherits MudComponentBase
+@inject IJSRuntime JSRuntime
+@inject IStringLocalizer<MapLocationDialog> L
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">Select Location</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudGrid>
+            <MudItem xs="12" md="8">
+                <MudTextField @bind-Value="SearchAddress"
+                              Label="Search Address"
+                              Variant="Variant.Outlined"
+                              Immediate="true"
+                              OnKeyDown="OnSearchKeyDown" />
+            </MudItem>
+
+            <MudItem xs="6" md="2">
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           StartIcon="Icons.Material.Filled.Search"
+                           OnClick="SearchLocation"
+                           Disabled="string.IsNullOrWhiteSpace(SearchAddress)">
+                    Search
+                </MudButton>
+            </MudItem>
+
+            <MudItem xs="6" md="2">
+                <MudButton Variant="Variant.Outlined"
+                           Color="Color.Secondary"
+                           StartIcon="Icons.Material.Filled.MyLocation"
+                           OnClick="GetCurrentLocation"
+                           Class="ml-2">
+                    Here
+                </MudButton>
+            </MudItem>
+
+
+            <MudItem xs="12" md="12">
+                <MudText Typo="Typo.body2" Class="mb-2">Click anywhere on the map or move the map to select the center location</MudText>
+                <div class="map-container" style="height: 400px; border: 1px solid #ccc; border-radius: 4px;">
+                    <div id="interactive-map" style="height: 100%; width: 100%;"></div>
+                </div>
+            </MudItem>
+            <MudItem xs="6" md="6">
+                <MudText Typo="Typo.body2">Latitude:</MudText>
+                <MudText Typo="Typo.body2">@SelectedCoordinate?.Latitude.ToString("F6")</MudText>
+            </MudItem>
+            <MudItem xs="6" md="6">
+                <MudText Typo="Typo.body2">Longitude:</MudText>
+                <MudText Typo="Typo.body2">@SelectedCoordinate?.Longitude.ToString("F6")</MudText>
+            </MudItem>
+
+
+        </MudGrid>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Text"
+                   OnClick="Cancel">Cancel</MudButton>
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   OnClick="Confirm"
+                   Disabled="SelectedCoordinate == null">Confirm</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    IMudDialogInstance MudDialog { get; set; } = null!;
+
+    [Parameter]
+    public Coordinate? InitialCoordinate { get; set; }
+
+    private string SearchAddress { get; set; } = string.Empty;
+    private Coordinate? SelectedCoordinate { get; set; }
+    private DotNetObjectReference<MapLocationDialog>? dotNetHelper;
+    private IJSObjectReference? module;
+    private const string MapContainerId = "interactive-map";
+    private bool _isInitialized = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && !_isInitialized)
+        {
+            await InitializeMap();
+        }
+    }
+
+    // In your MapLocationDialog.razor code section, update the InitializeMap method:
+
+    private async Task InitializeMap()
+    {
+        try
+        {
+            var initialLat = InitialCoordinate?.Latitude ?? 51.505;
+            var initialLng = InitialCoordinate?.Longitude ?? -0.09;
+            dotNetHelper = DotNetObjectReference.Create(this);
+            module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "/js/location.js");
+
+            // Add a small delay to ensure Leaflet is loaded
+            await Task.Delay(100);
+            await module.InvokeVoidAsync("initializeMap", MapContainerId, initialLat, initialLng, dotNetHelper);
+
+            if (InitialCoordinate != null)
+            {
+                SelectedCoordinate = InitialCoordinate;
+                StateHasChanged();
+            }
+            _isInitialized = true;
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Failed to initialize map: {ex.Message}", Severity.Error);
+            // ErrorMessage = $"Failed to initialize map: {ex.Message}";
+            StateHasChanged();
+        }
+    }
+
+
+    private async Task SearchLocation()
+    {
+        if (string.IsNullOrWhiteSpace(SearchAddress))
+            return;
+        await SearchAddressInternal();
+    }
+
+    private async Task OnSearchKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && !string.IsNullOrWhiteSpace(SearchAddress))
+        {
+            await SearchAddressInternal();
+        }
+    }
+
+    private async Task SearchAddressInternal()
+    {
+        // ErrorMessage = string.Empty;
+
+        try
+        {
+            if (module == null)
+            {
+                module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "/js/location.js");
+            }
+
+            var result = await module.InvokeAsync<Coordinate>("searchAddress", SearchAddress);
+
+            if (result != null)
+            {
+                SelectedCoordinate = result;
+                await module.InvokeVoidAsync("updateMapView", MapContainerId, result.Latitude, result.Longitude);
+                StateHasChanged();
+            }
+            else
+            {
+                Snackbar.Add("Location not found. Please try a different address.", Severity.Error);
+                // ErrorMessage = "Location not found. Please try a different address.";
+                StateHasChanged();
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error searching address: {ex.Message}", Severity.Error);
+            // ErrorMessage = $"Error searching address: {ex.Message}";
+            StateHasChanged();
+        }
+    }
+
+    private async Task GetCurrentLocation()
+    {
+        // ErrorMessage = string.Empty;
+
+        try
+        {
+            if (module == null)
+            {
+                module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "/js/location.js");
+            }
+
+            var location = await module.InvokeAsync<Coordinate>("getCurrentLocation");
+
+            if (location != null)
+            {
+                SelectedCoordinate = location;
+                await module.InvokeVoidAsync("updateMapView", MapContainerId, location.Latitude, location.Longitude);
+                StateHasChanged();
+            }
+        }
+        catch (Exception ex)
+        {
+            // ErrorMessage = $"Unable to get current location: {ex.Message}";
+            Snackbar.Add($"Unable to get current location: {ex.Message}", Severity.Error);
+            StateHasChanged();
+        }
+    }
+
+    [JSInvokable]
+    public async Task OnMapLocationSelected(double latitude, double longitude)
+    {
+        SelectedCoordinate = new Coordinate { Latitude = latitude, Longitude = longitude };
+        await InvokeAsync(StateHasChanged);
+    }
+
+    // private void ClearError() => ErrorMessage = string.Empty;
+
+    private void Confirm() => MudDialog.Close(DialogResult.Ok(SelectedCoordinate));
+    private void Cancel() => MudDialog.Cancel();
+
+    public async ValueTask DisposeAsync()
+    {
+        try
+        {
+            if (module != null)
+            {
+                await module.InvokeVoidAsync("destroyMap", MapContainerId);
+                await module.DisposeAsync();
+            }
+            dotNetHelper?.Dispose();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error during cleanup: {ex.Message}", Severity.Error);
+            // Console.WriteLine($"Error during cleanup: {ex.Message}");
+        }
+    }
+}
