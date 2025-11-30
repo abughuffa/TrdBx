@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251130063804_DatabaseUpdate-002")]
-    partial class DatabaseUpdate002
+    [Migration("20251130093352_DatabaseUpdate-001")]
+    partial class DatabaseUpdate001
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

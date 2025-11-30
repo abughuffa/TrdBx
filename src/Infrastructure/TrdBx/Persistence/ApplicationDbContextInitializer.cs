@@ -17,7 +17,9 @@ public partial class ApplicationDbContextInitializer
             await SeedTrdBxRolesAsync();
             await SeedTrdBxUsersAsync();
             await SeedServicePrices();
+
             _context.ChangeTracker.Clear();
+
         }
         catch (Exception ex)
         {
@@ -52,49 +54,26 @@ public partial class ApplicationDbContextInitializer
 
     private async Task SeedTrdBxRolesAsync()
     {
-        var installerRoleName = RoleName.Installer;
-        var traderRoleName = RoleName.Trader;
-        var transporterRoleName = RoleName.Transporter;
-        var driverRoleName = RoleName.Driver;
+        if (await _context.Roles.AnyAsync(r => r.Name == RoleName.Installer)) return;
 
+        var installerRoleName = RoleName.Installer;
         _logger.LogInformation("Seeding TrdBx roles...");
+
+        var tenantId = (await _context.Tenants.FirstAsync()).Id;
 
         var installerRole = new ApplicationRole(installerRoleName)
         {
             Description = "Installer Group",
-            Created = DateTime.UtcNow,
+            TenantId = tenantId
         };
-
-        var traderRole = new ApplicationRole(traderRoleName)
-        {
-            Description = "Trader Group",
-            TenantId = (await _context.Tenants.FirstAsync()).Id
-        };
-
-        var transporterRole = new ApplicationRole(transporterRoleName)
-        {
-            Description = "Transporter Group",
-            TenantId = (await _context.Tenants.FirstAsync()).Id
-        };
-
-        var driverRole = new ApplicationRole(driverRoleName)
-        {
-            Description = "Driver Group",
-            TenantId = (await _context.Tenants.FirstAsync()).Id
-        };
-
         await _roleManager.CreateAsync(installerRole);
-
-        await _roleManager.CreateAsync(traderRole);
-        await _roleManager.CreateAsync(transporterRole);
-        await _roleManager.CreateAsync(driverRole);
-
     }
 
 
     private async Task SeedTrdBxUsersAsync()
     {
-        //if (await _userManager.Users.AnyAsync()) return;
+
+        if (await _context.Users.AnyAsync(r => r.UserName == UserName.Installer1)) return;
 
         _logger.LogInformation("Seeding TrdBx users...");
 
@@ -140,53 +119,6 @@ public partial class ApplicationDbContextInitializer
             ProfilePictureDataUrl = "https://s.gravatar.com/avatar/ea753b0b0f357a41491408307ade445e?s=80"
         };
 
-        var traderUser = new ApplicationUser
-        {
-            UserName = UserName.Trader,
-            Provider = "Local",
-            IsActive = true,
-            TenantId = (await _context.Tenants.FirstAsync()).Id,
-            DisplayName = UserName.Trader,
-            Email = "Trader@example.com",
-            EmailConfirmed = true,
-            ProfilePictureDataUrl = "https://s.gravatar.com/avatar/78be68221020124c23c665ac54e07074?s=80",
-            LanguageCode = "en-US",
-            TimeZoneId = "Asia/Shanghai",
-            TwoFactorEnabled = false
-        };
-
-        var transporterUser = new ApplicationUser
-        {
-            UserName = UserName.Transporter,
-            Provider = "Local",
-            IsActive = true,
-            TenantId = (await _context.Tenants.FirstAsync()).Id,
-            DisplayName = UserName.Transporter,
-            Email = "Transporter@example.com",
-            EmailConfirmed = true,
-            ProfilePictureDataUrl = "https://s.gravatar.com/avatar/78be68221020124c23c665ac54e07074?s=80",
-            LanguageCode = "en-US",
-            TimeZoneId = "Asia/Shanghai",
-            TwoFactorEnabled = false
-        };
-
-
-        var driverUser = new ApplicationUser
-        {
-            UserName = UserName.Driver,
-            Provider = "Local",
-            IsActive = true,
-            TenantId = (await _context.Tenants.FirstAsync()).Id,
-            DisplayName = UserName.Driver,
-            Email = "Driver@example.com",
-            EmailConfirmed = true,
-            ProfilePictureDataUrl = "https://s.gravatar.com/avatar/78be68221020124c23c665ac54e07074?s=80",
-            LanguageCode = "en-US",
-            TimeZoneId = "Asia/Shanghai",
-            TwoFactorEnabled = false
-        };
-
-
         await _userManager.CreateAsync(demoInstaller1, UserName.DefaultPassword);
         await _userManager.AddToRoleAsync(demoInstaller1, RoleName.Installer);
 
@@ -196,15 +128,7 @@ public partial class ApplicationDbContextInitializer
         await _userManager.CreateAsync(demoInstaller3, UserName.DefaultPassword);
         await _userManager.AddToRoleAsync(demoInstaller3, RoleName.Installer);
 
-        await _userManager.CreateAsync(traderUser, UserName.DefaultPassword);
-        await _userManager.AddToRoleAsync(traderUser, RoleName.Trader);
 
-        await _userManager.CreateAsync(transporterUser, UserName.DefaultPassword);
-        await _userManager.AddToRoleAsync(transporterUser, RoleName.Transporter);
-
-
-        await _userManager.CreateAsync(driverUser, UserName.DefaultPassword);
-        await _userManager.AddToRoleAsync(driverUser, RoleName.Driver);
     }
 
 }

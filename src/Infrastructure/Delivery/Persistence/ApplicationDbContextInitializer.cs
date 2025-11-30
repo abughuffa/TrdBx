@@ -7,15 +7,13 @@ namespace CleanArchitecture.Blazor.Infrastructure.Persistence;
 
 public partial class ApplicationDbContextInitializer
 {
-
-
-
     public async Task SeedDeliveryAsync()
     {
         try
         {
             await SeedDeliveryRolesAsync();
             await SeedDeliveryUsersAsync();
+
             _context.ChangeTracker.Clear();
         }
         catch (Exception ex)
@@ -25,36 +23,35 @@ public partial class ApplicationDbContextInitializer
         }
     }
 
-
-
-
-
-
     private async Task SeedDeliveryRolesAsync()
     {
+
+        if (await _context.Roles.AnyAsync(r=>r.Name == RoleName.Trader)) return;
         var traderRoleName = RoleName.Trader;
         var transporterRoleName = RoleName.Transporter;
         var driverRoleName = RoleName.Driver;
 
         _logger.LogInformation("Seeding Delivery roles...");
 
+        var tenantId = (await _context.Tenants.FirstAsync()).Id;
 
         var traderRole = new ApplicationRole(traderRoleName)
         {
             Description = "Trader Group",
-            TenantId = (await _context.Tenants.FirstAsync()).Id
+            TenantId = tenantId
+
         };
 
         var transporterRole = new ApplicationRole(transporterRoleName)
         {
             Description = "Transporter Group",
-            TenantId = (await _context.Tenants.FirstAsync()).Id
+            TenantId = tenantId
         };
 
         var driverRole = new ApplicationRole(driverRoleName)
         {
             Description = "Driver Group",
-            TenantId = (await _context.Tenants.FirstAsync()).Id
+            TenantId = tenantId
         };
 
         await _roleManager.CreateAsync(traderRole);
@@ -67,6 +64,8 @@ public partial class ApplicationDbContextInitializer
     private async Task SeedDeliveryUsersAsync()
     {
         //if (await _userManager.Users.AnyAsync()) return;
+
+        if (await _context.Users.AnyAsync(r => r.UserName == UserName.Trader)) return;
 
         _logger.LogInformation("Seeding Delivery users...");
 
