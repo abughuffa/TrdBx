@@ -1,0 +1,434 @@
+﻿@page "/pages/TrdBx/Customers/{customerid:int}/CusPrices"
+@using CleanArchitecture.Blazor.Application.Features.CusPrices.Commands.Delete
+@using CleanArchitecture.Blazor.Application.Features.CusPrices.Commands.Update
+@using CleanArchitecture.Blazor.Application.Features.CusPrices.DTOs
+@using CleanArchitecture.Blazor.Application.Features.CusPrices.Mappers
+@using CleanArchitecture.Blazor.Application.Features.CusPrices.Specifications
+@using CleanArchitecture.Blazor.Application.Features.CusPrices.Caching
+@using CleanArchitecture.Blazor.Application.Features.CusPrices.Queries.Export
+@using CleanArchitecture.Blazor.Application.Features.CusPrices.Queries.Pagination
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.CusPrices
+
+@inject IStringLocalizer<CusPrices> L
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.CusPrices.View)]
+
+
+<PageTitle>@Title</PageTitle>
+
+<MudDataGrid ServerData="@(ServerReload)"
+             FixedHeader="true"
+             FixedFooter="false"
+             @bind-RowsPerPage="_defaultPageSize"
+             Loading="@_loading"
+             MultiSelection="true"
+             @bind-SelectedItems="_selectedItems"
+             ColumnResizeMode="ResizeMode.Column"
+             Hover="true" @ref="_table">
+    <ToolBarContent>
+        <MudStack Row Spacing="0" Class="flex-grow-1" Justify="Justify.SpaceBetween">
+            <MudStack Row AlignItems="AlignItems.Start">
+                <MudIcon Icon="@Icons.Material.Filled.QrCodeScanner" Size="Size.Large" />
+                <MudStack Spacing="0">
+                    <MudText Typo="Typo.subtitle2" Class="mb-2">@L[_currentDto.GetClassDescription()]</MudText>
+                    <MudEnumSelect Style="min-width:120px"
+                                   TEnum="CusPriceListView"
+                                   ValueChanged="OnChangedListView"
+                                   Value="Query.ListView"
+                                   Dense="true"
+                                   Label="@ConstantString.ListView">
+                    </MudEnumSelect>
+                </MudStack>
+            </MudStack>
+            <MudStack Spacing="0" AlignItems="AlignItems.End">
+                <MudToolBar Dense WrapContent="true" Class="py-1 px-0">
+                    <MudButton Disabled="@_loading"
+                               OnClick="@(() => OnRefresh())"
+                               StartIcon="@Icons.Material.Outlined.Refresh">
+                        @ConstantString.Refresh
+                    </MudButton>
+                    <MudMenu TransformOrigin="Origin.BottomRight"
+                             AnchorOrigin="Origin.BottomRight"
+                             EndIcon="@Icons.Material.Filled.MoreVert"
+                             Label="@ConstantString.More">
+                        @if (_canDelete)
+                        {
+                            <MudMenuItem Disabled="@(!(_selectedItems.Count > 0))"
+                                         OnClick="OnDeleteChecked">
+                                @ConstantString.Delete
+                            </MudMenuItem>
+                        }
+                        @if (_canExport)
+                        {
+                            <MudMenuItem Disabled="@_exporting" OnClick="OnExport">
+                                @ConstantString.Export
+                            </MudMenuItem>
+                        }
+                    </MudMenu>
+                </MudToolBar>
+                <MudStack Row Spacing="1">
+                    @if (_canSearch)
+                    {
+                        <MudTextField T="string"
+                                      ValueChanged="@(s => OnSearch(s))"
+                                      Value="@Query.Keyword"
+                                      Placeholder="@ConstantString.Search"
+                                      Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.Search"
+                                      IconSize="Size.Small">
+                        </MudTextField>
+                    }
+                </MudStack>
+            </MudStack>
+        </MudStack>
+    </ToolBarContent>
+    <Columns>
+        <SelectColumn ShowInFooter="false"></SelectColumn>
+        <TemplateColumn HeaderStyle="width:60px" Title="@ConstantString.Actions" Sortable="false">
+            <CellTemplate>
+                @if (_canEdit || _canDelete)
+                {
+                    <MudMenu Icon="@Icons.Material.Filled.Edit"
+                             Variant="Variant.Outlined"
+                             Size="Size.Small"
+                             Dense="true"
+                             IconColor="Color.Info"
+                             AnchorOrigin="Origin.CenterLeft">
+                        @if (_canEdit)
+                        {
+                            <MudMenuItem OnClick="@(() => OnEdit(context.Item))">
+                                L(@ConstantString.Edit)
+                                
+                            </MudMenuItem>
+                        }
+                        @if (_canDelete)
+                        {
+                            <MudMenuItem OnClick="@(() => OnDelete(context.Item))">
+                                L(@ConstantString.Delete)
+                            </MudMenuItem>
+                        }
+                    </MudMenu>
+                }
+                else
+                {
+                    <MudTooltip Text="@ConstantString.NoAllowed" Delay="300">
+                        <MudIconButton Variant="Variant.Outlined"
+                                       Disabled="true"
+                                       Icon="@Icons.Material.Filled.DoNotTouch"
+                                       Size="Size.Small"
+                                       Color="Color.Surface">
+                        </MudIconButton>
+                    </MudTooltip>
+                }
+            </CellTemplate>
+        </TemplateColumn>
+        <PropertyColumn Property="x => x.TrackingUnitModel" Title="@L[_currentDto.GetMemberDescription(x => x.TrackingUnitModel)]" />
+      @*   <PropertyColumn Property="x => x.TrackingUnitModelId" Title="@L[_currentDto.GetMemberDescription(x => x.TrackingUnitModelId)]" /> *@
+        <PropertyColumn Property="x => x.Gprs" Title="@L[_currentDto.GetMemberDescription(x => x.Gprs)]" />
+        <PropertyColumn Property="x => x.Host" Title="@L[_currentDto.GetMemberDescription(x => x.Host)]" />
+        <PropertyColumn Property="x => x.Price" Title="@L[_currentDto.GetMemberDescription(x => x.Price)]" />
+    </Columns>
+    <NoRecordsContent>
+        <MudText>@ConstantString.NoRecords</MudText>
+    </NoRecordsContent>
+    <LoadingContent>
+        <MudText>@ConstantString.Loading</MudText>
+    </LoadingContent>
+    <PagerContent>
+        <MudDataGridPager PageSizeOptions="@(new[] { 10, 15, 30, 50, 100, 500, 1000 })" />
+    </PagerContent>
+</MudDataGrid>
+
+@code {
+
+
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthState { get; set; } = default!;
+    [CascadingParameter]
+    private UserProfile? UserProfile { get; set; }
+    [Parameter] public int CustomerId { get; set; }
+    public string? Title { get; private set; }
+    private HashSet<CusPriceDto> _selectedItems = new();
+    private MudDataGrid<CusPriceDto> _table = default!;
+    private CusPriceDto _currentDto = new();
+    // private CusPricesAccessRights _accessRights = new();
+    private int _defaultPageSize = 15;
+    private bool _loading;
+    private bool _uploading;
+    private bool _exporting;
+
+    private CusPricesWithPaginationQuery Query { get; set; } = new();
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string? ReturnUrl { get; set; }
+
+    [Inject]
+    private IBlazorDownloadFileService BlazorDownloadFileService { get; set; } = null!;
+    private bool _canSearch;
+    private bool _canCreate;
+    private bool _canEdit;
+    private bool _canDelete;
+    private bool _canImport;
+    private bool _canExport;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Title = L[_currentDto.GetClassDescription()];
+        var state = await AuthState;
+        _canCreate = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.CusPrices.Create)).Succeeded;
+        _canSearch = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.CusPrices.Search)).Succeeded;
+        _canEdit = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.CusPrices.Edit)).Succeeded;
+        _canDelete = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.CusPrices.Delete)).Succeeded;
+        _canImport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.CusPrices.Import)).Succeeded;
+        _canExport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.CusPrices.Export)).Succeeded;
+    }
+
+    // protected override async Task OnInitializedAsync()
+    // {
+
+    //     Title = L[_currentDto.GetClassDescription()];
+    //     _accessRights = await PermissionService.GetAccessRightsAsync<CusPricesAccessRights>();
+    // }
+    private async Task<GridData<CusPriceDto>> ServerReload(GridState<CusPriceDto> state)
+    {
+        try
+        {
+            _loading = true;
+            Query.CustomerId = CustomerId;
+            // Query.CurrentUser = UserProfile;
+            Query.OrderBy = state.SortDefinitions.FirstOrDefault()?.SortBy ?? "Id";
+            Query.SortDirection = state.SortDefinitions.FirstOrDefault()?.Descending ?? true
+                                              ? SortDirection.Descending.ToString()
+                                              : SortDirection.Ascending.ToString();
+            Query.PageNumber = state.Page + 1;
+            Query.PageSize = state.PageSize;
+            var result = await Mediator.Send(Query).ConfigureAwait(false);
+            return new GridData<CusPriceDto> { TotalItems = result.TotalItems, Items = result.Items };
+        }
+        finally
+        {
+            _loading = false;
+        }
+
+    }
+    private async Task OnSearch(string text)
+    {
+        _selectedItems = new HashSet<CusPriceDto>();
+        Query.Keyword = text;
+        await _table.ReloadServerData();
+    }
+    private async Task OnChangedListView(CusPriceListView listview)
+    {
+        Query.ListView = listview;
+        await _table.ReloadServerData();
+    }
+    private async Task OnRefresh()
+    {
+        CusPriceCacheKey.Refresh();
+        _selectedItems = new HashSet<CusPriceDto>();
+        Query.Keyword = string.Empty;
+        await _table.ReloadServerData();
+    }
+
+    private Task OnGoBack()
+    {
+        var target = !string.IsNullOrWhiteSpace(ReturnUrl)
+            ? ReturnUrl
+            : Navigation.ToBaseRelativePath(Navigation.Uri);
+        Navigation.NavigateTo(target);
+        return Task.CompletedTask;
+    }
+
+
+    private async Task OnEdit(CusPriceDto dto)
+    {
+        var title = L["Update CusPrice"];
+        var command = Mapper.ToUpdateCommand(dto);
+        var parameters = new DialogParameters<CusPriceEditFormDialog>
+            {
+                { x=>x._model,command },
+            };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        var dialog = DialogService.Show<CusPriceEditFormDialog>(title, parameters, options);
+        var state = await dialog.Result;
+
+        if (state != null && !state.Canceled)
+        {
+            await _table.ReloadServerData();
+            _selectedItems.Clear();
+        }
+
+
+    }
+
+    // private async Task OnDelete(CusPriceDto dto)
+    // {
+    //     var contentText = string.Format(ConstantString.DeleteConfirmation, dto.Id);
+    //     var command = new DeleteCusPriceCommand(new int[] { dto.Id });
+    //     await DialogServiceHelper.ShowDeleteConfirmationDialogAsync(command, ConstantString.DeleteConfirmationTitle, contentText, async () =>
+    //     {
+    //         await InvokeAsync(async () =>
+    //         {
+    //             await _table.ReloadServerData();
+    //             _selectedItems.Clear();
+    //         });
+    //     });
+    // }
+
+    // private async Task OnDeleteChecked()
+    // {
+    //     var contentText = string.Format(ConstantString.DeleteConfirmWithSelected, _selectedItems.Count);
+    //     var command = new DeleteCusPriceCommand(_selectedItems.Select(x => x.Id).ToArray());
+    //     await DialogServiceHelper.ShowDeleteConfirmationDialogAsync(command, ConstantString.DeleteConfirmationTitle, contentText, async () =>
+    //     {
+    //         await InvokeAsync(async () =>
+    //         {
+    //             await _table.ReloadServerData();
+    //             _selectedItems.Clear();
+    //         });
+    //     });
+    // }
+
+
+        private async Task OnDelete(CusPriceDto dto)
+    {
+        var contentText = string.Format(ConstantString.DeleteConfirmation, dto.Id);
+        var command = new DeleteCusPriceCommand(new int[] { dto.Id });
+        await DialogServiceHelper.ShowDeleteConfirmationDialogAsync(command, ConstantString.DeleteConfirmationTitle, contentText, async () =>
+        {
+            await InvokeAsync(async () =>
+            {
+                await _table.ReloadServerData();
+                _selectedItems.Clear();
+            });
+        });
+    }
+
+    private async Task OnDeleteChecked()
+    {
+        var contentText = string.Format(ConstantString.DeleteConfirmWithSelected, _selectedItems.Count);
+        var command = new DeleteCusPriceCommand(_selectedItems.Select(x => x.Id).ToArray());
+        await DialogServiceHelper.ShowDeleteConfirmationDialogAsync(command, ConstantString.DeleteConfirmationTitle, contentText, async () =>
+        {
+            await InvokeAsync(async () =>
+            {
+                await _table.ReloadServerData();
+                _selectedItems.Clear();
+            });
+        });
+    }
+
+    private async Task OnExport()
+    {
+        _exporting = true;
+        var request = new ExportCusPricesQuery()
+        {
+            Keyword = Query.Keyword,
+            // CurrentUser = UserProfile,
+            ListView = Query.ListView,
+            OrderBy = _table.SortDefinitions.Values.FirstOrDefault()?.SortBy ?? "Id",
+            SortDirection = (_table.SortDefinitions.Values.FirstOrDefault()?.Descending ?? true) ? SortDirection.Descending.ToString() : SortDirection.Ascending.ToString()
+        };
+        var result = await Mediator.Send(request);
+        await result.MatchAsync<byte[]>(
+            async data =>
+            {
+                var downloadresult = await BlazorDownloadFileService.DownloadFile($"{L["CusPrices"]}.xlsx", result.Data, contentType: "application/octet-stream");
+                Snackbar.Add($"{ConstantString.ExportSuccess}", MudBlazor.Severity.Info);
+                return data;
+            },
+            errors =>
+            {
+                Snackbar.Add($"{errors}", MudBlazor.Severity.Error);
+                return Task.FromResult(Array.Empty<byte>());
+            });
+        _exporting = false;
+    }
+    // private Task OnEdit(CusPriceDto dto)
+    // {
+    //     // var command = new UpdateCusPriceCommand() { Id = dto.Id};
+    //     var command = Mapper.ToUpdateCommand(dto);
+    //     return DialogServiceHelper.ShowFormDialogAsync<CusPriceEditFormDialog, UpdateCusPriceCommand>(
+    //        L["Update CusPrice"],
+    //        new DialogParameters<CusPriceEditFormDialog>
+    //        {
+    //                         { x=>x._model,command}
+    //        },
+    //        async () =>
+    //        {
+    //            await _table.ReloadServerData();
+    //            _selectedItems.Clear();
+    //        });
+
+    // }
+
+
+
+    // private Task OnDelete(CusPriceDto dto)
+    // {
+    //     var contentText = string.Format(ConstantString.DeleteConfirmation, dto.Id);
+    //     var command = new DeleteCusPriceCommand(new int[] { dto.Id });
+    //     return DeleteInternal(command, contentText);
+    // }
+
+    // private Task OnDeleteChecked()
+    // {
+    //     var contentText = string.Format(ConstantString.DeleteConfirmWithSelected, _selectedItems.Count);
+    //     var command = new DeleteCusPriceCommand(_selectedItems.Select(x => x.Id).ToArray());
+    //     return DeleteInternal(command, contentText);
+
+    // }
+
+    // private Task DeleteInternal(DeleteCusPriceCommand command, string contentText)
+    // {
+    //     return DialogServiceHelper.ShowDeleteConfirmationDialogAsync(
+    //         command,
+    //         ConstantString.DeleteConfirmationTitle,
+    //     contentText,
+    //         async () =>
+    //         {
+    //             await _table.ReloadServerData();
+    //             _selectedItems.Clear();
+    //         });
+    // }
+
+    // private async Task OnExport()
+    // {
+    //     _exporting = true;
+    //     var request = new ExportCusPricesQuery()
+    //         {
+    //             Keyword = Query.Keyword,
+    //             ListView = Query.ListView,
+    //             OrderBy = _table.SortDefinitions.Values.FirstOrDefault()?.SortBy ?? "Id",
+    //             SortDirection = _table.SortDefinitions.Values.FirstOrDefault()?.Descending ?? false
+    //                                     ? SortDirection.Descending.ToString()
+    //                                     : SortDirection.Ascending.ToString()
+
+
+    //         };
+
+    //     var result = await Mediator.Send(request);
+    //     await result.MatchAsync(
+    //         async data =>
+    //         {
+    //             if (result.Data != null)
+    //             {
+    //                 await BlazorDownloadFileService.DownloadFileAsync($"{_currentDto.GetClassDescription()}.xlsx", result.Data, contentType: "application/octet-stream");
+    //                 Snackbar.Add($"{ConstantString.ExportSuccess}", MudBlazor.Severity.Info);
+    //             }
+    //             else
+    //             {
+    //                 Snackbar.Add($"{ConstantString.ExecuteFail}", MudBlazor.Severity.Error);
+    //             }
+    //         },
+    //         errors =>
+    //         {
+    //             Snackbar.Add($"{errors}", MudBlazor.Severity.Error);
+    //             return Task.CompletedTask;
+    //         });
+    //     _exporting = false;
+
+
+    // }
+
+}

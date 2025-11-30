@@ -1,0 +1,203 @@
+﻿@page "/pages/TrdBx/DbForceSyncs"
+
+@using CleanArchitecture.Blazor.Application.Features.DbForceSyncs.Delete
+@using CleanArchitecture.Blazor.Application.Features.DbForceSyncs.Syncs
+@using CleanArchitecture.Blazor.Application.Features.LibyanaSimCards.Commands.Import
+@using CleanArchitecture.Blazor.Application.Features.WialonUnits.Commands.Import
+
+
+
+@inherits MudComponentBase
+@inject IValidationService Validator
+@inject IStringLocalizer<DbForceSyncs> L
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.ActivateTestCases.View)]
+<PageTitle>@Title</PageTitle>
+<style>
+    .mud-table-toolbar {
+        height: 120px !important;
+    }
+</style>
+<PageTitle>@Title</PageTitle>
+<MudContainer Class="mt-3" MaxWidth="MaxWidth.Small">
+    <MudCard Class="pa-2">
+        <MudCardHeader>
+            <CardHeaderContent>
+                 <MudText Typo="Typo.h6">@Title</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent>
+
+        </MudCardContent>
+        <MudCardActions>
+
+            <MudLoadingButton Color="Color.Primary" DropShadow="false" Loading="@_updatenames" OnClick="SyncNamesOfUnits">Sync Unit Name</MudLoadingButton>
+
+            <MudFileUpload T="IBrowserFile" FilesChanged="ImportWialonUnits" Accept=".xlsx">
+                    <ActivatorContent>
+                    <MudLoadingButton Class="pa-0 ma-0" Style="font-weight:400;text-transform:none;"
+                                   Variant="Variant.Text"
+                                      Loading="@_uploadingnames">
+                            Import Wialon Units
+                        </MudLoadingButton>
+                    </ActivatorContent>
+            </MudFileUpload>
+
+            <MudLoadingButton Color="Color.Primary" DropShadow="false" Loading="@_updateexpairy" OnClick="SyncExpairyDatesOfSims">Sync Sim Expairy</MudLoadingButton>
+
+            <MudFileUpload T="IBrowserFile" FilesChanged="ImportLibyanaSimCards" Accept=".xlsx">
+                <ActivatorContent>
+                    <MudLoadingButton Class="pa-0 ma-0" Style="font-weight:400;text-transform:none;"
+                                      Variant="Variant.Text"
+                                      Loading="@_uploadingexpairy">
+                        Import Libyana Sims
+                    </MudLoadingButton>
+                </ActivatorContent>
+            </MudFileUpload>
+
+        </MudCardActions>
+        </MudCard>
+</MudContainer>
+
+@code {
+
+
+
+    public string? Title { get; private set; }
+
+    private bool _updatenames = false;
+
+    private bool _updateexpairy = false;
+
+    private bool _uploadingnames = false;
+
+    private bool _uploadingexpairy = false;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Title = L["Sync Data"];
+    }
+    async Task SyncNamesOfUnits()
+    {
+        try
+        {
+            _updatenames = true;
+            var model = new SyncUnitNameCommand();
+            var result = await Mediator.Send(model);
+            if(result.Succeeded)
+                Snackbar.Add("coool", MudBlazor.Severity.Info);
+                else
+                Snackbar.Add("DeleteFail", MudBlazor.Severity.Error);
+        }
+        finally
+        {
+            _updatenames = false;
+        }
+    }
+
+    async Task SyncExpairyDatesOfSims()
+    {
+        try
+        {
+            _updateexpairy = true;
+            var model = new SyncSimExpairyCommand();
+            var result = await Mediator.Send(model);
+            if (result.Succeeded)
+                Snackbar.Add("coool", MudBlazor.Severity.Info);
+            else
+                Snackbar.Add("DeleteFail", MudBlazor.Severity.Error);
+        }
+        finally
+        {
+            _updateexpairy = false;
+        }
+    }
+
+    private async Task ImportWialonUnits(IBrowserFile file)
+    {
+
+
+        _uploadingnames = true;
+        var stream = new MemoryStream();
+        await file.OpenReadStream().CopyToAsync(stream);
+
+        var dcommand = new DeleteWialonUnitsCommand();
+
+        var dresult = await Mediator.Send(dcommand);
+
+        if (dresult.Succeeded)
+        {
+            var command = new ImportWialonUnitsCommand(file.Name, stream.ToArray());
+
+            var iresult = await Mediator.Send(command);
+
+            if (iresult.Succeeded)
+            {
+                Snackbar.Add($"{ConstantString.ImportSuccess}", Severity.Info);
+            }
+            else
+            {
+                foreach (var msg in iresult.Errors)
+                {
+                    Snackbar.Add($"{msg}", Severity.Error);
+                }
+            }
+            _uploadingnames = false;
+        }
+        else
+        {
+            foreach (var msg in dresult.Errors)
+            {
+                Snackbar.Add($"{msg}", Severity.Error);
+            }
+        }
+
+
+    }
+
+    private async Task ImportLibyanaSimCards(IBrowserFile file)
+    {
+
+
+        _uploadingexpairy = true;
+
+        var stream = new MemoryStream();
+        await file.OpenReadStream().CopyToAsync(stream);
+
+        var dcommand = new DeleteLibyanaSimCardsCommand();
+
+        var dresult = await Mediator.Send(dcommand);
+
+        if (dresult.Succeeded)
+        {
+            var command = new ImportLibyanaSimCardsCommand(file.Name, stream.ToArray());
+
+            var iresult = await Mediator.Send(command);
+
+            if (iresult.Succeeded)
+            {
+                Snackbar.Add($"{ConstantString.ImportSuccess}", Severity.Info);
+            }
+            else
+            {
+                foreach (var msg in iresult.Errors)
+                {
+                    Snackbar.Add($"{msg}", Severity.Error);
+                }
+            }
+            _uploadingexpairy = false;
+        }
+        else
+        {
+            foreach (var msg in dresult.Errors)
+            {
+                Snackbar.Add($"{msg}", Severity.Error);
+            }
+        }
+
+
+    }
+
+
+}
+

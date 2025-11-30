@@ -1,4 +1,5 @@
 ﻿@using CleanArchitecture.Blazor.Application.Features.Vehicles.Commands.AddEdit
+@using CleanArchitecture.Blazor.Server.UI.Pages.Drivers.Components
 @using CleanArchitecture.Blazor.Server.UI.Pages.VehicleTypes
 
 @inherits MudComponentBase
@@ -10,7 +11,7 @@
         <MudForm Model="@model" @ref="@_form" Validation="@(Validator.ValidateValue(model))">
             <MudGrid>
                    <MudItem xs="12" md="12">
-                        <VehicleTypes @bind-TrackingUnitModelId="model.VehicleTypeId"></VehicleTypes>
+                    <VehicleTypes @bind-VehicleTypeId="model.VehicleTypeId"></VehicleTypes>
 
                     </MudItem>
         
@@ -21,7 +22,8 @@
                 </MudItem> 
  
                     <MudItem xs="12" md="12">
-                        <MudTextField Label="@L[model.GetMemberDescription(x => x.DriverId)]" For="@(() => model.DriverId)" @bind-Value="model.DriverId"></MudTextField>
+                        @* <DriversSelector @bind-UserId="model.DriverId"></DriversSelector> *@
+@*                         <MudTextField Label="@L[model.GetMemberDescription(x => x.DriverId)]" For="@(() => model.DriverId)" @bind-Value="model.DriverId"></MudTextField> *@
                     </MudItem>
 
             </MudGrid>
@@ -39,9 +41,13 @@
     private bool _saving = false;
     private bool _savingnew = false;
     [CascadingParameter]
-    IMudDialogInstance MudDialog { get; set; } = default!;
+    IMudDialogInstance MudDialog { get; set; } = default;
+    [CascadingParameter]
+    private UserProfile? UserProfile { get; set; }
     AddEditVehicleCommandValidator _modelValidator = new ();
     [EditorRequired] [Parameter] public AddEditVehicleCommand model { get; set; } = null!;
+
+
     async Task Submit()
     {
         try

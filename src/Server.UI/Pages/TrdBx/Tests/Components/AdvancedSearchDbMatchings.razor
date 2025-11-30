@@ -1,0 +1,61 @@
+﻿@using CleanArchitecture.Blazor.Application.Features.DbMatchings.Queries.Pagination
+@using CleanArchitecture.Blazor.Domain.Enums
+@inject IStringLocalizer<DbMatchings> L
+
+<MudExpansionPanel @bind-Expanded="_advancedSearchExpanded"
+                   Style="border-radius: var(--mud-default-borderradius) !important;"
+                   Class="mud-elevation-25 pa-2 mb-3" Text="@ConstantString.AdvancedSearch">
+    <MudGrid>
+
+        <MudItem md="6">
+            <MudEnumSelect Style="min-width:120px"
+                           Placeholder="@L["By Status On Wialon"]"
+                           TEnum="WStatus"
+                           Value="TRequest.StatusOnWialon"
+                           ValueChanged="OnStatusOnWialonChanged"
+                           Dense="true">
+
+            </MudEnumSelect>
+        </MudItem>
+
+
+        <MudItem md="6">
+            <MudEnumSelect Style="min-width:120px"
+                           Placeholder="@L["By Status On TrdBx"]"
+                           TEnum="UStatus"
+                           Value="TRequest.StatusOnTrdBx"
+                           ValueChanged="OnStatusOnTrdBxChanged"
+                           Dense="true">
+            </MudEnumSelect>
+
+
+        </MudItem>
+
+     </MudGrid>
+</MudExpansionPanel>
+
+@code {
+    [EditorRequired][Parameter] public DbMatchingsWithPaginationQuery TRequest { get; set; } = null!;
+    [EditorRequired][Parameter] public EventCallback<string> OnConditionChanged { get; set; }
+    private bool _advancedSearchExpanded;
+    private async Task TextChanged(string str)
+    {
+        if (_advancedSearchExpanded)
+        {
+          await OnConditionChanged.InvokeAsync(str);
+        }
+    }
+
+    private async Task OnStatusOnWialonChanged(WStatus str)
+    {
+        TRequest.StatusOnWialon = str;
+        await TextChanged(str.ToString());
+    }
+
+    private async Task OnStatusOnTrdBxChanged(UStatus str)
+    {
+        TRequest.StatusOnTrdBx = str;
+        await TextChanged(str.ToString());
+    }
+
+}

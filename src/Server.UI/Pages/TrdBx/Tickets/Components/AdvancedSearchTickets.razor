@@ -1,0 +1,57 @@
+﻿
+@using CleanArchitecture.Blazor.Application.Features.Tickets.Queries.Pagination
+@using CleanArchitecture.Blazor.Domain.Entities
+@using CleanArchitecture.Blazor.Domain.Enums
+
+@inject IStringLocalizer<Tickets> L
+
+<MudExpansionPanel @bind-Expanded="_advancedSearchExpanded"
+                   Style="border-radius: var(--mud-default-borderradius) !important;"
+                   Class="mud-elevation-25 pa-2 mb-3" Text="@ConstantString.AdvancedSearch">
+    <MudGrid>
+        <MudItem md="6">
+            <MudEnumSelect Style="min-width:120px"
+                           Placeholder="@L["ServiceTask"]"
+                           TEnum="ServiceTask"
+                           Value="TRequest.ServiceTask"
+                           ValueChanged="OnServiceTaskChanged"
+                           Dense="true">
+            </MudEnumSelect>
+        </MudItem>
+
+        <MudItem md="6">
+            <MudEnumSelect Style="min-width:120px"
+                           Placeholder="@L["TicketStatus"]"
+                           TEnum="TicketStatus"
+                           Value="TRequest.TicketStatus"
+                           ValueChanged="OnTicketStatusChanged"
+                           Dense="true">
+            </MudEnumSelect>
+        </MudItem>
+     </MudGrid>
+</MudExpansionPanel>
+
+@code {
+    [EditorRequired][Parameter] public TicketsWithPaginationQuery TRequest { get; set; } = null!;
+    [EditorRequired][Parameter] public EventCallback<string> OnConditionChanged { get; set; }
+    private bool _advancedSearchExpanded;
+    private async Task TextChanged(string str)
+    {
+        if (_advancedSearchExpanded)
+        {
+          await OnConditionChanged.InvokeAsync(str);
+        }
+    }
+
+    private async Task OnServiceTaskChanged(ServiceTask ticketType)
+    {
+        TRequest.ServiceTask = ticketType;
+        await TextChanged(ticketType.ToString());
+    }
+
+    private async Task OnTicketStatusChanged(TicketStatus ticketStatus)
+    {
+        TRequest.TicketStatus = ticketStatus;
+        await TextChanged(ticketStatus.ToString());
+    }
+}

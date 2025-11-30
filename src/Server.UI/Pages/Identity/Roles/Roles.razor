@@ -7,10 +7,11 @@
 @using CleanArchitecture.Blazor.Infrastructure.Persistence
 @using CleanArchitecture.Blazor.Server.UI.Pages.Identity.Roles.Components
 @using CleanArchitecture.Blazor.Infrastructure.Constants.ClaimTypes
+
 @using System.Linq.Expressions
 @using ZiggyCreatures.Caching.Fusion
 
-@attribute [Authorize(Policy = Permissions.Roles.View)]
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.Roles.View)]
 @inherits OwningComponentBase<ApplicationDbContext>
 @inject ITenantService TenantsService
 @inject IFusionCache FusionCache
@@ -190,13 +191,13 @@
         InitializeServices();
         Title = L[_currentDto.GetClassDescription()];
         var state = await AuthState;
-        _canCreate = (await AuthService.AuthorizeAsync(state.User, Permissions.Roles.Create)).Succeeded;
-        _canSearch = (await AuthService.AuthorizeAsync(state.User, Permissions.Roles.Search)).Succeeded;
-        _canEdit = (await AuthService.AuthorizeAsync(state.User, Permissions.Roles.Edit)).Succeeded;
-        _canDelete = (await AuthService.AuthorizeAsync(state.User, Permissions.Roles.Delete)).Succeeded;
-        _canManagePermissions = (await AuthService.AuthorizeAsync(state.User, Permissions.Roles.ManagePermissions)).Succeeded;
-        _canImport = (await AuthService.AuthorizeAsync(state.User, Permissions.Roles.Import)).Succeeded;
-        _canExport = (await AuthService.AuthorizeAsync(state.User, Permissions.Roles.Export)).Succeeded;
+        _canCreate = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Roles.Create)).Succeeded;
+        _canSearch = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Roles.Search)).Succeeded;
+        _canEdit = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Roles.Edit)).Succeeded;
+        _canDelete = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Roles.Delete)).Succeeded;
+        _canManagePermissions = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Roles.ManagePermissions)).Succeeded;
+        _canImport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Roles.Import)).Succeeded;
+        _canExport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Roles.Export)).Succeeded;
     }
     private void InitializeServices()
     {

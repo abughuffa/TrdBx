@@ -1,0 +1,53 @@
+﻿
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnitModels.DTOs
+
+@inherits MudComponentBase
+@inject IStringLocalizer<TrackingUnitModels> L
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.TrackingUnitModels.View)]
+
+@* <PageTitle>@Title</PageTitle> *@
+
+<MudDialog>
+    <DialogContent>
+        <MudForm Model="@_model">
+            <MudGrid>
+                <MudItem md="6">
+                    <ReadOnlyFieldX12 Label="@L[_model.GetMemberDescription(x => x.Name)]" Value="_model.Name"></ReadOnlyFieldX12>
+                </MudItem>
+                <MudItem md="6">
+                    <ReadOnlyFieldX6 Label="@L[_model.GetMemberDescription(x => x.WialonName)]" Value="_model.WialonName"></ReadOnlyFieldX6>
+                </MudItem>
+                <MudItem md="4">
+                    <ReadOnlyFieldX6 Label="@L[_model.GetMemberDescription(x => x.WhwTypeId)]" Value="_model.WhwTypeId"></ReadOnlyFieldX6>
+                </MudItem>
+                <MudItem md="4">
+                    <ReadOnlyFieldX6 Label="@L[_model.GetMemberDescription(x => x.PortNo1)]" Value="_model.PortNo1"></ReadOnlyFieldX6>
+                </MudItem>
+                <MudItem md="4">
+                    <ReadOnlyFieldX6 Label="@L[_model.GetMemberDescription(x => x.PortNo2)]" Value="_model.PortNo2"></ReadOnlyFieldX6>
+                </MudItem>
+                <MudItem md="4">
+                    <ReadOnlyFieldX6 Label="@L[_model.GetMemberDescription(x => x.DefualtGprs)]" Value="_model.DefualtGprs"></ReadOnlyFieldX6>
+                </MudItem>
+                <MudItem md="4">
+                    <ReadOnlyFieldX6 Label="@L[_model.GetMemberDescription(x => x.DefualtHost)]" Value="_model.DefualtHost"></ReadOnlyFieldX6>
+                </MudItem>
+                <MudItem md="4">
+                    <ReadOnlyFieldX12 Label="@L[_model.GetMemberDescription(x => x.DefualtPrice)]" Value="_model.DefualtPrice"></ReadOnlyFieldX12>
+                </MudItem>
+            </MudGrid>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">@ConstantString.Close</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+    @code {
+
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;
+    [Parameter] public TrackingUnitModelDto _model { get; set; } = default!;
+
+    void Cancel() => MudDialog.Cancel();
+}

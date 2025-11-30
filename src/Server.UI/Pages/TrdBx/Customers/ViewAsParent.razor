@@ -1,0 +1,88 @@
+﻿@page "/pages/TrdBx/Customers/{id:int}/ViewAsParent"
+
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Customers
+@using CleanArchitecture.Blazor.Application.Features.Customers.DTOs
+@using CleanArchitecture.Blazor.Application.Features.Customers.Queries.GetById
+
+@inherits MudComponentBase
+@inject IStringLocalizer<Customers> L
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.Customers.View)]
+
+<PageTitle>@Title</PageTitle>
+
+<MudContainer Class="mt-3" MaxWidth="MaxWidth.Medium">
+@if (model != null)
+{
+    <MudCard Class="pa-2">
+        <MudCardHeader>
+            <CardHeaderContent>
+                 <MudText Typo="Typo.h6">@Title</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent>
+            <MudGrid Spacing="3" Class="readonly-grid">
+                <MudItem md="12">
+                        <ReadOnlyField Label="@L[model.GetMemberDescription(x => x.Name)]" Value="model.Name"></ReadOnlyField>
+                </MudItem> 
+                <MudItem md="4">
+                        <ReadOnlyField Label="@L[model.GetMemberDescription(x => x.Account)]" Value="model.Account"></ReadOnlyField>
+                </MudItem> 
+                    <MudItem md="4">
+                        <ReadOnlyField Label="@L[model.GetMemberDescription(x => x.BillingPlan)]" Value="model.BillingPlan"></ReadOnlyField>
+                    </MudItem>
+                    <MudItem md="4">
+                        <ReadOnlyField Label="@L[model.GetMemberDescription(x => x.UserName)]" Value="model.UserName"></ReadOnlyField>
+                </MudItem>
+                    <MudItem md="4">
+                        <ReadOnlyField Label="@L[model.GetMemberDescription(x => x.IsTaxable)]" Value="model.IsTaxable" CheckBox="true"></ReadOnlyField>
+                    </MudItem>
+                    <MudItem md="4">
+                        <ReadOnlyField Label="@L[model.GetMemberDescription(x => x.IsRenewable)]" Value="model.IsRenewable" CheckBox="true"></ReadOnlyField>
+                    </MudItem>
+                    <MudItem md="4">
+                        <ReadOnlyField Label="@L[model.GetMemberDescription(x => x.IsAvaliable)]" Value="model.IsAvaliable" CheckBox="true"></ReadOnlyField>
+                    </MudItem>
+
+            </MudGrid>
+        </MudCardContent>
+            <MudCardActions>
+                <MudButton Color="Color.Primary" DropShadow="false" OnClick="OnGoBack">@ConstantString.GoBack</MudButton>
+            </MudCardActions>
+    </MudCard>
+ }
+</MudContainer>
+ 
+
+@code {
+    [Parameter] public int Id { get; set; }
+
+    public string? Title { get; private set; }
+    private CustomerDto model;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Title = L["Customer Info"];
+
+        var result = await Mediator.Send(new GetCustomerByIdQuery() { Id = Id });
+
+        result.Map(data =>
+   {
+       model = data;
+       return data;
+   }).Match(data =>
+   {
+       return data;
+
+   }, errors =>
+   {
+       Snackbar.Add(errors, MudBlazor.Severity.Error);
+       return null!;
+   });
+
+    }
+
+    void OnGoBack()
+    {
+        Navigation.NavigateTo($"/pages/TrdBx/Customers");
+    }
+}

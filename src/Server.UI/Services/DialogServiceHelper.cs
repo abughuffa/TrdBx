@@ -6,7 +6,7 @@ namespace CleanArchitecture.Blazor.Server.UI.Services;
 /// <summary>
 /// Helper class for dialog service operations.
 /// </summary>
-public class DialogServiceHelper
+public partial class DialogServiceHelper
 {
     private readonly IDialogService _dialogService;
 

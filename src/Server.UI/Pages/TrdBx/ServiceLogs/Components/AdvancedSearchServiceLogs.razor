@@ -1,0 +1,77 @@
+﻿@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx
+@using CleanArchitecture.Blazor.Application.Features.ServiceLogs.Queries.Pagination
+@using CleanArchitecture.Blazor.Domain.Enums
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Customers.Components
+
+@inject IStringLocalizer<ServiceLogs> L
+
+<MudExpansionPanel @bind-Expanded="_advancedSearchExpanded"
+Style="border-radius: var(--mud-default-borderradius) !important;"
+Class="mud-elevation-25 pa-2 mb-3" Text="@ConstantString.AdvancedSearch">
+
+    <MudGrid Spacing="2">
+
+        <MudItem md="4">
+            <AvaliableCustomers  
+                @bind-Value="TRequest.CustomerId"
+            Placeholder="@L["Search by Customer"]"
+            Clearable="true"
+                                Disabled="@Disabled"
+            OnConditionChanged="TextChanged">
+            </AvaliableCustomers>
+        </MudItem>
+
+        <MudItem md="4">
+            <MudEnumSelect Style="min-width:120px"
+                           Disabled="@Disabled"
+            TEnum="ServiceTask" 
+            Value="TRequest.ServiceTask"
+            ValueChanged="OnServiceTaskChanged"
+            Dense="true" Label="@L["ServiceTask"]">
+            </MudEnumSelect>
+        </MudItem>
+
+        <MudItem md="4">
+            <MudCheckBox Disabled="@Disabled"
+                T="bool?" 
+                TriState ="true"
+            Value ="@(TRequest.IsBilled == null ? null : TRequest.IsBilled)"
+            ValueChanged="OnIsBilledChanged">
+            </MudCheckBox>
+        </MudItem>
+
+    </MudGrid>
+</MudExpansionPanel>
+@* ValueChanged = "OnIsBilledChanged"> *@
+@code
+{
+    [EditorRequired][Parameter] public ServiceLogsWithPaginationQuery TRequest { get; set; } = default!;
+    [EditorRequired] [Parameter] public EventCallback<string> OnConditionChanged { get; set; }
+
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    private bool _advancedSearchExpanded;
+
+    private async Task TextChanged(string str)
+    {
+        if (_advancedSearchExpanded)
+        {
+            await OnConditionChanged.InvokeAsync(str);
+        }
+    }
+
+    private async Task OnServiceTaskChanged(ServiceTask ServiceTask)
+    {
+        TRequest.ServiceTask = ServiceTask;
+        await TextChanged(ServiceTask.ToString());
+    }
+
+    private async Task OnIsBilledChanged(bool? isBilled)
+    {
+        TRequest.IsBilled = isBilled == null ? null : isBilled;
+        await TextChanged(isBilled == null ? "" : isBilled.ToString());
+    }
+
+}
+

@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 namespace CleanArchitecture.Blazor.Infrastructure.Persistence;
 
 #nullable disable
-public class ApplicationDbContext : IdentityDbContext<
+public partial class ApplicationDbContext : IdentityDbContext<
     ApplicationUser, ApplicationRole, string,
     ApplicationUserClaim, ApplicationUserRole, ApplicationUserLogin,
     ApplicationRoleClaim, ApplicationUserToken>, IApplicationDbContext, IDataProtectionKeyContext
@@ -31,10 +31,7 @@ public class ApplicationDbContext : IdentityDbContext<
 
 
 
-    public DbSet<Warehouse> Warehouses { get; set; }
-    public DbSet<Vehicle> Vehicles { get; set; }
-    public DbSet<VehicleType> VehicleTypes { get; set; }
-    public DbSet<Shipment> Shipments { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

@@ -26,7 +26,7 @@ namespace CleanArchitecture.Blazor.Application.Features.Contacts.Mappers;
 #pragma warning disable RMG020
 #pragma warning disable RMG012
 [Mapper]
-public static partial class ContactMapper
+public static partial class Mapper
 {
     public static partial ContactDto ToDto(Contact source);
     public static partial Contact FromDto(ContactDto dto);

@@ -1,0 +1,96 @@
+﻿
+@using CleanArchitecture.Blazor.Application.Features.CusPrices.Commands.Update
+@using CleanArchitecture.Blazor.Application.Features.CusPrices.Queries.GetById
+
+@inherits MudComponentBase
+@inject IValidationService Validator
+@inject IStringLocalizer<CusPrices> L
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.CusPrices.Edit)]
+
+<MudDialog>
+    <DialogContent>
+        <MudForm Model="@_model" @ref="@_contactForm" Validation="@(Validator.ValidateValue(_model))">
+            <MudGrid>
+                <MudItem md="4">
+                    <MudTextField Label="@L[_model.GetMemberDescription(x => x.Gprs)]" @bind-Value="_model.Gprs" 
+                        For="@(() => _model.Gprs)" 
+                        Required="true"
+                                  RequiredError="@L["Gprs fees is required!"]"
+                                  Placeholder="@L["Enter Gprs fees"]">
+                    </MudTextField>
+                </MudItem>
+                <MudItem md="4">
+                    <MudTextField Label="@L[_model.GetMemberDescription(x => x.Host)]" @bind-Value="_model.Host"
+                                  For="@(() => _model.Host)"
+                                  Required="true"
+                                  RequiredError="@L["Host fees is required!"]"
+                                  Placeholder="@L["Enter Host fees"]">
+                    </MudTextField>
+                </MudItem>
+                <MudItem md="4">
+                    <MudTextField Label="@L[_model.GetMemberDescription(x => x.Price)]" @bind-Value="_model.Price"
+                                  For="@(() => _model.Price)"
+                                  Required="true"
+                                  RequiredError="@L["Unit Price is required!"]"
+                                  Placeholder="@L["Enter Unit Price"]">
+
+                    </MudTextField>
+                </MudItem>
+
+            </MudGrid>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudLoadingButton Loading="@_saveing" OnClick="OnSave">@ConstantString.Save</MudLoadingButton>
+        <MudButton OnClick="Cancel">@ConstantString.Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    MudForm _contactForm = new();
+    private bool _saveing = false;
+    [CascadingParameter]
+    IMudDialogInstance MudDialog { get; set; } = default!;
+    [EditorRequired][Parameter] public UpdateCusPriceCommand _model { get; set; } = null!;
+
+
+
+    async Task OnSave()
+    {
+        try
+        {
+            _saveing = true;
+            await _contactForm.Validate().ConfigureAwait(false);
+            if (!_contactForm.IsValid)
+                return;
+            var result = await Mediator.Send(_model);
+
+            result.Match(
+               data =>
+               {
+                   Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+                   MudDialog.Close(DialogResult.Ok(true));
+                   return data;
+               },
+               errors =>
+               {
+                   Snackbar.Add(errors, MudBlazor.Severity.Error);
+                   return -1;
+               });
+            // result.Match(data =>
+            // {
+            //     MudDialog.Close(DialogResult.Ok(true));
+            //     Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+            // }, errors =>
+            // {
+            //     Snackbar.Add(errors, MudBlazor.Severity.Error);
+            // });
+        }
+        finally
+        {
+            _saveing = false;
+        }
+    }
+
+    void Cancel() => MudDialog.Cancel();
+}

@@ -1,0 +1,180 @@
+﻿@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Customers
+@using CleanArchitecture.Blazor.Application.Features.Customers.Commands.Create
+@using CleanArchitecture.Blazor.Application.Features.Customers.DTOs
+@using CleanArchitecture.Blazor.Application.Features.Customers.Queries.GetAvaliable
+@using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.Create
+@using CleanArchitecture.Blazor.Domain.Enums
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Customers.Components
+
+@inherits MudComponentBase
+@inject IValidationService Validator
+@inject IStringLocalizer<Invoices> L
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.Invoices.Create)]
+
+
+<MudDialog>
+    <DialogContent>
+        <MudForm Model="@_model" @ref="@_contactForm" Validation="@(Validator.ValidateValue(_model))">
+            <MudGrid>
+
+                    <MudItem md="12">
+                    <AvaliableCustomers @bind-Value="_model.CustomerId"
+                        Placeholder="@L["By Customer"]"
+                        Clearable="false"
+                        OnConditionChanged="TextChanged">
+                        </AvaliableCustomers>
+                    </MudItem>
+
+                    <MudItem md="6">
+                        <MudEnumSelect Style="min-width:120px"
+                        TEnum="InvoiceType"
+                        Value="_model.InvoiceType"
+                        ValueChanged="OnChangedInvoiceType"
+                        Dense="true" Label="@L["InvoiceType"]">
+                        </MudEnumSelect>
+                    </MudItem>
+
+                    <MudItem md="6">
+                        <MudDatePicker Class="pa-4"
+                        PickerVariant="PickerVariant.Dialog"
+                        Editable @bind-Date="_date"
+                        For="@(() => _date)"
+                        Required="true"
+                        RequiredError="@L["Invoice Date is required!"]" />
+                    </MudItem>
+
+                    <MudItem md="12">
+                        <MudCheckBox Label="@L["Ignore Taxes even if it was required!"]"
+                        For="@(() => _model.IgnoreTaxes)"
+                        @bind-Value="_model.IgnoreTaxes">
+                        </MudCheckBox>
+                    </MudItem>
+
+            </MudGrid>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudLoadingButton Loading="@_savingnew" OnClick="OnSaveAndNew">@ConstantString.SaveAndNew</MudLoadingButton>
+        <MudLoadingButton Loading="@_saving"  OnClick="OnSave">@ConstantString.Save</MudLoadingButton>
+        <MudButton OnClick="Cancel">@ConstantString.Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; } = default!;
+    [EditorRequired][Parameter] public CreateInvoiceCommand _model { get; set; } = null!;
+    [EditorRequired][Parameter] public EventCallback<string> OnConditionChanged { get; set; }
+
+    MudForm _contactForm = new();
+    private bool _saving = false;
+    private bool _savingnew = false;
+    private IEnumerable<CustomerDto> Parents = new List<CustomerDto>();
+
+
+    private Task OnChangedInvoiceType(InvoiceType invoiceAs)
+    {
+        _model.InvoiceType = invoiceAs;
+
+         return Task.CompletedTask;
+    }
+
+    private async Task TextChanged(string str)
+    {
+
+        await OnConditionChanged.InvokeAsync(str);
+
+    }
+    private DateTime? _date
+    {
+        get => _model.InvDate.ToDateTime(TimeOnly.MinValue);
+        set
+        {
+            if (value is not null)
+            {
+                _model.InvDate = DateOnly.FromDateTime((DateTime)value);
+            }
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Parents = await Mediator.Send(new GetAvaliableParentsQuery());
+    }
+
+
+    async Task OnSave()
+    {
+        try
+        {
+            _saving = true;
+            await _contactForm.Validate().ConfigureAwait(false);
+            if (!_contactForm.IsValid)
+                return;
+            var result = await Mediator.Send(_model);
+
+            result.Match(
+data =>
+{
+Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+MudDialog.Close(DialogResult.Ok(true));
+return data;
+},
+errors =>
+{
+Snackbar.Add(errors, MudBlazor.Severity.Error);
+return -1;
+});
+            // result.Match(data =>
+            // {
+            //     MudDialog.Close(DialogResult.Ok(true));
+            //     Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+            // }, errors =>
+            // {
+            //     Snackbar.Add(errors, MudBlazor.Severity.Error);
+            // });
+        }
+        finally
+        {
+            _saving = false;
+        }
+    }
+
+    async Task OnSaveAndNew()
+    {
+        try
+        {
+            _savingnew = true;
+            await _contactForm.Validate().ConfigureAwait(false);
+            if (!_contactForm.IsValid)
+               return;
+            var result = await Mediator.Send(_model);
+            await result.MatchAsync(async data =>
+           {
+               Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+               await Task.Delay(300);
+               _model = new CreateInvoiceCommand() { };
+               return data;
+           }, errors =>
+           {
+               Snackbar.Add(errors, MudBlazor.Severity.Error);
+               return Task.FromResult(-1);
+           });
+        }
+        finally
+        {
+            _savingnew = false;
+        }
+    }
+
+    void Cancel() => MudDialog.Cancel();
+
+
+   }
+
+
+
+ 
+
+
+

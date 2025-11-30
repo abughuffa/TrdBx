@@ -1,0 +1,81 @@
+﻿
+using CleanArchitecture.Blazor.Application.Features.TestCases.ActivateTestCases.Caching;
+using CleanArchitecture.Blazor.Application.Features.TestCases.ActivateTestCases.Mappers;
+
+
+
+namespace CleanArchitecture.Blazor.Application.Features.TestCases.ActivateTestCases.Commands.Execute;
+
+public class ExecuteActivateTestCaseCommand : ICacheInvalidatorRequest<Result<int>>
+{
+    public int[] Id { get; }
+
+    internal IMediator Mediator;
+    public string CacheKey => ActivateTestCaseCacheKey.GetAllCacheKey;
+    public IEnumerable<string> Tags => ActivateTestCaseCacheKey.Tags;
+    public ExecuteActivateTestCaseCommand(int[] id, IMediator mediator)
+    {
+        Id = id;
+        Mediator = mediator;
+    }
+
+
+}
+
+public class ExecuteActivateTestCaseCommandHandler : IRequestHandler<ExecuteActivateTestCaseCommand, Result<int>>
+
+{
+    //private readonly IApplicationDbContextFactory _dbContextFactory;
+    //private readonly IMapper _mapper;
+    //public ExecuteActivateTestCaseCommandHandler(
+    //    IApplicationDbContextFactory dbContextFactory,
+    //    IMapper mapper
+    //)
+    //{
+    //    _dbContextFactory = dbContextFactory;
+    //    _mapper = mapper;
+    //}
+
+    private readonly IApplicationDbContext _context;
+    public ExecuteActivateTestCaseCommandHandler(
+        IApplicationDbContext context
+    )
+    {
+        _context = context;
+    }
+    public async Task<Result<int>> Handle(ExecuteActivateTestCaseCommand request, CancellationToken cancellationToken)
+    {
+        //await using var _context = await _dbContextFactory.CreateAsync(cancellationToken);
+
+        var items = await _context.ActivateTestCases.Where(x => request.Id.Contains(x.Id))
+             //.ProjectTo<ActivateTestCaseDto>(_mapper.ConfigurationProvider)
+            .ToListAsync(cancellationToken);
+        if (items.Any(i => i.IsSucssed == true))
+        {
+            return await Result<int>.FailureAsync("Some of selected Test cases already executed!");
+        }
+
+        foreach (var item in items)
+        {
+            //var cmd = _mapper.Map<ActivateTrackingUnitCommand>(item);
+
+            var cmd = Mapper.ToExecuteCommand(item);
+
+            var r = await request.Mediator.Send(cmd);
+
+            //item.CaseCode = r.D
+            item.IsSucssed = r.Succeeded;
+
+            item.Message = r.ErrorMessage;
+
+            item.AddDomainEvent(new ActivateTestCaseUpdatedEvent(item));
+        }
+
+        var result = await _context.SaveChangesAsync(cancellationToken);
+
+        return await Result<int>.SuccessAsync(result);
+
+    }
+
+}
+

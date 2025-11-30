@@ -22,7 +22,7 @@
                    ValueChanged="OnVehicleTypeChanged">
             <MudSelectItem Value=0>Select a VehicleType</MudSelectItem>
 
-            @foreach (var doc1type in gpsUnitModels)
+            @foreach (var doc1type in vehicleTypes)
             {
                 <MudSelectItem Value="doc1type.Id">@doc1type.Name</MudSelectItem>
             }
@@ -76,37 +76,37 @@
     [Parameter]
     public EventCallback<int> VehicleTypeIdChanged { get; set; }
 
-    private int _gpsUnitModelId;
+    private int _vehicleTypeId;
     [Parameter]
     public int VehicleTypeId
     {
-        get => _gpsUnitModelId;
+        get => _vehicleTypeId;
         set
         {
-            if (_gpsUnitModelId != value)
+            if (_vehicleTypeId != value)
             {
-                _gpsUnitModelId = value;
+                _vehicleTypeId = value;
                 VehicleTypeIdChanged.InvokeAsync(value);
             }
         }
     }
 
 
-    private IEnumerable<VehicleTypeDto> gpsUnitModels = default!;
+    private IEnumerable<VehicleTypeDto> vehicleTypes = default!;
     private GetAllVehicleTypesQuery GetAllVehicleTypesQuery { get; set; } = new();
 
     public VehicleTypeDto SelectedVehicleType { get; set; } = null!;
     private void OnVehicleTypeChanged(int id)
     {
         VehicleTypeId = id;
-        SelectedVehicleType = gpsUnitModels.FirstOrDefault(m => m.Id == id);
+        SelectedVehicleType = vehicleTypes.FirstOrDefault(m => m.Id == id);
     }
 
     bool isDisabled => (SelectedVehicleType is null);
 
     protected override async Task OnInitializedAsync()
     {
-        gpsUnitModels = await LoadVehicleTypes();
+        vehicleTypes = await LoadVehicleTypes();
     }
 
     private async Task<IEnumerable<VehicleTypeDto>> LoadVehicleTypes()
@@ -151,7 +151,7 @@
             contentText,
             async () =>
             {
-                gpsUnitModels = await LoadVehicleTypes();
+                vehicleTypes = await LoadVehicleTypes();
 
                 SelectedVehicleType = null;
             });
@@ -171,7 +171,7 @@
 
         if (state != null && !state.Canceled)
         {
-            gpsUnitModels = await LoadVehicleTypes();
+            vehicleTypes = await LoadVehicleTypes();
         }
     }
 
@@ -187,7 +187,7 @@
 
         if (state != null && !state.Canceled)
         {
-            gpsUnitModels = await LoadVehicleTypes();
+            vehicleTypes = await LoadVehicleTypes();
             SelectedVehicleType = dto;
         }
     }

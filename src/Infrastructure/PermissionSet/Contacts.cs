@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
-
 namespace CleanArchitecture.Blazor.Infrastructure.PermissionSet;
 
 public static partial class Permissions

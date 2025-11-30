@@ -1,0 +1,101 @@
+﻿
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnitModels.Commands.AddEdit
+
+@inherits MudComponentBase
+@inject IValidationService Validator
+@inject IStringLocalizer<TrackingUnitModels> L
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.TrackingUnitModels.Create)]
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.TrackingUnitModels.Edit)]
+
+
+<MudDialog>
+    <DialogContent>
+        <MudForm Model="@_model" @ref="@_form" Validation="@(Validator.ValidateValue(_model))">
+            <MudGrid>
+                <MudItem md="6">
+                    <MudTextField Label="@L[_model.GetMemberDescription(x=>x.Name)]" @bind-Value="_model.Name" For="@(() => _model.Name)" Required="false" RequiredError="@L["Name is required!"]"></MudTextField>
+                </MudItem>
+                <MudItem md="6">
+                    <MudTextField Label="@L[_model.GetMemberDescription(x => x.WialonName)]" @bind-Value="_model.WialonName" For="@(() => _model.WialonName)" Required="false" RequiredError="@L["Wialon Name is required!"]"></MudTextField>
+                </MudItem>
+                <MudItem md="4">
+                    <MudTextField Label="@L[_model.GetMemberDescription(x => x.WhwTypeId)]" @bind-Value="_model.WhwTypeId" For="@(() => _model.WhwTypeId)" Required="false" RequiredError="@L["WhwTypeId is required!"]"></MudTextField>
+                </MudItem>
+                <MudItem md="4">
+                    <MudTextField Label="@L[_model.GetMemberDescription(x => x.PortNo1)]" @bind-Value="_model.PortNo1" For="@(() => _model.PortNo1)" Required="false" RequiredError="@L["PortNo1 is required!"]"></MudTextField>
+                </MudItem>
+                <MudItem md="4">
+                    <MudTextField Label="@L[_model.GetMemberDescription(x => x.PortNo2)]" @bind-Value="_model.PortNo2" For="@(() => _model.PortNo2)" Required="false" RequiredError="@L["PortNo2 is required!"]"></MudTextField>
+                </MudItem>
+                <MudItem md="4">
+                    <MudTextField Label="@L[_model.GetMemberDescription(x=>x.DefualtGprs)]" @bind-Value="_model.DefualtGprs"></MudTextField>
+                </MudItem>
+                <MudItem md="4">
+                    <MudTextField Label="@L[_model.GetMemberDescription(x=>x.DefualtHost)]" @bind-Value="_model.DefualtHost"></MudTextField>
+                </MudItem>
+                <MudItem md="4">
+                    <MudTextField Label="@L[_model.GetMemberDescription(x=>x.DefualtPrice)]" @bind-Value="_model.DefualtPrice"></MudTextField>
+                </MudItem>
+            </MudGrid>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>     
+        <MudLoadingButton Loading="@_saving" OnClick="OnSave">@ConstantString.Save</MudLoadingButton>
+        <MudButton OnClick="Cancel">@ConstantString.Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+
+    
+    private MudForm? _form;
+    private bool _saving = false;
+    public string? Title { get; private set; }
+
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; } = default!;
+    [EditorRequired][Parameter] public AddEditTrackingUnitModelCommand _model { get; set; } = null!;
+
+
+
+    private async Task OnSave()
+    {
+        try
+        {
+            _saving = true;
+            await _form!.Validate().ConfigureAwait(false);
+            if (!_form!.IsValid)
+                return;
+            var result = await Mediator.Send(_model);
+            result.Match(
+   data =>
+   {
+       Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+       MudDialog.Close(DialogResult.Ok(true));
+       return data;
+   },
+   errors =>
+   {
+       Snackbar.Add(errors, MudBlazor.Severity.Error);
+       return -1;
+   });
+
+            // result.Match(
+            // data =>
+            // {
+               
+            //     Snackbar.Add(ConstantString.SaveSuccess, Severity.Info);
+            //     MudDialog.Close(DialogResult.Ok(true));
+            // },
+            // errors =>
+            // {
+            //     Snackbar.Add(errors, Severity.Error);
+            // });
+        }
+        finally
+        {
+            _saving = false;
+        }
+    }
+
+    private void Cancel() => MudDialog.Cancel();
+}

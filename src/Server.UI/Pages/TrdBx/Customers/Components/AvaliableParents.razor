@@ -1,0 +1,87 @@
+﻿@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Customers
+@using CleanArchitecture.Blazor.Application.Features.Customers.DTOs
+@using CleanArchitecture.Blazor.Application.Features.Customers.Queries.GetAvaliable
+
+
+
+@inherits MudComponentBase
+@inject IStringLocalizer<Customers> L
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.Customers.View)]
+
+<MudGrid >
+
+    <MudItem md="8">
+        <MudSelect T="int"
+                   Clearable="Clearable"
+                   Placeholder="Placeholder"
+                   Required="true"
+                   RequiredError="@L["Customer is required!"]"
+                   Value="Value"
+                   ValueChanged="OnValueChanged">
+            <MudSelectItem Value=0>Select a Cc</MudSelectItem>
+            @foreach (var doc1type in customers)
+            {
+                <MudSelectItem Value="doc1type.Id">@doc1type.Name</MudSelectItem>
+            }
+        </MudSelect>
+    </MudItem>
+
+
+
+</MudGrid>
+
+@code {
+
+    [Parameter]
+    public EventCallback<int> ValueChanged { get; set; }
+
+    [Parameter]
+    public string? Placeholder { get; set; }
+
+    [Parameter]
+    public bool Clearable { get; set; }
+
+    [EditorRequired]
+    [Parameter] 
+    public EventCallback<string> OnConditionChanged { get; set; }
+
+    private int _parentId;
+    [Parameter]
+    public int Value
+    {
+        get => _parentId;
+        set
+        {
+            if (_parentId != value)
+            {
+                _parentId = value;
+                ValueChanged.InvokeAsync(value);
+                OnConditionChanged.InvokeAsync();
+            }
+        }
+    }
+
+
+    private IEnumerable<CustomerDto> customers = default!;
+    private GetAvaliableCustomersQuery GetAvaliableCustomersQuery { get; set; } = new();
+
+    public CustomerDto SelectedCustomer { get; set; } = null;
+
+    private void OnValueChanged(int id)
+    {
+        Value = id;
+        SelectedCustomer = customers.FirstOrDefault(m => m.Id == id);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        customers = await LoadCcs();
+    }
+
+    private async Task<IEnumerable<CustomerDto>> LoadCcs()
+    {
+        var result = await Mediator.Send(GetAvaliableCustomersQuery).ConfigureAwait(false);
+        return result;
+    }
+
+}

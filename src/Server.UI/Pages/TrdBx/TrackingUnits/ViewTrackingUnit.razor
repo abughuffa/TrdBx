@@ -1,0 +1,119 @@
+﻿
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.DTOs
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Queries.GetById
+
+@inherits MudComponentBase
+@inject IStringLocalizer<TrackingUnits> L
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.TrackingUnits.View)]
+
+
+<PageTitle>@Title</PageTitle>
+
+<MudContainer Class="mt-3" MaxWidth="MaxWidth.Medium">
+@if (_model != null)
+{
+    <MudCard Class="pa-2">
+        <MudCardHeader>
+            <CardHeaderContent>
+                 <MudText Typo="Typo.h6">@Title</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+
+        <MudCardContent>
+
+            <MudGrid Spacing="3" Class="readonly-grid">
+                    <MudItem md="6">
+                        <ReadOnlyField Label="@L[_model.GetMemberDescription(x=>x.SNo)]" Value="_model.SNo"></ReadOnlyField>
+                    </MudItem>
+                    <MudItem md="6">
+                        <ReadOnlyField Label="@L[_model.GetMemberDescription(x => x.TrackingUnitModel)]" Value="_model.TrackingUnitModel"></ReadOnlyField>
+                    </MudItem>
+           @*          <MudItem md="6">
+                        <ReadOnlyField Label="@L[_model.GetMemberDescription(x=>x.TrackingUnitModelId)]" Value="_model.TrackingUnitModelId"></ReadOnlyField>
+                    </MudItem> *@
+                    <MudItem md="6">
+                        <ReadOnlyField Label="@L[_model.GetMemberDescription(x=>x.UStatus)]" Value="_model.UStatus"></ReadOnlyField>
+                    </MudItem>
+                    <MudItem md="6">
+                        <ReadOnlyField Label="@L[_model.GetMemberDescription(x=>x.UnitName)]" Value="_model.UnitName"></ReadOnlyField>
+                    </MudItem>
+             @*        <MudItem md="12">
+                        <ReadOnlyField Label="@L[_model.GetMemberDescription(x=>x.CustomerId)]" Value="_model.CustomerId"></ReadOnlyField>
+                    </MudItem> *@
+                    <MudItem md="12">
+                        <ReadOnlyField Label="@L[_model.GetMemberDescription(x => x.Customer)]" Value="_model.Customer"></ReadOnlyField>
+                    </MudItem>
+            </MudGrid>
+
+        </MudCardContent>
+
+            <MudCardActions Class="d-flex justify-end gap-2">
+
+                <MudButton Color="Color.Primary" DropShadow="false" OnClick="Cancel">@ConstantString.GoBack</MudButton>
+
+        </MudCardActions>
+
+    </MudCard>
+ }
+</MudContainer>
+ 
+
+@code {
+    public string? Title { get; private set; }
+    [Parameter]
+    public int Id { get; set; }
+    private TrackingUnitDto? _model;
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string? ReturnUrl { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Title = L["TrackingUnit"];
+
+       //  var result = await Mediator.Send(new GetTrackingUnitByIdQuery() { Id = Id });
+
+       //       result.Map(data =>
+       // {
+       //     _model = data;
+       //     return data;
+       // }).Match(data => {}, errors =>
+       // {
+       //     Snackbar.Add(errors, MudBlazor.Severity.Error);
+       // });
+
+        var result = await Mediator.Send(new GetTrackingUnitByIdQuery() { Id = Id });
+        result.Map(data =>
+        {
+            _model = data;
+            return data;
+        }).Match(data =>
+        {
+            // _breadcrumbItems.Add(new BreadcrumbItem(data.Name, null, disabled: true));
+            return data;
+
+        }, errors =>
+        {
+            Snackbar.Add(errors, MudBlazor.Severity.Error);
+            return null!;
+        });
+
+
+
+    }
+
+
+    void Cancel()
+    {
+        ReturnBack();
+    }
+
+    void ReturnBack()
+    {
+        var target = !string.IsNullOrWhiteSpace(ReturnUrl)
+            ? ReturnUrl
+            : Navigation.ToBaseRelativePath(Navigation.Uri);
+        Navigation.NavigateTo(target);
+    }
+}

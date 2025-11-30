@@ -10,6 +10,7 @@ builder.WebHost.UseStaticWebAssets();
 builder.Services
     .AddApplication()
     .AddInfrastructure(builder.Configuration)
+    .AddTrdBxInfrastructure(builder.Configuration)
     .AddServerUI(builder.Configuration);
 var app = builder.Build();
 

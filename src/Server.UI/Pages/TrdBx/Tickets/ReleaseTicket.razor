@@ -1,0 +1,116 @@
+﻿@page "/pages/TrdBx/Tickets/{id:int}/Release"
+
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Tickets
+@using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Release
+
+
+@inherits MudComponentBase
+@inject IValidationService Validator
+@inject IStringLocalizer<Tickets> L
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.Tickets.Release)]
+
+<PageTitle>@Title</PageTitle>
+
+<MudContainer Class="mt-3" MaxWidth="MaxWidth.Medium">
+    @if (model != null)
+    {
+        <MudCard Class="pa-2">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">@Title</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+
+            <MudCardContent>
+                <MudForm Model="@model" @ref="@_form" Validation="@(Validator.ValidateValue(model))">
+                    <MudGrid Spacing="2">
+                        <MudItem xs="12" md="6">
+                            <MudTextField Label="@L[model.GetMemberDescription(x => x.Note)]" Lines="5" @bind-Value="model.Note" For="@(() => model.Note)" Required="false" RequiredError="@L["Note is required!"]"></MudTextField>
+                        </MudItem>
+                    </MudGrid>
+                </MudForm>
+            </MudCardContent>
+            <MudCardActions >              
+                <MudLoadingButton Color="Color.Primary" DropShadow="false" Loading="@_saveing" OnClick="OnSave">@ConstantString.Save</MudLoadingButton>
+                <MudButton Color="Color.Primary" DropShadow="false" OnClick="Cancel">@ConstantString.Cancel</MudButton>
+            </MudCardActions>
+        </MudCard>
+    }
+</MudContainer>
+
+
+@code {
+    public string? Title { get; private set; }
+    [Parameter]
+    public int Id { get; set; }
+    MudForm? _form;
+    private bool _saveing = false;
+    private ReleaseTicketCommand model = new();
+
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string? ReturnUrl { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+  
+        Title = L["Release Ticket"];
+        model.Id = Id;
+        await Task.CompletedTask;
+
+
+    }
+    async Task OnSave()
+    {
+        try
+        {
+            _saveing = true;
+
+            await _form!.Validate().ConfigureAwait(false);
+
+            if (!_form!.IsValid)
+                return;
+
+            var result = await Mediator.Send(model);
+
+            result.Match(
+   data =>
+   {
+       Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+       ReturnBack();
+       return data;
+   },
+   errors =>
+   {
+       Snackbar.Add(errors, MudBlazor.Severity.Error);
+       return -1;
+   });
+
+            // result.Match(data =>
+            //      {
+            //          Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+            //          ReturnBack();
+            //      }, errors => { Snackbar.Add(errors, MudBlazor.Severity.Error); });
+        }
+        finally
+        {
+            _saveing = false;
+        }
+
+    }
+
+    void Cancel()
+    {
+        ReturnBack();
+    }
+
+    void ReturnBack()
+    {
+
+        var target = !string.IsNullOrWhiteSpace(ReturnUrl)
+            ? ReturnUrl
+            : Navigation.ToBaseRelativePath(Navigation.Uri);
+        Navigation.NavigateTo(target);
+    }
+}

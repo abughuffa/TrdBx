@@ -1,0 +1,119 @@
+﻿@using CleanArchitecture.Blazor.Application.Features.SimCards.Mappers
+@using CleanArchitecture.Blazor.Application.Features.SimCards.Commands.Update
+@using CleanArchitecture.Blazor.Application.Features.SimCards.Queries.GetById
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.SPackages
+
+@inherits MudComponentBase
+@inject IValidationService Validator
+@inject IStringLocalizer<SimCards> L
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.ServicePrices.Edit)]
+
+<MudDialog>
+    <DialogContent>
+        <MudForm Model="@_model" @ref="@_contactForm" Validation="@(Validator.ValidateValue(_model))">
+                    <MudGrid Spacing="2">
+                        <MudItem md="12">
+                            <SPackages @bind-SPackageId="_model.SPackageId"></SPackages>
+
+                        </MudItem>
+                        <MudItem md="6">
+                            <MudTextField Label="@L[_model.GetMemberDescription(x=>x.SimCardNo)]" @bind-Value="_model.SimCardNo" For="@(() => _model.SimCardNo)" Required="true" RequiredError="@L["SimCardNo is required!"]"></MudTextField>
+                        </MudItem>
+                        <MudItem md="6">
+                            <MudTextField Label="@L[_model.GetMemberDescription(x=>x.ICCID)]" @bind-Value="_model.ICCID"></MudTextField>
+                        </MudItem>
+
+                        <MudItem md="2"></MudItem>
+                        <MudItem md="8">
+                            <MudDatePicker Class="pa-4"
+                            PickerVariant="PickerVariant.Dialog"
+                            Label="@L["ExDate"]"
+                            Editable @bind-Date="_date"
+                            For="@(() => _date)" />
+                        </MudItem>
+                        <MudItem md="2"></MudItem>
+                    </MudGrid>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudLoadingButton Loading="@_saveing" OnClick="OnSave">@ConstantString.Save</MudLoadingButton>
+        <MudButton OnClick="Cancel">@ConstantString.Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    MudForm _contactForm = new();
+    private bool _saveing = false;
+    [CascadingParameter]
+    IMudDialogInstance MudDialog { get; set; } = default!;
+    [EditorRequired][Parameter] public UpdateSimCardCommand _model { get; set; } = null!;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await Mediator.Send(new GetSimCardByIdQuery() { Id = _model.Id });
+
+        result.Map(data =>
+        {
+            _model = Mapper.ToUpdateCommand(data);
+            return data;
+        }).Match(data =>
+        {
+            return data;
+
+        }, errors =>
+        {
+            Snackbar.Add(errors, MudBlazor.Severity.Error);
+            return null!;
+        });
+
+    }
+
+    private DateTime? _date
+    {
+
+        get => _model.ExDate is null ? null : ((DateOnly)_model.ExDate).ToDateTime(TimeOnly.MinValue);
+
+        set { _model.ExDate = value is null ? null : DateOnly.FromDateTime((DateTime)value); }
+
+    }
+
+    async Task OnSave()
+    {
+        try
+        {
+            _saveing = true;
+            await _contactForm.Validate().ConfigureAwait(false);
+            if (!_contactForm.IsValid)
+                return;
+            var result = await Mediator.Send(_model);
+
+            result.Match(
+data =>
+{
+Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+MudDialog.Close(DialogResult.Ok(true));
+return data;
+},
+errors =>
+{
+Snackbar.Add(errors, MudBlazor.Severity.Error);
+return -1;
+});
+            // result.Match(data =>
+            // {
+            //     MudDialog.Close(DialogResult.Ok(true));
+            //     Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+            // }, errors =>
+            // {
+            //     Snackbar.Add(errors, MudBlazor.Severity.Error);
+            // });
+        }
+        finally
+        {
+            _saveing = false;
+        }
+    }
+
+    void Cancel() => MudDialog.Cancel();
+}

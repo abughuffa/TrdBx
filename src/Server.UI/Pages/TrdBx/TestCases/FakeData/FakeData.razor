@@ -1,0 +1,93 @@
+﻿@page "/pages/TrdBx/FakeData"
+@using CleanArchitecture.Blazor.Application.Features.TestCases.Commands
+
+
+
+@inherits MudComponentBase
+@inject IValidationService Validator
+@inject IStringLocalizer<FakeData> L
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.ActivateTestCases.View)]
+<PageTitle>@Title</PageTitle>
+<style>
+    .mud-table-toolbar {
+        height: 120px !important;
+    }
+</style>
+<PageTitle>@Title</PageTitle>
+<MudContainer Class="mt-3" MaxWidth="MaxWidth.Small">
+    <MudCard Class="pa-2">
+        <MudCardHeader>
+            <CardHeaderContent>
+                 <MudText Typo="Typo.h6">@Title</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent>
+
+        </MudCardContent>
+        <MudCardActions Class="d-flex justify-end gap-2">
+            <MudLoadingButton Color="Color.Primary" DropShadow="false" Loading="@_deleting" OnClick="DeleteAllData">DeleteAllData</MudLoadingButton>
+            <MudFileUpload T="IBrowserFile" FilesChanged="ImportFakeData" Accept=".xlsx">
+                    <ActivatorContent>
+                    <MudLoadingButton Class="pa-0 ma-0" Style="font-weight:400;text-transform:none;"
+                                   Variant="Variant.Text"
+                                   Loading="@_uploading">
+                            @ConstantString.Import
+                        </MudLoadingButton>
+                    </ActivatorContent>
+                </MudFileUpload>
+        </MudCardActions>
+        </MudCard>
+</MudContainer>
+
+@code {
+
+
+
+    public string? Title { get; private set; }
+
+    private bool _deleting = false;
+    private bool _uploading = false;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Title = L["Fake Data"];
+    }
+    async Task DeleteAllData()
+    {
+        try
+        {
+            _deleting = true;
+            var model = new DeleteAllDataCommand();
+            var result = await Mediator.Send(model);
+            if(result.Succeeded)
+                Snackbar.Add(ConstantString.DeleteSuccess, MudBlazor.Severity.Info);
+                else
+                Snackbar.Add("DeleteFail", MudBlazor.Severity.Error);
+        }
+        finally
+        {
+            _deleting = false;
+        }
+    }
+
+
+    private async Task ImportFakeData(IBrowserFile file)
+    {
+        _uploading = true;
+        // Read the stream here, for example into a MemoryStream or process it.
+        var memoryStream = new MemoryStream();
+        await file.OpenReadStream(maxAllowedSize: 2097152).CopyToAsync(memoryStream);
+        var command = new ImportDataCommand(file.Name, memoryStream.ToArray(), Mediator);
+        var result = await Mediator.Send(command);
+        if (result.Succeeded)
+            Snackbar.Add(ConstantString.ImportSuccess, MudBlazor.Severity.Info);
+        else
+            Snackbar.Add(ConstantString.ImportFail, MudBlazor.Severity.Error);
+        _uploading = false;
+
+    }
+
+}
+
+

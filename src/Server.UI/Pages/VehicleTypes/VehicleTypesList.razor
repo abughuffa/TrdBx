@@ -5,6 +5,77 @@
 @attribute [Authorize(Policy = Permissions.VehicleTypes.View)]
 
 <MudGrid>
+    <!-- Selected Vehicle Types -->
+    <MudItem md="5">
+        <MudText Typo="Typo.h6" Class="mb-2">@L["Selected Vehicle Types"]</MudText>
+        <MudPaper Elevation="2" Class="vehicle-list-container">
+            <MudList @bind-SelectedValue="ToRemoveSelectedVehicleType"
+                     Class="scrollable-list"
+                     Style="max-height: 300px; overflow-y: auto;">
+                @if (!AddedVehicleTypes.Any())
+                {
+                    <MudListItem Text="No vehicle types selected" Disabled="true" />
+                }
+                else
+                {
+                    @foreach (var vehicleType in AddedVehicleTypes)
+                    {
+                        <MudListItem Value="vehicleType" Text="@vehicleType.Name" />
+                    }
+                }
+            </MudList>
+        </MudPaper>
+        @if (AddedVehicleTypes.Any())
+        {
+            <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mt-1">
+                @AddedVehicleTypes.Count selected
+            </MudText>
+        }
+    </MudItem>
+
+    <!-- Action Buttons -->
+    <MudItem md="2" Class="d-flex align-center justify-center">
+        <MudStack AlignItems="AlignItems.Center" Justify="Justify.Center">
+            <MudIconButton Icon="@Icons.Material.Filled.ArrowBack"
+                           Variant="Variant.Filled"
+                           OnClick="@(() => OnAdd(ToAddSelectedVehicleType))"
+                           Disabled="isToAddDisabled"
+                           Size="Size.Small"
+                           Color="Color.Primary"
+                           Class="mb-2">
+            </MudIconButton>
+
+            <MudIconButton Icon="@Icons.Material.Filled.ArrowForward"
+                           Variant="Variant.Filled"
+                           OnClick="@(() => OnRemove(ToRemoveSelectedVehicleType))"
+                           Disabled="isToRemoveDisabled"
+                           Size="Size.Small"
+                           Color="Color.Secondary">
+            </MudIconButton>
+
+            <!-- Add All Button -->
+            <MudIconButton Icon="@Icons.Material.Filled.KeyboardArrowLeft"
+                           Variant="Variant.Outlined"
+                           OnClick="OnAddAll"
+                           Disabled="!AvailableVehicleTypes.Any()"
+                           Size="Size.Small"
+                           Color="Color.Primary"
+                           Class="mt-4">
+            </MudIconButton>
+
+            <!-- Remove All Button -->
+            <MudIconButton Icon="@Icons.Material.Filled.KeyboardDoubleArrowRight"
+                           Variant="Variant.Outlined"
+                           OnClick="OnRemoveAll"
+                           Disabled="!AddedVehicleTypes.Any()"
+                           Size="Size.Small"
+                           Color="Color.Secondary"
+                           Class="mt-2">
+            </MudIconButton>
+        </MudStack>
+    </MudItem>
+
+
     <!-- Available Vehicle Types -->
     <MudItem md="5">
         <MudText Typo="Typo.h6" Class="mb-2">@L["Available Vehicle Types"]</MudText>
@@ -33,76 +104,6 @@
         }
     </MudItem>
 
-    <!-- Action Buttons -->
-    <MudItem md="2" Class="d-flex align-center justify-center">
-        <MudStack AlignItems="AlignItems.Center" Justify="Justify.Center">
-            <MudIconButton Icon="@Icons.Material.Filled.ArrowForward"
-
-                           Variant="Variant.Filled"
-                           OnClick="@(() => OnAdd(ToAddSelectedVehicleType))"
-                           Disabled="isToAddDisabled"
-                           Size="Size.Small"
-                           Color="Color.Primary"
-                           Class="mb-2">
-            </MudIconButton>
-
-            <MudIconButton Icon="@Icons.Material.Filled.ArrowBack"
-                           Variant="Variant.Filled"
-                           OnClick="@(() => OnRemove(ToRemoveSelectedVehicleType))"
-                           Disabled="isToRemoveDisabled"
-                           Size="Size.Small"
-                           Color="Color.Secondary">
-            </MudIconButton>
-
-            <!-- Add All Button -->
-            <MudIconButton Icon="@Icons.Material.Filled.KeyboardDoubleArrowRight"
-                           Variant="Variant.Outlined"
-                           OnClick="OnAddAll"
-                           Disabled="!AvailableVehicleTypes.Any()"
-                           Size="Size.Small"
-                           Color="Color.Primary"
-                           Class="mt-4">
-            </MudIconButton>
-
-            <!-- Remove All Button -->
-            <MudIconButton Icon="@Icons.Material.Filled.KeyboardDoubleArrowLeft"
-                           Variant="Variant.Outlined"
-                           OnClick="OnRemoveAll"
-                           Disabled="!AddedVehicleTypes.Any()"
-                           Size="Size.Small"
-                           Color="Color.Secondary"
-                           Class="mt-2">
-            </MudIconButton>
-        </MudStack>
-    </MudItem>
-
-    <!-- Selected Vehicle Types -->
-    <MudItem md="5">
-        <MudText Typo="Typo.h6" Class="mb-2">@L["Selected Vehicle Types"]</MudText>
-        <MudPaper Elevation="2" Class="vehicle-list-container">
-            <MudList @bind-SelectedValue="ToRemoveSelectedVehicleType"
-                     Class="scrollable-list"
-                     Style="max-height: 300px; overflow-y: auto;">
-                @if (!AddedVehicleTypes.Any())
-                {
-                    <MudListItem Text="No vehicle types selected" Disabled="true" />
-                }
-                else
-                {
-                    @foreach (var vehicleType in AddedVehicleTypes)
-                    {
-                        <MudListItem Value="vehicleType" Text="@vehicleType.Name" />
-                    }
-                }
-            </MudList>
-        </MudPaper>
-        @if (AddedVehicleTypes.Any())
-        {
-            <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mt-1">
-                @AddedVehicleTypes.Count selected
-            </MudText>
-        }
-    </MudItem>
 </MudGrid>
 
 <style>
@@ -193,11 +194,17 @@
         return result;
     }
 
+    // Also modify the UpdateVehicleTypeLists to be more robust
     private void UpdateVehicleTypeLists()
     {
-        if (vehicleTypes is null) return;
+        if (vehicleTypes is null)
+        {
+            Console.WriteLine("VehicleTypes is null - waiting for data...");
+            return;
+        }
 
         var addedIdsSet = new HashSet<int>(VehicleTypeIds ?? Array.Empty<int>());
+        Console.WriteLine($"Updating lists with {addedIdsSet.Count} vehicle type IDs");
 
         AddedVehicleTypes = vehicleTypes
             .Where(vt => addedIdsSet.Contains(vt.Id))
@@ -206,6 +213,8 @@
         AvailableVehicleTypes = vehicleTypes
             .Where(vt => !addedIdsSet.Contains(vt.Id))
             .ToList();
+
+        Console.WriteLine($"Added: {AddedVehicleTypes.Count}, Available: {AvailableVehicleTypes.Count}");
 
         // Clear selections if they are no longer valid
         if (ToAddSelectedVehicleType != null && !AvailableVehicleTypes.Contains(ToAddSelectedVehicleType))
@@ -216,6 +225,30 @@
 
         StateHasChanged();
     }
+
+    // private void UpdateVehicleTypeLists()
+    // {
+    //     if (vehicleTypes is null) return;
+
+    //     var addedIdsSet = new HashSet<int>(VehicleTypeIds ?? Array.Empty<int>());
+
+    //     AddedVehicleTypes = vehicleTypes
+    //         .Where(vt => addedIdsSet.Contains(vt.Id))
+    //         .ToList();
+
+    //     AvailableVehicleTypes = vehicleTypes
+    //         .Where(vt => !addedIdsSet.Contains(vt.Id))
+    //         .ToList();
+
+    //     // Clear selections if they are no longer valid
+    //     if (ToAddSelectedVehicleType != null && !AvailableVehicleTypes.Contains(ToAddSelectedVehicleType))
+    //         ToAddSelectedVehicleType = null;
+
+    //     if (ToRemoveSelectedVehicleType != null && !AddedVehicleTypes.Contains(ToRemoveSelectedVehicleType))
+    //         ToRemoveSelectedVehicleType = null;
+
+    //     StateHasChanged();
+    // }
 
     private Task OnAdd(VehicleTypeDto dto)
     {
@@ -263,12 +296,28 @@
         return Task.CompletedTask;
     }
 
-    // Handle parameter changes
-    protected override void OnParametersSet()
+    // Add this method to force refresh when parameters change
+    protected override async Task OnParametersSetAsync()
     {
-        if (vehicleTypes?.Any() == true)
+        if (vehicleTypes == null || !vehicleTypes.Any())
         {
-            UpdateVehicleTypeLists();
+            vehicleTypes = await LoadVehicleTypes();
         }
+
+        // Always update the lists when parameters change
+        UpdateVehicleTypeLists();
+
+        await base.OnParametersSetAsync();
     }
+
+    // // Handle parameter changes
+    // protected override void OnParametersSet()
+    // {
+    //     if (vehicleTypes?.Any() == true)
+    //     {
+    //         UpdateVehicleTypeLists();
+    //     }
+    // }
 }
+
+

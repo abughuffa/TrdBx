@@ -3,6 +3,7 @@
 @using CleanArchitecture.Blazor.Application.Features.Shipments.Mappers
 @using CleanArchitecture.Blazor.Application.Features.Shipments.Queries.GetById
 @using CleanArchitecture.Blazor.Server.UI.Components.Fusion
+@using CleanArchitecture.Blazor.Server.UI.Pages.VehicleTypes
 
 @inherits MudComponentBase
 @inject IValidationService Validator
@@ -42,9 +43,12 @@
                             <MudTextField Label="@L[model.GetMemberDescription(x => x.IsBidable)]" For="@(() => model.IsBidable)" @bind-Value="model.IsBidable"></MudTextField>
                         </MudItem>
 
-                        <MudItem xs="12" md="12">
-                            <MudTextField Label="@L[model.GetMemberDescription(x => x.RecVehicleType)]" For="@(() => model.RecVehicleType)" @bind-Value="model.RecVehicleType"></MudTextField>
-                        </MudItem>
+                    <MudItem xs="12" md="12">
+
+                        <VehicleTypesList VehicleTypeIds="model.RecVehicleType"
+                                          VehicleTypeIdsChanged="OnVehicleTypeIdsChanged" />
+
+                    </MudItem>
 
             </MudGrid>
         </MudForm>
@@ -63,19 +67,33 @@
     public int Id { get; set; }
     MudForm? _form;
     private bool _saving = false;
+
+    private int[] selectedVehicleTypeIds = Array.Empty<int>();
+
+    private async Task OnVehicleTypeIdsChanged(int[] newIds)
+    {
+        model.RecVehicleType = newIds;
+        StateHasChanged();
+    }
+
     private List<BreadcrumbItem> _breadcrumbItems = new List<BreadcrumbItem>
     {
         new BreadcrumbItem("Home", href: "/"),
         new BreadcrumbItem("Shipments", href: "/pages/Shipments")
     };
     private UpdateShipmentCommand? model;
+
     protected override async Task OnInitializedAsync()
     {
         Title = L["Edit Shipment"];
         var result = await Mediator.Send(new GetShipmentByIdQuery() { Id = Id });
+
         result.Map(data =>
         {
-            model = ShipmentMapper.ToUpdateCommand(data);
+            // The data should now have the proper RecVehicleType populated
+            //Console.WriteLine($"Vehicle types count: {data.RecVehicleType?.Length ?? 0}");
+
+            model = data.ToUpdateCommand();
             return data;
         }).Match(data =>
         {
@@ -86,8 +104,27 @@
             Snackbar.Add($"{errors}", Severity.Error);
             return null!;
         });
-
     }
+
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     Title = L["Edit Shipment"];
+    //     var result = await Mediator.Send(new GetShipmentByIdQuery() { Id = Id });
+    //     result.Map(data =>
+    //     {
+    //         model = ShipmentMapper.ToUpdateCommand(data);
+    //         return data;
+    //     }).Match(data =>
+    //     {
+    //         _breadcrumbItems.Add(new BreadcrumbItem(data.ShipmentNo, href: $"/pages/Shipments/edit/{Id}"));
+    //         return data;
+    //     }, errors =>
+    //     {
+    //         Snackbar.Add($"{errors}", Severity.Error);
+    //         return null!;
+    //     });
+
+    // }
     async Task Submit()
     {
         try

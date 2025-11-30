@@ -63,6 +63,11 @@ public static class LocalizationConstants
         {
             Code = "ko-kr",
             DisplayName = "한국어(대한민국)"
+        },
+        new()
+        {
+            Code = "ar-LY",
+            DisplayName = "العربية - ليبيا"
         }
     };
 }

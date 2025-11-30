@@ -1,0 +1,67 @@
+﻿@using System.Linq.Expressions
+@using CleanArchitecture.Blazor.Application.Common.Interfaces.Identity
+@using CleanArchitecture.Blazor.Application.Features.Identity.DTOs
+@using CleanArchitecture.Blazor.Domain.Identity
+@using CleanArchitecture.Blazor.Infrastructure.Persistence
+
+@inherits OwningComponentBase
+@inject IStringLocalizer<Installers> L
+@implements IDisposable
+
+
+        <MudSelect T="string"
+                   Disabled="!CanAssignOtherUser"
+                   Label="@L["Installer"]"
+                   Required="true"
+                   RequiredError="@L["InstallerIsRequired"]"
+                   Value="InstallerId"
+                   ValueChanged="InstallerIdChanged">
+            @foreach (var doc1type in installers)
+            {
+        <MudSelectItem T="string" Value="doc1type.Id">@doc1type.DisplayName</MudSelectItem>
+            }
+        </MudSelect>
+
+
+@code {
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthState { get; set; } = default!;
+    [CascadingParameter]
+    private UserProfile? UserProfile { get; set; }
+    [Parameter] public string InstallerId { get; set; }
+    [Parameter] public EventCallback<string> InstallerIdChanged { get; set; }
+
+    private UserManager<ApplicationUser> _userManager = null!;
+    private bool CanAssignOtherUser = false;
+    private IEnumerable<ApplicationUserDto> installers = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        InitializeServices();
+        installers = await LoadInstallers();
+        InstallerId = UserProfile.UserId;
+        CanAssignOtherUser = UserProfile.AssignedRoles.Contains("Admin");
+    }
+
+    private void InitializeServices()
+    {
+        _userManager = ScopedServices.GetRequiredService<UserManager<ApplicationUser>>();
+    }
+
+    private async Task<IEnumerable<ApplicationUserDto>> LoadInstallers()
+    {
+        // var data = await _userManager.Users.Where(x => x.IsActive)
+        //         .Include(x => x.UserRoles).ThenInclude(ur => ur.Role)
+        //         .ProjectTo<ApplicationUserDto>(Mapper.ConfigurationProvider).Where(u=>u.AssignedRoles.Contains("Installer"))
+        //         .ToListAsync();
+        // return data;
+      //   var data = await _userManager.Users.Where(x => x.IsActive)
+      // .Include(x => x.UserRoles).ThenInclude(ur => ur.Role).Where(d=>d.)
+      // .Where(u => u.UserRoles.Contains(r=>r."Installer")).ProjectTo().ToListAsync();
+
+        return null;
+    }
+
+
+
+}

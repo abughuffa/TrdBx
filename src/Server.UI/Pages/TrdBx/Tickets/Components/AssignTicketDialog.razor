@@ -1,0 +1,99 @@
+﻿
+@using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Assign
+@using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Create
+@using CleanArchitecture.Blazor.Domain.Enums
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Installers
+ 
+@inject IStringLocalizer<Tickets> L
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.Tickets.Assign)]
+
+
+<MudDialog>
+    <DialogContent>
+        <MudForm Model="@_model" @ref="@_form" Validation="@(Validator.ValidateValue(_model))">
+                    <MudGrid Spacing="2">
+                            <MudItem md="12">
+                                <MudText>ContentText</MudText>
+                            </MudItem>
+
+                            <MudItem md="12">
+
+                                <Installers @bind-InstallerId="_model.InstallerId"></Installers>
+                            </MudItem>
+
+                            <MudItem md="12">
+                                <MudDatePicker Class="pa-4"
+                                               Editable @bind-Date="_date"
+                                               For="@(() => _date)"
+                                               Required="true"
+                                               RequiredError="@L["Assign Date is required!"]" />
+                            </MudItem>
+                    </MudGrid>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudLoadingButton Loading="@_submitting" OnClick="OnSave">@ConstantString.Save</MudLoadingButton>
+        <MudButton OnClick="Cancel">@ConstantString.Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+@code {
+    MudForm _form = new();
+    private bool _submitting = false;
+    [CascadingParameter]
+    IMudDialogInstance MudDialog { get; set; } = default!;
+    [EditorRequired][Parameter] public AssignTicketCommand _model { get; set; } = null!;
+
+
+    private DateTime? _date
+    {
+        get => _model.TaDate.ToDateTime(TimeOnly.MinValue);
+        set
+        {
+            if (value is not null)
+            {
+                _model.TaDate = DateOnly.FromDateTime((DateTime)value);
+            }
+        }
+    }
+
+    private async Task OnSave()
+    {
+        try
+        {
+            _submitting = true;
+            await _form.Validate().ConfigureAwait(false);
+            if (!_form.IsValid)
+                return;
+            var result = await Mediator.Send(_model);
+
+            result.Match(
+   data =>
+   {
+       Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+       MudDialog.Close(DialogResult.Ok(true));
+       return data;
+   },
+   errors =>
+   {
+       Snackbar.Add(errors, MudBlazor.Severity.Error);
+       return -1;
+   });
+            // result.Match(data =>
+            // {
+            //     MudDialog.Close(DialogResult.Ok(true));
+            //     Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+            // }, errors =>
+            // {
+            //     Snackbar.Add(errors, MudBlazor.Severity.Error);
+            // });
+        }
+        finally
+        {
+            _submitting = false;
+        }
+    }
+
+    private void Cancel() => MudDialog.Cancel();
+}

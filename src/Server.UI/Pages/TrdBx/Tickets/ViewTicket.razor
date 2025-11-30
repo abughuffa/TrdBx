@@ -1,0 +1,200 @@
+﻿@page "/pages/TrdBx/Tickets/{id:int}/view"
+
+@using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Complete
+@using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Start
+@using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Stop
+@using CleanArchitecture.Blazor.Application.Features.Tickets.DTOs
+@using CleanArchitecture.Blazor.Application.Features.Tickets.Queries.GetById
+@using CleanArchitecture.Blazor.Domain.Entities
+
+@inherits MudComponentBase
+@inject IStringLocalizer<Tickets> L
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.Tickets.View)]
+
+<PageTitle>@Title</PageTitle>
+
+<MudContainer Class="mt-3" MaxWidth="MaxWidth.Medium">
+    @if (model != null)
+    {
+        <MudCard Class="pa-2">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">@Title</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudGrid Spacing="2" Class="readonly-grid">
+                    <MudItem md="4">
+                        <ReadOnlyField Label="@L[model.GetMemberDescription(x=>x.TicketNo)]" Value="model.TicketNo"></ReadOnlyField>
+                    </MudItem>
+                    <MudItem md="4">
+                        <ReadOnlyField Label="@L[model.GetMemberDescription(x => x.TicketStatus)]" Value="model.TicketStatus"></ReadOnlyField>
+                    </MudItem>
+             @*        <MudItem md="4">
+                        <ReadOnlyField Label="@L[model.GetMemberDescription(x => x.TrackingUnitId)]" Value="model.TrackingUnitId"></ReadOnlyField>
+                    </MudItem> *@
+                    <MudItem md="4">
+                        <ReadOnlyField Label="@L[model.GetMemberDescription(x => x.TrackingUnit)]" Value="model.TrackingUnit"></ReadOnlyField>
+                    </MudItem>
+                    <MudItem md="12">
+                        <ReadOnlyField Label="@L[model.GetMemberDescription(x=>x.Desc)]" Value="model.Desc"></ReadOnlyField>
+                    </MudItem>
+                    <MudItem md="12">
+                        <ReadOnlyField Label="@L[model.GetMemberDescription(x=>x.Note)]" Value="model.Note"></ReadOnlyField>
+                    </MudItem>
+
+                </MudGrid>
+            </MudCardContent>
+            <MudCardActions>
+                <MudLoadingButton Loading=_starting Disabled=CanStart Color="Color.Primary" DropShadow="false" OnClick="OnStart">Start</MudLoadingButton>
+                <MudLoadingButton Loading=_stoping Disabled=CanStop Color="Color.Primary" DropShadow="false" OnClick="OnStop">Stop</MudLoadingButton>
+                <MudLoadingButton Loading=_completeing Disabled=CanComplete Color="Color.Primary" DropShadow="false" OnClick="OnComplete">Complete</MudLoadingButton>
+                <MudButton Disabled=CanRelease Color="Color.Primary" DropShadow="false" OnClick="OnRelease">Release</MudButton>
+                <MudButton Color="Color.Primary" DropShadow="false" OnClick="OnGoBack">@ConstantString.GoBack</MudButton>
+            </MudCardActions>
+        </MudCard>
+    }
+    </MudContainer>
+
+
+@code {
+
+    public string? Title { get; private set; }
+    [Parameter]
+    public int Id { get; set; }
+
+    private TicketDto? model;
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string? ReturnUrl { get; set; }
+
+    bool _submitting;
+
+    bool CanStart = false;
+    bool CanStop = false;
+    bool CanComplete = false;
+    bool CanRelease = false;
+
+    bool _starting = false;
+    bool _stoping = false;
+    bool _completeing = false;
+
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Title = L["Ticket"];
+
+        var result = await Mediator.Send(new GetTicketByIdQuery() { Id = Id });
+        result.Map(data =>
+{
+    model = data;
+    return data;
+}).Match(data =>
+{
+    return data;
+
+}, errors =>
+{
+    Snackbar.Add(errors, MudBlazor.Severity.Error);
+    return null!;
+});
+
+        AssignCommands();
+    }
+
+    void AssignCommands()
+    {
+        CanStart = !(model.TicketStatus == TicketStatus.Assigned);
+        CanStop = !(model.TicketStatus == TicketStatus.OnProcess);
+        CanComplete = !(model.TicketStatus == TicketStatus.OnProcess);
+        CanRelease = !(model.TicketStatus == TicketStatus.Assigned || model.TicketStatus == TicketStatus.OnProcess);
+    }
+
+    private Task OnGoBack()
+    {
+        Navigation.NavigateTo($"/pages/TrdBx/Tickets");
+        return Task.CompletedTask;
+    }
+
+    private Task OnRelease()
+    {
+        Navigation.NavigateTo($"/pages/TrdBx/Tickets/{Id}/Release?returnUrl=/pages/TrdBx/Tickets");
+        return Task.CompletedTask;
+    }
+
+    private async Task OnStart()
+    {
+
+        try
+        {
+            _starting = true;
+            var command = new StartTicketCommand() { Id = Id };
+            var result = await Mediator.Send(command);
+            if (result.Succeeded)
+            {
+                Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+                OnGoBack();
+            }
+            else
+            {
+                Snackbar.Add(result.ErrorMessage, MudBlazor.Severity.Error);
+            }
+        }
+        finally
+        {
+            _starting = false;
+        }
+    }
+    private async Task OnStop()
+    {
+        try
+        {
+            _stoping = true;
+            var command = new StopTicketCommand() { Id = Id };
+            var result = await Mediator.Send(command);
+            if (result.Succeeded)
+            {
+                Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+                OnGoBack();
+            }
+            else
+            {
+                Snackbar.Add(result.ErrorMessage, MudBlazor.Severity.Error);
+            }
+        }
+        finally
+        {
+            _stoping = false;
+        }
+    }
+    private async Task OnComplete()
+    {
+        try
+        {
+            _completeing = true;
+            var command = new CompleteTicketCommand() { Id = Id };
+            var result = await Mediator.Send(command);
+            if (result.Succeeded)
+            {
+                Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+                OnGoBack();
+            }
+            else
+            {
+                Snackbar.Add(result.ErrorMessage, MudBlazor.Severity.Error);
+            }
+        }
+        finally
+        {
+            _completeing = false;
+        }
+    }
+
+
+
+
+
+}

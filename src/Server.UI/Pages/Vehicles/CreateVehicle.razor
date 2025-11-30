@@ -47,6 +47,8 @@
  
 
 @code {
+    [CascadingParameter]
+    private UserProfile? UserProfile { get; set; }
     public string? Title { get; private set; }
     MudForm? _form;
     private bool _saving = false;

@@ -3,7 +3,7 @@ using System.Resources;
 
 namespace CleanArchitecture.Blazor.Infrastructure.Constants;
 
-public static class ConstantString
+public static partial class ConstantString
 {
     public const string CONSTANTSTRINGRESOURCEID =
         "CleanArchitecture.Blazor.Infrastructure.Resources.Constants.ConstantString";

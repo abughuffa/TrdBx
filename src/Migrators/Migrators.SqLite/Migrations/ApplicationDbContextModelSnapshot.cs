@@ -17,6 +17,117 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.0");
 
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.ActivateGprsTestCase", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("CaseCode")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("InstallerId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool?>("IsSucssed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Message")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SNo")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("TrackingUnitId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateOnly>("TsDate")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ActivateGprsTestCases");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.ActivateHostingTestCase", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("CaseCode")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("InstallerId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool?>("IsSucssed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Message")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SNo")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("TrackingUnitId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateOnly>("TsDate")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ActivateHostingTestCases");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.ActivateTestCase", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("CaseCode")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("InstallerId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool?>("IsSucssed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Message")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SNo")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("TrackingUnitId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateOnly>("TsDate")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ActivateTestCases");
+                });
+
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.AuditTrail", b =>
                 {
                     b.Property<int>("Id")
@@ -112,6 +223,175 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
                     b.ToTable("Contacts");
                 });
 
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.CusPrice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AssignedTo")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Gprs")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Host")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("TrackingUnitModelId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("TrackingUnitModelId");
+
+                    b.ToTable("CusPrices");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Customer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Account")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("BillingPlan")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsAvaliable")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsRenewable")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsTaxable")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Mobile1")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Mobile2")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("OldId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("WUnitGroupId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("WUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.DeactivateTestCase", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("CaseCode")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("InstallerId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool?>("IsSucssed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Message")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SNo")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("TrackingUnitId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateOnly>("TsDate")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DeactivateTestCases");
+                });
+
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Document", b =>
                 {
                     b.Property<int>("Id")
@@ -171,6 +451,139 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
                     b.HasIndex("TenantId");
 
                     b.ToTable("Documents");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Invoice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateOnly>("DueDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("GrangTotal")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("IStatus")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateOnly>("InvDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("InvDesc")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("InvNo")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("InvoiceType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsTaxable")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Taxes")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("InvNo")
+                        .IsUnique();
+
+                    b.ToTable("Invoices");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.InvoiceItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("InvoiceId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ServiceLogId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InvoiceId");
+
+                    b.HasIndex("ServiceLogId")
+                        .IsUnique();
+
+                    b.ToTable("InvoiceItems");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.LibyanaSimCard", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("BExDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("Balance")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("DExDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("DOExpired")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DataOffer")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("JoinDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Package")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SimCardNo")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SimCardStatus")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LibyanaSimCards");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Logger", b =>
@@ -324,6 +737,129 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SPackage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("OldId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("SPackages");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.ServiceLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Desc")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("InstallerId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsBilled")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsDeserved")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateOnly>("SerDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ServiceNo")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ServiceTask")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("InstallerId");
+
+                    b.HasIndex("ServiceNo")
+                        .IsUnique();
+
+                    b.ToTable("ServiceLogs");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.ServicePrice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Desc")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ServiceTask")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ServicePrices");
+                });
+
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Shipment", b =>
                 {
                     b.Property<int>("Id")
@@ -355,10 +891,6 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("TEXT");
 
-                    b.PrimitiveCollection<string>("RecVehicleTypes")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("ShipmentNo")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -382,6 +914,124 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
                     b.ToTable("Shipments");
                 });
 
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.ShipmentVehicleType", b =>
+                {
+                    b.Property<int>("ShipmentId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("VehicleTypeId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ShipmentId", "VehicleTypeId");
+
+                    b.HasIndex("VehicleTypeId");
+
+                    b.ToTable("ShipmentVehicleType");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SimCard", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateOnly?>("ExDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ICCID")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("OldId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SPackageId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SStatus")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("SimCardNo")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SPackageId");
+
+                    b.HasIndex("SimCardNo")
+                        .IsUnique();
+
+                    b.ToTable("SimCards");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Subscription", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Amount")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("TEXT")
+                        .HasComputedColumnSql("(julianday(SeDate) - julianday(SsDate)) * DailyFees", true);
+
+                    b.Property<int>("CaseCode")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("DailyFees")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Days")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("INTEGER")
+                        .HasComputedColumnSql("julianday(SeDate) - julianday(SsDate)", true);
+
+                    b.Property<string>("Desc")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("LastPaidFees")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateOnly>("SeDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ServiceLogId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateOnly>("SsDate")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("TrackingUnitId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ServiceLogId");
+
+                    b.HasIndex("TrackingUnitId");
+
+                    b.ToTable("Subscriptions");
+                });
+
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Tenant", b =>
                 {
                     b.Property<string>("Id")
@@ -399,6 +1049,260 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Tenants");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Ticket", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Desc")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("InstallerId")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ServiceTask")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateOnly?>("TaDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateOnly>("TcDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateOnly?>("TeDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TicketNo")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("TicketStatus")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TrackingUnitId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InstallerId");
+
+                    b.HasIndex("TicketNo")
+                        .IsUnique();
+
+                    b.HasIndex("TrackingUnitId");
+
+                    b.ToTable("Tickets");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.TrackedAsset", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsAvaliable")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("OldId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("OldVehicleNo")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PlateNo")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TrackedAssetCode")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TrackedAssetDesc")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TrackedAssetNo")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("VinSerNo")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TrackedAssetNo")
+                        .IsUnique();
+
+                    b.ToTable("TrackedAssets");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.TrackingUnit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Imei")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("InsMode")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsOnWialon")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("OldId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("SNo")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("SimCardId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("TrackedAssetId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TrackingUnitModelId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UStatus")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UnitName")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("WStatus")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("WUnitId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateOnly?>("WryDate")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("SimCardId")
+                        .IsUnique();
+
+                    b.HasIndex("TrackedAssetId");
+
+                    b.HasIndex("TrackingUnitModelId");
+
+                    b.ToTable("TrackingUnits");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.TrackingUnitModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("DefualtGprs")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("DefualtHost")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("DefualtPrice")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("OldId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PortNo1")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PortNo2")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("WhwTypeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("WialonName")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("TrackingUnitModels");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Vehicle", b =>
@@ -509,6 +1413,78 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Warehouses");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.WialonTask", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("APITask")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Desc")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateOnly>("ExcDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsExecuted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ServiceLogId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TrackingUnitId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ServiceLogId");
+
+                    b.HasIndex("TrackingUnitId");
+
+                    b.ToTable("WialonTasks");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.WialonUnit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Account")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("Deactivation")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SimCardNo")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("StatusOnWialon")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UnitName")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UnitSNo")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("WialonUnits");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Identity.ApplicationRole", b =>
@@ -854,6 +1830,34 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
                     b.Navigation("Owner");
                 });
 
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.CusPrice", b =>
+                {
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.TrackingUnitModel", "TrackingUnitModel")
+                        .WithMany("CusPrices")
+                        .HasForeignKey("TrackingUnitModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("TrackingUnitModel");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Customer", b =>
+                {
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Customer", "Parent")
+                        .WithMany("Childs")
+                        .HasForeignKey("ParentId");
+
+                    b.Navigation("Parent");
+                });
+
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Document", b =>
                 {
                     b.HasOne("CleanArchitecture.Blazor.Domain.Identity.ApplicationUser", "CreatedByUser")
@@ -877,6 +1881,55 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
                     b.Navigation("Tenant");
                 });
 
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Invoice", b =>
+                {
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.InvoiceItem", b =>
+                {
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Invoice", "Invoice")
+                        .WithMany("InvoiceItems")
+                        .HasForeignKey("InvoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.ServiceLog", "ServiceLog")
+                        .WithOne("InvoiceItem")
+                        .HasForeignKey("CleanArchitecture.Blazor.Domain.Entities.InvoiceItem", "ServiceLogId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Invoice");
+
+                    b.Navigation("ServiceLog");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.ServiceLog", b =>
+                {
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Identity.ApplicationUser", "Installer")
+                        .WithMany()
+                        .HasForeignKey("InstallerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Installer");
+                });
+
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Shipment", b =>
                 {
                     b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Vehicle", "Vehicle")
@@ -884,6 +1937,101 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
                         .HasForeignKey("VehicleId");
 
                     b.Navigation("Vehicle");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.ShipmentVehicleType", b =>
+                {
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Shipment", "Shipment")
+                        .WithMany("VehicleTypes")
+                        .HasForeignKey("ShipmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.VehicleType", "VehicleType")
+                        .WithMany("Shipments")
+                        .HasForeignKey("VehicleTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Shipment");
+
+                    b.Navigation("VehicleType");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SimCard", b =>
+                {
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.SPackage", "SPackage")
+                        .WithMany("SimCards")
+                        .HasForeignKey("SPackageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SPackage");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Subscription", b =>
+                {
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.ServiceLog", "ServiceLog")
+                        .WithMany("Subscriptions")
+                        .HasForeignKey("ServiceLogId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.TrackingUnit", "TrackingUnit")
+                        .WithMany("Subscriptions")
+                        .HasForeignKey("TrackingUnitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ServiceLog");
+
+                    b.Navigation("TrackingUnit");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Ticket", b =>
+                {
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Identity.ApplicationUser", "Installer")
+                        .WithMany()
+                        .HasForeignKey("InstallerId");
+
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.TrackingUnit", "TrackingUnit")
+                        .WithMany()
+                        .HasForeignKey("TrackingUnitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Installer");
+
+                    b.Navigation("TrackingUnit");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.TrackingUnit", b =>
+                {
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId");
+
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.SimCard", "SimCard")
+                        .WithOne("TrackingUnits")
+                        .HasForeignKey("CleanArchitecture.Blazor.Domain.Entities.TrackingUnit", "SimCardId");
+
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.TrackedAsset", "TrackedAsset")
+                        .WithMany("TrackingUnits")
+                        .HasForeignKey("TrackedAssetId");
+
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.TrackingUnitModel", "TrackingUnitModel")
+                        .WithMany("TrackingUnits")
+                        .HasForeignKey("TrackingUnitModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("SimCard");
+
+                    b.Navigation("TrackedAsset");
+
+                    b.Navigation("TrackingUnitModel");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Vehicle", b =>
@@ -901,6 +2049,25 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
                     b.Navigation("Driver");
 
                     b.Navigation("VehicleType");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.WialonTask", b =>
+                {
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.ServiceLog", "ServiceLog")
+                        .WithMany("WialonTasks")
+                        .HasForeignKey("ServiceLogId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.TrackingUnit", "TrackingUnit")
+                        .WithMany("WialonTasks")
+                        .HasForeignKey("TrackingUnitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ServiceLog");
+
+                    b.Navigation("TrackingUnit");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Identity.ApplicationRole", b =>
@@ -1000,6 +2167,64 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Customer", b =>
+                {
+                    b.Navigation("Childs");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Invoice", b =>
+                {
+                    b.Navigation("InvoiceItems");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SPackage", b =>
+                {
+                    b.Navigation("SimCards");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.ServiceLog", b =>
+                {
+                    b.Navigation("InvoiceItem");
+
+                    b.Navigation("Subscriptions");
+
+                    b.Navigation("WialonTasks");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Shipment", b =>
+                {
+                    b.Navigation("VehicleTypes");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SimCard", b =>
+                {
+                    b.Navigation("TrackingUnits");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.TrackedAsset", b =>
+                {
+                    b.Navigation("TrackingUnits");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.TrackingUnit", b =>
+                {
+                    b.Navigation("Subscriptions");
+
+                    b.Navigation("WialonTasks");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.TrackingUnitModel", b =>
+                {
+                    b.Navigation("CusPrices");
+
+                    b.Navigation("TrackingUnits");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.VehicleType", b =>
+                {
+                    b.Navigation("Shipments");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Identity.ApplicationRole", b =>

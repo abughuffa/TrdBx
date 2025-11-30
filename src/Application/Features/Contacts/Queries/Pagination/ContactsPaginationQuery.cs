@@ -48,7 +48,7 @@ public class ContactsWithPaginationQueryHandler :
                                                    .ProjectToPaginatedDataAsync(request.Specification, 
                                                                                 request.PageNumber, 
                                                                                 request.PageSize, 
-                                                                                ContactMapper.ToDto, 
+                                                                                Mapper.ToDto, 
                                                                                 cancellationToken);
             return data;
         }

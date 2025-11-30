@@ -5,7 +5,7 @@ namespace CleanArchitecture.Blazor.Infrastructure.Configurations;
 /// <summary>
 ///     Configuration wrapper for the database section
 /// </summary>
-public class DatabaseSettings : IValidatableObject
+public partial class DatabaseSettings : IValidatableObject
 {
     /// <summary>
     ///     Database key constraint
@@ -38,5 +38,7 @@ public class DatabaseSettings : IValidatableObject
             yield return new ValidationResult(
                 $"{nameof(DatabaseSettings)}.{nameof(ConnectionString)} is not configured",
                 new[] { nameof(ConnectionString) });
+
+        TrdBxValidate(validationContext);
     }
 }

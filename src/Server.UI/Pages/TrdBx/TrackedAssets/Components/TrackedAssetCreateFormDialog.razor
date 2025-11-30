@@ -1,0 +1,115 @@
+﻿@using CleanArchitecture.Blazor.Application.Features.TrackedAssets.Commands.Create
+
+
+@inherits MudComponentBase
+@inject IValidationService Validator
+@inject IStringLocalizer<TrackedAssets> L
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.TrackedAssets.Create)]
+
+<MudDialog>
+    <DialogContent>
+        <MudForm Model="@_model" @ref="@_contactForm" Validation="@(Validator.ValidateValue(_model))">
+            <MudGrid Spacing="2">
+                <MudItem md="12">
+                    <MudTextField Label="@L[_model.GetMemberDescription(x => x.TrackedAssetDesc)]" @bind-Value="_model.TrackedAssetDesc" For="@(() => _model.TrackedAssetDesc)" Required="true" RequiredError="@L["Desc is required!"]" />
+                </MudItem>
+                <MudItem md="4">
+                    <MudTextField Label="@L[_model.GetMemberDescription(x => x.TrackedAssetCode)]" @bind-Value="_model.TrackedAssetCode" />
+                </MudItem>
+                <MudItem md="4">
+                    <MudTextField Label="@L[_model.GetMemberDescription(x => x.PlateNo)]" @bind-Value="_model.PlateNo" For="@(() => _model.PlateNo)" Required="(_model.TrackedAssetCode is null && _model.VinSerNo is null)" RequiredError="@L["PlateNo is required!"]" />
+                </MudItem>
+                <MudItem md="4">
+                    <MudTextField Label="@L[_model.GetMemberDescription(x => x.VinSerNo)]" @bind-Value="_model.VinSerNo" For="@(() => _model.VinSerNo)" Required="(_model.TrackedAssetCode is null && _model.PlateNo is null)" RequiredError="@L["VinSerNo is required!"]" />
+                </MudItem>
+
+            </MudGrid>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        
+        <MudLoadingButton Loading="@_savingnew" OnClick="OnSaveAndNew">@ConstantString.SaveAndNew</MudLoadingButton>
+        <MudLoadingButton Loading="@_saving" OnClick="OnSave">@ConstantString.Save</MudLoadingButton>
+        <MudButton OnClick="Cancel">@ConstantString.Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+
+    MudForm _contactForm = new();
+    private bool _saving = false;
+    private bool _savingnew = false;
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; } = default!;
+    [EditorRequired][Parameter] public CreateTrackedAssetCommand _model { get; set; } = null!;
+
+
+
+    async Task OnSave()
+    {
+        try
+        {
+            _saving = true;
+
+            await _contactForm.Validate().ConfigureAwait(false);
+
+            if (!_contactForm.IsValid) return;
+
+            var result = await Mediator.Send(_model);
+
+            result.Match(
+   data =>
+   {
+       Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+       MudDialog.Close(DialogResult.Ok(true));
+       return data;
+   },
+   errors =>
+   {
+       Snackbar.Add(errors, MudBlazor.Severity.Error);
+       return -1;
+   });
+
+            // result.Match(data =>
+            // {
+            //     MudDialog.Close(DialogResult.Ok(true));
+            //     Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+            // }, errors =>
+            // {
+            //     Snackbar.Add(errors, MudBlazor.Severity.Error);
+            // });
+        }
+        finally
+        {
+            _saving = false;
+        }
+    }
+    async Task OnSaveAndNew()
+    {
+        try
+        {
+            _savingnew = true;
+            await _contactForm.Validate().ConfigureAwait(false);
+            if (!_contactForm.IsValid)
+                return;
+            var result = await Mediator.Send(_model);
+            await result.MatchAsync(async data =>
+            {
+                Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+                await Task.Delay(300);
+                _model = new CreateTrackedAssetCommand() { };
+                return data;
+            }, errors =>
+            {
+                Snackbar.Add(errors, MudBlazor.Severity.Error);
+                return Task.FromResult(-1);
+            });
+        }
+        finally
+        {
+            _savingnew = false;
+        }
+    }
+    void Cancel() => MudDialog.Cancel();
+}
+
+

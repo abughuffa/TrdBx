@@ -1,0 +1,262 @@
+﻿
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnitModels.Commands.AddEdit
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnitModels.Commands.Delete
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnitModels.DTOs
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnitModels.Mappers
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnitModels.Queries.GetAll
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.TrackingUnitModels.Components
+
+@inherits MudComponentBase
+@inject IStringLocalizer<TrackingUnitModels> L
+
+<MudGrid>
+
+    <MudItem md="8">
+        @* Placeholder="@L["Select TrackingUnitModel"]" *@
+        <MudSelect T="int"  
+                   Value="SelectedItemId" 
+                   ValueChanged="OnTrackingUnitModelChanged"
+                   Required="true"
+                   RequiredError="@L["TrackingUnitModel is required!"]" >
+                   <MudSelectItem Value=0>@L["Select TrackingUnitModel"]</MudSelectItem>
+            @foreach (var doc1type in items)
+            {
+                <MudSelectItem Value="doc1type.Id">@doc1type.Name</MudSelectItem>  
+            }
+        </MudSelect>
+    </MudItem>
+
+    <MudItem md="1">
+        <MudIconButton Variant="Variant.Outlined"
+                       OnClick="@(()=>OnView(SelectedItem))"
+                       Disabled="isDisabled"
+                       Icon="@Icons.Material.Filled.Preview"
+                       Size="Size.Small"
+                       Color="Color.Primary">
+        </MudIconButton>
+    </MudItem>
+
+    <MudItem md="1">
+        <MudIconButton Variant="Variant.Outlined"
+                       OnClick="@(()=>OnEdit(SelectedItem))"
+                       Disabled="isDisabled"
+                       Icon="@Icons.Material.Filled.Edit"
+                       Size="Size.Small"
+                       Color="Color.Primary">
+        </MudIconButton>
+    </MudItem>
+
+    <MudItem md="1">
+        <MudIconButton Variant="Variant.Outlined"
+                       OnClick="@(()=>OnCreate())"
+                       Icon="@Icons.Material.Filled.Add"
+                       Size="Size.Small"
+                       Color="Color.Primary">
+        </MudIconButton>
+    </MudItem>
+
+    <MudItem md="1">
+        <MudIconButton Variant="Variant.Outlined"
+                       OnClick="@(()=>OnDelete(SelectedItem))"
+                       Disabled="isDisabled"
+                       Icon="@Icons.Material.Filled.Delete"
+                       Size="Size.Small"
+                       Color="Color.Primary">
+        </MudIconButton>
+    </MudItem>
+
+
+</MudGrid>
+
+@code {
+
+    [Parameter] public EventCallback<int> SelectedItemIdChanged { get; set; }
+
+    private int selectedItemId;
+
+    private IEnumerable<TrackingUnitModelDto> items = default!;
+
+    private GetAllTrackingUnitModelsQuery GetAllTrackingUnitModelsQuery { get; set; } = new();
+
+    [Parameter] public int SelectedItemId
+    {
+        get => selectedItemId;
+        set
+        {
+            if (selectedItemId != value)
+            {
+                selectedItemId = value;
+                SelectedItemIdChanged.InvokeAsync((int)value);
+            }
+        }
+    }
+
+    public TrackingUnitModelDto SelectedItem { get; set; } = default!;
+
+    private bool isDisabled => (SelectedItem is null);
+
+    protected override async Task OnInitializedAsync()
+    {
+        items = await LoadTrackingUnitModels();
+    }
+
+    private void OnTrackingUnitModelChanged(int id)
+    {
+        SelectedItemId = id; // is null ? null: id;
+        SelectedItem = items.FirstOrDefault(m => m.Id == id);
+    }
+
+    private async Task<IEnumerable<TrackingUnitModelDto>> LoadTrackingUnitModels()
+    {
+        var result = await Mediator.Send(GetAllTrackingUnitModelsQuery).ConfigureAwait(false);
+        return result;
+    }
+
+    #region Curd
+
+    private async Task OnCreate()
+    {
+        var title = L["Create TrackingUnitModel"];
+        var command = Mapper.ToEditCommand(new TrackingUnitModelDto());
+        var parameters = new DialogParameters<TrackingUnitModelAddEditDialog>
+            {
+                { x=>x._model,command },
+            };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        var dialog = DialogService.Show<TrackingUnitModelAddEditDialog>(title, parameters, options);
+        var state = await dialog.Result;
+
+        if (state != null && !state.Canceled)
+        {
+            items = await LoadTrackingUnitModels();
+
+            SelectedItem = null;
+        }
+    }
+
+    private async Task OnEdit(TrackingUnitModelDto dto)
+    {
+        var title = L["Update TrackingUnitModel"];
+        var command = Mapper.ToEditCommand(dto);
+        var parameters = new DialogParameters<TrackingUnitModelAddEditDialog>
+            {
+                { x=>x._model,command },
+            };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        var dialog = DialogService.Show<TrackingUnitModelAddEditDialog>(title, parameters, options);
+        var state = await dialog.Result;
+
+        if (state != null && !state.Canceled)
+        {
+            items = await LoadTrackingUnitModels();
+
+            SelectedItem = null;
+        }
+
+
+    }
+
+    private async Task OnDelete(TrackingUnitModelDto dto)
+    {
+        var contentText = string.Format(ConstantString.DeleteConfirmation, dto.Name);
+        var command = new DeleteTrackingUnitModelCommand(new int[] { dto.Id });
+        await DialogServiceHelper.ShowDeleteConfirmationDialogAsync(command, ConstantString.DeleteConfirmationTitle, contentText, async () =>
+        {
+            await InvokeAsync(async () =>
+            {
+                items = await LoadTrackingUnitModels();
+
+                SelectedItem = null;
+            });
+        });
+    }
+
+
+
+    private async Task OnView(TrackingUnitModelDto dto)
+    {
+        var title = L["View TrackingUnitModel"];
+        // var command = Mapper.ToEditCommand(dto);
+        var parameters = new DialogParameters<TrackingUnitModelViewDialog>
+            {
+                { x=>x._model,dto },
+            };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        var dialog = DialogService.Show<TrackingUnitModelViewDialog>(title, parameters, options);
+        var state = await dialog.Result;
+
+        // if (state != null && !state.Canceled)
+        // {
+        //     items = await LoadTrackingUnitModelModels();
+
+        //     SelectedItem = null;
+        // }
+    }
+
+    #endregion
+
+    // private async Task OnView(TrackingUnitModelDto dto)
+    // {
+        // await ShowViewFormDialog(L["TrackingUnitModel"],dto);
+    // }
+
+    // private async Task OnCreate()
+    // {
+    //     var command = Mapper.Map<AddEditTrackingUnitModelCommand>(new TrackingUnitModelDto());
+    //     await ShowAddEditFormDialog(L["Create TrackingUnitModel"], command);
+    // }
+
+    // private async Task OnEdit(TrackingUnitModelDto dto)
+    // {
+    //     var command = Mapper.Map<AddEditTrackingUnitModelCommand>(dto);
+    //     await ShowAddEditFormDialog(L["Update TrackingUnitModel"], command);
+    // }
+
+    // private Task OnDelete(TrackingUnitModelDto dto)
+    // {
+    //     var contentText = string.Format(ConstantString.DeleteConfirmation, dto.Name);
+    //     var command = new DeleteTrackingUnitModelCommand(new int[] { dto.Id });
+    //     return DialogServiceHelper.ShowDeleteConfirmationDialogAsync(
+    //         command,
+    //         ConstantString.DeleteConfirmationTitle,
+    //         contentText,
+    //         async () =>
+    //         {
+    //             items = await LoadTrackingUnitModels();
+
+    //             SelectedItem = null;
+    //         });
+    
+    // }
+
+    // private Task ShowAddEditFormDialog(string title, AddEditTrackingUnitModelCommand command)
+    // {
+    //     return DialogServiceHelper.ShowFormDialogAsync<TrackingUnitModelAddEditDialog, AddEditTrackingUnitModelCommand>(
+    //         title,
+    //         new DialogParameters<TrackingUnitModelAddEditDialog>
+    //        {
+    //                         { x=>x._model,command}
+    //        },
+    //         async () =>
+    //         {
+    //             items = await LoadTrackingUnitModels();
+    //         });
+    // }
+
+
+
+
+    // private Task ShowViewFormDialog(string title, TrackingUnitModelDto dto)
+    // {
+    //     return DialogServiceHelper.ShowFormDialogAsync<TrackingUnitModelViewDialog, TrackingUnitModelDto>(
+    //         title,
+    //          new DialogParameters<TrackingUnitModelViewDialog>
+    //        {
+    //                         { x=>x.__model,dto}
+    //        },
+    //         async () =>
+    //         {
+    //              // Task.CompletedTask();
+    //         });
+    // }
+}

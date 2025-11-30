@@ -1,0 +1,555 @@
+﻿@page "/pages/TrdBx/Tickets"
+@using CleanArchitecture.Blazor.Application.Features.Tickets.Caching
+@using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Approve
+@using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Assign
+@using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Delete
+@using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Reject
+@using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.UnReject
+@using CleanArchitecture.Blazor.Application.Features.Tickets.DTOs
+@using CleanArchitecture.Blazor.Application.Features.Tickets.Queries.Export
+@using CleanArchitecture.Blazor.Application.Features.Tickets.Queries.Pagination
+@using CleanArchitecture.Blazor.Application.Features.Tickets.Specifications
+@using CleanArchitecture.Blazor.Application.Features.Tickets.Mappers
+@using CleanArchitecture.Blazor.Domain.Entities
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Tickets.Components
+
+
+
+@inject IStringLocalizer<Tickets> L
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.Tickets.View)]
+
+<PageTitle>@Title</PageTitle>
+
+<AdvancedSearchTickets TRequest="Query" OnConditionChanged="ConditionChanged"></AdvancedSearchTickets>
+
+<MudDataGrid ServerData="@(ServerReload)"
+             T="TicketDto"
+             RowClick="@(s => OnView(s.Item))"
+             FixedHeader="true"
+             FixedFooter="false"
+             @bind-RowsPerPage="_defaultPageSize"
+             Loading="@_loading"
+             MultiSelection="true"
+             @bind-SelectedItems="_selectedItems"
+             ColumnResizeMode="ResizeMode.Column"
+             Hover="true" @ref="_table">
+
+    <ToolBarContent>
+        <MudStack Row Spacing="0" Class="flex-grow-1" Justify="Justify.SpaceBetween">
+            <MudStack Row AlignItems="AlignItems.Start">
+                <MudIcon Icon="@Icons.Material.Filled.Window" Size="Size.Large" />
+                <MudStack Spacing="0">
+                    <MudText Typo="Typo.subtitle2" Class="mb-2">@Title</MudText>
+                    <MudEnumSelect Style="min-width:120px" TEnum="TicketListView" ValueChanged="OnChangedListView" Value="Query.ListView" Dense="true" Label="@L["List View"]">
+                    </MudEnumSelect>
+                </MudStack>
+            </MudStack>
+            <MudStack Spacing="0" AlignItems="AlignItems.End">
+                <MudToolBar Dense WrapContent="true" Class="py-1 px-0">
+                    <MudButton Disabled="@_loading"
+                               OnClick="@(() => OnRefresh())"
+                               StartIcon="@Icons.Material.Outlined.Refresh">
+                        @ConstantString.Refresh
+                    </MudButton>
+
+                    <MudMenu TransformOrigin="Origin.BottomRight" AnchorOrigin="Origin.BottomRight" EndIcon="@Icons.Material.Filled.MoreVert" Label="@ConstantString.More">
+
+                        @if (_canDelete)
+                        {
+                            <MudMenuItem Disabled="@(!(_selectedItems.Count > 0))"
+                                         OnClick="OnDeleteChecked">
+                                @ConstantString.Delete
+                            </MudMenuItem>
+                        }
+                        @if (_canExport)
+                        {
+                            <MudMenuItem Disabled="@_exporting"
+                                         OnClick="OnExport">
+                                @ConstantString.Export
+                            </MudMenuItem>
+                        }
+
+                    </MudMenu>
+                </MudToolBar>
+                <MudStack Row Spacing="1">
+                    @if (_canSearch)
+                    {
+                        <MudTextField T="string" ValueChanged="@(s => OnSearch(s))" Value="@Query.Keyword" Placeholder="@ConstantString.Search" Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Small">
+                        </MudTextField>
+                    }
+                </MudStack>
+            </MudStack>
+        </MudStack>
+    </ToolBarContent>
+    <Columns>
+        <SelectColumn ShowInFooter="false"></SelectColumn>
+        <TemplateColumn HeaderStyle="width:60px" Title="@ConstantString.Actions" Sortable="false">
+            <CellTemplate>
+                @if (_canDelete)
+                {
+                    <MudMenu Icon="@Icons.Material.Filled.Edit" Variant="Variant.Filled" Size="Size.Small"
+                             Dense="true"
+                             EndIcon="@Icons.Material.Filled.KeyboardArrowDown" IconColor="Color.Info" AnchorOrigin="Origin.CenterLeft">
+
+                        }
+                        @if (_canDelete)
+                        {
+                            <MudMenuItem OnClick="@(()=>OnDelete(context.Item))">@ConstantString.Delete</MudMenuItem>
+                        }
+                    </MudMenu>
+                }
+                else
+                {
+                    <MudIconButton Variant="Variant.Filled"
+                                   Disabled="true"
+                                   Icon="@Icons.Material.Filled.DoNotTouch"
+                                   Size="Size.Small"
+                                   Color="Color.Surface">
+                        @ConstantString.NoAllowed
+                    </MudIconButton>
+                }
+            </CellTemplate>
+        </TemplateColumn>
+
+        <TemplateColumn HeaderStyle="width:60px" Sortable="false">
+            <CellTemplate>
+                @if (_canDelete)
+                {
+                    <MudMenu Icon="@Icons.Material.Filled.Edit" Variant="Variant.Filled" Size="Size.Small"
+                             Dense="true"
+                             EndIcon="@Icons.Material.Filled.KeyboardArrowDown" IconColor="Color.Info" AnchorOrigin="Origin.CenterLeft">
+
+                       
+                        @if (_canApprove)
+                        {
+                            <MudMenuItem Disabled="!(context.Item.TicketStatus == TicketStatus.JustCreated)" OnClick="@(() => OnApprove(context.Item))">Approve</MudMenuItem>
+                        }
+                        @if (_canReject)
+                        {
+                            <MudMenuItem Disabled="!(context.Item.TicketStatus == TicketStatus.JustCreated || context.Item.TicketStatus == TicketStatus.Released)" OnClick="@(() => OnReject(context.Item))">Reject</MudMenuItem>
+                        }
+                        @if (_canAssign)
+                        {
+                            <MudMenuItem Disabled="!(context.Item.TicketStatus == TicketStatus.Approved || context.Item.TicketStatus == TicketStatus.Released)" OnClick="@(() => OnAssign(context.Item))">Assign</MudMenuItem>
+                        }
+                        @if (_canUnReject)
+                        {
+                            <MudMenuItem Disabled="!(context.Item.TicketStatus == TicketStatus.Rejected)" OnClick="@(() => OnUnReject(context.Item))">UnReject</MudMenuItem>
+                        }
+                    </MudMenu>
+                }
+                
+                else
+                {
+                    <MudIconButton Variant="Variant.Filled"
+                                   Disabled="true"
+                                   Icon="@Icons.Material.Filled.DoNotTouch"
+                                   Size="Size.Small"
+                                   Color="Color.Surface">
+                        @ConstantString.NoAllowed
+                    </MudIconButton>
+                }
+            </CellTemplate>
+        </TemplateColumn>
+
+        <PropertyColumn Property="x => x.TicketNo" Title="@L[_currentDto.GetMemberDescription(x=>x.TicketNo)]" />
+        <PropertyColumn Property="x => x.ServiceTask" Title="@L[_currentDto.GetMemberDescription(x => x.ServiceTask)]" />
+        <PropertyColumn Property="x => x.Desc" Title="@L[_currentDto.GetMemberDescription(x=>x.Desc)]" />
+        <PropertyColumn Property="x => x.TicketStatus" Title="@L[_currentDto.GetMemberDescription(x=>x.TicketStatus)]" />
+        <PropertyColumn Property="x => x.TcDate" Title="@L[_currentDto.GetMemberDescription(x=>x.TcDate)]" />
+        @* <PropertyColumn Property="x => x.TrackingUnitId" Title="@L[_currentDto.GetMemberDescription(x=>x.TrackingUnitId)]" /> *@
+        <PropertyColumn Property="x => x.TrackingUnit" Title="@L[_currentDto.GetMemberDescription(x => x.TrackingUnit)]" />
+        <PropertyColumn Property="x => x.TaDate" Title="@L[_currentDto.GetMemberDescription(x=>x.TaDate)]" />
+        <PropertyColumn Property="x => x.InstallerId" Title="@L[_currentDto.GetMemberDescription(x => x.InstallerId)]" />
+        <PropertyColumn Property="x => x.TeDate" Title="@L[_currentDto.GetMemberDescription(x => x.TeDate)]" />
+
+    </Columns>
+    <NoRecordsContent>
+        <MudText>@ConstantString.NoRecords</MudText>
+    </NoRecordsContent>
+    <LoadingContent>
+        <MudText>@ConstantString.Loading</MudText>
+    </LoadingContent>
+    <PagerContent>
+        <MudDataGridPager PageSizeOptions="@(new int[]{10,15,30,50,100})" />
+    </PagerContent>
+</MudDataGrid>
+
+
+
+@code {
+
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthState { get; set; } = default!;
+    [CascadingParameter]
+    private UserProfile? UserProfile { get; set; }
+    public string? Title { get; private set; }
+    private HashSet<TicketDto> _selectedItems = new();
+    private MudDataGrid<TicketDto> _table = default!;
+    private TicketDto _currentDto = new();
+    // private TicketsAccessRights _accessRights = new();
+    private int _defaultPageSize = 15;
+    private bool _loading;
+    private bool _uploading;
+    private bool _exporting;
+
+    private bool _approveing;
+    private bool _unrejecting;
+
+    bool CanAssign = false;
+
+    private TicketsWithPaginationQuery Query { get; set; } = new();
+
+    [Inject]
+    private IBlazorDownloadFileService BlazorDownloadFileService { get; set; } = null!;
+    private bool _canSearch;
+    private bool _canCreate;
+    // private bool _canEdit;
+    private bool _canDelete;
+    private bool _canExport;
+
+    private bool _canApprove;
+    private bool _canReject;
+    private bool _canAssign;
+    private bool _canUnReject;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Title = L[_currentDto.GetClassDescription()];
+        var state = await AuthState;
+        _canCreate = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Tickets.Create)).Succeeded;
+        _canSearch = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Tickets.Search)).Succeeded;
+        // _canEdit = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Tickets.Edit)).Succeeded;
+        _canDelete = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Tickets.Delete)).Succeeded;
+        _canExport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Tickets.Export)).Succeeded;
+
+        _canApprove = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Tickets.Approve)).Succeeded;
+        _canReject = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Tickets.Reject)).Succeeded;
+        _canAssign = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Tickets.Assign)).Succeeded;
+        _canUnReject = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Tickets.UnReject)).Succeeded;
+    }
+
+
+
+
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     Title = L[_currentDto.GetClassDescription()];
+    //     _accessRights = await PermissionService.GetAccessRightsAsync<TicketsAccessRights>();
+    // }
+    private async Task<GridData<TicketDto>> ServerReload(GridState<TicketDto> state)
+    {
+        try
+        {
+
+            _loading = true;
+            Query.CurrentUser = UserProfile;
+            Query.OrderBy = state.SortDefinitions.FirstOrDefault()?.SortBy ?? "Id";
+            Query.SortDirection = state.SortDefinitions.FirstOrDefault()?.Descending ?? true
+                                              ? SortDirection.Descending.ToString()
+                                              : SortDirection.Ascending.ToString();
+            Query.PageNumber = state.Page + 1;
+            Query.PageSize = state.PageSize;
+            var result = await Mediator.Send(Query).ConfigureAwait(false);
+            return new GridData<TicketDto> { TotalItems = result.TotalItems, Items = result.Items };
+
+        }
+        finally
+        {
+            _loading = false;
+        }
+
+    }
+
+    private void ConditionChanged(string s)
+    {
+        InvokeAsync(_table.ReloadServerData);
+    }
+    private async Task OnSearch(string text)
+    {
+        _selectedItems = new HashSet<TicketDto>();
+        Query.Keyword = text;
+        await _table.ReloadServerData();
+    }
+    private async Task OnChangedListView(TicketListView listview)
+    {
+        Query.ListView = listview;
+        await _table.ReloadServerData();
+    }
+
+    private async Task OnRefresh()
+    {
+        TicketCacheKey.Refresh();
+        _selectedItems = new HashSet<TicketDto>();
+        Query.Keyword = string.Empty;
+        await _table.ReloadServerData();
+    }
+
+
+    #region Curd
+
+    private async Task OnDelete(TicketDto dto)
+    {
+        var contentText = string.Format(ConstantString.DeleteConfirmation, dto.TicketNo);
+        var command = new DeleteTicketCommand(new int[] { dto.Id });
+        await DialogServiceHelper.ShowDeleteConfirmationDialogAsync(command, ConstantString.DeleteConfirmationTitle, contentText, async () =>
+        {
+            await InvokeAsync(async () =>
+            {
+                await _table.ReloadServerData();
+                _selectedItems.Clear();
+            });
+        });
+    }
+
+    private async Task OnDeleteChecked()
+    {
+        var contentText = string.Format(ConstantString.DeleteConfirmWithSelected, _selectedItems.Count);
+        var command = new DeleteTicketCommand(_selectedItems.Select(x => x.Id).ToArray());
+        await DialogServiceHelper.ShowDeleteConfirmationDialogAsync(command, ConstantString.DeleteConfirmationTitle, contentText, async () =>
+        {
+            await InvokeAsync(async () =>
+            {
+                await _table.ReloadServerData();
+                _selectedItems.Clear();
+            });
+        });
+    }
+
+    private async Task OnExport()
+    {
+        _exporting = true;
+        var request = new ExportTicketsQuery()
+        {
+            Keyword = Query.Keyword,
+            // CurrentUser = UserProfile,
+            ListView = Query.ListView,
+            OrderBy = _table.SortDefinitions.Values.FirstOrDefault()?.SortBy ?? "Id",
+            SortDirection = (_table.SortDefinitions.Values.FirstOrDefault()?.Descending ?? true) ? SortDirection.Descending.ToString() : SortDirection.Ascending.ToString()
+        };
+        var result = await Mediator.Send(request);
+        await result.MatchAsync<byte[]>(
+            async data =>
+            {
+                var downloadresult = await BlazorDownloadFileService.DownloadFile($"{L["Tickets"]}.xlsx", result.Data, contentType: "application/octet-stream");
+                Snackbar.Add($"{ConstantString.ExportSuccess}", MudBlazor.Severity.Info);
+                return data;
+            },
+            errors =>
+            {
+                Snackbar.Add($"{errors}", MudBlazor.Severity.Error);
+                return Task.FromResult(Array.Empty<byte>());
+            });
+        _exporting = false;
+    }
+    #endregion
+    // private Task OnDelete(TicketDto dto)
+    // {
+    //     var contentText = string.Format(ConstantString.DeleteConfirmation, dto.Id);
+    //     var command = new DeleteTicketCommand(new int[] { dto.Id });
+    //     return DeleteInternal(command, contentText);
+    // }
+
+    // private Task OnDeleteChecked()
+    // {
+    //     var contentText = string.Format(ConstantString.DeleteConfirmWithSelected, _selectedItems.Count);
+    //     var command = new DeleteTicketCommand(_selectedItems.Select(x => x.Id).ToArray());
+    //     return DeleteInternal(command, contentText);
+
+    // }
+
+    // private Task DeleteInternal(DeleteTicketCommand command, string contentText)
+    // {
+    //     return DialogServiceHelper.ShowDeleteConfirmationDialogAsync(
+    //         command,
+    //         ConstantString.DeleteConfirmationTitle,
+    //         contentText,
+    //         async () =>
+    //         {
+    //             await _table.ReloadServerData();
+    //             _selectedItems.Clear();
+    //         });
+    // }
+
+
+
+    private Task OnView(TicketDto dto)
+    {
+        Navigation.NavigateTo($"/pages/TrdBx/Tickets/{dto.Id}/view");
+        return Task.CompletedTask;
+    }
+
+    private async Task OnReject(TicketDto dto)
+    {
+        // var command = Mapper.Map<RejectTicketCommand>(dto);
+
+        // var command = Mapper.ToRejectCommand(dto);
+
+        // return DialogServiceHelper.ShowFormDialogAsync<RejectTicketDialog, RejectTicketCommand>(
+        //     L["Assign Ticket"],
+        //     new DialogParameters<RejectTicketDialog>
+        //    {
+        //                     { x=>x._model,command}
+        //    },
+        //     async () =>
+        //     {
+        //         await _table.ReloadServerData();
+        //         _selectedItems.Clear();
+        //     });
+
+        var title = L["Reject Ticket"];
+        var command = Mapper.ToRejectCommand(dto);
+        var parameters = new DialogParameters<RejectTicketDialog>
+            {
+                { x=>x._model,command },
+            };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        var dialog = DialogService.Show<RejectTicketDialog>(title, parameters, options);
+        var state = await dialog.Result;
+
+        if (state != null && !state.Canceled)
+        {
+            await _table.ReloadServerData();
+            _selectedItems.Clear();
+        }
+    }
+
+    private async Task OnAssign(TicketDto dto)
+    {
+        // var command = Mapper.Map<AssignTicketCommand>(dto);
+    //     var command = Mapper.ToAssignCommand(dto);
+    //     return DialogServiceHelper.ShowFormDialogAsync<AssignTicketDialog, AssignTicketCommand>(
+    //         L["Assign Ticket"],
+    //          new DialogParameters<AssignTicketDialog>
+    //        {
+    //                         { x=>x._model,command}
+    //        },
+    //         async () =>
+    //         {
+    //             await _table.ReloadServerData();
+    //             _selectedItems.Clear();
+    //         });
+
+
+        var title = L["Assign Ticket"];
+        var command = Mapper.ToAssignCommand(dto);
+        var parameters = new DialogParameters<AssignTicketDialog>
+            {
+                { x=>x._model,command },
+            };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        var dialog = DialogService.Show<AssignTicketDialog>(title, parameters, options);
+        var state = await dialog.Result;
+
+        if (state != null && !state.Canceled)
+        {
+            await _table.ReloadServerData();
+            _selectedItems.Clear();
+        }
+    }
+
+
+
+
+
+    private async Task OnApprove(TicketDto dto)
+    {
+        try
+        {
+            _approveing = true;
+            var command = new ApproveTicketCommand() { Id = dto.Id };
+            var result = await Mediator.Send(command);
+
+            if (result.Succeeded)
+            {
+                Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+                await InvokeAsync(async () =>
+                                               {
+                                                   await _table.ReloadServerData();
+                                                   _selectedItems.Clear();
+                                               });
+            }
+            else
+            {
+                Snackbar.Add(result.ErrorMessage, MudBlazor.Severity.Error);
+            }
+        }
+        finally
+        {
+            _approveing = false;
+        }
+    }
+
+    private async Task OnUnReject(TicketDto dto)
+    {
+       
+
+        try
+        {
+            _unrejecting = true;
+            var command = new UnRejectTicketCommand() { Id = dto.Id };
+            var result = await Mediator.Send(command);
+
+            if (result.Succeeded)
+            {
+                Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+                await InvokeAsync(async () =>
+                                               {
+                                                   await _table.ReloadServerData();
+                                                   _selectedItems.Clear();
+                                               });
+            }
+            else
+            {
+                Snackbar.Add(result.ErrorMessage, MudBlazor.Severity.Error);
+            }
+        }
+        finally
+        {
+            _unrejecting = false;
+        }
+    }
+
+    // private async Task OnExport()
+    // {
+    //     _exporting = true;
+    //     var request = new ExportTicketsQuery()
+    //     {
+    //         Keyword = Query.Keyword,
+    //         ListView = Query.ListView,
+    //         ServiceTask = Query.ServiceTask,
+    //         TicketStatus = Query.TicketStatus,
+    //         OrderBy = _table.SortDefinitions.Values.FirstOrDefault()?.SortBy ?? "Id",
+    //         SortDirection = _table.SortDefinitions.Values.FirstOrDefault()?.Descending ?? false
+    //                                 ? SortDirection.Descending.ToString()
+    //                                 : SortDirection.Ascending.ToString(),
+    //         CurrentUser = UserProfile,
+
+    //     };
+    //     var result = await Mediator.Send(request);
+    //     await result.MatchAsync(
+    //         async data =>
+    //         {
+    //             if (result.Data != null)
+    //             {
+    //                 await BlazorDownloadFileService.DownloadFileAsync($"{L[_currentDto.GetClassDescription()]}.xlsx", result.Data, contentType: "application/octet-stream");
+    //                 Snackbar.Add($"{ConstantString.ExportSuccess}", MudBlazor.Severity.Info);
+    //             }
+    //             else
+    //             {
+    //                 Snackbar.Add($"{ConstantString.ExecuteFail}", MudBlazor.Severity.Error);
+    //             }
+    //         },
+    //         errors =>
+    //         {
+    //             Snackbar.Add($"{errors}", MudBlazor.Severity.Error);
+    //             return Task.CompletedTask;
+    //         });
+    //     _exporting = false;
+
+    // }
+
+
+
+}

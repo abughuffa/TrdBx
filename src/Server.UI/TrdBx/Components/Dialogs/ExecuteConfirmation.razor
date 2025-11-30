@@ -1,0 +1,48 @@
+﻿@inject IStringLocalizer<SharedResource> L
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.QuestionMark" Class="mb-n1" />
+            @ConstantString.ExecuteConfirmationTitle
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudText>@ContentText</MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton StartIcon="@Icons.Material.Filled.Cancel" OnClick="Cancel">@ConstantString.Cancel</MudButton>
+        <MudButton StartIcon="@Icons.Material.Outlined.Bolt" Color="Color.Primary" OnClick="Submit">@ConstantString.Confirm</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code
+{
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;
+
+    [EditorRequired][Parameter] public string? ContentText { get; set; }
+    [EditorRequired][Parameter] public IRequest<Result> Command { get; set; } = default!;
+
+    private async Task Submit()
+    {
+        var result = await Mediator.Send(Command);
+
+          if (result.Succeeded)
+            {
+                MudDialog.Close(DialogResult.Ok(true));
+            Snackbar.Add(ConstantString.ExecuteSuccess, MudBlazor.Severity.Info);
+            }
+            else
+            {
+                Snackbar.Add(result.ErrorMessage, MudBlazor.Severity.Error);
+            }
+
+        
+        
+    }
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+}

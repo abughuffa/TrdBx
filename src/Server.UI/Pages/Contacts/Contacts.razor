@@ -13,7 +13,7 @@
 @using CleanArchitecture.Blazor.Server.UI.Pages.Contacts.Components
 
 @inject IStringLocalizer<Contacts> L
-@attribute [Authorize(Policy = Permissions.Contacts.View)]
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.Contacts.View)]
 <PageTitle>@Title</PageTitle>
 
 <MudDataGrid ServerData="@(ServerReload)"
@@ -182,12 +182,12 @@
     {
         Title = L[_currentDto.GetClassDescription()];
         var state = await AuthState;
-        _canCreate = (await AuthService.AuthorizeAsync(state.User, Permissions.Contacts.Create)).Succeeded;
-        _canSearch = (await AuthService.AuthorizeAsync(state.User, Permissions.Contacts.Search)).Succeeded;
-        _canEdit = (await AuthService.AuthorizeAsync(state.User, Permissions.Contacts.Edit)).Succeeded;
-        _canDelete = (await AuthService.AuthorizeAsync(state.User, Permissions.Contacts.Delete)).Succeeded;
-        _canImport = (await AuthService.AuthorizeAsync(state.User, Permissions.Contacts.Import)).Succeeded;
-        _canExport = (await AuthService.AuthorizeAsync(state.User, Permissions.Contacts.Export)).Succeeded;
+        _canCreate = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Contacts.Create)).Succeeded;
+        _canSearch = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Contacts.Search)).Succeeded;
+        _canEdit = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Contacts.Edit)).Succeeded;
+        _canDelete = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Contacts.Delete)).Succeeded;
+        _canImport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Contacts.Import)).Succeeded;
+        _canExport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Contacts.Export)).Succeeded;
     }
     private async Task<GridData<ContactDto>> ServerReload(GridState<ContactDto> state)
     {
@@ -255,7 +255,7 @@
     private async Task OnClone()
     {
         var dto = _selectedItems.First();
-        var command = ContactMapper.CloneFromDto(dto);
+        var command = Mapper.CloneFromDto(dto);
         await ShowEditFormDialog(string.Format(ConstantString.CreateAnItem, L["Contact"]), command);
     }
     private async Task OnEdit(ContactDto dto)

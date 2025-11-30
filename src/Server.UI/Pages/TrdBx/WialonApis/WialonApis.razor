@@ -1,0 +1,73 @@
+﻿@page "/pages/TrdBx/WialonApis"
+@using CleanArchitecture.Blazor.Application.Features.WialonApis.Commands.Connect
+@using CleanArchitecture.Blazor.Application.Features.WialonApis.Commands.Disconnect
+
+
+
+@inject IStringLocalizer<WialonApis> L
+
+<PageTitle>@Title</PageTitle>
+
+<PageTitle>@Title</PageTitle>
+<MudContainer Class="mt-3" MaxWidth="MaxWidth.Small">
+    <MudCard Class="pa-2">
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h6">@Title</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent>
+
+        </MudCardContent>
+        <MudCardActions Class="d-flex justify-end gap-2">
+            <MudButton Color="Color.Primary" DropShadow="false" onclick="OnConnectDisconnect">@Btn</MudButton>
+        </MudCardActions>
+    </MudCard>
+</MudContainer>
+
+
+
+@code {
+
+    [CascadingParameter] private UserProfile? UserProfile { get; set; }
+    public string? Title { get; private set; }
+
+    public bool LoginFlag { get; set; } = false;
+    public string Btn { get; set; } = "Connect";
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Title = "Wialon API Tests";
+
+    }
+
+
+    private async Task OnConnectDisconnect()
+    {
+        if (LoginFlag)
+        {
+            if (await Mediator.Send(new DisconnectWialonCommand()))
+            {
+                LoginFlag = false;
+                Btn = "Connect";
+            }
+        }      
+        else
+        {
+            if (await Mediator.Send(new ConnectWialonCommand()))
+            {
+                LoginFlag = true;
+                Btn = "Disonnect";
+            }
+        }
+
+
+
+
+    }
+
+
+
+
+}

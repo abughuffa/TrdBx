@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace CleanArchitecture.Blazor.Application.Common.Interfaces;
 
-public interface IApplicationDbContext
+public partial interface IApplicationDbContext
 {
     DbSet<Logger> Loggers { get; set; }
     DbSet<AuditTrail> AuditTrails { get; set; }
@@ -19,11 +19,7 @@ public interface IApplicationDbContext
     ChangeTracker ChangeTracker { get; }
 
 
-    DbSet<Warehouse> Warehouses { get; set; }
-    DbSet<Vehicle> Vehicles { get; set; }
 
-    DbSet<VehicleType> VehicleTypes { get; set; }
-    DbSet<Shipment> Shipments { get; set; }
 
     DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);

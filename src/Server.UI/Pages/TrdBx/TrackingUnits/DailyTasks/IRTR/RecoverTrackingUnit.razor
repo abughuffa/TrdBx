@@ -1,0 +1,173 @@
+﻿@page "/pages/TrdBx/TrackingUnits/Recover/{trackingunitid:int}"
+
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Mappers
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Recover
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Queries.GetById
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Installers
+
+@inherits MudComponentBase
+@inject IValidationService Validator
+@inject IStringLocalizer<DailyTasks> L
+@attribute [Authorize(Policy = Permissions.TrackingUnits.Recover)]
+
+<PageTitle>@Title</PageTitle>
+
+<MudContainer Class="mt-3" MaxWidth="MaxWidth.Small">
+    @if (model != null)
+    {
+        <MudCard Class="pa-2">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">@Title</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+
+                <MudForm Model="@model" @ref="@_form" Validation="@(Validator.ValidateValue(model))">
+                    <MudGrid Spacing="2">
+                        <MudItem md="12">
+                            <MudText>Selected Unit Serial No</MudText>
+                        </MudItem>
+
+                        <MudItem md="12">
+
+                            <Installers @bind-InstallerId="model.InstallerId"></Installers>
+
+                        </MudItem>
+
+                        <MudItem md="6">
+                            <MudCheckBox Label="@L["CreateDeservedServices?"]"
+                            For="@(() => model.CreateDeservedServices)"
+                            @bind-Value="model.CreateDeservedServices">
+                            </MudCheckBox>
+                        </MudItem>
+
+
+                        <MudItem md="6">
+                            <MudDatePicker Class="pa-4"
+                            PickerVariant="PickerVariant.Dialog"
+                            Editable @bind-Date="_date"
+                            For="@(() => _date)"
+                            Required="true"
+                                           RequiredError="@L["TaskDateIsRequired"]" />
+                        </MudItem>
+                    </MudGrid>
+                </MudForm>
+            </MudCardContent>
+            <MudCardActions Class="d-flex justify-end gap-2">
+                <MudButton Color="Color.Primary" DropShadow="false" OnClick="Cancel">@ConstantString.Cancel</MudButton>
+                <MudLoadingButton Color="Color.Primary" DropShadow="false" Loading="@_submiting" OnClick="Submit">@ConstantString.Submit</MudLoadingButton>
+            </MudCardActions>
+        </MudCard>
+    }
+</MudContainer>
+
+@code {
+    [CascadingParameter]
+    private UserProfile? UserProfile { get; set; }
+
+    private MudForm? _form;
+    private RecoverTrackingUnitCommand model = new();
+    public string? Title { get; private set; }
+    // public bool CanAssignOtherUser = false;
+    private bool _submiting = false;
+
+    [Parameter]
+    public int TrackingUnitId { get; set; }
+
+    private DateTime? _date
+    {
+        get => model.TsDate.ToDateTime(TimeOnly.MinValue);
+        set
+        {
+            if (value is not null)
+            {
+                model.TsDate = DateOnly.FromDateTime((DateTime)value);
+            }
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        Title = L["Recover TrackingUnit"];
+
+        // CanAssignOtherUser = UserProfile.AssignedRoles.Contains("Admin");
+
+        var result = await Mediator.Send(new GetTrackingUnitByIdQuery() { Id = TrackingUnitId });
+
+        result.Map(data =>
+      {
+          model = Mapper.ToRecoverCommand(data);
+          return data;
+      }).Match(data =>
+      {
+          return data;
+
+      }, errors =>
+      {
+          Snackbar.Add(errors, MudBlazor.Severity.Error);
+          return null!;
+      });
+        // result.Map(data =>
+        //     {
+        //         // model = Mapper.Map<RecoverTrackingUnitCommand>(data);
+        //         model = Mapper.ToRecoverCommand(data);
+        //         // model.InstallerId = UserProfile.UserId/* ; */
+        //         return Task.CompletedTask;
+        //         // return data;
+
+        //     }).Match(data =>
+        //         {
+        //         }, errors => { Snackbar.Add($"{errors}", Severity.Error); });
+
+
+    }
+    async Task Submit()
+    {
+        var succeed = false;
+        try
+        {
+            _submiting = true;
+            await _form!.Validate().ConfigureAwait(false);
+            if (!_form!.IsValid)
+                return;
+            var result = await Mediator.Send(model);
+
+            result.Match(
+data =>
+{
+   Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+   succeed = true;
+   return data;
+},
+errors =>
+{
+   Snackbar.Add(errors, MudBlazor.Severity.Error);
+   return -1;
+});
+//             result.Match(
+// data =>
+// {
+//     Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+//     succeed = true;
+// },
+// errors =>
+// {
+//   Snackbar.Add(errors, MudBlazor.Severity.Error);
+// }); ;
+        }
+        finally
+        {
+            _submiting = false;
+            if (succeed) Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits");
+        }
+    }
+
+    async Task Cancel()
+    {
+        Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits");
+
+    }
+
+}

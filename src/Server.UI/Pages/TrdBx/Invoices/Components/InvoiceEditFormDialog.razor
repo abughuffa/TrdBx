@@ -1,0 +1,98 @@
+﻿@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Invoices
+@using CleanArchitecture.Blazor.Application.Features.Invoices.Mappers
+@using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.Update
+@using CleanArchitecture.Blazor.Application.Features.Invoices.Queries.GetById
+
+@inherits MudComponentBase
+@inject IValidationService Validator
+@inject IStringLocalizer<Invoices> L
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.Invoices.Edit)]
+
+<MudDialog>
+    <DialogContent>
+        <MudForm Model="@_model" @ref="@_contactForm" Validation="@(Validator.ValidateValue(_model))">
+            <MudGrid>
+                <MudItem md="6">
+                    <MudTextField Label="@L[_model.GetMemberDescription(x => x.InvDate)]" @bind-Value="_model.InvDate" />
+                </MudItem>
+                <MudItem md="6">
+                    <MudTextField Label="@L[_model.GetMemberDescription(x => x.DueDate)]" @bind-Value="_model.DueDate" />
+                </MudItem>
+
+            </MudGrid>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudLoadingButton Loading="@_saveing" OnClick="OnSave">@ConstantString.Save</MudLoadingButton>
+        <MudButton OnClick="Cancel">@ConstantString.Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; } = default!;
+    [EditorRequired][Parameter] public UpdateInvoiceCommand _model { get; set; }
+    MudForm _contactForm = new();
+    private bool _saveing = false;
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await Mediator.Send(new GetInvoiceByIdQuery() { Id = _model.Id });
+
+        result.Map(data =>
+         {
+             _model = Mapper.ToUpdateCommand(data);
+             return data;
+         }).Match(data =>
+         {
+             return data;
+
+         }, errors =>
+         {
+             Snackbar.Add(errors, MudBlazor.Severity.Error);
+             return null!;
+         });
+    }
+
+
+    async Task OnSave()
+    {
+        try
+        {
+            _saveing = true;
+            await _contactForm.Validate().ConfigureAwait(false);
+            if (!_contactForm.IsValid)
+                return;
+                            var result = await Mediator.Send(_model);
+
+            result.Match(
+data =>
+{
+    Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+    MudDialog.Close(DialogResult.Ok(true));
+    return data;
+},
+errors =>
+{
+    Snackbar.Add(errors, MudBlazor.Severity.Error);
+    return -1;
+});
+            // var result = await Mediator.Send(_model);
+            // result.Match(data =>
+            // {
+            //     MudDialog.Close(DialogResult.Ok(true));
+            //     Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+            // }, errors =>
+            // {
+            //     Snackbar.Add(errors, MudBlazor.Severity.Error);
+            // });
+        }
+        finally
+        {
+            _saveing = false;
+        }
+    }
+
+    void Cancel() => MudDialog.Cancel();
+}

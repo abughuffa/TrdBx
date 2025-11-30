@@ -1,0 +1,72 @@
+﻿@using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Reject
+@using CleanArchitecture.Blazor.Domain.Enums
+ 
+
+@inject IStringLocalizer<Tickets> L
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.Tickets.Reject)]
+
+<MudDialog>
+    <DialogContent>
+        <MudForm Model="@_model" @ref="@_form" Validation="@(Validator.ValidateValue(_model))">
+            <MudGrid>
+
+                <MudItem xs="12" md="6">
+                    <MudTextField Label="@L[_model.GetMemberDescription(x => x.Note)]" Lines="5" @bind-Value="_model.Note" For="@(() => _model.Note)" Required="false" RequiredError="@L["Note is required!"]"></MudTextField>
+                </MudItem>
+
+            </MudGrid>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>      
+        <MudLoadingButton Loading="@_submitting" OnClick="OnSave">@ConstantString.Save</MudLoadingButton>
+        <MudButton OnClick="Cancel">@ConstantString.Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+@code {
+    MudForm _form = new();
+    private bool _submitting = false;
+    [CascadingParameter]
+    IMudDialogInstance MudDialog { get; set; } = default!;
+    [EditorRequired][Parameter] public RejectTicketCommand _model { get; set; } = null!;
+
+
+    private async Task OnSave()
+    {
+        try
+        {
+            _submitting = true;
+            await _form.Validate().ConfigureAwait(false);
+            if (!_form.IsValid)
+                return;
+            var result = await Mediator.Send(_model);
+            result.Match(
+   data =>
+   {
+       Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+       MudDialog.Close(DialogResult.Ok(true));
+       return data;
+   },
+   errors =>
+   {
+       Snackbar.Add(errors, MudBlazor.Severity.Error);
+       return -1;
+   });
+            // result.Match(data =>
+            // {
+            //     MudDialog.Close(DialogResult.Ok(true));
+            //     Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+            // }, errors =>
+            // {
+            //     Snackbar.Add(errors, MudBlazor.Severity.Error);
+            // });
+        }
+        finally
+        {
+            _submitting = false;
+        }
+    }
+
+    private void Cancel() => MudDialog.Cancel();
+}

@@ -1,0 +1,38 @@
+﻿@page "/X"
+@using CleanArchitecture.Blazor.Domain.Identity
+@* @using CleanArchitecture.Blazor.Infrastructure.Constants.Role *@
+@using CleanArchitecture.Blazor.Server.UI.Pages.Dashboard.Components
+@using MudBlazor.Utilities
+@inject IStringLocalizer<Dashboard> L
+@inject NavigationManager Navigation
+@inject UserManager<ApplicationUser> UserManager
+
+@code
+{
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string? ReturnUrl { get; set; }
+    [CascadingParameter]
+    private UserProfile? UserProfile { get; set; }
+
+    protected void Redirect()
+    {
+        string languageCode = UserProfile.LanguageCode ?? "en-US";
+
+        var url = UserProfile.AssignedRoles.Contains("Admin") ? "/pages/admindashboard" :
+                  UserProfile.AssignedRoles.Contains("Installer") ? "/pages/installerdashboard" :
+                  UserProfile.AssignedRoles.Contains("Basic") ? "/pages/basicdashboard" : "/pages/defualtdashboard";
+
+        string redirectUrl = $"{ReturnUrl ?? url}?culture={languageCode}";
+
+        Navigation.NavigateTo($"{redirectUrl}?returnUrl={Uri.EscapeDataString(Navigation.Uri)}");
+    }
+
+
+
+    protected override void OnInitialized()
+    {
+        //Redirects user to it's spsfic dashboard based on his roles
+        Redirect();
+    }
+}

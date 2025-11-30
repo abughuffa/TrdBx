@@ -14,6 +14,11 @@ public static class HostExtensions
             if (env.IsDevelopment())
             {
                 await initializer.SeedAsync().ConfigureAwait(false);
+
+                await initializer.SeedTrdBxAsync().ConfigureAwait(false);
+
+                await initializer.SeedDeliveryAsync().ConfigureAwait(false);
+
             }
         }
     }

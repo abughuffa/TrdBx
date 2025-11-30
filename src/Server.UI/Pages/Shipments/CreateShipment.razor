@@ -37,6 +37,10 @@
                         <MudTextField Label="@L[model.GetMemberDescription(x => x.IsBidable)]" For="@(() => model.IsBidable)" @bind-Value="model.IsBidable"></MudTextField>
                     </MudItem>
 
+@*                     <MudItem xs="12" md="12">
+                        <MudTextField Label="@L[model.GetMemberDescription(x => x.RecVehicleType)]" For="@(() => model.RecVehicleType)" @bind-Value="model.RecVehicleType"></MudTextField>
+                    </MudItem> *@
+
                     <MudItem xs="12" md="12">
 
                         <VehicleTypesList VehicleTypeIds="model.RecVehicleType"

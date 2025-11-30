@@ -24,7 +24,7 @@
 @using System.Globalization
 @using ZiggyCreatures.Caching.Fusion
 
-@attribute [Authorize(Policy = Permissions.Users.View)]
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.Users.View)]
 @inherits OwningComponentBase<ApplicationDbContext>
 @implements IDisposable
 
@@ -242,13 +242,13 @@
         Title = L[_currentDto.GetClassDescription()];
         InitializeServices();
         var state = await AuthState;
-        _canCreate = (await AuthService.AuthorizeAsync(state.User, Permissions.Users.Create)).Succeeded;
-        _canSearch = (await AuthService.AuthorizeAsync(state.User, Permissions.Users.Search)).Succeeded;
-        _canEdit = (await AuthService.AuthorizeAsync(state.User, Permissions.Users.Edit)).Succeeded;
-        _canDelete = (await AuthService.AuthorizeAsync(state.User, Permissions.Users.Delete)).Succeeded;
-        _canRestPassword = (await AuthService.AuthorizeAsync(state.User, Permissions.Users.RestPassword)).Succeeded;
-        _canSendRestPasswordMail = (await AuthService.AuthorizeAsync(state.User, Permissions.Users.SendRestPasswordMail)).Succeeded;
-        _canViewOnlineStatus = (await AuthService.AuthorizeAsync(state.User, Permissions.Users.ViewOnlineStatus)).Succeeded;
+        _canCreate = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Users.Create)).Succeeded;
+        _canSearch = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Users.Search)).Succeeded;
+        _canEdit = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Users.Edit)).Succeeded;
+        _canDelete = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Users.Delete)).Succeeded;
+        _canRestPassword = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Users.RestPassword)).Succeeded;
+        _canSendRestPasswordMail = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Users.SendRestPasswordMail)).Succeeded;
+        _canViewOnlineStatus = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Users.ViewOnlineStatus)).Succeeded;
     }
     private void InitializeServices()
     {

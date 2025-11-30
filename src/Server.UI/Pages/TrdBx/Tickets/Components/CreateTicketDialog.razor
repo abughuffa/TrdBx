@@ -1,0 +1,89 @@
+﻿
+@using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Create
+@using CleanArchitecture.Blazor.Domain.Enums
+ 
+@inject IStringLocalizer<Tickets> L
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.Tickets.Create)]
+
+<MudDialog>
+    <DialogContent>
+        <MudForm Model="@_model" @ref="@_form" Validation="@(Validator.ValidateValue(_model))">
+            <MudGrid>
+                <MudItem md="12">
+                    <MudText>@_contentText</MudText>
+                </MudItem>
+
+                <MudItem md="12">
+                    <MudEnumSelect Style="min-width:120px" TEnum="ServiceTask" ValueChanged="OnChangedServiceTask" Value="_model.ServiceTask" Dense="true" Label="@L["ServiceTask"]">
+                    </MudEnumSelect>
+                </MudItem>
+            </MudGrid>
+        </MudForm>
+    </DialogContent>
+    <DialogActions> 
+        <MudLoadingButton Loading="@_saveing" OnClick="OnSave">@ConstantString.Save</MudLoadingButton>
+        <MudButton OnClick="Cancel">@ConstantString.Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+@code
+{
+
+    private MudForm? _form;
+    private bool _saveing = false;
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;
+    [EditorRequired][Parameter] public CreateTicketCommand _model { get; set; } = default!;
+    [Parameter] public string? _contentText { get; set; } = default!;
+
+    private Task OnChangedServiceTask(ServiceTask serviceTask)
+    {
+        _model.ServiceTask = serviceTask;
+        return Task.CompletedTask;
+    }
+
+
+
+    async Task OnSave()
+    {
+        try
+        {
+            _saveing = true;
+            await _form!.Validate().ConfigureAwait(false);
+            if (!_form!.IsValid) return;
+            var result = await Mediator.Send(_model);
+
+            result.Match(
+   data =>
+   {
+       Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+       MudDialog.Close(DialogResult.Ok(true));
+       return data;
+   },
+   errors =>
+   {
+       Snackbar.Add(errors, MudBlazor.Severity.Error);
+       return -1;
+   });
+            // if (result.Succeeded)
+            // {
+            //     MudDialog.Close(DialogResult.Ok(true));
+            //     Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+
+            // }
+            // else
+            // {
+            //     Snackbar.Add(result.ErrorMessage, MudBlazor.Severity.Error);
+            // }
+        }
+        finally
+        {
+            _saveing = false;
+        }
+    }
+
+    void Cancel() => MudDialog.Cancel();
+
+
+
+}

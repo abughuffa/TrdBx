@@ -1,0 +1,270 @@
+﻿@page "/pages/TrdBx/TrackingUnits/Replace/{trackingunitid:int}"
+
+
+@using CleanArchitecture.Blazor.Application.Features.TrackedAssets.DTOs
+@using CleanArchitecture.Blazor.Application.Features.Customers.DTOs
+@using CleanArchitecture.Blazor.Application.Features.Customers.Queries.GetAvaliable
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Replace
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.DTOs
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Mappers
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Queries.GetAvaliable
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Queries.GetById
+@using CleanArchitecture.Blazor.Application.Features.SimCards.DTOs
+@using CleanArchitecture.Blazor.Application.Features.SimCards.Queries.GetAvaliableSimCards
+
+@using CleanArchitecture.Blazor.Domain.Enums
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Installers
+
+@inherits MudComponentBase
+@inject IValidationService Validator
+@inject IStringLocalizer<DailyTasks> L
+@attribute [Authorize(Policy = Permissions.TrackingUnits.Replace)]
+
+<PageTitle>@Title</PageTitle>
+
+<MudContainer Class="mt-3" MaxWidth="MaxWidth.Small">
+    @if (model != null)
+    {
+        <MudCard Class="pa-2">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">@Title</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+
+                <MudForm Model="@model" @ref="@_form" Validation="@(Validator.ValidateValue(model))">
+                    <MudGrid Spacing="2">
+                        <MudItem xs="12">
+                            <MudText>model.SNo</MudText>
+                        </MudItem>
+
+                        <MudItem md="6">
+                            <MudSelect For="@(() => model.SimCardId)"
+                            Label="@L["SimCard"]"
+                            Required="true"
+                            RequiredError="@L["SimCardIsRequired"]"
+                            @bind-Value="model.SimCardId">
+                                <MudSelectItem T="int" Value=0>@L["SelectSimCard"]</MudSelectItem>
+                                @foreach (var doc1type in SimCards)
+                                {
+                                    <MudSelectItem Value="@doc1type.Id">@doc1type.SimCardNo</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudItem>
+
+                        <MudItem md="6">
+                            <MudSelect For="@(() => model.SUnitId)"
+                            Label="@L["ReplacmentUnit"]"
+                            Required="true"
+                                       RequiredError="@L["ReplacmentUnitIsRequired"]"
+                            @bind-Value="model.SUnitId">
+                                <MudSelectItem T="int" Value=0>@L["SelectReplacmentUnit"]</MudSelectItem>
+                                @foreach (var doc1type in Units)
+                                {
+                                    <MudSelectItem Value="@doc1type.Id">@doc1type.SNo</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudItem>
+
+                        <MudItem md="6">
+                            <MudEnumSelect Style="min-width:120px" TEnum="InsMode" ValueChanged="OnChangedInsMode" Value="model.InsMode" Dense="true" Label="@L["InsMode"]">
+                            </MudEnumSelect>
+                        </MudItem>
+
+                        <MudItem md="6">
+                            <MudEnumSelect Style="min-width:120px" TEnum="SubPackage" ValueChanged="OnChangedSubPackage" Value="model.SubPackage" Dense="true" Label="@L["Subscription"]">
+                            </MudEnumSelect>
+                        </MudItem>
+
+
+                        <MudItem md="12">
+                            <MudSelect For="@(() => model.CustomerId)"
+                            Label="@L["Customer"]"
+                            Required="true"
+                            RequiredError="@L["CustomerIsRequired"]"
+                            @bind-Value="model.CustomerId">
+                                <MudSelectItem T="int" Value=0>@L["SelectCustomer"]</MudSelectItem>
+                                @foreach (var doc1type in Customers)
+                                {
+                                    <MudSelectItem Value="@doc1type.Id">@doc1type.Name</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudItem>
+                        <MudItem md="12">
+
+                            <Installers @bind-InstallerId="model.InstallerId"></Installers>
+                        </MudItem>
+
+
+                        <MudItem md="6">
+                            <MudCheckBox Label="@L["IsTampred"]"
+                                         For="@(() => model.IsTampred)"
+                                         @bind-Value="model.IsTampred">
+                            </MudCheckBox>
+                        </MudItem>
+
+                        <MudItem md="6">
+                            <MudCheckBox Label="@L["CreateDeservedServices?"]"
+                                         For="@(() => model.CreateDeservedServices)"
+                                         @bind-Value="model.CreateDeservedServices">
+                            </MudCheckBox>
+                        </MudItem>
+
+
+                        <MudItem md="6">
+                            <MudDatePicker Class="pa-4"
+                            Label="@L["Date"]"
+                            Editable @bind-Date="_date"
+                            For="@(() => _date)"
+                            Required="true"
+                                           RequiredError="@L["TaskDateIsRequired"]" />
+                        </MudItem>
+                    </MudGrid>
+                </MudForm>
+            </MudCardContent>
+            <MudCardActions Class="d-flex justify-end gap-2">
+                <MudButton Color="Color.Primary" DropShadow="false" OnClick="Cancel">@ConstantString.Cancel</MudButton>
+                <MudLoadingButton Color="Color.Primary" DropShadow="false" Loading="@_submiting" OnClick="Submit">@ConstantString.Submit</MudLoadingButton>
+            </MudCardActions>
+        </MudCard>
+    }
+</MudContainer>
+
+@code {
+    [CascadingParameter]
+    private UserProfile? UserProfile { get; set; }
+
+    private MudForm? _form;
+
+    private ReplaceTrackingUnitCommand model = new();
+    public string? Title { get; private set; }
+    // public bool CanAssignOtherUser = false;
+    private bool _submiting = false;
+
+    [Parameter]
+    public int TrackingUnitId { get; set; }
+
+    private IEnumerable<SimCardDto> SimCards = new List<SimCardDto>();
+    private IEnumerable<TrackingUnitDto> Units = new List<TrackingUnitDto>();
+    private IEnumerable<TrackedAssetDto> TrackedAssets = new List<TrackedAssetDto>();
+    private IEnumerable<CustomerDto> Customers = new List<CustomerDto>();
+
+
+    private async Task OnChangedInsMode(InsMode insMode)
+    {
+        model.InsMode = insMode;
+        await Task.CompletedTask;
+    }
+
+    private async Task OnChangedSubPackage(SubPackage gpsSubscriptionStatus)
+    {
+        model.SubPackage = gpsSubscriptionStatus;
+        await Task.CompletedTask;
+    }
+
+
+    private DateTime? _date
+    {
+        get => model.TsDate.ToDateTime(TimeOnly.MinValue);
+        set
+        {
+            if (value is not null)
+            {
+                model.TsDate = DateOnly.FromDateTime((DateTime)value);
+            }
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Title = L["Replace TrackingUnit"];
+
+        // CanAssignOtherUser = UserProfile.AssignedRoles.Contains("Admin");
+
+
+        var result = await Mediator.Send(new GetTrackingUnitByIdQuery() { Id = TrackingUnitId });
+
+        SimCards = await Mediator.Send(new GetAvaliableSimCardsQuery() { Ids = new int[] { (int)result.Data.SimCardId } });
+        Units = await Mediator.Send(new GetAvaliableTrackingUnitsQuery() { Id = (int)result.Data.CustomerId});
+        Customers = await Mediator.Send(new GetAvaliableChildsByParentIdQuery() { Id = (int)result.Data.CustomerId });
+
+        result.Map(data =>
+ {
+     model = Mapper.ToReplaceCommand(data);
+     return data;
+ }).Match(data =>
+ {
+     return data;
+
+ }, errors =>
+ {
+     Snackbar.Add(errors, MudBlazor.Severity.Error);
+     return null!;
+ });
+
+        // result.Map(data =>
+        // {
+        //     // model = Mapper.Map<ReplaceTrackingUnitCommand>(data);
+        //     // _model = Mapper.ToUpdateCommand > (data);
+        //     model = Mapper.ToReplaceCommand > (data);
+        //     // model.InstallerId = UserProfile.UserId;
+        //     return Task.CompletedTask;
+        //     // return data;
+
+        // }).Match(data =>
+        // {
+
+        // }, errors => { Snackbar.Add($"{errors}", Severity.Error); });
+
+
+
+    }
+    async Task Submit()
+    {
+        var succeed = false;
+        try
+        {
+            _submiting = true;
+            await _form!.Validate().ConfigureAwait(false);
+            if (!_form!.IsValid)
+                return;
+            var result = await Mediator.Send(model);
+
+            result.Match(
+data =>
+{
+  Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+  succeed = true;
+  return data;
+},
+errors =>
+{
+  Snackbar.Add(errors, MudBlazor.Severity.Error);
+  return -1;
+});
+     //        result.Match(
+     // data =>
+     // {
+     //     Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+     //     succeed = true;
+     // },
+     // errors =>
+     // {
+     //     Snackbar.Add(errors, MudBlazor.Severity.Error);
+     // });
+        }
+        finally
+        {
+            _submiting = false;
+            if (succeed) Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits");
+        }
+    }
+
+    async Task Cancel()
+    {
+        Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits");
+
+    }
+
+}

@@ -206,6 +206,7 @@
     }
     private async Task OnCreate()
     {
+        
         var command = new AddEditVehicleCommand();
         await ShowEditFormDialog(string.Format(ConstantString.CreateAnItem, L["Vehicle"]), command);
     }

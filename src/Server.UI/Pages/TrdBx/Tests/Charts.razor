@@ -1,0 +1,767 @@
+﻿@page "/pages/TrdBx/Charts"
+
+@using CleanArchitecture.Blazor.Application.Features.Charts.Caching
+@using CleanArchitecture.Blazor.Application.Features.Charts.Dto
+@using CleanArchitecture.Blazor.Application.Features.Charts.Queries.GetCharts
+@using CleanArchitecture.Blazor.Application.Features.Charts.Specifications;
+@using System.Globalization
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Tests.Components
+
+@inject IStringLocalizer<Charts> L
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.Charts.View)]
+
+<PageTitle>Data Analysis</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge">
+    <!-- Advanced Search -->
+    <AdvancedSearchCharts TRequest="Query" OnConditionChanged="ConditionChanged" />
+
+    <!-- Main Content -->
+    <MudCard Class="mt-3">
+        <MudCardContent Class="pa-4">
+            <!-- Header Controls -->
+            <MudGrid>
+                <MudStack Row Spacing="0" Class="flex-grow-1" Justify="Justify.SpaceBetween">
+                    <MudStack Row AlignItems="AlignItems.Start">
+                        <MudIcon Icon="@Icons.Material.Filled.Window" Size="Size.Large" />
+                        <MudStack>
+                            <MudEnumSelect Style="min-width:120px"
+                                           TEnum="ChartListView"
+                                           ValueChanged="OnChangedListView"
+                                           Value="Query.ListView"
+                                           Dense="true"
+                                           Label="@L["List View"]">
+                            </MudEnumSelect>
+                        </MudStack>
+                    </MudStack>
+                    <MudStack Spacing="0" AlignItems="AlignItems.End">
+                        <MudToolBar Dense WrapContent="true" Class="py-1 px-0">
+                            <MudLoadingButton Disabled="@_loading"
+                                              OnClick="@(() => OnRefresh())"
+                                              StartIcon="@Icons.Material.Outlined.Refresh"
+                                              Loading="@_loading">
+                                @ConstantString.Refresh
+                            </MudLoadingButton>
+                        </MudToolBar>
+                    </MudStack>
+                </MudStack>
+            </MudGrid>
+
+            <!-- Filter Controls -->
+            <MudGrid Class="mt-3">
+                <MudItem md="6">
+                    <MudSwitch Value="@_excludeZeroCount"
+                               ValueChanged="OnExcludeZeroCountChanged"
+                               Color="Color.Primary"
+                               Label="Exclude Zero Count Values">
+                    </MudSwitch>
+                </MudItem>
+                <MudItem md="6">
+                    <MudSwitch Value="@_useLogScale"
+                               ValueChanged="OnUseLogScaleChanged"
+                               Label="Use Logarithmic Scale"
+                               Color="Color.Primary">
+                    </MudSwitch>
+                </MudItem>
+            </MudGrid>
+
+            <!-- Loading Indicator -->
+            @if (_loading)
+            {
+                <MudGrid Class="mb-4">
+                    <MudItem xs="12" Class="text-center">
+                        <MudProgressCircular Indeterminate="true" Color="Color.Primary" />
+                        <MudText Class="ml-3">Loading data...</MudText>
+                    </MudItem>
+                </MudGrid>
+            }
+
+            <!-- Data Visualization -->
+            @if (FilteredTable?.Any() == true)
+            {
+                <MudGrid Class="mt-4">
+                    <MudItem xs="12">
+                        <!-- Chart Info -->
+                        <MudGrid Class="mb-3">
+                            <MudItem xs="12" Class="d-flex align-center justify-end">
+                                <MudText Typo="Typo.body2" Color="Color.Secondary">
+                                    Showing @FilteredTable.Count of @_originalTable.Count data points
+                                    @if (_excludeZeroCount)
+                                    {
+                                        <MudBadge Color="Color.Info" Size="Size.Small" Class="ml-2">
+                                            Zero values excluded
+                                        </MudBadge>
+                                    }
+                                </MudText>
+                            </MudItem>
+                        </MudGrid>
+
+                        <!-- Unit Impulse Visualization -->
+                        <MudGrid>
+                            <MudItem xs="12">
+                                <div class="impulse-container" style="position: relative; height: 240px; width: 100%; overflow-x: auto;">
+                                    <svg class="impulse-svg" style="width: 100%; height: 100%; min-width: @(Math.Max(800, FilteredTable.Count * 60))px;">
+                                        <!-- X-Axis -->
+                                        <line x1="50" y1="180" x2="@(FilteredTable.Count * 60 + 30)" y2="180" stroke="#666" stroke-width="2" />
+
+                                        <!-- Current Date Indicator Line -->
+                                        @if (ShowCurrentDateLine)
+                                        {
+                                            <g class="current-date-indicator">
+                                                <!-- Dashed vertical line -->
+                                                <line x1="@CurrentDateXPosition" y1="40"
+                                                      x2="@CurrentDateXPosition" y2="180"
+                                                      stroke="#4CAF50"
+                                                      stroke-width="2"
+                                                      stroke-dasharray="5,5"
+                                                      class="current-date-line" />
+
+                                                <!-- Current Date Label with background -->
+                                                <rect x="@(CurrentDateXPosition - 25)" y="15"
+                                                      width="50" height="20"
+                                                      fill="#4CAF50"
+                                                      rx="3"
+                                                      class="current-date-bg" />
+
+                                                <text x="@CurrentDateXPosition" y="30" text-anchor="middle"
+                                                      font-size="10" fill="white" font-weight="bold"
+                                                      class="current-date-label">
+                                                    Today
+                                                </text>
+
+                                                <!-- Today's date display -->
+                                                <text x="@CurrentDateXPosition" y="210" text-anchor="middle"
+                                                      font-size="9" fill="#4CAF50" font-weight="bold">
+                                                    @DateOnly.FromDateTime(DateTime.Now).ToString("dd-MM-yyyy")
+                                                </text>
+
+                                            </g>
+                                        }
+
+                                        <!-- Unit Impulses -->
+                                        @for (int i = 0; i < FilteredTable.Count; i++)
+                                        {
+                                            var item = FilteredTable[i];
+                                            var x = 80 + (i * 60);
+                                            var height = CalculateImpulseHeight((int)item.Count);
+                                            var isCurrent = i == _currentFilteredIndex;
+                                            var index = i;
+
+                                            <g @key="@($"{item.Date}_{item.Count}")" class="impulse-group" @onclick="@(() => OnImpulseClick(index))" style="cursor: pointer;">
+                                                <!-- Impulse Line -->
+                                                <line x1="@x" y1="180"
+                                                      x2="@x" y2="@(180 - height)"
+                                                      stroke="@(isCurrent ? "#ff4444" : "#1976d2")"
+                                                      stroke-width="@(isCurrent ? "3" : "2")"
+                                                      class="impulse-line" />
+
+                                                <!-- Impulse Head -->
+                                                <circle cx="@x" cy="@(180 - height)"
+                                                        r="@(isCurrent ? "5" : "3")"
+                                                        fill="@(isCurrent ? "#ff4444" : "#1976d2")"
+                                                        class="impulse-head" />
+
+                                                <!-- X-Axis Label -->
+                                                <text x="@x" y="195" text-anchor="middle"
+                                                      font-size="10" fill="#666" class="x-axis-label">
+                                                    @FormatDateLabel(item.Date)
+                                                </text>
+
+                                                <!-- Value Label -->
+                                                <text x="@x" y="@(180 - height - 8)" text-anchor="middle"
+                                                      font-size="10" fill="@(isCurrent ? "#ff4444" : "#1976d2")"
+                                                      class="value-label">
+                                                    @FormatValueLabel((int)item.Count)
+                                                </text>
+                                            </g>
+                                        }
+                                    </svg>
+                                </div>
+                            </MudItem>
+                        </MudGrid>
+
+                        <!-- Current Item Details -->
+                        @if (_currentItem != null)
+                        {
+                            <MudGrid Class="mt-4">
+                                <MudItem xs="12">
+                                    <MudCard>
+                                        <MudCardContent>
+                                            <MudText Typo="Typo.h6" Class="mb-3">Current Data Point Details</MudText>
+                                            <MudGrid>
+                                                <MudItem xs="12" md="6">
+                                                    <MudTextField Label="Date"
+                                                                  Variant="Variant.Outlined"
+                                                                  Value="@_currentItem.Date.ToString("yyyy-MM-dd")"
+                                                                  ReadOnly="true" />
+                                                </MudItem>
+                                                <MudItem xs="12" md="6">
+                                                    <MudTextField Label="Count"
+                                                                  Variant="Variant.Outlined"
+                                                                  Value="@_currentItem.Count.ToString("N0")"
+                                                                  ReadOnly="true" />
+                                                </MudItem>
+                                            </MudGrid>
+                                        </MudCardContent>
+                                    </MudCard>
+                                </MudItem>
+                            </MudGrid>
+                        }
+
+                        <!-- Navigation Controls -->
+                        <MudStack Spacing="2" AlignItems="AlignItems.Center" Class="mt-4">
+                            <MudText Typo="Typo.h6">Navigate Data Points</MudText>
+
+                            <MudStack Row Spacing="2" AlignItems="AlignItems.Center" Justify="Justify.Center">
+                                <MudButton Variant="Variant.Filled"
+                                           Color="Color.Primary"
+                                           OnClick="NavigatePrevious"
+                                           Disabled="_currentFilteredIndex <= 0"
+                                           StartIcon="@Icons.Material.Filled.ChevronLeft" />
+
+                                <MudSlider T="int"
+                                           Min="0"
+                                           Max="@Math.Max(0, FilteredTable.Count - 1)"
+                                           Value="@CurrentFilteredIndex"
+                                           ValueChanged="OnSliderValueChanged"
+                                           Immediate="true"
+                                           Class="mx-4"
+                                           Style="min-width: 300px;" />
+
+                                <MudButton Variant="Variant.Filled"
+                                           Color="Color.Primary"
+                                           OnClick="NavigateNext"
+                                           Disabled="_currentFilteredIndex >= FilteredTable.Count - 1"
+                                           StartIcon="@Icons.Material.Filled.ChevronRight" />
+                            </MudStack>
+
+                            <MudText Typo="Typo.body2" Class="mt-2">
+                                Point @(_currentFilteredIndex + 1) of @FilteredTable.Count •
+                                @(_currentItem?.Date.ToString("MMM dd, yyyy") ?? "No data") •
+                                Count: @(_currentItem?.Count.ToString("N0") ?? "0")
+                            </MudText>
+                        </MudStack>
+                    </MudItem>
+                </MudGrid>
+            }
+
+            <!-- Empty State -->
+            @if (!_loading && FilteredTable?.Any() != true)
+            {
+                <MudGrid>
+                    <MudItem xs="12" Class="text-center py-8">
+                        <MudIcon Icon="Icons.Material.Filled.BarChart" Size="Size.Large" Color="Color.Secondary" />
+                        <MudText Typo="Typo.h6" Class="mt-2" Color="Color.Secondary">
+                            @if (_originalTable.Any())
+                            {
+                                <span>
+                                    No data available after filtering.
+                                    <MudButton Variant="Variant.Text"
+                                               Color="Color.Primary"
+                                               OnClick="ToggleExcludeZeroCount"
+                                               Class="text-lowercase p-0 ml-1">
+                                        Include zero values?
+                                    </MudButton>
+                                </span>
+                            }
+                            else
+                            {
+                                <span>No data available for the selected criteria</span>
+                            }
+                        </MudText>
+                        <MudButton Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   OnClick="OnRefresh"
+                                   Class="mt-3">
+                            <MudIcon Icon="Icons.Material.Filled.Refresh" Class="mr-2" />
+                            Refresh Data
+                        </MudButton>
+                    </MudItem>
+                </MudGrid>
+            }
+        </MudCardContent>
+    </MudCard>
+</MudContainer>
+
+<style>
+    .impulse-container {
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        background: #fafafa;
+    }
+
+    .impulse-line {
+        transition: all 0.2s ease;
+    }
+
+    .impulse-head {
+        transition: all 0.2s ease;
+    }
+
+    .impulse-group:hover .impulse-line {
+        stroke: #ff6b35;
+        stroke-width: 3;
+    }
+
+    .impulse-group:hover .impulse-head {
+        fill: #ff6b35;
+        r: 5;
+    }
+
+    .x-axis-label {
+        transition: all 0.2s ease;
+    }
+
+    .impulse-group:hover .x-axis-label {
+        fill: #ff6b35;
+        font-weight: bold;
+    }
+
+    .value-label {
+        opacity: 0.8;
+        transition: all 0.2s ease;
+    }
+
+    .impulse-group:hover .value-label {
+        opacity: 1;
+        font-weight: bold;
+    }
+
+    /* Current date line styles */
+    .current-date-line {
+        animation: pulse 2s infinite;
+    }
+
+    .current-date-bg {
+        opacity: 0.9;
+        transition: all 0.2s ease;
+    }
+
+    .current-date-label {
+        font-size: 10px;
+    }
+
+    .current-date-indicator:hover .current-date-line {
+        stroke-width: 3;
+        stroke-dasharray: 3,3;
+    }
+
+    .current-date-indicator:hover .current-date-bg {
+        opacity: 1;
+    }
+
+    @@keyframes pulse {
+        0% {
+            opacity: 0.7;
+        }
+
+        50% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0.7;
+        }
+    }
+</style>
+
+@code {
+    private List<ChartDto> _originalTable = new();
+    private List<ChartDto> _filteredTable = new();
+    private GetChartsQuery Query { get; set; } = new();
+    private bool _loading = false;
+    private bool _useLogScale = false;
+    private bool _excludeZeroCount = false;
+
+    private int _currentFilteredIndex = 0;
+    private ChartDto? _currentItem = null;
+    private CancellationTokenSource _refreshCts = new();
+
+    // Current date indicator properties
+    private bool ShowCurrentDateLine => CurrentDateXPosition > 0;
+    private double CurrentDateXPosition { get; set; }
+    private bool IsCurrentDateBeforeData { get; set; }
+    private bool IsCurrentDateAfterData { get; set; }
+
+    // Computed property for filtered table
+    private List<ChartDto> FilteredTable => _filteredTable;
+
+    // Reactive property with event
+    private EventCallback<int> CurrentFilteredIndexChanged { get; set; }
+
+    private int CurrentFilteredIndex
+    {
+        get => _currentFilteredIndex;
+        set
+        {
+            if (_currentFilteredIndex != value && value >= 0 && value < FilteredTable.Count)
+            {
+                _currentFilteredIndex = value;
+                UpdateCurrentItem();
+                if (CurrentFilteredIndexChanged.HasDelegate)
+                {
+                    CurrentFilteredIndexChanged.InvokeAsync(_currentFilteredIndex);
+                }
+            }
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDataAsync();
+        CalculateCurrentDatePosition();
+    }
+
+    protected override void OnParametersSet()
+    {
+        CalculateCurrentDatePosition();
+    }
+
+    public void Dispose()
+    {
+        _refreshCts?.Cancel();
+        _refreshCts?.Dispose();
+    }
+
+    #region Event Handlers
+    private void ConditionChanged(string s) => _ = RefreshDataAsync();
+
+    private async Task OnChangedListView(ChartListView listView)
+    {
+        Query.ListView = listView;
+        await LoadDataAsync();
+    }
+
+    private async Task OnRefresh() => await RefreshDataAsync();
+
+    private void OnSliderValueChanged(int newIndex) => SetCurrentIndex(newIndex);
+
+    private void OnImpulseClick(int index)
+    {
+        if (index >= 0 && index < FilteredTable.Count)
+        {
+            SetCurrentIndex(index);
+        }
+    }
+
+    private EventCallback<bool> OnExcludeZeroCountChanged =>
+        EventCallback.Factory.Create<bool>(this, async (newValue) =>
+        {
+            if (_excludeZeroCount != newValue)
+            {
+                _excludeZeroCount = newValue;
+                await ApplyFilter();
+            }
+        });
+
+    private EventCallback<bool> OnUseLogScaleChanged =>
+        EventCallback.Factory.Create<bool>(this, async (newValue) =>
+        {
+            if (_useLogScale != newValue)
+            {
+                _useLogScale = newValue;
+                await InvokeAsync(StateHasChanged);
+            }
+        });
+
+    // Handle exclude zero count switch change
+    private async Task ToggleExcludeZeroCount()
+    {
+        _excludeZeroCount = !_excludeZeroCount;
+        await ApplyFilter();
+    }
+
+    private void NavigatePrevious() => SetCurrentIndex(CurrentFilteredIndex - 1);
+
+    private void NavigateNext() => SetCurrentIndex(CurrentFilteredIndex + 1);
+
+    // Centralized method for setting current index
+    private void SetCurrentIndex(int newIndex)
+    {
+        if (newIndex >= 0 && newIndex < FilteredTable.Count && newIndex != CurrentFilteredIndex)
+        {
+            CurrentFilteredIndex = newIndex;
+        }
+    }
+    #endregion
+
+    #region Data Operations
+    private async Task LoadDataAsync()
+    {
+        if (_loading) return;
+
+        _loading = true;
+        StateHasChanged();
+
+        try
+        {
+            var result = await Mediator.Send(Query).ConfigureAwait(false);
+            _originalTable = result?.ToList() ?? new List<ChartDto>();
+
+            await ApplyFilter(); // Apply initial filter after loading data
+        }
+        catch (OperationCanceledException)
+        {
+            // Ignore cancellation
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading data: {ex.Message}");
+            _originalTable = new List<ChartDto>();
+            _filteredTable = new List<ChartDto>();
+            _currentItem = null;
+        }
+        finally
+        {
+            _loading = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task ApplyFilter()
+    {
+        if (_excludeZeroCount)
+        {
+            _filteredTable = _originalTable.Where(x => x.Count > 0).ToList();
+        }
+        else
+        {
+            _filteredTable = _originalTable.ToList();
+        }
+
+        // Reset current index after filtering
+        if (_filteredTable.Any())
+        {
+            CurrentFilteredIndex = 0;
+        }
+        else
+        {
+            _currentFilteredIndex = 0;
+            _currentItem = null;
+        }
+
+        // Recalculate current date position after filtering
+        CalculateCurrentDatePosition();
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task RefreshDataAsync()
+    {
+        _refreshCts?.Cancel();
+        _refreshCts = new CancellationTokenSource();
+
+        ChartCacheKey.Refresh();
+        await LoadDataAsync();
+    }
+    #endregion
+
+    #region Current Date Indicator Methods
+    private void CalculateCurrentDatePosition()
+    {
+        if (FilteredTable == null || !FilteredTable.Any())
+        {
+            CurrentDateXPosition = 0;
+            IsCurrentDateBeforeData = false;
+            IsCurrentDateAfterData = false;
+            return;
+        }
+
+        var today = DateOnly.FromDateTime(DateTime.Now);
+        IsCurrentDateBeforeData = false;
+        IsCurrentDateAfterData = false;
+
+        // Get the actual data date range
+        var dataMinDate = FilteredTable.Min(x => x.Date);
+        var dataMaxDate = FilteredTable.Max(x => x.Date);
+
+        // Calculate total chart width
+        var totalWidth = Math.Max(800, FilteredTable.Count * 60);
+        var chartStartX = 50;
+        var chartEndX = totalWidth - 30;
+
+        // Case 1: fromDate is specified and greater than current date
+        if (Query.FromDate.HasValue && Query.FromDate.Value > today)
+        {
+            // Position current date line before the first impulse (left edge)
+            CurrentDateXPosition = chartStartX;
+            IsCurrentDateBeforeData = true;
+            return;
+        }
+
+        // Case 2: toDate is specified and less than current date
+        if (Query.ToDate.HasValue && Query.ToDate.Value < today)
+        {
+            // Position current date line after the last impulse (right edge)
+            CurrentDateXPosition = chartEndX;
+            IsCurrentDateAfterData = true;
+            return;
+        }
+
+        // Case 3: Current date is before the data range (but within query range)
+        if (today < dataMinDate)
+        {
+            // Position between left edge and first data point
+            var firstDataX = 80; // First impulse X position
+            CurrentDateXPosition = chartStartX + ((firstDataX - chartStartX) / 2);
+            IsCurrentDateBeforeData = true;
+            return;
+        }
+
+        // Case 4: Current date is after the data range (but within query range)
+        if (today > dataMaxDate)
+        {
+            // Position between last data point and right edge
+            var lastDataX = 80 + ((FilteredTable.Count - 1) * 60); // Last impulse X position
+            CurrentDateXPosition = lastDataX + ((chartEndX - lastDataX) / 2);
+            IsCurrentDateAfterData = true;
+            return;
+        }
+
+        // Case 5: Current date is within the data range - calculate proportional position
+        var totalTimeSpan = dataMaxDate.ToDateTime(TimeOnly.MinValue) - dataMinDate.ToDateTime(TimeOnly.MinValue);
+        var daysFromStart = today.ToDateTime(TimeOnly.MinValue) - dataMinDate.ToDateTime(TimeOnly.MinValue);
+        var percentage = daysFromStart.TotalDays / totalTimeSpan.TotalDays;
+        var availableWidth = chartEndX - chartStartX;
+
+        if (totalTimeSpan.TotalDays > 0)
+        {
+            CurrentDateXPosition = chartStartX + (percentage * availableWidth);
+        }
+        else
+        {
+            // If all data points are on the same day, center the line
+            CurrentDateXPosition = chartStartX + (availableWidth / 2);
+        }
+    }
+
+    // Alternative simpler method that always shows current date line
+    private void CalculateCurrentDatePositionAlwaysVisible()
+    {
+        if (FilteredTable == null || !FilteredTable.Any())
+        {
+            CurrentDateXPosition = 0;
+            IsCurrentDateBeforeData = false;
+            IsCurrentDateAfterData = false;
+            return;
+        }
+
+        var today = DateOnly.FromDateTime(DateTime.Now);
+        IsCurrentDateBeforeData = false;
+        IsCurrentDateAfterData = false;
+
+        // Calculate total chart width
+        var totalWidth = Math.Max(800, FilteredTable.Count * 60);
+        var chartStartX = 50;
+        var chartEndX = totalWidth - 30;
+        var availableWidth = chartEndX - chartStartX;
+
+        // Determine the reference date range for positioning
+        DateOnly refMinDate, refMaxDate;
+
+        if (Query.FromDate.HasValue && Query.ToDate.HasValue)
+        {
+            // Use query date range if both are specified
+            refMinDate = Query.FromDate.Value;
+            refMaxDate = Query.ToDate.Value;
+        }
+        else if (Query.FromDate.HasValue)
+        {
+            // Use fromDate and data max date
+            refMinDate = Query.FromDate.Value;
+            refMaxDate = FilteredTable.Max(x => x.Date);
+            if (Query.ToDate.HasValue) refMaxDate = Query.ToDate.Value > refMaxDate ? Query.ToDate.Value : refMaxDate;
+        }
+        else if (Query.ToDate.HasValue)
+        {
+            // Use data min date and toDate
+            refMinDate = FilteredTable.Min(x => x.Date);
+            refMaxDate = Query.ToDate.Value;
+            if (Query.FromDate.HasValue) refMinDate = Query.FromDate.Value < refMinDate ? Query.FromDate.Value : refMinDate;
+        }
+        else
+        {
+            // Use data date range
+            refMinDate = FilteredTable.Min(x => x.Date);
+            refMaxDate = FilteredTable.Max(x => x.Date);
+        }
+
+        // Calculate position based on reference date range
+        var totalTimeSpan = refMaxDate.ToDateTime(TimeOnly.MinValue) - refMinDate.ToDateTime(TimeOnly.MinValue);
+
+        if (totalTimeSpan.TotalDays > 0)
+        {
+            var daysFromStart = today.ToDateTime(TimeOnly.MinValue) - refMinDate.ToDateTime(TimeOnly.MinValue);
+            var percentage = Math.Max(0, Math.Min(1, daysFromStart.TotalDays / totalTimeSpan.TotalDays));
+            
+            CurrentDateXPosition = chartStartX + (percentage * availableWidth);
+
+            // Set flags for edge cases
+            IsCurrentDateBeforeData = today < FilteredTable.Min(x => x.Date);
+            IsCurrentDateAfterData = today > FilteredTable.Max(x => x.Date);
+        }
+        else
+        {
+            // If date range is zero, center the line
+            CurrentDateXPosition = chartStartX + (availableWidth / 2);
+        }
+
+        // Ensure the line is always visible within the chart bounds
+        CurrentDateXPosition = Math.Max(chartStartX, Math.Min(chartEndX, CurrentDateXPosition));
+    }
+    #endregion
+
+    #region Visualization Helpers
+    private double CalculateImpulseHeight(int countValue)
+    {
+        if (FilteredTable == null || !FilteredTable.Any()) return 0;
+
+        var maxCountValue = FilteredTable.Max(x => x.Count);
+        var minCountValue = FilteredTable.Min(x => x.Count);
+
+        if (maxCountValue == minCountValue) return 50; // Minimum visible height
+
+        try
+        {
+            if (_useLogScale && countValue > 0)
+            {
+                var logCountValue = Math.Log10(countValue);
+                var logMax = Math.Log10(maxCountValue);
+                var logMin = Math.Log10(Math.Max(1, minCountValue)); // Avoid log(0)
+
+                var normalized = (logCountValue - logMin) / (logMax - logMin);
+                return Math.Max(10, normalized * 140); // Ensure minimum height
+            }
+            else
+            {
+                var normalized = (double)(countValue - minCountValue) / (maxCountValue - minCountValue);
+                return Math.Max(10, normalized * 140);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error calculating impulse height: {ex.Message}");
+            return 50;
+        }
+    }
+
+    private string FormatValueLabel(int countValue)
+    {
+        return countValue.ToString("N0");
+    }
+
+    private string FormatDateLabel(DateOnly date)
+    {
+        return date.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture);
+    }
+    #endregion
+
+    #region Helper Methods
+    private void UpdateCurrentItem()
+    {
+        _currentItem = (CurrentFilteredIndex >= 0 && CurrentFilteredIndex < FilteredTable.Count)
+            ? FilteredTable[CurrentFilteredIndex]
+            : null;
+    }
+    #endregion
+}

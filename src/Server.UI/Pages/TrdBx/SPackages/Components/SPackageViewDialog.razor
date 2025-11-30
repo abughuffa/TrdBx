@@ -1,0 +1,37 @@
+﻿
+@using CleanArchitecture.Blazor.Application.Features.SPackages.DTOs
+
+@inherits MudComponentBase
+@inject IStringLocalizer<SPackages> L
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.SPackages.View)]
+
+@* <PageTitle>@Title</PageTitle> *@
+
+<MudDialog>
+    <DialogContent>
+        <MudForm Model="@model">
+            <MudGrid>
+                <MudItem md="12">
+                    <MudTextField ReadOnly=true Label="@L[model.GetMemberDescription(x => x.Name)]" Value="model.Name"></MudTextField>
+                </MudItem>
+            </MudGrid>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">@ConstantString.Close</MudButton>
+    </DialogActions>
+</MudDialog>
+    @code {
+    // public string? Title { get; private set; }
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;
+    [Parameter] public SPackageDto model { get; set; } = null!;
+    protected override Task OnInitializedAsync()
+    {
+        // Title = L["View SPackage"];
+        return Task.CompletedTask;
+
+    }
+
+
+    void Cancel() => MudDialog.Cancel();
+}

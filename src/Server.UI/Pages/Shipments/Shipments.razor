@@ -7,7 +7,7 @@
 @using CleanArchitecture.Blazor.Application.Features.Shipments.Specifications
 @using CleanArchitecture.Blazor.Application.Features.Shipments.Commands.Delete
 @using CleanArchitecture.Blazor.Application.Features.Shipments.Queries.Pagination
-@using CleanArchitecture.Blazor.Application.Features.Shipments.Commands.AddEdit
+@* @using CleanArchitecture.Blazor.Application.Features.Shipments.Commands.AddEdit *@
 @using CleanArchitecture.Blazor.Server.UI.Pages.Shipments.Components
 
 @inject IStringLocalizer<Shipments> L
@@ -52,10 +52,10 @@
                         </MudButton>
                     }
                     <MudMenu TransformOrigin="Origin.BottomRight" AnchorOrigin="Origin.BottomRight" EndIcon="@Icons.Material.Filled.MoreVert" Label="@ConstantString.More">
-                        @if (_canCreate)
+             @*            @if (_canCreate)
                         {
                             <MudMenuItem Disabled="@(_selectedItems.Count != 1)" OnClick="OnClone">@ConstantString.Clone</MudMenuItem>
-                        }
+                        } *@
                         @if (_canDelete)
                         {
                             <MudMenuItem Disabled="@(!(_selectedItems.Count > 0))"
@@ -200,22 +200,22 @@
         Query.Keyword = string.Empty;
         await _table.ReloadServerData();
     }
-    private async Task ShowEditFormDialog(string title, AddEditShipmentCommand command)
-    {
-        var parameters = new DialogParameters<ShipmentFormDialog>
-            {
-                { x=>x.model,command },
-            };
-        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
-        var dialog = DialogService.Show<ShipmentFormDialog>(title, parameters, options);
-        var state = await dialog.Result;
+    // private async Task ShowEditFormDialog(string title, AddEditShipmentCommand command)
+    // {
+    //     var parameters = new DialogParameters<ShipmentFormDialog>
+    //         {
+    //             { x=>x.model,command },
+    //         };
+    //     var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+    //     var dialog = DialogService.Show<ShipmentFormDialog>(title, parameters, options);
+    //     var state = await dialog.Result;
 
-        if (state != null && !state.Canceled)
-        {
-            await _table.ReloadServerData();
-            _selectedItems.Clear();
-        }
-    }
+    //     if (state != null && !state.Canceled)
+    //     {
+    //         await _table.ReloadServerData();
+    //         _selectedItems.Clear();
+    //     }
+    // }
     private void OnView(ShipmentDto dto)
     {
         Navigation.NavigateTo($"/pages/Shipments/view/{dto.Id}");
@@ -226,12 +226,12 @@
         // var command = new AddEditShipmentCommand();
         // await ShowEditFormDialog(string.Format(ConstantString.CreateAnItem, L["Shipment"]), command);
     }
-    private async Task OnClone()
-    {
-        var dto = _selectedItems.First();
-        var command = ShipmentMapper.CloneFromDto(dto);
-        await ShowEditFormDialog(string.Format(ConstantString.CreateAnItem, L["Shipment"]), command);
-    }
+    // private async Task OnClone()
+    // {
+    //     var dto = _selectedItems.First();
+    //     // var command = ShipmentMapper.CloneFromDto(dto);
+    //     await ShowEditFormDialog(string.Format(ConstantString.CreateAnItem, L["Shipment"]), command);
+    // }
     private async Task OnEdit(ShipmentDto dto)
     {
         Navigation.NavigateTo($"/pages/Shipments/edit/{dto.Id}");
