@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,11 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Picklist" xml:space="preserve">
+    <value>選択リスト</value>
+  </data>
+  <data name="Picklist Set" xml:space="preserve">
+    <value>選択リスト セット</value>
+  </data>
   <data name="Create a picklist" xml:space="preserve">
     <value>選択リストを作成</value>
   </data>
-  <data name="Description" xml:space="preserve">
-    <value>説明</value>
+  <data name="Search by picklist" xml:space="preserve">
+    <value>選択リストで検索</value>
   </data>
   <data name="Id" xml:space="preserve">
     <value>ID</value>
@@ -129,31 +135,25 @@
   <data name="Name" xml:space="preserve">
     <value>名前</value>
   </data>
-  <data name="Name is required!" xml:space="preserve">
-    <value>名前は必須です!</value>
-  </data>
-  <data name="Picklist" xml:space="preserve">
-    <value>選択リスト</value>
-  </data>
-  <data name="Picklist Set" xml:space="preserve">
-    <value>選択リスト セット</value>
-  </data>
-  <data name="Search" xml:space="preserve">
-    <value>検索</value>
-  </data>
-  <data name="Search by picklist" xml:space="preserve">
-    <value>選択リストで検索</value>
+  <data name="Value" xml:space="preserve">
+    <value>値</value>
   </data>
   <data name="Text" xml:space="preserve">
     <value>テキスト</value>
   </data>
-  <data name="Text is required!" xml:space="preserve">
-    <value>テキストは必須です!</value>
+  <data name="Description" xml:space="preserve">
+    <value>説明</value>
   </data>
-  <data name="Value" xml:space="preserve">
-    <value>値</value>
+  <data name="Search" xml:space="preserve">
+    <value>検索</value>
+  </data>
+  <data name="Name is required!" xml:space="preserve">
+    <value>名前は必須です!</value>
   </data>
   <data name="Value is required!" xml:space="preserve">
     <value>値は必須です!</value>
+  </data>
+  <data name="Text is required!" xml:space="preserve">
+    <value>テキストは必須です!</value>
   </data>
 </root>

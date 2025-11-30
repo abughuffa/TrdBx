@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,11 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Picklist" xml:space="preserve">
+    <value>Liste de sélection</value>
+  </data>
+  <data name="Picklist Set" xml:space="preserve">
+    <value>Ensemble de listes de sélection</value>
+  </data>
   <data name="Create a picklist" xml:space="preserve">
     <value>Créer une liste de sélection</value>
   </data>
-  <data name="Description" xml:space="preserve">
-    <value>Description</value>
+  <data name="Search by picklist" xml:space="preserve">
+    <value>Recherche par liste de sélection</value>
   </data>
   <data name="Id" xml:space="preserve">
     <value>Id</value>
@@ -129,31 +135,25 @@
   <data name="Name" xml:space="preserve">
     <value>Nom</value>
   </data>
-  <data name="Name is required!" xml:space="preserve">
-    <value>Le nom est obligatoire !</value>
-  </data>
-  <data name="Picklist" xml:space="preserve">
-    <value>Liste de sélection</value>
-  </data>
-  <data name="Picklist Set" xml:space="preserve">
-    <value>Ensemble de listes de sélection</value>
-  </data>
-  <data name="Search" xml:space="preserve">
-    <value>Recherche</value>
-  </data>
-  <data name="Search by picklist" xml:space="preserve">
-    <value>Recherche par liste de sélection</value>
+  <data name="Value" xml:space="preserve">
+    <value>Valeur</value>
   </data>
   <data name="Text" xml:space="preserve">
     <value>Texte</value>
   </data>
-  <data name="Text is required!" xml:space="preserve">
-    <value>Le texte est obligatoire !</value>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
   </data>
-  <data name="Value" xml:space="preserve">
-    <value>Valeur</value>
+  <data name="Search" xml:space="preserve">
+    <value>Recherche</value>
+  </data>
+  <data name="Name is required!" xml:space="preserve">
+    <value>Le nom est obligatoire !</value>
   </data>
   <data name="Value is required!" xml:space="preserve">
     <value>La valeur est obligatoire !</value>
+  </data>
+  <data name="Text is required!" xml:space="preserve">
+    <value>Le texte est obligatoire !</value>
   </data>
 </root>
