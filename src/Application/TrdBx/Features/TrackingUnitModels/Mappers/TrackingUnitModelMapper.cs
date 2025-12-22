@@ -12,6 +12,7 @@ namespace CleanArchitecture.Blazor.Application.Features.TrackingUnitModels.Mappe
 public static partial class Mapper
 {
     public static partial TrackingUnitModelDto ToDto(TrackingUnitModel source);
+
     public static partial TrackingUnitModel FromDto(TrackingUnitModelDto dto);
     public static partial TrackingUnitModel FromEditCommand(AddEditTrackingUnitModelCommand command);
     public static partial AddEditTrackingUnitModelCommand ToEditCommand(TrackingUnitModelDto dto);

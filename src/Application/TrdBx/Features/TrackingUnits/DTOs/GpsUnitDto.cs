@@ -20,7 +20,7 @@ public class TrackingUnitDto
     [Description("CustomerId")] public int? CustomerId { get; set; }
     [Description("IsOnWialon")] public bool IsOnWialon { get; set; }
     [Description("WStatus")] public WStatus WStatus { get; set; }
-    [Description("WUnitId")] public int? WUnitId { get; set; }
+    [Description("WunitId")] public int? WUnitId { get; set; }
     [Description("OldId")] public int? OldId { get; set; }
 
 

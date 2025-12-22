@@ -4,12 +4,7 @@
 using CleanArchitecture.Blazor.Application.Features.LibyanaSimCards.Caching;
 using CleanArchitecture.Blazor.Application.Features.LibyanaSimCards.DTOs;
 using CleanArchitecture.Blazor.Application.Features.LibyanaSimCards.Mappers;
-using CleanArchitecture.Blazor.Application.Features.TestCases.DeactivateTestCases.DTOs;
-using CleanArchitecture.Blazor.Domain.Entities;
 using CleanArchitecture.Blazor.Domain.Enums;
-using DocumentFormat.OpenXml.Office2013.Drawing.ChartStyle;
-using DocumentFormat.OpenXml.Wordprocessing;
-using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitecture.Blazor.Application.Features.LibyanaSimCards.Commands.Import;
 
@@ -86,7 +81,8 @@ public class ImportLibyanaSimCardsCommandHandler :
                     var x when x == "One-Way Block"  => SLStatus.OneWayBlock, //	G	
                     var x when x == "Two-Way Block" => SLStatus.TwoWayBlock, //	H
                     var x when x == "Frozen Block" => SLStatus.Frozen, //	H+G
-                    _ => SLStatus.Null // Default case when none match
+                    var x when x == "Inactive" => SLStatus.Inactive, //	H+G
+                    _ => null // Default case when none match
                 } },
 { _localizer[_dto.GetMemberDescription(x=>x.Balance)], (row, item) => item.Balance = decimal.Parse(row[_localizer[_dto.GetMemberDescription(x=>x.Balance)]].ToString())},
 { _localizer[_dto.GetMemberDescription(x=>x.BExDate)], (row, item) => item.BExDate = (DateTime.TryParse(row[_localizer[_dto.GetMemberDescription(x=>x.BExDate)]].ToString(), out DateTime result) == true ? result : null)},
@@ -94,7 +90,7 @@ public class ImportLibyanaSimCardsCommandHandler :
 { _localizer[_dto.GetMemberDescription(x=>x.Package)], (row, item) => item.Package = row[_localizer[_dto.GetMemberDescription(x=>x.Package)]].ToString() },
 { _localizer[_dto.GetMemberDescription(x=>x.DExDate)], (row, item) => item.DExDate = (DateTime.TryParse(row[_localizer[_dto.GetMemberDescription(x=>x.DExDate)]].ToString(), out DateTime result) == true ? result : null)},
 { _localizer[_dto.GetMemberDescription(x=>x.DataOffer)], (row, item) => item.DataOffer = string.IsNullOrEmpty(row[_localizer[_dto.GetMemberDescription(x=>x.DataOffer)]].ToString()) ? null : row[_localizer[_dto.GetMemberDescription(x=>x.DataOffer)]].ToString() },
-{ _localizer[_dto.GetMemberDescription(x=>x.DOExpired)], (row, item) => item.DOExpired = (DateTime.TryParse(row[_localizer[_dto.GetMemberDescription(x=>x.DOExpired)]].ToString(), out DateTime result) == true ? result : null)},
+{ _localizer[_dto.GetMemberDescription(x=>x.DOExpired)], (row, item) => item.DOExpired = (DateTime.TryParse(row[_localizer[_dto.GetMemberDescription(x=>x.DOExpired)]].ToString(), out DateTime result) == true ? result : null)}
             }, _localizer[_dto.GetClassDescription()]);
         if (result.Succeeded && result.Data is not null)
 

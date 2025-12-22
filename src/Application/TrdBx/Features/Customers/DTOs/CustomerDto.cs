@@ -45,6 +45,12 @@ public class CustomerDto
 
     [Description("Parent")] public string? Parent { get; set; }
 
+
+    [Description("ParentChild")] public string? ParentChild => Parent is null ? Name : $"{Parent} - {Name}";
+
+
+
+
     //private class Mapping : Profile
     //{
     //    public Mapping()
@@ -62,4 +68,6 @@ public class CustomerDto
     //}
 
 }
+
+
 

@@ -11,10 +11,11 @@ public enum InsMode
 }
 public enum WStatus
 {
-    [Description("Null")] Null = 0,
+    //[Description("Null")] Null = 0,
+    [Description("All")] All = 0,
     [Description("Active")] Active = 1,
     [Description("Inactive")] Inactive = 2,
-    [Description("All")] All = 999,
+    
 }
 public enum UStatus
 {
@@ -28,7 +29,7 @@ public enum UStatus
     [Description("Used")] Used = 7,
     [Description("Damaged")] Damaged = 8,
     [Description("Lost")] Lost = 9,
-    [Description("Null")] Null = 99,
+    //[Description("Null")] Null = 99,
     [Description("All")] All = 999,
 
 }
@@ -60,7 +61,9 @@ public enum SLStatus
     [Description("One-Way Block")] OneWayBlock = 1,
     [Description("Two-Way Block")] TwoWayBlock = 2,
     [Description("Frozen Block")] Frozen = 3,
-    [Description("Null")] Null = 99,
+    [Description("Inactive")] Inactive = 4,
+    
+    //[Description("Null")] Null = 99,
     [Description("All")] All = 999
 
 }

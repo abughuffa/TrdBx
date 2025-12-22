@@ -1,4 +1,5 @@
 ﻿using CleanArchitecture.Blazor.Domain.Entities;
+using CleanArchitecture.Blazor.Domain.Enums;
 
 namespace CleanArchitecture.Blazor.Application.Features.TrackingUnits.Specifications;
 #nullable disable warnings
@@ -15,7 +16,8 @@ public class TrackingUnitAdvancedSpecification : Specification<TrackingUnit>
 
         Query.Where(q => q.SNo != null)
              .Where(filter.Keyword,!string.IsNullOrEmpty(filter.Keyword))
-             //.Where(q => q.CreatedBy == filter.CurrentUser.UserId, filter.ListView == TrackingUnitListView.My && filter.CurrentUser is not null)
+             .Where(x => x.CustomerId.Equals(filter.CustomerId), !(filter.CustomerId.Equals(0) || filter.CustomerId.Equals(null)))
+             .Where(x => x.UStatus == filter.UStatus, !filter.UStatus.Equals(UStatus.All))
              .Where(x => x.Created >= todayrange.Start && x.Created < todayrange.End.AddDays(1), filter.ListView == TrackingUnitListView.TODAY)
              .Where(x => x.Created >= last30daysrange.Start, filter.ListView == TrackingUnitListView.LAST_30_DAYS);
        

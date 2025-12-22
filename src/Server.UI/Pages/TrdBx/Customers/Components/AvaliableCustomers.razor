@@ -19,7 +19,7 @@
             <MudSelectItem Value=0>Select a Customer</MudSelectItem>
             @foreach (var doc1type in customers)
             {
-                <MudSelectItem Value="doc1type.Id">@doc1type.Name</MudSelectItem>
+                <MudSelectItem Value="doc1type.Id">@doc1type.ParentChild</MudSelectItem>
             }
         </MudSelect>
     </MudItem>
@@ -34,6 +34,8 @@
     [Parameter] public bool Clearable { get; set; }
 
     [Parameter] public bool Disabled { get; set; } = false;
+
+    [Parameter] public bool WithAdvParents { get; set; }
 
     [EditorRequired] [Parameter] public EventCallback<string> OnConditionChanged { get; set; }
 
@@ -55,7 +57,7 @@
 
     private IEnumerable<CustomerDto> customers = default!;
 
-    private GetAvaliableCustomersQuery GetAvaliableCustomersQuery { get; set; } = new();
+    private GetAvaliableCustomersQuery GetAvaliableCustomersQuery;
 
     public CustomerDto SelectedCustomer { get; set; } = null;
 
@@ -67,6 +69,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        GetAvaliableCustomersQuery = new GetAvaliableCustomersQuery() { WithAdvParents = WithAdvParents };
         customers = await LoadAvaliableCustomers();
     }
 

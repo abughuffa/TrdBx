@@ -10,6 +10,7 @@
 @using CleanArchitecture.Blazor.Application.Features.SimCards.Queries.GetAvaliableSimCards
 
 @using CleanArchitecture.Blazor.Domain.Enums
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Customers.Components
 @using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Installers
 
 @inherits MudComponentBase
@@ -84,7 +85,7 @@
                                 <MudSelectItem T="int" Value=0>@L["SelectCustomer"]</MudSelectItem>
                                 @foreach (var doc1type in Customers)
                                 {
-                                    <MudSelectItem Value="@doc1type.Id">@doc1type.Name</MudSelectItem>
+                                    <MudSelectItem Value="@doc1type.Id">@doc1type.ParentChild</MudSelectItem>
                                 }
                             </MudSelect>
                         </MudItem>

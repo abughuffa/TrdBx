@@ -104,6 +104,7 @@ public class ImportTrackingUnitModelsCommand: ICacheInvalidatorRequest<Result<in
         public async Task<Result<byte[]>> Handle(CreateTrackingUnitModelsTemplateCommand request, CancellationToken cancellationToken)
         {
         var fields = new string[] {
+            _localizer[_dto.GetMemberDescription(x=>x.Id)],
             _localizer[_dto.GetMemberDescription(x=>x.WialonName)],
                   _localizer[_dto.GetMemberDescription(x=>x.Name)],
 _localizer[_dto.GetMemberDescription(x=>x.WhwTypeId)],

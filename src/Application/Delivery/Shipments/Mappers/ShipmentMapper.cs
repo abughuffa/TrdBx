@@ -1,8 +1,10 @@
 ﻿
-//using CleanArchitecture.Blazor.Application.Features.Shipments.Commands.AddEdit;
+
 using CleanArchitecture.Blazor.Application.Features.Shipments.Commands.Create;
 using CleanArchitecture.Blazor.Application.Features.Shipments.Commands.Update;
 using CleanArchitecture.Blazor.Application.Features.Shipments.DTOs;
+using CleanArchitecture.Blazor.Application.Features.WayPoints.Mappers;
+using CleanArchitecture.Blazor.Domain.Entities;
 
 namespace CleanArchitecture.Blazor.Application.Features.Shipments.Mappers;
 //#region Assembly Riok.Mapperly.Abstractions, Version=4.3.0.0, Culture=neutral, PublicKeyToken=null
@@ -28,7 +30,9 @@ namespace CleanArchitecture.Blazor.Application.Features.Shipments.Mappers;
 [Mapper]
 public static partial class ShipmentMapper
 {
+
     public static partial ShipmentDto ToDto(this Shipment shipment);
+
 
     public static partial IQueryable<ShipmentDto> ProjectToDto(this IQueryable<Shipment> query);
 
@@ -57,8 +61,9 @@ public static partial class ShipmentMapper
         var shipment = new Shipment
         {
             ShipmentNo = command.ShipmentNo,
-            StartLocation = command.StartLocation,
-            EndLocation = command.EndLocation,
+            WayPoints = command.WayPoints.ProjectFrom(),
+            //StartLocation = command.StartLocation,
+            //EndLocation = command.EndLocation,
             Price = command.Price,
             IsBidable = command.IsBidable
         };
@@ -68,8 +73,9 @@ public static partial class ShipmentMapper
     public static void ToEntity(this UpdateShipmentCommand command, Shipment shipment)
     {
         shipment.ShipmentNo = command.ShipmentNo;
-        shipment.StartLocation = command.StartLocation;
-        shipment.EndLocation = command.EndLocation;
+        shipment.WayPoints = command.WayPoints.ProjectFrom();
+        //StartLocation = command.StartLocation,
+        //EndLocation = command.EndLocation,
         shipment.Price = command.Price;
         shipment.IsBidable = command.IsBidable;
     }

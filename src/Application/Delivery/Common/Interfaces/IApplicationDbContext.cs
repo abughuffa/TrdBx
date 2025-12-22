@@ -7,9 +7,10 @@ namespace CleanArchitecture.Blazor.Application.Common.Interfaces;
 
 public partial interface IApplicationDbContext
 {
-    DbSet<Warehouse> Warehouses { get; set; }
+    DbSet<POI> POIs { get; set; }
+    DbSet<WayPoint> WayPoints { get; set; }
+    DbSet<BidRecord> BidRecords { get; set; }
     DbSet<Vehicle> Vehicles { get; set; }
-
     DbSet<VehicleType> VehicleTypes { get; set; }
     DbSet<Shipment> Shipments { get; set; }
 }

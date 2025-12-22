@@ -7,8 +7,7 @@ public class UpdateShipmentCommandValidator : AbstractValidator<UpdateShipmentCo
         public UpdateShipmentCommandValidator()
         {
         RuleFor(v => v.ShipmentNo).MaximumLength(50).NotEmpty();
-        RuleFor(v => v.StartLocation).MaximumLength(255);
-        RuleFor(v => v.EndLocation).MaximumLength(255);
+        RuleFor(v => v.WayPoints.Count()).GreaterThan(1);
         RuleFor(v => v.Price).NotNull();
 
 

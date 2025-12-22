@@ -78,7 +78,7 @@
         if (result.Data.UStatus == UStatus.Used)
             Customers = await Mediator.Send(new GetAvaliableChildsByParentIdQuery() {Id = result.Data.CustomerId});
         else
-            Customers = await Mediator.Send(new GetAvaliableCustomersQuery() { });
+            Customers = await Mediator.Send(new GetAvaliableChildsByParentIdQuery() { Id = null });
 
 
             result.Map(data =>

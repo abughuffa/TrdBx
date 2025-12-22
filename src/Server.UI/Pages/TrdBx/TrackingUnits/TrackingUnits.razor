@@ -485,8 +485,8 @@
         {
 
             _loading = true;
-            // Query.CustomerId = Query.CustomerId;
-            // Query.UStatus = Query.UStatus;
+            Query.CustomerId = Query.CustomerId;
+            Query.UStatus = Query.UStatus;
             Query.OrderBy = state.SortDefinitions.FirstOrDefault()?.SortBy ?? "Id";
             Query.SortDirection = state.SortDefinitions.FirstOrDefault()?.Descending ?? true
                                               ? SortDirection.Descending.ToString()
@@ -619,7 +619,8 @@
         var request = new ExportTrackingUnitsQuery()
         {
             Keyword = Query.Keyword,
-            // CurrentUser = UserProfile,
+            CustomerId = Query.CustomerId,
+            UStatus = Query.UStatus,
             ListView = Query.ListView,
             OrderBy = _table.SortDefinitions.Values.FirstOrDefault()?.SortBy ?? "Id",
             SortDirection = (_table.SortDefinitions.Values.FirstOrDefault()?.Descending ?? true) ? SortDirection.Descending.ToString() : SortDirection.Ascending.ToString()

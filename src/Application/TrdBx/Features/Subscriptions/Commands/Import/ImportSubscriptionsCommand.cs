@@ -1,9 +1,6 @@
-﻿using CleanArchitecture.Blazor.Application.Features.ServiceLogs.Commands.Import;
-using CleanArchitecture.Blazor.Application.Features.Subscriptions.Mappers;
-using CleanArchitecture.Blazor.Application.Features.Subscriptions.Caching;
+﻿using CleanArchitecture.Blazor.Application.Features.Subscriptions.Caching;
 using CleanArchitecture.Blazor.Application.Features.Subscriptions.DTOs;
-using CleanArchitecture.Blazor.Domain.Entities;
-using CleanArchitecture.Blazor.Domain.Enums;
+using CleanArchitecture.Blazor.Application.Features.Subscriptions.Mappers;
 using CleanArchitecture.Blazor.Domain.Enums;
 
 namespace CleanArchitecture.Blazor.Application.Features.Subscriptions.Commands.Import;
@@ -79,6 +76,7 @@ public class ImportSubscriptionsCommandHandler :
                { _localizer[_dto.GetMemberDescription(x=>x.DailyFees)], (row, item) => item.DailyFees = decimal.Parse(row[_localizer[_dto.GetMemberDescription(x=>x.DailyFees)]].ToString())},
                { _localizer[_dto.GetMemberDescription(x=>x.Days)], (row, item) => item.Days = int.Parse(row[_localizer[_dto.GetMemberDescription(x=>x.Days)]].ToString())},
                { _localizer[_dto.GetMemberDescription(x=>x.Amount)], (row, item) => item.Amount = decimal.Parse(row[_localizer[_dto.GetMemberDescription(x=>x.Amount)]].ToString())},
+               //{ _localizer[_dto.GetMemberDescription(x=>x.IsBilled)], (row, item) => item.IsBilled =Convert.ToBoolean(row[_localizer[_dto.GetMemberDescription(x=>x.IsBilled)]]) },
         }, _localizer[_dto.GetClassDescription()]);
         if (result.Succeeded && result.Data is not null)
         {
@@ -117,6 +115,7 @@ _localizer[_dto.GetMemberDescription(x=>x.Desc)],
 _localizer[_dto.GetMemberDescription(x=>x.DailyFees)],
 _localizer[_dto.GetMemberDescription(x=>x.Days)],
 _localizer[_dto.GetMemberDescription(x=>x.Amount)],
+//_localizer[_dto.GetMemberDescription(x=>x.IsBilled)],
 
                 };
         var result = await _excelService.CreateTemplateAsync(fields, _localizer[_dto.GetClassDescription()]);

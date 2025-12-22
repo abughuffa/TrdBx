@@ -1,0 +1,123 @@
+﻿@page "/pages/Shipments/create"
+@using CleanArchitecture.Blazor.Application.Features.Shipments.Commands.Create
+@using CleanArchitecture.Blazor.Server.UI.Pages.Delivery.VehicleTypes
+
+@inherits MudComponentBase
+@inject IValidationService Validator
+@inject IStringLocalizer<Shipments> L
+
+<PageTitle>@Title</PageTitle>
+<Breadcrumbs OnSaveButtonClick="Submit" Saving="_saving" BreadcrumbItems="_breadcrumbItems"></Breadcrumbs>
+<MudContainer Class="mt-3" MaxWidth="MaxWidth.Small">
+    <MudCard Class="pa-2">
+        <MudCardHeader>
+            <CardHeaderContent>
+                 <MudText Typo="Typo.h6">@Title</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent>
+        <MudForm Model="@model" @ref="@_form" Validation="@(Validator.ValidateValue(model))">
+
+                <MudStack Spacing="2" Row="true">
+
+                    <MudGrid Spacing="2">
+                        <MudItem xs="12" md="12">
+                            <MudTextField Label="@L[model.GetMemberDescription(x => x.ShipmentNo)]" @bind-Value="model.ShipmentNo" For="@(() => model.ShipmentNo)" Required="true" RequiredError="@L["ShipmentNo is required!"]"></MudTextField>
+                        </MudItem>
+                        <MudItem xs="12" md="6">
+                            <MudTextField Label="@L[model.GetMemberDescription(x => x.Price)]" @bind-Value="model.Price" For="@(() => model.Price)" Required="true" RequiredError="@L["Price is required!"]"></MudTextField>
+                        </MudItem>
+
+                        <MudItem xs="12" md="6">
+                            <MudTextField Label="@L[model.GetMemberDescription(x => x.IsBidable)]" For="@(() => model.IsBidable)" @bind-Value="model.IsBidable"></MudTextField>
+                        </MudItem>
+                        <MudItem xs="12" md="12">
+
+                            <VehicleTypesList VehicleTypeIds="model.RecVehicleType"
+                                              VehicleTypeIdsChanged="OnVehicleTypeIdsChanged" />
+
+                        </MudItem>
+                    </MudGrid>
+
+
+                <MudGrid>
+                        <MudItem md="12">
+                            <MudText Typo="Typo.h6" Class="mb-2">@L["Way Points"]</MudText>
+                            <MudPaper Elevation="2">
+                                <MudList T="string">
+                                     <MudListItem Text="Way Points" Disabled="false" />
+                                </MudList>
+                            </MudPaper>
+                        </MudItem>
+                </MudGrid>
+
+
+            </MudStack>
+
+
+
+
+
+        </MudForm>
+        </MudCardContent>
+         <MudCardActions Class="d-flex justify-end gap-2">
+                    <MudLoadingButton Color="Color.Primary" DropShadow="false" Loading="@_saving" OnClick="Submit">@ConstantString.Save</MudLoadingButton>
+         </MudCardActions>
+        </MudCard>
+</MudContainer>
+ 
+
+@code {
+    public string? Title { get; private set; }
+    MudForm? _form;
+    private bool _saving = false;
+
+    private int[] selectedVehicleTypeIds = Array.Empty<int>();
+
+    private async Task OnVehicleTypeIdsChanged(int[] newIds)
+    {
+        model.RecVehicleType = newIds;
+        StateHasChanged();
+    }
+
+    private List<BreadcrumbItem> _breadcrumbItems = new List<BreadcrumbItem>
+    {
+        new BreadcrumbItem("Home", href: "/"),
+        new BreadcrumbItem("Shipments", href: "/pages/Shipments"),
+        new BreadcrumbItem("Create Shipment", href:null, disabled:true)
+    };
+    private CreateShipmentCommand model = new();
+    protected override Task OnInitializedAsync()
+    {
+        Title = L["Create Shipment"];
+
+        return Task.CompletedTask;
+    }
+    async Task Submit()
+    {
+        try
+        {
+            _saving = true;
+            await _form!.Validate().ConfigureAwait(false);
+            if (!_form!.IsValid)
+                return;
+            var result = await Mediator.Send(model);
+            result.Match(
+                data=>
+                {
+                    Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+                    Navigation.NavigateTo($"/pages/Shipments");
+                    return data;
+                },
+                errors=>
+                {
+                    Snackbar.Add(errors, MudBlazor.Severity.Error);
+                    return -1;
+                });
+        }
+        finally
+        {
+            _saving = false;
+        }
+    }
+}

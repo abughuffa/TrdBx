@@ -16,7 +16,7 @@ public class LibyanaSimCardDto
     //[Description("State")]
     //public string? SimCardStatus { get; set; }
     [Description("State")]
-    public SLStatus SimCardStatus { get; set; }
+    public SLStatus? SimCardStatus { get; set; }
     [Description("Main Bal")]
     public decimal? Balance { get; set; }
     [Description("Main Bal Expiry Date")]

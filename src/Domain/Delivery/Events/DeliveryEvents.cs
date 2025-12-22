@@ -2,38 +2,37 @@
 
 namespace CleanArchitecture.Blazor.Domain.Events;
 
-#region Warehouse
-public class WarehouseCreatedEvent : DomainEvent
+#region POI
+public class POICreatedEvent : DomainEvent
 {
-    public WarehouseCreatedEvent(Warehouse item)
+    public POICreatedEvent(POI item)
     {
         Item = item;
     }
 
-    public Warehouse Item { get; }
+    public POI Item { get; }
 }
 
-public class WarehouseUpdatedEvent : DomainEvent
+public class POIUpdatedEvent : DomainEvent
 {
-    public WarehouseUpdatedEvent(Warehouse item)
+    public POIUpdatedEvent(POI item)
     {
         Item = item;
     }
 
-    public Warehouse Item { get; }
+    public POI Item { get; }
 }
 
-public class WarehouseDeletedEvent : DomainEvent
+public class POIDeletedEvent : DomainEvent
 {
-    public WarehouseDeletedEvent(Warehouse item)
+    public POIDeletedEvent(POI item)
     {
         Item = item;
     }
 
-    public Warehouse Item { get; }
+    public POI Item { get; }
 }
 #endregion
-
 
 #region Shipment
 public class ShipmentCreatedEvent : DomainEvent
@@ -67,8 +66,6 @@ public class ShipmentDeletedEvent : DomainEvent
 }
 #endregion
 
-
-
 #region Vehicle
 public class VehicleCreatedEvent : DomainEvent
 {
@@ -101,7 +98,6 @@ public class VehicleDeletedEvent : DomainEvent
 }
 #endregion
 
-
 #region VehicleType
 public class VehicleTypeCreatedEvent : DomainEvent
 {
@@ -133,3 +129,36 @@ public class VehicleTypeDeletedEvent : DomainEvent
     public VehicleType Item { get; }
 }
 #endregion
+
+#region BidRecord
+public class BidRecordCreatedEvent : DomainEvent
+{
+    public BidRecordCreatedEvent(BidRecord item)
+    {
+        Item = item;
+    }
+
+    public BidRecord Item { get; }
+}
+
+public class BidRecordUpdatedEvent : DomainEvent
+{
+    public BidRecordUpdatedEvent(BidRecord item)
+    {
+        Item = item;
+    }
+
+    public BidRecord Item { get; }
+}
+
+public class BidRecordDeletedEvent : DomainEvent
+{
+    public BidRecordDeletedEvent(BidRecord item)
+    {
+        Item = item;
+    }
+
+    public BidRecord Item { get; }
+}
+#endregion
+

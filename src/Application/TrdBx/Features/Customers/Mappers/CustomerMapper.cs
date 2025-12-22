@@ -10,6 +10,12 @@ namespace CleanArchitecture.Blazor.Application.Features.Customers.Mappers;
 [Mapper]
 public static partial class Mapper
 {
+
+    [MapProperty(
+       nameof(Customer.Parent),
+       nameof(CustomerDto.Parent),
+       Use = nameof(MapParentToParentName)
+   )]
     public static partial CustomerDto ToDto(Customer source);
     public static partial Customer FromDto(CustomerDto dto);
 
@@ -20,5 +26,9 @@ public static partial class Mapper
     public static partial void ApplyChangesFrom(UpdateChildCommand source, Customer target);
     public static partial void ApplyChangesFrom(UpdateParentCommand source, Customer target);
     public static partial IQueryable<CustomerDto> ProjectTo(this IQueryable<Customer> q);
-}
 
+ private static string? MapParentToParentName(Customer? parent)
+    {
+        return parent?.Name;
+    }
+}

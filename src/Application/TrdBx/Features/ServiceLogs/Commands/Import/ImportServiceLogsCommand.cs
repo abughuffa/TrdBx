@@ -64,6 +64,17 @@ public class ImportServiceLogsCommandHandler :
 
         var result = await _excelService.ImportAsync(request.Data, mappers: new Dictionary<string, Func<DataRow, ServiceLogDto, object?>>
             {
+             //{ _localizer[_dto.GetMemberDescription(x=>x.Id)], (row, item) => item.Id = int.Parse(row[0].ToString()) },
+             //       { _localizer[_dto.GetMemberDescription(x=>x.ServiceNo)], (row, item) => item.ServiceNo = row[1].ToString() },
+             //       { _localizer[_dto.GetMemberDescription(x=>x.ServiceTask)], (row, item) => item.ServiceTask = (ServiceTask)Convert.ToInt32(row[2].ToString()) },
+             //       { _localizer[_dto.GetMemberDescription(x=>x.CustomerId)], (row, item) => item.CustomerId = int.Parse(row[3].ToString()) },
+             //       { _localizer[_dto.GetMemberDescription(x=>x.InstallerId)], (row, item) => item.InstallerId = row[4].ToString() },
+             //       { _localizer[_dto.GetMemberDescription(x=>x.Desc)], (row, item) => item.Desc = row[5].ToString() },
+             //       { _localizer[_dto.GetMemberDescription(x=>x.SerDate)], (row, item) => item.SerDate = DateOnly.FromDateTime(DateTime.Parse(row[6].ToString()))},
+             //       { _localizer[_dto.GetMemberDescription(x=>x.IsDeserved)], (row, item) => item.IsDeserved =Convert.ToBoolean(row[7]) },
+             //       { _localizer[_dto.GetMemberDescription(x=>x.IsBilled)], (row, item) => item.IsBilled =Convert.ToBoolean(row[8]) },
+             //       { _localizer[_dto.GetMemberDescription(x=>x.Amount)], (row, item) => item.Amount = decimal.Parse(row[9].ToString())},
+
                     { _localizer[_dto.GetMemberDescription(x=>x.Id)], (row, item) => item.Id = int.Parse(row[_localizer[_dto.GetMemberDescription(x=>x.Id)]].ToString()) },
                     { _localizer[_dto.GetMemberDescription(x=>x.ServiceNo)], (row, item) => item.ServiceNo = row[_localizer[_dto.GetMemberDescription(x=>x.ServiceNo)]].ToString() },
                     { _localizer[_dto.GetMemberDescription(x=>x.ServiceTask)], (row, item) => item.ServiceTask = (ServiceTask)Convert.ToInt32(row[_localizer[_dto.GetMemberDescription(x=>x.ServiceTask)]].ToString()) },

@@ -35,7 +35,7 @@ public class TrackingUnit : BaseAuditableEntity
     public int? SimCardId { get; set; } = null;
     public int? CustomerId { get; set; } = null;
     public bool IsOnWialon { get; set; } = false;
-    public WStatus WStatus { get; set; } = WStatus.Null;
+    public WStatus? WStatus { get; set; }
     public int? WUnitId { get; set; }
     public int? OldId { get; set; } 
     public TrackingUnitModel? TrackingUnitModel { get; set; } = null;
@@ -235,7 +235,7 @@ public class LibyanaSimCard : BaseEntity
 {
     public string? SimCardNo { get; set; } = string.Empty;
     //public string? SimCardStatus { get; set; } = string.Empty;
-    public SLStatus SimCardStatus { get; set; } = SLStatus.Null;
+    public SLStatus? SimCardStatus { get; set; }
     public decimal? Balance { get; set; } = 0.0m;
     public DateTime? BExDate { get; set; } = null;
     public DateTime? JoinDate { get; set; } = null;
@@ -252,7 +252,7 @@ public class WialonUnit : BaseEntity
     public string? UnitSNo { get; set; } = string.Empty;
     public DateTime? Deactivation { get; set; } = null;
     public string? SimCardNo { get; set; } = string.Empty;
-    public WStatus StatusOnWialon { get; set; } = WStatus.Null;
+    public WStatus? StatusOnWialon { get; set; } 
     public string? Note { get; set; } = string.Empty;
 }
 public class DbMatching : IEntity
@@ -264,8 +264,8 @@ public class DbMatching : IEntity
     public string? TUnitSNo { get; set; }
     public string? WSimCardNo { get; set; }
     public string? TSimCardNo { get; set; }
-    public WStatus StatusOnWialon { get; set; }
-    public UStatus StatusOnTrdBx { get; set; }
+    public WStatus? StatusOnWialon { get; set; }
+    public UStatus? StatusOnTrdBx { get; set; }
     public string? TNote { get; set; }
     public string? WNote { get; set; }
 }
@@ -285,13 +285,13 @@ public class Diagnostic : IEntity
     public string? SimCardNo { get; set; }
 
     [Description("StatusOnWialon")]
-    public WStatus StatusOnWialon { get; set; }
+    public WStatus? StatusOnWialon { get; set; }
 
     [Description("StatusOnTrdBx")]
-    public UStatus StatusOnTrdBx { get; set; }
+    public UStatus? StatusOnTrdBx { get; set; }
 
     [Description("SimCardStatus")]
-    public SLStatus SimCardStatus { get; set; }
+    public SLStatus? SimCardStatus { get; set; }
     [Description("LDExDate")]
     public DateTime? LDExDate { get; set; }
     [Description("LDOExpired")]

@@ -77,7 +77,7 @@
         _uploading = true;
         // Read the stream here, for example into a MemoryStream or process it.
         var memoryStream = new MemoryStream();
-        await file.OpenReadStream(maxAllowedSize: 2097152).CopyToAsync(memoryStream);
+        await file.OpenReadStream(maxAllowedSize: 3145728).CopyToAsync(memoryStream);
         var command = new ImportDataCommand(file.Name, memoryStream.ToArray(), Mediator);
         var result = await Mediator.Send(command);
         if (result.Succeeded)

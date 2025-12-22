@@ -11,7 +11,7 @@ public class ExportTrackingUnitsQuery : TrackingUnitAdvancedFilter, ICacheableRe
     public IEnumerable<string>? Tags => TrackingUnitCacheKey.Tags;
     public override string ToString()
     {
-        return $"Listview:{ListView}: Search:{Keyword}, {OrderBy}, {SortDirection}";
+        return $"Listview:{ListView}: Search:{Keyword},Client/Customer:{CustomerId},UStatus:{UStatus}, {OrderBy}, {SortDirection}, {PageNumber}, {PageSize}";
     }
     public string CacheKey => TrackingUnitCacheKey.GetExportCacheKey($"{this}");
 

@@ -26,7 +26,7 @@ public class WialonUnitDto
 
     // Calculated from Deactivation column where if it has a value StatusOnWialon will be Inactive otherwise equals Active
     [Description("StatusOnWialon")]
-    public WStatus StatusOnWialon { get; set; }
+    public WStatus? StatusOnWialon { get; set; }
     [Description("Note")]
     public string? Note { get; set; } = string.Empty;
 

@@ -129,7 +129,7 @@ public class ExecuteWialonTaskCommandHandler :
                         {
                            
                             unit.IsOnWialon = false;
-                            unit.WStatus = WStatus.Null;
+                            unit.WStatus = null;
                             unit.AddDomainEvent(new TrackingUnitUpdatedEvent(unit));
                             APIExecuationSuccessed = true;
                         }
@@ -225,7 +225,7 @@ public class ExecuteWialonTaskCommandHandler :
         if (result is not null) //api results
         {
             unit.IsOnWialon = false;
-            unit.WStatus = WStatus.Null;
+            unit.WStatus = null;
             unit.WUnitId = null;
             unit.AddDomainEvent(new TrackingUnitUpdatedEvent(unit));
             return true;

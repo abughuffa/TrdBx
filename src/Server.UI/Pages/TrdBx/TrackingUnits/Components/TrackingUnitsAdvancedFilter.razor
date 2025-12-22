@@ -10,11 +10,12 @@
                    Class="mud-elevation-25 pa-2 mb-3" Text="@ConstantString.AdvancedSearch">
     <MudGrid>
 
-    @*      <MudItem md="6">
-            <AvaliableCustomers  @bind-Value="TRequest.CustomerId"
+         <MudItem md="6">
+            <AvaliableCustomers @bind-Value="TRequest.CustomerId"
+                                WithAdvParents ="true"
                                 Placeholder="@L["Search by Customer"]"
-                           Clearable="true"
-                           OnConditionChanged="TextChanged">
+                                Clearable="true"
+                                OnConditionChanged="TextChanged">
             </AvaliableCustomers>
         </MudItem>
 
@@ -26,15 +27,8 @@
                            ValueChanged="OnUStatusChanged"
                            Dense="true">
             </MudEnumSelect>
-        </MudItem> *@
-        <MudItem xs="12" sm="6" md="4">
-            @*TODO: define advanced search query fields, for example:*@
-            @*<MudTextField @bind-Value="TRequest.Name" 
-                          Placeholder="@L["Search for name"]"
-                          Clearable="true"
-                          TextChanged="TextChanged">
-            </MudTextField>*@
         </MudItem>
+
      </MudGrid>
 </MudExpansionPanel>
 
@@ -51,9 +45,9 @@
     }
 
 
-    // private async Task OnUStatusChanged(UStatus UStatus)
-    // {
-    //     TRequest.UStatus = UStatus;
-    //     await TextChanged(UStatus.ToString());
-    // }
+    private async Task OnUStatusChanged(UStatus UStatus)
+    {
+        TRequest.UStatus = UStatus;
+        await TextChanged(UStatus.ToString());
+    }
 }

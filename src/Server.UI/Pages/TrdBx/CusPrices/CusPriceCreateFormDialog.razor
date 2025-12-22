@@ -63,8 +63,6 @@
     IMudDialogInstance MudDialog { get; set; } = default!;
     [EditorRequired][Parameter] public CreateCusPriceCommand _model { get; set; } = null!;
 
-
-
     async Task OnSave()
     {
         try
@@ -112,7 +110,7 @@
                     {
                         Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
                         await Task.Delay(300);
-                        _model = new CreateCusPriceCommand() { };
+                        _model = new CreateCusPriceCommand() { CustomerId = _model.CustomerId };
                         return data;
                     },
                     errors =>

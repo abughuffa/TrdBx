@@ -1,4 +1,6 @@
-﻿namespace CleanArchitecture.Blazor.Application.Features.TrackingUnits.Specifications;
+﻿using CleanArchitecture.Blazor.Domain.Enums;
+
+namespace CleanArchitecture.Blazor.Application.Features.TrackingUnits.Specifications;
 
 #nullable disable warnings
 /// <summary>
@@ -18,8 +20,10 @@ public enum TrackingUnitListView
 /// </summary>
 public class TrackingUnitAdvancedFilter: PaginationFilter
 {
+
+    public int CustomerId { get; set; } = 0;
+    public UStatus UStatus { get; set; } = UStatus.All;
     public TimeSpan LocalTimezoneOffset { get; set; }
-    //public UserProfile? CurrentUser { get; set; }
     public TrackingUnitListView ListView { get; set; } = TrackingUnitListView.All;
 
 }

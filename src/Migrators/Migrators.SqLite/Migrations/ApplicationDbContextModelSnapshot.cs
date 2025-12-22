@@ -177,6 +177,48 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
                     b.ToTable("AuditTrails");
                 });
 
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.BidRecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ShipmentId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TransporterId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("TransporterId1")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ShipmentId");
+
+                    b.HasIndex("TransporterId1");
+
+                    b.ToTable("BidRecords");
+                });
+
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Contact", b =>
                 {
                     b.Property<int>("Id")
@@ -578,7 +620,7 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
                         .HasMaxLength(450)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("SimCardStatus")
+                    b.Property<int?>("SimCardStatus")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -639,6 +681,42 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
                     b.HasIndex("TimeStamp");
 
                     b.ToTable("Loggers");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.POI", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("Latitude")
+                        .HasColumnType("REAL");
+
+                    b.Property<double>("Longitude")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("POIs");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.PicklistSet", b =>
@@ -873,11 +951,6 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
                         .HasMaxLength(450)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("EndLocation")
-                        .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("TEXT");
-
                     b.Property<bool>("IsBidable")
                         .HasColumnType("INTEGER");
 
@@ -898,11 +971,6 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
 
                     b.Property<int>("ShipmentStatus")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("StartLocation")
-                        .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("TEXT");
 
                     b.Property<int?>("VehicleId")
                         .HasColumnType("INTEGER");
@@ -1237,7 +1305,7 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
                         .HasMaxLength(450)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("WStatus")
+                    b.Property<int?>("WStatus")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("WUnitId")
@@ -1352,22 +1420,8 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime?>("Created")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(450)
-                        .HasColumnType("TEXT");
-
                     b.Property<byte>("Image")
                         .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasMaxLength(450)
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1379,25 +1433,11 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
                     b.ToTable("VehicleTypes");
                 });
 
-            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Warehouse", b =>
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.WayPoint", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("Created")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(450)
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasMaxLength(450)
-                        .HasColumnType("TEXT");
 
                     b.Property<double>("Latitude")
                         .HasColumnType("REAL");
@@ -1405,14 +1445,14 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
                     b.Property<double>("Longitude")
                         .HasColumnType("REAL");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
+                    b.Property<int>("ShipmentId")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Warehouses");
+                    b.HasIndex("ShipmentId");
+
+                    b.ToTable("WayPoints");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.WialonTask", b =>
@@ -1471,7 +1511,7 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
                         .HasMaxLength(450)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("StatusOnWialon")
+                    b.Property<int?>("StatusOnWialon")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("UnitName")
@@ -1830,6 +1870,23 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
                     b.Navigation("Owner");
                 });
 
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.BidRecord", b =>
+                {
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Shipment", "Shipment")
+                        .WithMany("BidRecords")
+                        .HasForeignKey("ShipmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Identity.ApplicationUser", "Transporter")
+                        .WithMany()
+                        .HasForeignKey("TransporterId1");
+
+                    b.Navigation("Shipment");
+
+                    b.Navigation("Transporter");
+                });
+
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.CusPrice", b =>
                 {
                     b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Customer", "Customer")
@@ -2051,6 +2108,15 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
                     b.Navigation("VehicleType");
                 });
 
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.WayPoint", b =>
+                {
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Shipment", null)
+                        .WithMany("WayPoints")
+                        .HasForeignKey("ShipmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.WialonTask", b =>
                 {
                     b.HasOne("CleanArchitecture.Blazor.Domain.Entities.ServiceLog", "ServiceLog")
@@ -2195,7 +2261,11 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Shipment", b =>
                 {
+                    b.Navigation("BidRecords");
+
                     b.Navigation("VehicleTypes");
+
+                    b.Navigation("WayPoints");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SimCard", b =>

@@ -73,7 +73,6 @@ public class ImportTrackingUnitsCommandHandler :
                 { _localizer[_dto.GetMemberDescription(x=>x.Imei)], (row, item) => item.Imei = row[_localizer[_dto.GetMemberDescription(x=>x.Imei)]].ToString() },
                 { _localizer[_dto.GetMemberDescription(x=>x.UnitName)], (row, item) => item.UnitName = row[_localizer[_dto.GetMemberDescription(x=>x.UnitName)]].ToString() != null ? row[_localizer[_dto.GetMemberDescription(x=>x.UnitName)]].ToString() : null  },
                 { _localizer[_dto.GetMemberDescription(x=>x.TrackingUnitModelId)], (row, item) => item.TrackingUnitModelId = int.Parse(row[_localizer[_dto.GetMemberDescription(x=>x.TrackingUnitModelId)]].ToString()) },
-                //{ _localizer[_dto.GetMemberDescription(x=>x.WryDate)], (row, item) => item.WryDate = (DateOnly.TryParse(row[_localizer[_dto.GetMemberDescription(x=>x.WryDate)]].ToString(), out DateOnly result) == true ? result : null)},
                 { _localizer[_dto.GetMemberDescription(x=>x.WryDate)], (row, item) => item.WryDate = row[_localizer[_dto.GetMemberDescription(x=>x.WryDate)]].ToString().IsNullOrEmpty() ? null : DateOnly.FromDateTime(DateTime.Parse(row[_localizer[_dto.GetMemberDescription(x=>x.WryDate)]].ToString()))},
                 { _localizer[_dto.GetMemberDescription(x=>x.TrackedAssetId)], (row, item) => item.TrackedAssetId = (int.TryParse(row[_localizer[_dto.GetMemberDescription(x=>x.TrackedAssetId)]].ToString(), out int result) == true ? result : null) },
                 { _localizer[_dto.GetMemberDescription(x=>x.SimCardId)], (row, item) => item.SimCardId = (int.TryParse(row[_localizer[_dto.GetMemberDescription(x=>x.SimCardId)]].ToString(), out int result) == true ? result : null) },
@@ -81,7 +80,7 @@ public class ImportTrackingUnitsCommandHandler :
                 { _localizer[_dto.GetMemberDescription(x=>x.UStatus)], (row, item) => item.UStatus = (UStatus)Convert.ToInt32(row[_localizer[_dto.GetMemberDescription(x=>x.UStatus)]].ToString()) },
                 { _localizer[_dto.GetMemberDescription(x=>x.IsOnWialon)], (row, item) => item.IsOnWialon =Convert.ToBoolean(row[_localizer[_dto.GetMemberDescription(x=>x.IsOnWialon)]]) },
                 { _localizer[_dto.GetMemberDescription(x=>x.InsMode)], (row, item) => item.InsMode = (InsMode)Convert.ToInt32(row[_localizer[_dto.GetMemberDescription(x=>x.InsMode)]].ToString()) },
-                 { _localizer[_dto.GetMemberDescription(x=>x.WStatus)], (row, item) => item.WStatus = (WStatus)Convert.ToInt32(row[_localizer[_dto.GetMemberDescription(x=>x.WStatus)]].ToString()) },
+                { _localizer[_dto.GetMemberDescription(x=>x.WStatus)], (row, item) => item.WStatus = (WStatus)Convert.ToInt32(row[_localizer[_dto.GetMemberDescription(x=>x.WStatus)]].ToString()) },
                 { _localizer[_dto.GetMemberDescription(x=>x.WUnitId)], (row, item) => item.WUnitId = (int.TryParse(row[_localizer[_dto.GetMemberDescription(x=>x.WUnitId)]].ToString(), out int result) == true ? result : null) },
                 { _localizer[_dto.GetMemberDescription(x=>x.OldId)], (row, item) => item.OldId = (int.TryParse(row[_localizer[_dto.GetMemberDescription(x=>x.OldId)]].ToString(), out int result) == true ? result : null) }
             }, _localizer[_dto.GetClassDescription()]);

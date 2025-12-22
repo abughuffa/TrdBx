@@ -37,9 +37,9 @@ public class ShipmentConfiguration : IEntityTypeConfiguration<Shipment>
     }
 }
 
-public class WarehouseConfiguration : IEntityTypeConfiguration<Warehouse>
+public class POIConfiguration : IEntityTypeConfiguration<POI>
 {
-    public void Configure(EntityTypeBuilder<Warehouse> builder)
+    public void Configure(EntityTypeBuilder<POI> builder)
     {
         builder.Property(t => t.Name).HasMaxLength(50).IsRequired();
         builder.Ignore(e => e.DomainEvents);

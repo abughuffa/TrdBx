@@ -46,16 +46,33 @@ public static partial class Permissions
 public static partial class Permissions
 {
 
-    [DisplayName("Warehouse Permissions")]
-    [Description("Set permissions for Warehouse operations.")]
-    public static class Warehouses
+    [DisplayName("BidRecord Permissions")]
+    [Description("Set permissions for BidRecord operations.")]
+    public static class BidRecords
+    {
+        public const string View = "Permissions.BidRecords.View"; //trader & transporter permission
+        public const string Create = "Permissions.BidRecords.Create"; //transporter permission
+        public const string Edit = "Permissions.BidRecords.Edit"; //transporter permission
+        public const string Delete = "Permissions.BidRecords.Delete"; //transporter permission
+        public const string Print = "Permissions.BidRecords.Print"; //transporter permission
+        public const string Search = "Permissions.BidRecords.Search"; //transporter permission
+    }
+
+}
+
+public static partial class Permissions
+{
+
+    [DisplayName("POI Permissions")]
+    [Description("Set permissions for POI operations.")]
+    public static class POIs
     { 
-        public const string View = "Permissions.Warehouses.View"; //trader permission
-    public const string Create = "Permissions.Warehouses.Create"; //trader permission
-    public const string Edit = "Permissions.Warehouses.Edit"; //trader permission
-    public const string Delete = "Permissions.Warehouses.Delete"; //trader permission
-    public const string Print = "Permissions.Warehouses.Print"; //trader permission
-    public const string Search = "Permissions.Warehouses.Search"; //trader permission
+        public const string View = "Permissions.POIs.View"; //trader permission
+    public const string Create = "Permissions.POIs.Create"; //trader permission
+    public const string Edit = "Permissions.POIs.Edit"; //trader permission
+    public const string Delete = "Permissions.POIs.Delete"; //trader permission
+    public const string Print = "Permissions.POIs.Print"; //trader permission
+    public const string Search = "Permissions.POIs.Search"; //trader permission
 }
 }
 

@@ -32,8 +32,8 @@ public class AddEditContactCommand: ICacheInvalidatorRequest<Result<int>>
 {
       [Description("Id")]
       public int Id { get; set; }
-          [Description("Name")]
-    public string Name {get;set;} 
+    [Description("Name")]
+    public string Name { get; set; } = string.Empty;
     [Description("Description")]
     public string? Description {get;set;} 
     [Description("Email")]

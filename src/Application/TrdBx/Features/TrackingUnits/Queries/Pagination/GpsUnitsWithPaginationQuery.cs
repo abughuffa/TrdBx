@@ -1,8 +1,9 @@
 ﻿using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Caching;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.DTOs;
-using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Specifications;
     using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Mappers;
+using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Specifications;
 using CleanArchitecture.Blazor.Domain.Entities;
+using CleanArchitecture.Blazor.Domain.Enums;
 
 namespace CleanArchitecture.Blazor.Application.Features.TrackingUnits.Queries.Pagination;
 
@@ -11,7 +12,7 @@ public class TrackingUnitsWithPaginationQuery : TrackingUnitAdvancedFilter, ICac
 
     public override string ToString()
     {
-        return $"Listview:{ListView}: Search:{Keyword}, {OrderBy}, {SortDirection}, {PageNumber}, {PageSize}";
+        return $"Listview:{ListView}: Search:{Keyword},Client/Customer:{CustomerId},UStatus:{UStatus}, {OrderBy}, {SortDirection}, {PageNumber}, {PageSize}";
     }
 
     public string CacheKey => TrackingUnitCacheKey.GetPaginationCacheKey($"{this}");

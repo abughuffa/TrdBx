@@ -2,6 +2,7 @@
 //using CleanArchitecture.Blazor.Application.Features.ServiceLogs.Commands.Create;
 using CleanArchitecture.Blazor.Application.Features.ServiceLogs.Commands.Update;
 using CleanArchitecture.Blazor.Application.Features.ServiceLogs.DTOs;
+using CleanArchitecture.Blazor.Application.Features.TrackingUnits.DTOs;
 
 namespace CleanArchitecture.Blazor.Application.Features.ServiceLogs.Mappers;
 
@@ -10,8 +11,12 @@ namespace CleanArchitecture.Blazor.Application.Features.ServiceLogs.Mappers;
 [Mapper]
 public static partial class Mapper
 {
-    public static partial ServiceLogDto ToDto(ServiceLog source);
+
+    [MapperIgnoreSource(nameof(ServiceLogDto.Customer))]
+    [MapperIgnoreSource(nameof(ServiceLogDto.Installer))]
     public static partial ServiceLog FromDto(ServiceLogDto dto);
+    public static partial ServiceLogDto ToDto(ServiceLog source);
+  
     //public static partial CusPrice FromEditCommand(AddEditCusPriceCommand command);
     //public static partial ServiceLog FromCreateCommand(CreateCusPriceCommand command);
     public static partial UpdateServiceLogCommand ToUpdateCommand(ServiceLogDto dto);

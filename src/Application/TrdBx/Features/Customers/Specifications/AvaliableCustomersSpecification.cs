@@ -7,11 +7,14 @@ namespace CleanArchitecture.Blazor.Application.Features.Customers.Specifications
 /// </summary>
 public class AvaliableCustomersSpecification : Specification<Customer>
 {
-    public AvaliableCustomersSpecification()
+    public AvaliableCustomersSpecification(bool WithAdvParents)
     {
-        Query.Where(c => c.ParentId != null)
-             .Where(c=>(c.BillingPlan == BillingPlan.Basic)||(c.BillingPlan == BillingPlan.Advanced))
-             .Where(q => q.IsAvaliable == true);
+ 
+        if (WithAdvParents)     
+            Query.Where(q => q.IsAvaliable == true);
+        else
+            Query.Where(c => (c.ParentId == null && c.BillingPlan == BillingPlan.Basic) || (c.ParentId != null && c.BillingPlan == BillingPlan.Advanced))
+                .Where(c => c.IsAvaliable == true);
     }
 
 }

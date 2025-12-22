@@ -74,7 +74,7 @@ public class ImportTrackedAssetsCommandHandler :
                { _localizer[_dto.GetMemberDescription(x=>x.TrackedAssetDesc)], (row, item) => item.TrackedAssetDesc = row[_localizer[_dto.GetMemberDescription(x=>x.TrackedAssetDesc)]].ToString() },
                { _localizer[_dto.GetMemberDescription(x=>x.IsAvaliable)], (row, item) => item.IsAvaliable =Convert.ToBoolean(row[_localizer[_dto.GetMemberDescription(x=>x.IsAvaliable)]]) },
                 { _localizer[_dto.GetMemberDescription(x=>x.OldId)], (row, item) => item.OldId = (int.TryParse(row[_localizer[_dto.GetMemberDescription(x=>x.OldId)]].ToString(), out int result) == true ? result : null) },
-                 { _localizer[_dto.GetMemberDescription(x=>x.OldVehicleNo)], (row, item) => item.OldVehicleNo = row[_localizer[_dto.GetMemberDescription(x=>x.OldVehicleNo)]].ToString() },
+                 { _localizer[_dto.GetMemberDescription(x=>x.OldVehicleNo)], (row, item) => item.OldVehicleNo = row[_localizer[_dto.GetMemberDescription(x=>x.OldVehicleNo)]].ToString() }
 
             }, _localizer[_dto.GetClassDescription()]);
         if (result.Succeeded && result.Data is not null)

@@ -9,10 +9,12 @@ namespace CleanArchitecture.Blazor.Infrastructure.Persistence;
 public partial class ApplicationDbContext 
 {
     #region Delivery
-    public DbSet<Warehouse> Warehouses { get; set; }
+    public DbSet<WayPoint> WayPoints { get; set; }
+    public DbSet<POI> POIs { get; set; }
     public DbSet<Vehicle> Vehicles { get; set; }
     public DbSet<VehicleType> VehicleTypes { get; set; }
     public DbSet<Shipment> Shipments { get; set; }
+    public DbSet<BidRecord> BidRecords { get; set; }
     #endregion
 
 

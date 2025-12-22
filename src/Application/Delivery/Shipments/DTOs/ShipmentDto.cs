@@ -1,4 +1,6 @@
-﻿using CleanArchitecture.Blazor.Domain.Enums;
+﻿using CleanArchitecture.Blazor.Application.Features.WayPoints.DTOs;
+using CleanArchitecture.Blazor.Domain.Entities;
+using CleanArchitecture.Blazor.Domain.Enums;
 
 namespace CleanArchitecture.Blazor.Application.Features.Shipments.DTOs;
 
@@ -11,10 +13,12 @@ public class ShipmentDto
     public string ShipmentNo { get; set; }
     [Description("ShipmentStatus")]
     public ShipmentStatus ShipmentStatus { get; set; } = ShipmentStatus.JustCreated;
-    [Description("StartLocation")]
-    public string StartLocation { get; set; } = $"0.0,0.0";
-    [Description("EndLocation")]
-    public string EndLocation { get; set; } = $"0.0,0.0";
+    [Description("WayPoints")]
+    public List<WayPointDto> WayPoints { get; set; }
+    //[Description("StartLocation")]
+    //public string StartLocation { get; set; } = $"0.0,0.0";
+    //[Description("EndLocation")]
+    //public string EndLocation { get; set; } = $"0.0,0.0";
     [Description("Price")]
     public decimal Price { get; set; } = 0.0m;
     [Description("IsBidable")]

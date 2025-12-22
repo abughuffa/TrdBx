@@ -14,8 +14,8 @@ public class UpdateWialonUnitCommand : ICacheInvalidatorRequest<Result<int>>
     public int Id { get; set; }
     [Description("UnitSNo")]
     public string? UnitSNo { get; set; }
-    [Description("SimNo")]
-    public string? SimNo { get; set; }
+    [Description("SimCardNo")]
+    public string? SimCardNo { get; set; }
     [Description("StatusOnWialon")]
     public string? StatusOnWialon { get; set; }
     [Description("Note")]

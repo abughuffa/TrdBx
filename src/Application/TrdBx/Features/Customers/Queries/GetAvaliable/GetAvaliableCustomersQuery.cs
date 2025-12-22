@@ -8,7 +8,8 @@ namespace CleanArchitecture.Blazor.Application.Features.Customers.Queries.GetAva
 
 public class GetAvaliableCustomersQuery : ICacheableRequest<IEnumerable<CustomerDto>>
 {
-    public string CacheKey => CustomerCacheKey.GetAvaliableCustomersCacheKey;
+     public bool WithAdvParents { get; set; }
+     public string CacheKey => CustomerCacheKey.GetAvaliableCustomersCacheKey;
      public IEnumerable<string> Tags => CustomerCacheKey.Tags;
 }
 
@@ -42,7 +43,7 @@ public class GetAvaliableCustomersQueryHandler :
         //    .ToListAsync(cancellationToken);
         //return data;
 
-        var data = await _context.Customers.ApplySpecification(new AvaliableCustomersSpecification())
+        var data = await _context.Customers.Include(c=>c.Parent).ApplySpecification(new AvaliableCustomersSpecification(request.WithAdvParents))
                                               .ProjectTo()
                                               .ToListAsync(cancellationToken);
         return data;

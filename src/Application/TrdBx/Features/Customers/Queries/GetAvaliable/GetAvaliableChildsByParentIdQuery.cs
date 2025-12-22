@@ -65,7 +65,7 @@ public class GetAvaliableChildsByParentIdQueryHandler :
 
         if (customer is null)
         {
-            var data = await _context.Customers.ApplySpecification(new AvaliableChildsByParentIdSpecification(null))
+            var data = await _context.Customers.Include(c => c.Parent).ApplySpecification(new AvaliableChildsByParentIdSpecification(null))
                                               .ProjectTo()
                                               .ToListAsync(cancellationToken);
             return data;

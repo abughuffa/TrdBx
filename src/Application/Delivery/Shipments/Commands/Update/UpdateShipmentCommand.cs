@@ -2,6 +2,7 @@
 
 using CleanArchitecture.Blazor.Application.Features.Shipments.Caching;
 using CleanArchitecture.Blazor.Application.Features.Shipments.Mappers;
+using CleanArchitecture.Blazor.Application.Features.WayPoints.DTOs;
 
 namespace CleanArchitecture.Blazor.Application.Features.Shipments.Commands.Update;
 
@@ -11,10 +12,12 @@ public class UpdateShipmentCommand: ICacheInvalidatorRequest<Result<int>>
     public int Id { get; set; }
     [Description("ShipmentNo")]
     public string ShipmentNo { get; set; }
-    [Description("StartLocation")]
-    public string StartLocation { get; set; }
-    [Description("EndLocation")]
-    public string EndLocation { get; set; }
+    [Description("WayPoints")]
+    public List<WayPointDto> WayPoints { get; set; }
+    //[Description("StartLocation")]
+    //public string StartLocation { get; set; } = $"0.0,0.0";
+    //[Description("EndLocation")]
+    //public string EndLocation { get; set; } = $"0.0,0.0";
     [Description("Price")]
     public decimal Price { get; set; }
     [Description("IsBidable")]

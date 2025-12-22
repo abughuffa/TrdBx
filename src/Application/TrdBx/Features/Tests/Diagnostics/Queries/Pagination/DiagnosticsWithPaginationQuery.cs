@@ -64,20 +64,20 @@ public class DiagnosticsWithPaginationQueryHandler : IRequestHandler<Diagnostics
             case DiagnosticListView.SimCardsOfUnitsWhichAreExistOnTrdBxAndWialon:
                 {
                     diagnostics = await (from l in _context.LibyanaSimCards
-                                                   join u in _context.TrackingUnits on l.SimCardNo equals u.SimCard.SimCardNo
+                                                   join t in _context.TrackingUnits on l.SimCardNo equals t.SimCard.SimCardNo
                                                    join w in _context.WialonUnits on
-                                                             new { UnitSNo = u.SNo, SimCardNo = l.SimCardNo } equals
+                                                             new { UnitSNo = t.SNo, SimCardNo = l.SimCardNo } equals
                                                              new { UnitSNo = w.UnitSNo, SimCardNo = w.SimCardNo }
                                              select new Diagnostic
                                              {
                                                  Account = w.Account,
-                                                 Client = u.Customer.Parent.Name,
-                                                 Customer = u.Customer.Name,
-                                                 UnitSNo = u.SNo,
+                                                 Client = t.Customer.Parent.Name,
+                                                 Customer = t.Customer.Name,
+                                                 UnitSNo = t.SNo,
                                                  SimCardNo = l.SimCardNo,
                                                  SimCardStatus = l.SimCardStatus,
                                                  StatusOnWialon = w.StatusOnWialon,
-                                                 StatusOnTrdBx = u.UStatus,
+                                                 StatusOnTrdBx = t.UStatus,
                                                  WNote = w.Note,
                                                  Balance = l.Balance,
                                                  LDExDate = l.DExDate,
@@ -95,23 +95,25 @@ public class DiagnosticsWithPaginationQueryHandler : IRequestHandler<Diagnostics
             case DiagnosticListView.SimCardsOfUnitsWhichAreNotExistOnWialon:
                 {
                     diagnostics = await (from l in _context.LibyanaSimCards
-                                             join u in _context.TrackingUnits on l.SimCardNo equals u.SimCard.SimCardNo
+                                             join t in _context.TrackingUnits on l.SimCardNo equals t.SimCard.SimCardNo
                                              join w in _context.WialonUnits on
-                                                 new { UnitSNo = u.SNo, SimCardNo = l.SimCardNo } equals
+                                                 new { UnitSNo = t.SNo, SimCardNo = l.SimCardNo } equals
                                                  new { UnitSNo = w.UnitSNo, SimCardNo = w.SimCardNo } into wialonJoin
                                              from w in wialonJoin.DefaultIfEmpty()
                                              where w == null // This gives us records where there's no matching WialonUnit (W.SimCardNo IS NULL)
                                              select new Diagnostic
                                              {
-                                                 Account = u.Customer.Account,
-                                                 Client = u.Customer.Parent.Name,
-                                                 Customer = u.Customer.Name,
-                                                 UnitSNo = u.SNo,
+                                                 Account = t.Customer.Account,
+                                                 Client = t.Customer.Parent.Name,
+                                                 Customer = t.Customer.Name,
+                                                 UnitSNo = t.SNo,
                                                  SimCardNo = l.SimCardNo,
                                                  SimCardStatus = l.SimCardStatus,
-                                                 StatusOnWialon = w.StatusOnWialon,
-                                                 StatusOnTrdBx = u.UStatus,
-                                                 WNote = w.Note,
+                                                 //StatusOnWialon = w.StatusOnWialon,
+                                                 StatusOnWialon = null,
+                                                 StatusOnTrdBx = t.UStatus,
+                                                 //WNote = w.Note,
+                                                 WNote = string.Empty,
                                                  Balance = l.Balance,
                                                  LDExDate = l.DExDate,
                                                  LDOExpired = l.DOExpired
@@ -124,33 +126,38 @@ public class DiagnosticsWithPaginationQueryHandler : IRequestHandler<Diagnostics
                                                     cancellationToken);
 
                     break;
-                    return diagnostics;
+                    //return diagnostics;
 
                 }
             case DiagnosticListView.SimCardsOfUnitsWhichAreNotExistOnTrdBx:
                 {
                     diagnostics = await (from l in _context.LibyanaSimCards
-                                             join u in _context.TrackingUnits on l.SimCardNo equals u.SimCard.SimCardNo into unitJoin
-                                             from u in unitJoin.DefaultIfEmpty()
+                                             join t in _context.TrackingUnits on l.SimCardNo equals t.SimCard.SimCardNo into unitJoin
+                                             from t in unitJoin.DefaultIfEmpty()
                                              join w in _context.WialonUnits on
-                                                 new { UnitSNo = u.SNo, SimCardNo = l.SimCardNo } equals
+                                                 new { UnitSNo = t.SNo, SimCardNo = l.SimCardNo } equals
                                                  new { UnitSNo = w.UnitSNo, SimCardNo = w.SimCardNo } into wialonJoin
                                              from w in wialonJoin.DefaultIfEmpty()
-                                             where u == null // This gives us records where there's no matching Unit (T.SimCardNo IS NULL)
+                                             where t == null // This gives us records where there's no matching Unit (T.SimCardNo IS NULL)
                                              select new Diagnostic
                                              {
-                                                 Account = u.Customer.Account,
-                                                 Client = u.Customer.Parent.Name,
-                                                 Customer = u.Customer.Name,
-                                                 UnitSNo = u.SNo,
+                                                 //Account = t.Customer.Account,
+                                                 //Client = t.Customer.Parent.Name,
+                                                 //Customer = t.Customer.Name,
+                                                 Account = w.Account,
+                                                 Client = string.Empty,
+                                                 Customer = string.Empty,
+                                                 UnitSNo = w.UnitSNo,
                                                  SimCardNo = l.SimCardNo,
                                                  SimCardStatus = l.SimCardStatus,
                                                  StatusOnWialon = w.StatusOnWialon,
-                                                 StatusOnTrdBx = u.UStatus,
+                                                 //StatusOnTrdBx = t.UStatus,
+                                                 StatusOnTrdBx = null,
                                                  WNote = w.Note,
                                                  Balance = l.Balance,
                                                  LDExDate = l.DExDate,
                                                  LDOExpired = l.DOExpired
+
                                              }).OrderBy($"{request.OrderBy} {request.SortDirection}")
                                                .ProjectToPaginatedDataAsync(request.Specification,
                                                     request.PageNumber,
@@ -166,7 +173,7 @@ public class DiagnosticsWithPaginationQueryHandler : IRequestHandler<Diagnostics
                 {
 
                     diagnostics = await (from l in _context.LibyanaSimCards
-                                             where !_context.TrackingUnits.Any(u => u.SimCard.SimCardNo == l.SimCardNo) &&
+                                             where !_context.TrackingUnits.Any(t => t.SimCard.SimCardNo == l.SimCardNo) &&
                                                    !_context.WialonUnits.Any(w => w.SimCardNo == l.SimCardNo)
                                              select new Diagnostic
                                              {
@@ -176,8 +183,8 @@ public class DiagnosticsWithPaginationQueryHandler : IRequestHandler<Diagnostics
                                                  UnitSNo = null,
                                                  SimCardNo = l.SimCardNo,
                                                  SimCardStatus = l.SimCardStatus,
-                                                 StatusOnWialon = Domain.Enums.WStatus.Null,
-                                                 StatusOnTrdBx = UStatus.Null,
+                                                 StatusOnWialon = null,
+                                                 StatusOnTrdBx = null,
                                                  WNote = null,
                                                  Balance = l.Balance,
                                                  LDExDate = l.DExDate,
