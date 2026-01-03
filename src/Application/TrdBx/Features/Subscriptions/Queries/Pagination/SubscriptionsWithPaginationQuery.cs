@@ -45,7 +45,7 @@ public class SubscriptionsWithPaginationQueryHandler :
         //    .ProjectToPaginatedDataAsync<Subscription, SubscriptionDto>(request.Specification, request.PageNumber, request.PageSize, _mapper.ConfigurationProvider, cancellationToken);
         //return data;
 
-        var data = await _context.Subscriptions.OrderBy($"{request.OrderBy} {request.SortDirection}")
+        var data = await _context.Subscriptions.Include(s => s.ServiceLog).Include(s => s.TrackingUnit).OrderBy($"{request.OrderBy} {request.SortDirection}")
                                           .ProjectToPaginatedDataAsync(request.Specification,
                                                                        request.PageNumber,
                                                                        request.PageSize,

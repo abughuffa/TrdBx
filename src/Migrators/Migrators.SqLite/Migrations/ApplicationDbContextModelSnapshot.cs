@@ -271,9 +271,6 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AssignedTo")
-                        .HasColumnType("INTEGER");
-
                     b.Property<DateTime?>("Created")
                         .HasColumnType("TEXT");
 
@@ -829,12 +826,36 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
                     b.Property<int?>("OldId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("SProviderId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
                         .IsUnique();
 
+                    b.HasIndex("SProviderId");
+
                     b.ToTable("SPackages");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SProvider", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("SProviders");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.ServiceLog", b =>
@@ -1016,6 +1037,9 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
                     b.Property<string>("ICCID")
                         .HasMaxLength(450)
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsOwen")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("TEXT");
@@ -1968,6 +1992,17 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
                     b.Navigation("ServiceLog");
                 });
 
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SPackage", b =>
+                {
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.SProvider", "SProvider")
+                        .WithMany("SPackages")
+                        .HasForeignKey("SProviderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SProvider");
+                });
+
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.ServiceLog", b =>
                 {
                     b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Customer", "Customer")
@@ -2248,6 +2283,11 @@ namespace CleanArchitecture.Blazor.Migrators.SqLite.Migrations
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SPackage", b =>
                 {
                     b.Navigation("SimCards");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SProvider", b =>
+                {
+                    b.Navigation("SPackages");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.ServiceLog", b =>

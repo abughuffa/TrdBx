@@ -2,6 +2,7 @@
 using CleanArchitecture.Blazor.Application.Features.CusPrices.Commands.Create;
 using CleanArchitecture.Blazor.Application.Features.CusPrices.Commands.Update;
 using CleanArchitecture.Blazor.Application.Features.CusPrices.DTOs;
+using CleanArchitecture.Blazor.Application.Features.SimCards.DTOs;
 
 namespace CleanArchitecture.Blazor.Application.Features.CusPrices.Mappers;
 
@@ -10,6 +11,8 @@ namespace CleanArchitecture.Blazor.Application.Features.CusPrices.Mappers;
 [Mapper]
 public static partial class Mapper
 {
+    [MapProperty(nameof(CusPrice.Customer.Name), nameof(CusPriceDto.Customer))]
+    [MapProperty(nameof(CusPrice.TrackingUnitModel.Name), nameof(CusPriceDto.TrackingUnitModel))]
     public static partial CusPriceDto ToDto(CusPrice source);
 
     [MapperIgnoreSource(nameof(CusPriceDto.Customer))]

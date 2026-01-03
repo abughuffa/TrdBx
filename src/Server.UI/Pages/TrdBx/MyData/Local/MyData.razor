@@ -1,0 +1,631 @@
+﻿@page "/pages/TrdBx/MyData/Local"
+@using CleanArchitecture.Blazor.Application.Features.Customers.Commands.Import
+@using CleanArchitecture.Blazor.Application.Features.SPackages.Commands.Import
+@using CleanArchitecture.Blazor.Application.Features.SProviders.Commands.Import
+@using CleanArchitecture.Blazor.Application.Features.ServiceLogs.Commands.Import
+@using CleanArchitecture.Blazor.Application.Features.SimCards.Commands.Import
+@using CleanArchitecture.Blazor.Application.Features.Subscriptions.Commands.Import
+@using CleanArchitecture.Blazor.Application.Features.TrackedAssets.Commands.Import
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnitModels.Commands.Import
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.Import
+@using CleanArchitecture.Blazor.Application.Features.WialonTasks.Commands.Import
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Commands.Delete
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Commands.Import
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.DTOs
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Queries.GetDataCounts
+@using MudBlazor.Utilities
+@inject IStringLocalizer<MyData> L
+<PageTitle>@Title</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Large">
+    <div class="@ContentClassNames">
+        <MudPaper Class="pa-4 mb-3">
+
+            <MudExpansionPanel
+                               Style="border-radius: var(--mud-default-borderradius) !important;"
+                               Class="mud-elevation-25 pa-2 mb-3" Text=@L["Basic Data"]>
+
+                <div class="lp-app-grid">
+                    <MudPaper Class="py-4 px-6 rounded-lg d-flex align-center">
+                        <div class="flex-grow-1">
+                            <MudText Typo="Typo.h6">@L["Unit Models"]</MudText>
+                            <MudText Typo="Typo.h4">@_dataCount.TrackingUnitModels</MudText>
+                        </div>
+                        <div class="d-flex align-end justify-end mud-height-full py-8">
+                            <MudFileUpload T="IBrowserFile" FilesChanged="OnUnitModelsImport" Accept=".xlsx">
+                                <ActivatorContent>
+                                    <MudLoadingButton Class="pa-0 ma-0" Style="font-weight:400;text-transform:none;"
+                                                      Variant="Variant.Text"
+                                                      Loading="@_unitModelsUploading">
+                                        @ConstantString.Import
+                                    </MudLoadingButton>
+                                </ActivatorContent>
+                            </MudFileUpload>
+                        </div>
+                    </MudPaper>
+                    <MudPaper Class="py-4 px-6 rounded-lg d-flex align-center">
+                        <div class="flex-grow-1">
+                            <MudText Typo="Typo.h6">@L["GSM Service Providers"]</MudText>
+                            <MudText Typo="Typo.h4">@_dataCount.SProviders</MudText>
+                        </div>
+                        <div class="d-flex align-end justify-end mud-height-full py-8">
+                            <MudFileUpload T="IBrowserFile" FilesChanged="OnSProvidersImport" Accept=".xlsx">
+                                <ActivatorContent>
+                                    <MudLoadingButton Class="pa-0 ma-0" Style="font-weight:400;text-transform:none;"
+                                                      Variant="Variant.Text"
+                                                      Loading="@_sprovidersUploading">
+                                        @ConstantString.Import
+                                    </MudLoadingButton>
+                                </ActivatorContent>
+                            </MudFileUpload>
+                        </div>
+                    </MudPaper>
+                    <MudPaper Class="py-4 px-6 rounded-lg d-flex align-center">
+                        <div class="flex-grow-1">
+                            <MudText Typo="Typo.h6">@L["Sim card Packages"]</MudText>
+                            <MudText Typo="Typo.h4">@_dataCount.SPackages</MudText>
+                        </div>
+                        <div class="d-flex align-end justify-end mud-height-full py-8">
+                            <MudFileUpload T="IBrowserFile" FilesChanged="OnSPackagesImport" Accept=".xlsx">
+                                <ActivatorContent>
+                                    <MudLoadingButton Class="pa-0 ma-0" Style="font-weight:400;text-transform:none;"
+                                                      Variant="Variant.Text"
+                                                      Loading="@_unitModelsUploading">
+                                        @ConstantString.Import
+                                    </MudLoadingButton>
+                                </ActivatorContent>
+                            </MudFileUpload>
+                        </div>
+                    </MudPaper>
+                </div>
+
+            </MudExpansionPanel>
+       
+            <MudExpansionPanel Style="border-radius: var(--mud-default-borderradius) !important;"
+                               Class="mud-elevation-25 pa-2 mb-3" Text=@L["Assets, Sim Cards and Customers"]>
+
+                <div class="lp-app-grid">
+                    <MudPaper Class="py-4 px-6 rounded-lg d-flex align-center">
+                        <div class="flex-grow-1">
+                            <MudText Typo="Typo.h6">@L["Assets"]</MudText>
+                            <MudText Typo="Typo.h4">@_dataCount.TrackedAssets</MudText>
+                        </div>
+                        <div class="d-flex align-end justify-end mud-height-full py-8">
+                            <MudFileUpload T="IBrowserFile" FilesChanged="OnAssetsImport" Accept=".xlsx">
+                                <ActivatorContent>
+                                    <MudLoadingButton Class="pa-0 ma-0" Style="font-weight:400;text-transform:none;"
+                                                      Variant="Variant.Text"
+                                                      Loading="@_assetsUploading">
+                                        @ConstantString.Import
+                                    </MudLoadingButton>
+                                </ActivatorContent>
+                            </MudFileUpload>
+                        </div>
+                    </MudPaper>
+                    <MudPaper Class="py-4 px-6 rounded-lg d-flex align-center">
+                        <div class="flex-grow-1">
+                            <MudText Typo="Typo.h6">@L["Sim cards"]</MudText>
+                            <MudText Typo="Typo.h4">@_dataCount.SimCards</MudText>
+                        </div>
+                        <div class="d-flex align-end justify-end mud-height-full py-8">
+                            <MudFileUpload T="IBrowserFile" FilesChanged="OnSimCardsImport" Accept=".xlsx">
+                                <ActivatorContent>
+                                    <MudLoadingButton Class="pa-0 ma-0" Style="font-weight:400;text-transform:none;"
+                                                      Variant="Variant.Text"
+                                                      Loading="@_simcardsUploading">
+                                        @ConstantString.Import
+                                    </MudLoadingButton>
+                                </ActivatorContent>
+                            </MudFileUpload>
+                        </div>
+                    </MudPaper>
+                    <MudPaper Class="py-4 px-6 rounded-lg d-flex align-center">
+                        <div class="flex-grow-1">
+                            <MudText Typo="Typo.h6">@L["Customers"]</MudText>
+                            <MudText Typo="Typo.h4">@_dataCount.ParentCustomer</MudText>
+                            <MudText Typo="Typo.h4">@_dataCount.ChildCustomers</MudText>
+                        </div>
+                        <div class="d-flex align-end justify-end mud-height-full py-8">
+                            <MudFileUpload T="IBrowserFile" FilesChanged="OnCustomersImport" Accept=".xlsx">
+                                <ActivatorContent>
+                                    <MudLoadingButton Class="pa-0 ma-0" Style="font-weight:400;text-transform:none;"
+                                                      Variant="Variant.Text"
+                                                      Loading="@_customersUploading">
+                                        @ConstantString.Import
+                                    </MudLoadingButton>
+                                </ActivatorContent>
+                            </MudFileUpload>
+                        </div>
+                    </MudPaper>
+                </div>
+
+            </MudExpansionPanel>
+         
+           
+            <MudExpansionPanel Style="border-radius: var(--mud-default-borderradius) !important;"
+                               Class="mud-elevation-25 pa-2 mb-3" Text=@L["Tracking Units"]>
+
+                <div class="lp-app-grid">
+                    <MudPaper Class="py-4 px-6 rounded-lg d-flex align-center">
+                        <div class="flex-grow-1">
+                            <MudText Typo="Typo.h6">@L["Tracking Units"]</MudText>
+                            <MudText Typo="Typo.h4">@_dataCount.TrackingUnits</MudText>
+                        </div>
+                        <div class="d-flex align-end justify-end mud-height-full py-8">
+                            <MudFileUpload T="IBrowserFile" FilesChanged="OnUnitsImport" Accept=".xlsx">
+                                <ActivatorContent>
+                                    <MudLoadingButton Class="pa-0 ma-0" Style="font-weight:400;text-transform:none;"
+                                                      Variant="Variant.Text"
+                                                      Loading="@_unitsUploading">
+                                        @ConstantString.Import
+                                    </MudLoadingButton>
+                                </ActivatorContent>
+                            </MudFileUpload>
+                        </div>
+                    </MudPaper>
+                </div>
+
+            </MudExpansionPanel>
+          
+          
+            <MudExpansionPanel Style="border-radius: var(--mud-default-borderradius) !important;"
+                               Class="mud-elevation-25 pa-2 mb-3" Text=@L["Services Log, Subscriptions and Wialon Tasks"]>
+
+                <div class="lp-app-grid">
+                    <MudPaper Class="py-4 px-6 rounded-lg d-flex align-center">
+                        <div class="flex-grow-1">
+                            <MudText Typo="Typo.h6">@L["Service Logs"]</MudText>
+                            <MudText Typo="Typo.h4">@_dataCount.ServiceLogs</MudText>
+                        </div>
+                        <div class="d-flex align-end justify-end mud-height-full py-8">
+                            <MudFileUpload T="IBrowserFile" FilesChanged="OnServiceLogsImport" Accept=".xlsx">
+                                <ActivatorContent>
+                                    <MudLoadingButton Class="pa-0 ma-0" Style="font-weight:400;text-transform:none;"
+                                                      Variant="Variant.Text"
+                                                      Loading="@_servicelogsUploading">
+                                        @ConstantString.Import
+                                    </MudLoadingButton>
+                                </ActivatorContent>
+                            </MudFileUpload>
+                        </div>
+                    </MudPaper>
+                    <MudPaper Class="py-4 px-6 rounded-lg d-flex align-center">
+                        <div class="flex-grow-1">
+                            <MudText Typo="Typo.h6">@L["Subscriptions"]</MudText>
+                            <MudText Typo="Typo.h4">@_dataCount.Subscriptions</MudText>
+                        </div>
+                        <div class="d-flex align-end justify-end mud-height-full py-8">
+                            <MudFileUpload T="IBrowserFile" FilesChanged="OnSubscriptionsImport" Accept=".xlsx">
+                                <ActivatorContent>
+                                    <MudLoadingButton Class="pa-0 ma-0" Style="font-weight:400;text-transform:none;"
+                                                      Variant="Variant.Text"
+                                                      Loading="@_subscriptionsUploading">
+                                        @ConstantString.Import
+                                    </MudLoadingButton>
+                                </ActivatorContent>
+                            </MudFileUpload>
+                        </div>
+                    </MudPaper>
+                    <MudPaper Class="py-4 px-6 rounded-lg d-flex align-center">
+                        <div class="flex-grow-1">
+                            <MudText Typo="Typo.h6">@L["Wialon Tasks"]</MudText>
+                            <MudText Typo="Typo.h4">@_dataCount.WialonTasks</MudText>
+                        </div>
+                        <div class="d-flex align-end justify-end mud-height-full py-8">
+                            <MudFileUpload T="IBrowserFile" FilesChanged="OnWialonTasksImport" Accept=".xlsx">
+                                <ActivatorContent>
+                                    <MudLoadingButton Class="pa-0 ma-0" Style="font-weight:400;text-transform:none;"
+                                                      Variant="Variant.Text"
+                                                      Loading="@_wialontasksUploading">
+                                        @ConstantString.Import
+                                    </MudLoadingButton>
+                                </ActivatorContent>
+                            </MudFileUpload>
+                        </div>
+                    </MudPaper>
+                </div>
+
+            </MudExpansionPanel>
+
+            
+
+            <MudExpansionPanel Style="border-radius: var(--mud-default-borderradius) !important;"
+                               Class="mud-elevation-25 pa-2 mb-3" Text=@L["All data"]>
+
+                <div class="lp-app-grid">
+                    <MudPaper Class="py-4 px-6 rounded-lg d-flex align-center">
+
+                        <div class="d-flex align-end justify-center mud-height-full py-8">
+                            <MudLoadingButton Color="Color.Primary" 
+                            DropShadow="false" 
+                            Loading="@_deleting" 
+                            OnClick="OnDeleteData">
+                            @L["Delete All Data"]
+                            </MudLoadingButton>
+                        </div>
+                      
+                        
+
+                        <div class="d-flex align-end justify-center mud-height-full py-8">
+
+                            <MudFileUpload T="IBrowserFile" FilesChanged="OnImportData" Accept=".xlsx">
+                                <ActivatorContent>
+                                    <MudLoadingButton Class="pa-0 ma-0" Style="font-weight:400;text-transform:none;"
+                                                      Variant="Variant.Text"
+                                                      Loading="@_uploading">
+                                        @L["Import All Data"]
+                                    </MudLoadingButton>
+                                </ActivatorContent>
+                            </MudFileUpload>
+                        </div>
+                    </MudPaper>
+                </div>
+
+            </MudExpansionPanel>
+        </MudPaper>
+
+    </div>
+
+</MudContainer>
+
+<style>
+    .lp-app-grid {
+        display: grid;
+        gap: 24px;
+        grid-template-columns: repeat(auto-fit,minmax(300px,1fr));
+    }
+</style>
+
+
+@code
+{
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthState { get; set; } = default!;
+    [CascadingParameter]
+    private UserProfile? UserProfile { get; set; }
+    public string? Title { get; private set; }
+
+    private DataCountDto _dataCount = new();
+    private GetDataCountsQuery Query { get; set; } = new();
+
+
+
+    private bool _loading;
+
+    private bool _deleting = false;
+    private bool _uploading = false;
+
+    private bool _unitModelsUploading = false;
+    private bool _sprovidersUploading = false;
+    private bool _spackagesUploading = false;
+
+    private bool _assetsUploading = false;
+    private bool _simcardsUploading = false;
+    private bool _customersUploading = false;
+    private bool _unitsUploading = false;
+
+    private bool _cuspricesUploading = false;
+    private bool _servicespricesUploading = false;
+
+    private bool _servicelogsUploading = false;
+    private bool _subscriptionsUploading = false;
+    private bool _wialontasksUploading = false;
+
+
+
+
+
+
+    protected string ContentClassNames => new CssBuilder("flex-grow-1 flex-shrink-1")
+        .AddClass("pa-5", !false)
+        .AddClass("px-8", false)
+        .Build();
+
+    protected override async void OnInitialized()
+    {
+        Title = L["MyData"];
+
+        await LoadDataAsync();
+
+
+    }
+    private async Task LoadDataAsync()
+    {
+        if (_loading) return;
+
+        _loading = true;
+        try
+        {
+            var result = await Mediator.Send(Query).ConfigureAwait(false);
+            _dataCount = result.Data;
+
+            // result.Match(
+            //     data =>
+            //     {
+            //         Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+            //         return data;
+            //     },
+            //     errors =>
+            //     {
+            //         Snackbar.Add(errors, MudBlazor.Severity.Error);
+            //         return -1;
+            //     });
+
+        }
+        catch (OperationCanceledException)
+        {
+            // Ignore cancellation
+        }
+        catch (Exception ex)
+        {
+            // Console.WriteLine($"Error loading data: {ex.Message}");
+            // _originalTable = new List<ChartDto>();
+            // _filteredTable = new List<ChartDto>();
+            // _currentImpulse = null;
+            // await ShowNotification($"Error loading data: {ex.Message}", Severity.Error);
+        }
+        finally
+        {
+            _loading = false;
+            // StateHasChanged();
+        }
+    }
+
+
+    private async Task OnDeleteData()
+    {
+        try
+        {
+            _deleting = true;
+            var model = new DeleteDataCommand();
+            var result = await Mediator.Send(model);
+            if (result.Succeeded)
+                Snackbar.Add(ConstantString.DeleteSuccess, MudBlazor.Severity.Info);
+            else
+                Snackbar.Add(ConstantString.DeleteFail, MudBlazor.Severity.Error);
+        }
+        finally
+        {
+            _deleting = false;
+        }
+    }
+
+
+    private async Task OnImportData(IBrowserFile file)
+    {
+        _uploading = true;
+        // Read the stream here, for example into a MemoryStream or process it.
+        var memoryStream = new MemoryStream();
+        await file.OpenReadStream(maxAllowedSize: 3145728).CopyToAsync(memoryStream);
+        var command = new ImportDataCommand(file.Name, memoryStream.ToArray(), Mediator);
+        var result = await Mediator.Send(command);
+        if (result.Succeeded)
+            Snackbar.Add(ConstantString.ImportSuccess, MudBlazor.Severity.Info);
+        else
+            Snackbar.Add(ConstantString.ImportFail, MudBlazor.Severity.Error);
+        _uploading = false;
+
+    }
+
+    private async Task OnUnitModelsImport(IBrowserFile file)
+    {
+        _unitModelsUploading = true;
+        var stream = new MemoryStream();
+        await file.OpenReadStream().CopyToAsync(stream);
+        var command = new ImportTrackingUnitModelsCommand(file.Name, stream.ToArray());
+        var result = await Mediator.Send(command);
+        if (result.Succeeded)
+        {
+            // await _table.ReloadServerData();
+            Snackbar.Add($"{ConstantString.ImportSuccess}", Severity.Info);
+        }
+        else
+        {
+            foreach (var msg in result.Errors)
+            {
+                Snackbar.Add($"{msg}", Severity.Error);
+            }
+        }
+        _unitModelsUploading = false;
+    }
+
+    private async Task OnSProvidersImport(IBrowserFile file)
+    {
+        _sprovidersUploading = true;
+        var stream = new MemoryStream();
+        await file.OpenReadStream().CopyToAsync(stream);
+        var command = new ImportSProvidersCommand(file.Name, stream.ToArray());
+        var result = await Mediator.Send(command);
+        if (result.Succeeded)
+        {
+            // await _table.ReloadServerData();
+            Snackbar.Add($"{ConstantString.ImportSuccess}", Severity.Info);
+        }
+        else
+        {
+            foreach (var msg in result.Errors)
+            {
+                Snackbar.Add($"{msg}", Severity.Error);
+            }
+        }
+        _sprovidersUploading = false;
+    }
+
+    private async Task OnSPackagesImport(IBrowserFile file)
+    {
+        _spackagesUploading = true;
+        var stream = new MemoryStream();
+        await file.OpenReadStream().CopyToAsync(stream);
+        var command = new ImportSPackagesCommand(file.Name, stream.ToArray());
+        var result = await Mediator.Send(command);
+        if (result.Succeeded)
+        {
+            // await _table.ReloadServerData();
+            Snackbar.Add($"{ConstantString.ImportSuccess}", Severity.Info);
+        }
+        else
+        {
+            foreach (var msg in result.Errors)
+            {
+                Snackbar.Add($"{msg}", Severity.Error);
+            }
+        }
+        _spackagesUploading = false;
+    }
+
+
+    private async Task OnAssetsImport(IBrowserFile file)
+    {
+        _assetsUploading = true;
+        var stream = new MemoryStream();
+        await file.OpenReadStream().CopyToAsync(stream);
+        var command = new ImportTrackedAssetsCommand(file.Name, stream.ToArray());
+        var result = await Mediator.Send(command);
+        if (result.Succeeded)
+        {
+            // await _table.ReloadServerData();
+            Snackbar.Add($"{ConstantString.ImportSuccess}", Severity.Info);
+        }
+        else
+        {
+            foreach (var msg in result.Errors)
+            {
+                Snackbar.Add($"{msg}", Severity.Error);
+            }
+        }
+        _assetsUploading = false;
+    }
+
+    private async Task OnSimCardsImport(IBrowserFile file)
+    {
+        _simcardsUploading = true;
+        var stream = new MemoryStream();
+        await file.OpenReadStream().CopyToAsync(stream);
+        var command = new ImportSimCardsCommand(file.Name, stream.ToArray());
+        var result = await Mediator.Send(command);
+        if (result.Succeeded)
+        {
+            // await _table.ReloadServerData();
+            Snackbar.Add($"{ConstantString.ImportSuccess}", Severity.Info);
+        }
+        else
+        {
+            foreach (var msg in result.Errors)
+            {
+                Snackbar.Add($"{msg}", Severity.Error);
+            }
+        }
+        _simcardsUploading = false;
+    }
+
+    private async Task OnCustomersImport(IBrowserFile file)
+    {
+        _customersUploading = true;
+        var stream = new MemoryStream();
+        await file.OpenReadStream().CopyToAsync(stream);
+        var command = new ImportCustomersCommand(file.Name, stream.ToArray());
+        var result = await Mediator.Send(command);
+        if (result.Succeeded)
+        {
+            // await _table.ReloadServerData();
+            Snackbar.Add($"{ConstantString.ImportSuccess}", Severity.Info);
+        }
+        else
+        {
+            foreach (var msg in result.Errors)
+            {
+                Snackbar.Add($"{msg}", Severity.Error);
+            }
+        }
+        _customersUploading = false;
+    }
+
+    private async Task OnUnitsImport(IBrowserFile file)
+    {
+        _unitsUploading = true;
+        var stream = new MemoryStream();
+        await file.OpenReadStream().CopyToAsync(stream);
+        var command = new ImportTrackingUnitsCommand(file.Name, stream.ToArray());
+        var result = await Mediator.Send(command);
+        if (result.Succeeded)
+        {
+            // await _table.ReloadServerData();
+            Snackbar.Add($"{ConstantString.ImportSuccess}", Severity.Info);
+        }
+        else
+        {
+            foreach (var msg in result.Errors)
+            {
+                Snackbar.Add($"{msg}", Severity.Error);
+            }
+        }
+        _unitsUploading = false;
+    }
+
+    private async Task OnServiceLogsImport(IBrowserFile file)
+    {
+        _servicelogsUploading = true;
+        var stream = new MemoryStream();
+        await file.OpenReadStream().CopyToAsync(stream);
+        var command = new ImportServiceLogsCommand(file.Name, stream.ToArray());
+        var result = await Mediator.Send(command);
+        if (result.Succeeded)
+        {
+            // await _table.ReloadServerData();
+            Snackbar.Add($"{ConstantString.ImportSuccess}", Severity.Info);
+        }
+        else
+        {
+            foreach (var msg in result.Errors)
+            {
+                Snackbar.Add($"{msg}", Severity.Error);
+            }
+        }
+        _servicelogsUploading = false;
+    }
+    private async Task OnSubscriptionsImport(IBrowserFile file)
+    {
+        _subscriptionsUploading = true;
+        var stream = new MemoryStream();
+        await file.OpenReadStream().CopyToAsync(stream);
+        var command = new ImportSubscriptionsCommand(file.Name, stream.ToArray());
+        var result = await Mediator.Send(command);
+        if (result.Succeeded)
+        {
+            // await _table.ReloadServerData();
+            Snackbar.Add($"{ConstantString.ImportSuccess}", Severity.Info);
+        }
+        else
+        {
+            foreach (var msg in result.Errors)
+            {
+                Snackbar.Add($"{msg}", Severity.Error);
+            }
+        }
+        _subscriptionsUploading = false;
+    }
+    private async Task OnWialonTasksImport(IBrowserFile file)
+    {
+        _wialontasksUploading = true;
+        var stream = new MemoryStream();
+        await file.OpenReadStream().CopyToAsync(stream);
+        var command = new ImportWialonTasksCommand(file.Name, stream.ToArray());
+        var result = await Mediator.Send(command);
+        if (result.Succeeded)
+        {
+            // await _table.ReloadServerData();
+            Snackbar.Add($"{ConstantString.ImportSuccess}", Severity.Info);
+        }
+        else
+        {
+            foreach (var msg in result.Errors)
+            {
+                Snackbar.Add($"{msg}", Severity.Error);
+            }
+        }
+        _wialontasksUploading = false;
+    }
+
+
+
+}

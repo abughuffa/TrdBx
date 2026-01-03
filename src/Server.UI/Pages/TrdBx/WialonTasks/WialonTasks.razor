@@ -4,10 +4,8 @@
 @using CleanArchitecture.Blazor.Application.Features.WialonTasks.DTOs
 @using CleanArchitecture.Blazor.Application.Features.WialonTasks.Queries.Pagination
 
-
 @inject IStringLocalizer<WialonTasks> L
 
-    
 @attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.WialonTasks.View)]
 
 <MudContainer Class="mt-3">

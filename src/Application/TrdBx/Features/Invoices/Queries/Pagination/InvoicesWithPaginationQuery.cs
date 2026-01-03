@@ -49,7 +49,7 @@ public class InvoicesWithPaginationQueryHandler :
         //                                            cancellationToken);
         //return data;
 
-        var data = await _context.Invoices.OrderBy($"{request.OrderBy} {request.SortDirection}")
+        var data = await _context.Invoices.Include(s => s.Customer).OrderBy($"{request.OrderBy} {request.SortDirection}")
                                                   .ProjectToPaginatedDataAsync(request.Specification,
                                                                                request.PageNumber,
                                                                                request.PageSize,

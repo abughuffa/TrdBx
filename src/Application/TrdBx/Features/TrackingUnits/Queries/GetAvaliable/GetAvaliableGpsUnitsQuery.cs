@@ -44,14 +44,14 @@ public class GetAvaliableTrackingUnitsQueryHandler :
             var c = await _context.Customers.Where(c => c.Id == cc.ParentId).ToListAsync(cancellationToken);
             var Ids = c.Select(obj => obj.Id).ToArray();
 
-            var data = await _context.TrackingUnits.ApplySpecification(new AvaliableTrackingUnitsSpecification(Ids))
+            var data = await _context.TrackingUnits.Include(u=>u.Subscriptions).ThenInclude(s=>s.ServiceLog).ApplySpecification(new AvaliableTrackingUnitsSpecification(Ids))
                                         .ProjectTo()
                                         .ToListAsync(cancellationToken);
             return data;
         }
         else
         {
-            var data = await _context.TrackingUnits.ApplySpecification(new AvaliableTrackingUnitsSpecification(new int[] { (int)request.Id }))
+            var data = await _context.TrackingUnits.Include(u => u.Subscriptions).ThenInclude(s => s.ServiceLog).ApplySpecification(new AvaliableTrackingUnitsSpecification(new int[] { (int)request.Id }))
                                         .ProjectTo()
                                         .ToListAsync(cancellationToken);
             return data;

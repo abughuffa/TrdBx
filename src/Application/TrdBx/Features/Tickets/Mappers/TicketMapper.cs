@@ -1,22 +1,30 @@
 ﻿
 //using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.AddEdit;
+using CleanArchitecture.Blazor.Application.Features.Documents.DTOs;
+using CleanArchitecture.Blazor.Application.Features.Identity.Mappers;
 using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Assign;
 using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Create;
 using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Reject;
 
 //using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Update;
 using CleanArchitecture.Blazor.Application.Features.Tickets.DTOs;
+using CleanArchitecture.Blazor.Application.Features.TrackingUnits.DTOs;
 
 namespace CleanArchitecture.Blazor.Application.Features.Tickets.Mappers;
 
 #pragma warning disable RMG020
 #pragma warning disable RMG012
 [Mapper]
+[UseStaticMapper(typeof(ApplicationUserMapper))]
 public static partial class Mapper
 {
+    [MapProperty(nameof(Ticket.TrackingUnit.SNo), nameof(TicketDto.TrackingUnit))]
+    //[MapProperty(nameof(Ticket.Installer.DisplayName), nameof(TicketDto.Installer))]
     public static partial TicketDto ToDto(Ticket source);
 
     [MapperIgnoreSource(nameof(TicketDto.TrackingUnit))]
+    [MapperIgnoreSource(nameof(TicketDto.CreatedByUser))]
+    [MapperIgnoreSource(nameof(TicketDto.LastModifiedByUser))]
     public static partial Ticket FromDto(TicketDto dto);
 
     public static partial AssignTicketCommand ToAssignCommand(TicketDto dto);

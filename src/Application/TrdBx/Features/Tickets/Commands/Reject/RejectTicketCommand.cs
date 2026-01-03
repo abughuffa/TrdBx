@@ -49,7 +49,7 @@ public class RejectTicketCommandHandler : IRequestHandler<RejectTicketCommand, R
         }
 
         ticket.TicketStatus = TicketStatus.Rejected;
-        ticket.InstallerId = string.Empty;
+        //ticket.InstallerId = string.Empty;
         ticket.TaDate = null;
         ticket.Note = request.Note;
 

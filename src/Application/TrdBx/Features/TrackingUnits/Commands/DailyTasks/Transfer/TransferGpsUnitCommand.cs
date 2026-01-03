@@ -12,7 +12,7 @@ public class TransferTrackingUnitCommand : ICacheInvalidatorRequest<Result<int>>
     [Description("SimCardId")] public int SimCardId { get; set; }
     [Description("TrackedAssetId")] public int TrackedAssetId { get; set; }
     [Description("CustomerId")] public int CustomerId { get; set; }
-    [Description("InstallerId")] public string InstallerId { get; set; } = string.Empty;
+    //[Description("InstallerId")] public string InstallerId { get; set; } = string.Empty;
     [Description("SubPackage")] public SubPackage SubPackage { get; set; } = SubPackage.Active;
     [Description("InsMode")] public InsMode InsMode { get; set; }
     [Description("CreateDeservedServices")] public bool CreateDeservedServices { get; set; } = true;
@@ -69,7 +69,7 @@ public class TransferTrackingUnitCommandHandler : SubscriptionSharedLogic, IRequ
     {
         //await using var _context = await _dbContextFactory.CreateAsync(cancellationToken);
 
-        var unit = await _context.TrackingUnits.Where(x => x.Id == request.Id).Include(x => x.Subscriptions).FirstAsync(cancellationToken) ?? throw new NotFoundException($"TrackingUnit with id: [{request.Id}] not found.");
+        var unit = await _context.TrackingUnits.Where(x => x.Id == request.Id).Include(u => u.Subscriptions).ThenInclude(s => s.ServiceLog).FirstAsync(cancellationToken) ?? throw new NotFoundException($"TrackingUnit with id: [{request.Id}] not found.");
 
         if (!(unit.UStatus == UStatus.InstalledActive || unit.UStatus == UStatus.InstalledActiveHosting || unit.UStatus == UStatus.InstalledInactive))
         {
@@ -80,19 +80,19 @@ public class TransferTrackingUnitCommandHandler : SubscriptionSharedLogic, IRequ
 
         var asset = await _context.TrackedAssets.FindAsync(new object[] { request.TrackedAssetId }, cancellationToken) ?? throw new NotFoundException($"TrackedAsset with id: [{request.TrackedAssetId}] not found.");
 
-        var price = GetCPrice(_context, (int)unit.CustomerId, unit.TrackingUnitModelId);
+        var price = await GetCPrice(_context, (int)unit.CustomerId, unit.TrackingUnitModelId);
 
-        var serviceNo = GenSerialNo(_context, "ServiceLog", request.TsDate).Result;
+        var serviceNo = await GenSerialNo(_context, "ServiceLog", request.TsDate);
 
         var serviceLog = new ServiceLog()
         {
             ServiceNo = serviceNo,
             ServiceTask = ServiceTask.Transfer,
             CustomerId = request.CustomerId,
-            InstallerId = request.InstallerId,
+            //InstallerId = request.InstallerId,
             SerDate = request.TsDate,
             IsBilled = false,
-            Amount = GetSPrice(_context, ServiceTask.Transfer),
+            Amount = await GetSPrice(_context, ServiceTask.Transfer),
             Subscriptions = [],
             WialonTasks = []
         };

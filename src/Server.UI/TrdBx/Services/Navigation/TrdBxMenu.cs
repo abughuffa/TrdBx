@@ -18,12 +18,7 @@ internal static class TrdBxMenu
                     IsParent = true,
                     MenuItems = new List<MenuSectionSubItemModel>
                     {
-                        new ()
-                        {
-                            Title = "Services's Prices",
-                            Href = "/pages/TrdBx/ServicePrices",
-                            PageStatus = PageStatus.Completed
-                        },
+                       
                         new ()
                         {
                             Title = "Customers",
@@ -75,104 +70,77 @@ internal static class TrdBxMenu
                            Title = "Invoices",
                             Href = "/pages/TrdBx/Invoices",
                             PageStatus = PageStatus.Completed
+                        },
+                         new ()
+                        {
+                            Title = "Services's Prices",
+                            Href = "/pages/TrdBx/ServicePrices",
+                            PageStatus = PageStatus.Completed
                         }
                     }
                 },
                 new()
                 {
-                    Title = "Tests",
+                    Title = "Local Data",
+                    Icon = Icons.Material.Filled.Dataset,
+                    PageStatus = PageStatus.Completed,
+                    IsParent = true,
+                    MenuItems = new List<MenuSectionSubItemModel>
+                    {
+                        new()
+                        {
+                            Title = "My Data",
+                            Href = "/pages/TrdBx/MyData/Local",
+                            PageStatus = PageStatus.Completed
+                        },
+                        new()
+                        {
+                            Title = "Charts",
+                            Href = "/pages/TrdBx/MyData/Local/Charts",
+                            PageStatus = PageStatus.Completed
+                        },
+                        new()
+                        {
+                            Title = "Backup & Restore",
+                            Href = "/pages/TrdBx/MyData/Local/BackupRestore",
+                            PageStatus = PageStatus.Completed
+                        }
+                    }
+                },
+                new()
+                {
+                    Title = "Online Data",
                     Icon = Icons.Material.Filled.Api,
                     PageStatus = PageStatus.Completed,
                     IsParent = true,
                     MenuItems = new List<MenuSectionSubItemModel>
                     {
                         new()
-                    {
-                        Title = "Wialon Units",
-                        Href = "/pages/TrdBx/WialonUnits",
-                        PageStatus = PageStatus.Completed
-                    },
-                    new()
-                    {
-                        Title = "Libyana Sim Cards",
-                        Href = "/pages/TrdBx/LibyanaSimCards",
-                        PageStatus = PageStatus.Completed
-                    },
-
-
-
-                        new()
                         {
-                           Title = "Syncronize Data",
-                            Href = "/pages/TrdBx/DbForceSyncs",
+                            Title = "Wialon Units",
+                            Href = "/pages/TrdBx/MyData/Online/WialonUnits",
                             PageStatus = PageStatus.Completed
                         },
                         new()
                         {
-                            Title = "Charts",
-                            Href = "/pages/TrdBx/Charts",
-                            PageStatus = PageStatus.Completed
-                        },
-                        new()
-                        {
-                           Title = "Diagnostics",
-                            Href =  "/pages/TrdBx/Diagnostics",
-                            PageStatus = PageStatus.Completed
-                        },
-                        new()
-                        {
-                           Title = "Data Matching",
-                            Href =  "/pages/TrdBx/DbMatchings",
+                            Title = "Libyana Sim Cards",
+                            Href = "/pages/TrdBx/MyData/Online/LibyanaSimCards",
                             PageStatus = PageStatus.Completed
                         }
-                    }
-                },
-                new()
-                {
-                    Title = "Test Cases",
-                    Icon = Icons.Material.Filled.Analytics,
-                    PageStatus = PageStatus.Completed,
-                    IsParent = true,
-                    MenuItems = new List<MenuSectionSubItemModel>
-                    {
+                        ,
                         new()
                         {
-                            Title = "Fake Data",
-                            Href = "/pages/TrdBx/FakeData",
+                           Title = "Data Matches",
+                            Href =  "/pages/TrdBx/MyData/Online/DataMatches",
                             PageStatus = PageStatus.Completed
                         },
                         new()
                         {
-                            Title = "Backup & Restore",
-                            Href = "/pages/TrdBx/BackupRestore",
+                           Title = "Data Diagnosises",
+                            Href =  "/pages/TrdBx/MyData/Online/DataDiagnosises",
                             PageStatus = PageStatus.Completed
-                        },
+                        }
 
-                        
-                        //new()
-                        //{
-                        //   Title = "Activate Cases",
-                        //    Href = "/pages/TrdBx/ActivateTestCases",
-                        //    PageStatus = PageStatus.Completed
-                        //},
-                        //new()
-                        //{
-                        //   Title = "ActivateGprs Cases",
-                        //    Href = "/pages/TrdBx/ActivateGprsTestCases",
-                        //    PageStatus = PageStatus.Completed
-                        //},
-                        //new()
-                        //{
-                        //   Title = "ActivateHosting Cases",
-                        //    Href = "/pages/TrdBx/ActivateHostingTestCases",
-                        //    PageStatus = PageStatus.Completed
-                        //},
-                        //new()
-                        //{
-                        //   Title = "Deactivate Cases",
-                        //    Href = "/pages/TrdBx/DeactivateTestCases",
-                        //    PageStatus = PageStatus.Completed
-                        //}
                     }
                 }
             }

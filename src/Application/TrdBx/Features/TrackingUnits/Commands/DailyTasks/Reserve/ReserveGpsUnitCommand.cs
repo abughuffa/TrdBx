@@ -56,7 +56,7 @@ public class ReserveTrackingUnitCommandHandler : IRequestHandler<ReserveTracking
 
         ////await using var _context = await _dbContextFactory.CreateAsync(cancellationToken);
 
-        var unit = await _context.TrackingUnits.Where(x => x.Id == request.Id).Include(x => x.Subscriptions).FirstAsync() ?? throw new NotFoundException($"TrackingUnit with id: [{request.Id}] not found.");
+        var unit = await _context.TrackingUnits.Where(x => x.Id == request.Id).FirstAsync() ?? throw new NotFoundException($"TrackingUnit with id: [{request.Id}] not found.");
 
         if (!(unit.UStatus == UStatus.New || unit.UStatus == UStatus.Reserved || unit.UStatus == UStatus.Used))
         {

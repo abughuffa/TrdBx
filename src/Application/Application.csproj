@@ -8,6 +8,11 @@
         <LangVersion>default</LangVersion>
     </PropertyGroup>
     <ItemGroup>
+      <Compile Remove="TrdBx\Features\Installers\**" />
+      <EmbeddedResource Remove="TrdBx\Features\Installers\**" />
+      <None Remove="TrdBx\Features\Installers\**" />
+    </ItemGroup>
+    <ItemGroup>
    
         <PackageReference Include="Ardalis.Specification" Version="9.3.1" />
         <PackageReference Include="Ardalis.Specification.EntityFrameworkCore" Version="9.3.1" />

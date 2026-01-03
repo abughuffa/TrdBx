@@ -1,5 +1,5 @@
 ﻿// Infrastructure.Services
-using CleanArchitecture.Blazor.Application.Features.DbAdmininstraion.DTOs;
+using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.BackupRestore.DTOs;
 using CleanArchitecture.Blazor.Infrastructure.Configurations;
 using Microsoft.AspNetCore.Hosting;
 
@@ -42,57 +42,60 @@ public class BackupRestoreService : IBackupRestoreService
         try
         {
             var backupPath = GetBackupPath();
-            var result = await _strategy.CreateBackupAsync(
-                _databaseSettings.ConnectionString,
-                backupPath,
-                backupName);
 
-            if (result)
-            {
-                _logger.LogInformation("Backup created successfully: {BackupName}", backupName);
+            var result = await _strategy.CreateBackupAsync(_databaseSettings.ConnectionString, backupPath, backupName);
 
-                return true;
-            }
-            else
-            {
-                _logger.LogError("Error creating backup: {BackupName}", backupName);
-                return false;
-            }
+            return await Task.FromResult(result);
+
+            //if (result)
+            //{
+            //    _logger.LogInformation("Backup created successfully: {BackupName}", backupName);
+
+            //    return await Task.FromResult(true);
+            //}
+            //else
+            //{
+            //    _logger.LogError("Error creating backup: {BackupName}", backupName);
+            //    return await Task.FromResult(false);
+            //}
                
 
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error creating backup: {BackupName}", backupName);
-            return false;
+            return await Task.FromResult(false);
         }
     }
 
-    public async Task<Result> RestoreBackupAsync(string backupName)
+    public async Task<bool> RestoreBackupAsync(string backupName)
     {
-        try
-        {
+        //try
+        //{
             var backupPath = GetBackupPath();
-            var result = await _strategy.RestoreBackupAsync(
-                _databaseSettings.ConnectionString,
-                backupPath,
-                backupName);
 
-            if (result)
-            {
-                _logger.LogInformation("Backup restored successfully: {BackupName}", backupName);
-                return await Result.SuccessAsync();
-            }
+            var result = await _strategy.RestoreBackupAsync(_databaseSettings.ConnectionString, backupPath, backupName);
+
+            return await Task.FromResult(result);
+
+            //if (result)
+            //{
+            //    _logger.LogInformation("Backup restored successfully: {BackupName}", backupName);
+            //    return await Task.FromResult(true);
+            //    //return await Result<bool>.SuccessAsync(true);
+            //}
                
 
-            _logger.LogError("Error restoring backup: {BackupName}", backupName);
-            return await Result.FailureAsync("Restore Faild!");
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error restoring backup: {BackupName}", backupName);
-            return await Result.FailureAsync("Restore Faild!");
-        }
+            //_logger.LogError("Error restoring backup: {BackupName}", backupName);
+            //return await Task.FromResult(false);
+            //return await Result<bool>.FailureAsync("Error");
+        //}
+        //catch (Exception ex)
+        //{
+        //    _logger.LogError(ex, "Error restoring backup: {BackupName}", backupName);
+        //    return await Task.FromResult(false);
+        //    //return await Result<bool>.FailureAsync("Error");
+        //}
     }
 
     public async Task<Result<int>> DeleteBackupAsync(string backupName)
@@ -119,10 +122,10 @@ public class BackupRestoreService : IBackupRestoreService
         }
     }
 
-    public async Task<string> GetBackupPathAsync()
-    {
-        return await Task.FromResult(GetBackupPath());
-    }
+    //public async Task<string> GetBackupPathAsync()
+    //{
+    //    return await Task.FromResult(GetBackupPath());
+    //}
 
     private string GetBackupPath()
     {

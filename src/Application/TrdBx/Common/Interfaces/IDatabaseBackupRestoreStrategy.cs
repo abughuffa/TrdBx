@@ -1,5 +1,5 @@
 ﻿// Application.Common.Interfaces
-using CleanArchitecture.Blazor.Application.Features.DbAdmininstraion.DTOs;
+using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.BackupRestore.DTOs;
 
 namespace CleanArchitecture.Blazor.Application.Common.Interfaces;
 public interface IDatabaseBackupRestoreStrategy

@@ -9,7 +9,7 @@ public class ActivateTrackingUnitCommand : ICacheInvalidatorRequest<Result>
 {
     [Description("Id")] public int Id { get; set; }
     [Description("TsDate")] public DateOnly TsDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
-    [Description("InstallerId")] public string InstallerId { get; set; } = string.Empty;
+    //[Description("InstallerId")] public string InstallerId { get; set; } = string.Empty;
     [Description("ApplyChangesToDatabase")] public bool ApplyChangesToDatabase { get; set; } = true;
     [Description("ApplyChangesOnWialon")] public bool ApplyChangesOnWialon { get; set; } = true;
      public IEnumerable<string> Tags => TrackingUnitCacheKey.Tags;
@@ -68,17 +68,17 @@ public class ActivateTrackingUnitCommandHandler : SubscriptionSharedLogic, IRequ
             return await Result.FailureAsync("Tracking Unit status should be InstalledInactive, InstalledActiveGprs Or InstalledActiveHosting to Activate it.");
         }
 
-        var price = GetCPrice(_context,(int)unit.CustomerId, unit.TrackingUnitModelId);
+        var price = await GetCPrice(_context,(int)unit.CustomerId, unit.TrackingUnitModelId);
 
-        var serviceNo = GenSerialNo(_context, "ServiceLog", request.TsDate).Result;
-           
+        var serviceNo = await GenSerialNo(_context, "ServiceLog", request.TsDate);
+
         var serviceLog = new ServiceLog()
         {
             Desc = string.Format("تفعيل الوحدة ({0}) بشكل كامل .", unit.SNo),
             ServiceNo = serviceNo,
             ServiceTask = ServiceTask.ActivateUnit,
             CustomerId = (int)unit.CustomerId,
-            InstallerId = request.InstallerId,
+            //InstallerId = request.InstallerId,
             SerDate = request.TsDate,
             Amount = 0.0m,
             IsDeserved = true,
@@ -102,7 +102,7 @@ public class ActivateTrackingUnitCommandHandler : SubscriptionSharedLogic, IRequ
             return await Result.SuccessAsync();
         }
         else
-            return await Result.FailureAsync("TransferTrackingUnit Faild!");
+            return await Result.FailureAsync("ActivateTrackingUnit Faild!");
 
     }
 }

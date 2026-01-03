@@ -1,0 +1,267 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="# Zoom: {0}x" xml:space="preserve">
+    <value># تكبير: {0} اكس</value>
+  </data>
+  <data name=", using Logarithmic Scale" xml:space="preserve">
+    <value>، استخدام التدرج اللوغارتمي</value>
+  </data>
+  <data name=": Zeros excluded" xml:space="preserve">
+    <value>: استبعاد الأصفار</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>الأجراءات</value>
+  </data>
+  <data name="ago" xml:space="preserve">
+    <value>مضت</value>
+  </data>
+  <data name="Count" xml:space="preserve">
+    <value>العدد</value>
+  </data>
+  <data name="Data Analysis" xml:space="preserve">
+    <value>تحليل البيانات</value>
+  </data>
+  <data name="Data Points" xml:space="preserve">
+    <value>نقاط البيانات</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>التاريخ</value>
+  </data>
+  <data name="Day of Week" xml:space="preserve">
+    <value>يوم الاسبوع</value>
+  </data>
+  <data name="End Date" xml:space="preserve">
+    <value>تاريخ الانتهاء</value>
+  </data>
+  <data name="Error loading data: {0}" xml:space="preserve">
+    <value>خطأ تحميل البيانات: {0}</value>
+  </data>
+  <data name="Error scrolling to impulse: {0}" xml:space="preserve">
+    <value>خطأ اثناء التمرير للنبضة: {0}</value>
+  </data>
+  <data name="Exclude Zeros" xml:space="preserve">
+    <value>الأصفار مستبعدة</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>تصدير</value>
+  </data>
+  <data name="Export failed: {0}" xml:space="preserve">
+    <value>فشل التصدير: {0}</value>
+  </data>
+  <data name="Export ready!" xml:space="preserve">
+    <value>التصدير جاهز!</value>
+  </data>
+  <data name="Exporting {0} items..." xml:space="preserve">
+    <value>تصدير {0} عنصر</value>
+  </data>
+  <data name="Filter applied successfully" xml:space="preserve">
+    <value>تم تطبيق التصفية بنجاح</value>
+  </data>
+  <data name="Filter by Customer" xml:space="preserve">
+    <value>تصفية بحسب الزبون</value>
+  </data>
+  <data name="Focused on selected item" xml:space="preserve">
+    <value>التركيز على العنصر المختار</value>
+  </data>
+  <data name="from now" xml:space="preserve">
+    <value>منذ الآن</value>
+  </data>
+  <data name="Highest Group Count" xml:space="preserve">
+    <value>أعلى مجموعة عدداً</value>
+  </data>
+  <data name="Item" xml:space="preserve">
+    <value>العنصر</value>
+  </data>
+  <data name="items" xml:space="preserve">
+    <value>من العناصر</value>
+  </data>
+  <data name="Items Count" xml:space="preserve">
+    <value>عدد العناصر</value>
+  </data>
+  <data name="Items of Selected Impulse: {0}: Count: {1}" xml:space="preserve">
+    <value>عناصر النبضة المختارة: {0} : عددها: {1}</value>
+  </data>
+  <data name="Loaded {0} data points" xml:space="preserve">
+    <value>تحميل {0} نقطة بيانات</value>
+  </data>
+  <data name="Loading data..." xml:space="preserve">
+    <value>تحميل البيانات...</value>
+  </data>
+  <data name="Logarithmic Scale" xml:space="preserve">
+    <value>التدرج اللوغارتمي</value>
+  </data>
+  <data name="Lowest Group Count" xml:space="preserve">
+    <value>أقل مجموعة عدداً</value>
+  </data>
+  <data name="No data" xml:space="preserve">
+    <value>لا بيانات</value>
+  </data>
+  <data name="No Data Available" xml:space="preserve">
+    <value>لا بيانات متاحة</value>
+  </data>
+  <data name="No data available for the selected criteria" xml:space="preserve">
+    <value>لا بيانات متاحة للصيغة المختارة</value>
+  </data>
+  <data name="No data matches your filter criteria. Try adjusting your filters." xml:space="preserve">
+    <value>لا بيانات توافق صيغة التصفية. حاول تعديل صيغة فلتر التصفية.</value>
+  </data>
+  <data name="Number of Groups" xml:space="preserve">
+    <value>عدد المجموعات</value>
+  </data>
+  <data name="Point {0} of {1} • {2} • Count: {3} • Items: {4}" xml:space="preserve">
+    <value>النقطة {0} من {1}  •  {2} • العدد: {3}  •  العناصر: {4}</value>
+  </data>
+  <data name="Refresh Data" xml:space="preserve">
+    <value>انعاش البيانات</value>
+  </data>
+  <data name="Selected Impulse Details:" xml:space="preserve">
+    <value>تفاصيل النبضة المختارة:</value>
+  </data>
+  <data name="Selected impulse: {0} with {1} items" xml:space="preserve">
+    <value>النبضة المختارة: {0} مع {1} من العناصر</value>
+  </data>
+  <data name="Showing {0} Impulses" xml:space="preserve">
+    <value>عرض {0} من النبضات</value>
+  </data>
+  <data name="Start Date" xml:space="preserve">
+    <value>تاريخ البدء</value>
+  </data>
+  <data name="Time from Today: {0} days {1}" xml:space="preserve">
+    <value>الوقت من اليوم: {0} يوماً {1}</value>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>اليوم</value>
+  </data>
+  <data name="Total Items" xml:space="preserve">
+    <value>مجموع العناصر</value>
+  </data>
+  <data name="Trend Line" xml:space="preserve">
+    <value>الخط المتصل</value>
+  </data>
+  <data name="Updated item spacing: {0}px (base: {1}, zoom: {2}x)" xml:space="preserve">
+    <value>تحديث تباعد العناصر: {0} نقطة (التباعد الاساسي: {1}، التكبير: {2} اكس)</value>
+  </data>
+  <data name="Zoom level: {0}x" xml:space="preserve">
+    <value>مستوى التكبير: {0} اكس</value>
+  </data>
+  <data name="Zoom reset to default" xml:space="preserve">
+    <value>استعادة قيمة التكبير الافتراضية</value>
+  </data>
+</root>

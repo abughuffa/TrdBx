@@ -12,7 +12,7 @@ public class RecoverTrackingUnitCommand : ICacheInvalidatorRequest<Result<int>>
 {
     [Description("Id")] public int Id { get; set; }
     [Description("TsDate")] public DateOnly TsDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
-    [Description("InstallerId")] public string InstallerId { get; set; } = string.Empty;
+    //[Description("InstallerId")] public string InstallerId { get; set; } = string.Empty;
     [Description("CreateDeservedServices")] public bool CreateDeservedServices { get; set; } = false;
     [Description("ApplyChangesOnWialon")] public bool ApplyChangesOnWialon { get; set; } = true;
 
@@ -64,7 +64,7 @@ public class RecoverTrackingUnitCommandHandler : SubscriptionSharedLogic, IReque
     {
         //await using var _context = await _dbContextFactory.CreateAsync(cancellationToken);
 
-        var unit = await _context.TrackingUnits.Where(x => x.Id == request.Id).Include(x => x.Subscriptions).FirstAsync() ?? throw new NotFoundException($"TrackingUnit with id: [{request.Id}] not found.");
+        var unit = await _context.TrackingUnits.Where(x => x.Id == request.Id).Include(u => u.Subscriptions).ThenInclude(s => s.ServiceLog).FirstAsync() ?? throw new NotFoundException($"TrackingUnit with id: [{request.Id}] not found.");
 
         if (!(unit.UStatus == UStatus.InstalledActive || unit.UStatus == UStatus.InstalledActiveGprs || unit.UStatus == UStatus.InstalledActiveHosting || unit.UStatus == UStatus.InstalledInactive))
         {
@@ -73,9 +73,9 @@ public class RecoverTrackingUnitCommandHandler : SubscriptionSharedLogic, IReque
 
         var asset = await _context.TrackedAssets.Where(x => x.Id == (int)unit.TrackedAssetId).FirstAsync();
 
-        var price = GetCPrice(_context,(int)unit.CustomerId, unit.TrackingUnitModelId);
+        var price = await GetCPrice(_context,(int)unit.CustomerId, unit.TrackingUnitModelId);
 
-        var serviceNo = GenSerialNo(_context, "ServiceLog", request.TsDate).Result;
+        var serviceNo = await GenSerialNo(_context, "ServiceLog", request.TsDate);
 
         var serviceLog = new ServiceLog()
         {
@@ -83,11 +83,11 @@ public class RecoverTrackingUnitCommandHandler : SubscriptionSharedLogic, IReque
             ServiceNo = serviceNo,
             ServiceTask = ServiceTask.Recover,
             CustomerId = (int)unit.CustomerId,
-            InstallerId = request.InstallerId,
+            //InstallerId = request.InstallerId,
             SerDate = request.TsDate,
             IsDeserved = request.CreateDeservedServices,
             IsBilled = false,
-            Amount = GetSPrice(_context, ServiceTask.Recover),
+            Amount = await GetSPrice(_context, ServiceTask.Recover),
             Subscriptions = new List<Subscription>(),
             WialonTasks = new List<WialonTask>()
         };

@@ -1,0 +1,134 @@
+﻿@page "/pages/TrdBx/TrackingUnits/ReassignOwner/{id:int}"
+
+
+@using CleanArchitecture.Blazor.Application.Features.Customers.DTOs
+@using CleanArchitecture.Blazor.Application.Features.Customers.Queries.GetAvaliable
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.ReassignOwner
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Queries.GetById
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Mappers
+@using CleanArchitecture.Blazor.Domain.Enums
+
+
+@inherits MudComponentBase
+@inject IValidationService Validator
+@inject IStringLocalizer<TrackingUnits> L
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.TrackingUnits.ReassignOwner)]
+
+<PageTitle>@Title</PageTitle>
+
+<MudContainer Class="mt-3" MaxWidth="MaxWidth.Small">
+    @if (model != null)
+    {
+        <MudCard Class="pa-2">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">@Title</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudForm Model="@model" @ref="@_form" Validation="@(Validator.ValidateValue(model))">
+                    <MudGrid Spacing="2">
+                        <MudItem md="12">
+                            <MudText>Selected Unit Serial No</MudText>
+                        </MudItem>
+
+                        <MudItem md="12">
+                            <MudSelect For="@(() => model.CustomerId)"
+                                       Label="@L["Customer"]"
+                                       Required="true"
+                                       RequiredError="@L["Customer Is Required!"]"
+                                       @bind-Value="model.CustomerId">
+                                <MudSelectItem T="int" Value=0>@L["Select Customer"]</MudSelectItem>
+                                @foreach (var doc1type in Customers)
+                                {
+                                    <MudSelectItem Value="@doc1type.Id">@doc1type.Name</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudItem>
+
+                    </MudGrid>
+                </MudForm>
+            </MudCardContent>
+            <MudCardActions Class="d-flex justify-end gap-2">
+                <MudButton Color="Color.Primary" DropShadow="false" OnClick="Cancel">@ConstantString.Cancel</MudButton>
+                <MudLoadingButton Color="Color.Primary" DropShadow="false" Loading="@_submiting" OnClick="Submit">@ConstantString.Submit</MudLoadingButton>
+            </MudCardActions>
+        </MudCard>
+    }
+</MudContainer>
+
+@code {
+    public string? Title { get; private set; }
+    private MudForm? _form;
+    private bool _submiting = false;
+    private ReassignTrackingUnitOwnerCommand? model;
+    private IEnumerable<CustomerDto> Customers = new List<CustomerDto>();
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        Title = L["Reassign TrackingUnit's Owner"];
+
+
+        var result = await Mediator.Send(new GetTrackingUnitByIdQuery() { Id = Id });
+
+        Customers = await Mediator.Send(new GetAvaliableChildsByParentIdQuery() { Id = result.Data.CustomerId });
+
+
+        result.Map(data =>
+     {
+         model = Mapper.ToReassignOwnerCommand(data);
+         return data;
+     }).Match(data =>
+     {
+         return data;
+
+     }, errors =>
+     {
+         Snackbar.Add(errors, MudBlazor.Severity.Error);
+         return null!;
+     });
+    }
+
+
+    async Task Submit()
+    {
+        var done = false;
+        try
+        {
+            _submiting = true;
+            await _form!.Validate().ConfigureAwait(false);
+            if (!_form!.IsValid)
+                return;
+            var result = await Mediator.Send(model);
+
+            result.Match(
+data =>
+{
+    Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+    return data;
+},
+errors =>
+{
+    Snackbar.Add(errors, MudBlazor.Severity.Error);
+    return -1;
+});
+
+
+        }
+        finally
+        {
+            _submiting = false;
+            if (done) Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits");
+        }
+    }
+
+    async Task Cancel()
+    {
+        Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits");
+
+    }
+
+}

@@ -13,6 +13,7 @@ public partial class ApplicationDbContext
     public DbSet<TrackingUnit> TrackingUnits { get; set; }
     public DbSet<Customer> Customers { get; set; }
     public DbSet<CusPrice> CusPrices { get; set; }
+    public DbSet<SProvider> SProviders { get; set; }
     public DbSet<SPackage> SPackages { get; set; }
     public DbSet<SimCard> SimCards { get; set; }
     public DbSet<TrackedAsset> TrackedAssets { get; set; }

@@ -1,8 +1,7 @@
 ﻿using CleanArchitecture.Blazor.Application.Features.Tickets.Caching;
 using CleanArchitecture.Blazor.Application.Features.Tickets.DTOs;
-using CleanArchitecture.Blazor.Application.Features.Tickets.Specifications;
 using CleanArchitecture.Blazor.Application.Features.Tickets.Mappers;
-using CleanArchitecture.Blazor.Application.Features.WialonUnits.Specifications;
+using CleanArchitecture.Blazor.Application.Features.Tickets.Specifications;
 
 namespace CleanArchitecture.Blazor.Application.Features.Tickets.Queries.GetById;
 

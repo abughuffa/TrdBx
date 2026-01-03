@@ -16,7 +16,7 @@
                    RequiredError="@L["Customer is required!"]"
                    Value="Value"
                    ValueChanged="OnValueChanged">
-            <MudSelectItem Value=0>Select a Customer</MudSelectItem>
+            <MudSelectItem Value=0>"@L["Select a Customer"]"</MudSelectItem>
             @foreach (var doc1type in customers)
             {
                 <MudSelectItem Value="doc1type.Id">@doc1type.ParentChild</MudSelectItem>
@@ -55,7 +55,7 @@
         }
     }
 
-    private IEnumerable<CustomerDto> customers = default!;
+    private IEnumerable<CustomerDto> customers = new List<CustomerDto>();
 
     private GetAvaliableCustomersQuery GetAvaliableCustomersQuery;
 

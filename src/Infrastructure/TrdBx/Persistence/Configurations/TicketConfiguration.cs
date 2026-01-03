@@ -14,6 +14,16 @@ public class TicketConfiguration : IEntityTypeConfiguration<Ticket>
         builder.HasIndex(t => t.TicketNo).IsUnique(true);
         builder.Property(t => t.TicketNo).HasMaxLength(50).IsRequired();
         builder.Ignore(e => e.DomainEvents);
+        builder.HasOne(x => x.CreatedByUser)
+    .WithMany()
+    .HasForeignKey(x => x.CreatedBy)
+    .OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne(x => x.LastModifiedByUser)
+            .WithMany()
+            .HasForeignKey(x => x.LastModifiedBy)
+            .OnDelete(DeleteBehavior.Restrict);
+        builder.Navigation(e => e.CreatedByUser).AutoInclude();
+        builder.Navigation(e => e.LastModifiedByUser).AutoInclude();
     }
 }
 

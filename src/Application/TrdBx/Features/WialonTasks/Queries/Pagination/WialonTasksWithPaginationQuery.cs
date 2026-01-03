@@ -52,7 +52,8 @@ public class WialonTasksWithPaginationQueryHandler :
         //                                            cancellationToken);
         //return data;
 
-        var data = await _context.WialonTasks.OrderBy($"{request.OrderBy} {request.SortDirection}")
+        var data = await _context.WialonTasks.Include(s => s.ServiceLog).Include(s => s.TrackingUnit)
+            .OrderBy($"{request.OrderBy} {request.SortDirection}")
                                                 .ProjectToPaginatedDataAsync(request.Specification,
                                                                              request.PageNumber,
                                                                              request.PageSize,

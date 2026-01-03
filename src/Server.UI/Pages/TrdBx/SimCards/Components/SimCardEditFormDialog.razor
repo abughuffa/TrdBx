@@ -32,6 +32,13 @@
                             For="@(() => _date)" />
                         </MudItem>
                         <MudItem md="2"></MudItem>
+
+                <MudItem md="12">
+                    <MudCheckBox Label="@L["Is Owened by Eagle eye?"]"
+                                 For="@(() => _model.IsOwen)"
+                                 @bind-Value="_model.IsOwen">
+                    </MudCheckBox>
+                </MudItem>
                     </MudGrid>
         </MudForm>
     </DialogContent>

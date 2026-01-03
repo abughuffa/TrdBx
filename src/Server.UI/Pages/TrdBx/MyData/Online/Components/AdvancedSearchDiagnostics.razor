@@ -1,0 +1,101 @@
+﻿
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Online.DataDiagnosises.Queries.Pagination
+@using CleanArchitecture.Blazor.Domain.Enums
+
+
+
+@inject IStringLocalizer<DataDiagnosises> L
+
+<MudExpansionPanel @bind-Expanded="_advancedSearchExpanded"
+                   Style="border-radius: var(--mud-default-borderradius) !important;"
+                   Class="mud-elevation-25 pa-2 mb-3" Text="@ConstantString.AdvancedSearch">
+    <MudGrid>
+
+        <MudItem md="3">
+            <MudEnumSelect Style="min-width:120px"
+                           Placeholder="@L["By Status On Wialon"]"
+                           TEnum="WStatus"
+                           Value="TRequest.StatusOnWialon"
+                           ValueChanged ="OnStatusOnWialonChanged"
+                           Dense="true">
+                          
+            </MudEnumSelect>
+        </MudItem>
+
+
+        <MudItem md="3">
+            <MudEnumSelect Style="min-width:120px"
+                           Placeholder="@L["By Status On TrdBx"]"
+                           TEnum="UStatus"
+                           Value="TRequest.StatusOnTrdBx"
+                           ValueChanged="OnStatusOnTrdBxChanged"
+                           Dense="true">
+            </MudEnumSelect>
+
+
+        </MudItem>
+
+        <MudItem md="3">
+
+            <MudEnumSelect Style="min-width:120px"
+                           Placeholder="@L["By SimCard Status"]"
+                           TEnum="SLStatus"
+                           Value="TRequest.SimCardStatus"
+                           ValueChanged="OnSimCardStatusChanged"
+                           Dense="true">
+            </MudEnumSelect>
+
+
+        </MudItem>
+
+
+        <MudItem md="3">
+            <MudDatePicker Editable @bind-Date="TRequest.ExpiersBefore" 
+                           Placeholder="@L["By Expiers Before"]"
+                           Clearable="true"
+                           TextChanged="OnExpiersBeforeChanged">
+            </MudDatePicker>
+        </MudItem>
+
+     </MudGrid>
+</MudExpansionPanel>
+
+@code {
+    [EditorRequired][Parameter] public DataDiagnosisesWithPaginationQuery TRequest { get; set; } = null!;
+    [EditorRequired][Parameter] public EventCallback<string> OnConditionChanged { get; set; }
+
+    private bool _advancedSearchExpanded;
+    private async Task TextChanged(string str)
+    {
+        if (_advancedSearchExpanded)
+        {
+          await OnConditionChanged.InvokeAsync(str);
+        }
+    }
+
+
+    private async Task OnStatusOnWialonChanged(WStatus str)
+    {
+        TRequest.StatusOnWialon = str;
+        await TextChanged(str.ToString());
+    }
+
+    private async Task OnStatusOnTrdBxChanged(UStatus str)
+    {
+        TRequest.StatusOnTrdBx =str;
+        await TextChanged(str.ToString());
+    }
+    private async Task OnSimCardStatusChanged(SLStatus str)
+    {
+        TRequest.SimCardStatus = str;
+        await TextChanged(str.ToString());
+    }
+
+    private async Task OnExpiersBeforeChanged(string? str)
+    {
+        TRequest.ExpiersBefore = string.IsNullOrEmpty(str) ? null : DateTime.Parse(str).Add(new TimeSpan(23, 59, 59));
+        await TextChanged(str);
+    }
+
+        // 
+}

@@ -52,7 +52,7 @@ public class MarkTrackingUnitAsDamagedCommandHandler : IRequestHandler<MarkTrack
     {
         //await using var _context = await _dbContextFactory.CreateAsync(cancellationToken);
 
-        var unit = await _context.TrackingUnits.Where(x => x.Id == request.Id).Include(x => x.Subscriptions).FirstAsync() ?? throw new NotFoundException($"TrackingUnit with id: [{request.Id}] not found.");
+        var unit = await _context.TrackingUnits.Where(x => x.Id == request.Id).FirstAsync() ?? throw new NotFoundException($"TrackingUnit with id: [{request.Id}] not found.");
 
         if (!(unit.UStatus == UStatus.Recovered || unit.UStatus == UStatus.Used))
         {

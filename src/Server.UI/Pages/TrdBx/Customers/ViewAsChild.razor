@@ -60,7 +60,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Title = L["Customer Info"];
+        Title = L["Customer details"];
 
         var result = await Mediator.Send(new GetCustomerByIdQuery() { Id = Id });
         result.Map(data =>

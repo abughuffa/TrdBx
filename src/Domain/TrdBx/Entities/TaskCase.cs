@@ -9,8 +9,8 @@ public class DeactivateTestCase : BaseEntity
     [Description("TrackingUnitId")]
     public int? TrackingUnitId { get; set; }
 
-    [Description("InstallerId")]
-    public required string InstallerId { get; set; }
+    //[Description("InstallerId")]
+    //public required string InstallerId { get; set; }
 
     [Description("SNo")]
     public string? SNo { get; set; }
@@ -33,8 +33,8 @@ public class ActivateTestCase : BaseEntity
     [Description("TrackingUnitId")]
     public int? TrackingUnitId { get; set; }
 
-    [Description("InstallerId")]
-    public required string InstallerId { get; set; }
+    //[Description("InstallerId")]
+    //public required string InstallerId { get; set; }
 
     [Description("SNo")]
     public string? SNo { get; set; }
@@ -56,8 +56,8 @@ public class ActivateGprsTestCase : BaseEntity
     [Description("TrackingUnitId")]
     public int? TrackingUnitId { get; set; }
 
-    [Description("InstallerId")]
-    public required string InstallerId { get; set; }
+    //[Description("InstallerId")]
+    //public required string InstallerId { get; set; }
 
     [Description("SNo")]
     public string? SNo { get; set; }
@@ -79,8 +79,8 @@ public class ActivateHostingTestCase : BaseEntity
     [Description("TrackingUnitId")]
     public int? TrackingUnitId { get; set; }
 
-    [Description("InstallerId")]
-    public required string InstallerId { get; set; }
+    //[Description("InstallerId")]
+    //public required string InstallerId { get; set; }
 
     [Description("SNo")]
     public string? SNo { get; set; }

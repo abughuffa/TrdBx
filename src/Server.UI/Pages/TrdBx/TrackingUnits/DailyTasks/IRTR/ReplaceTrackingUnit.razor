@@ -13,11 +13,11 @@
 @using CleanArchitecture.Blazor.Application.Features.SimCards.Queries.GetAvaliableSimCards
 
 @using CleanArchitecture.Blazor.Domain.Enums
-@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Installers
+@* @using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Installers *@
 
 @inherits MudComponentBase
 @inject IValidationService Validator
-@inject IStringLocalizer<DailyTasks> L
+@inject IStringLocalizer<TrackingUnits> L
 @attribute [Authorize(Policy = Permissions.TrackingUnits.Replace)]
 
 <PageTitle>@Title</PageTitle>
@@ -43,9 +43,9 @@
                             <MudSelect For="@(() => model.SimCardId)"
                             Label="@L["SimCard"]"
                             Required="true"
-                            RequiredError="@L["SimCardIsRequired"]"
+                            RequiredError="@L["SimCard Is Required!"]"
                             @bind-Value="model.SimCardId">
-                                <MudSelectItem T="int" Value=0>@L["SelectSimCard"]</MudSelectItem>
+                                <MudSelectItem T="int" Value=0>@L["Select SimCard"]</MudSelectItem>
                                 @foreach (var doc1type in SimCards)
                                 {
                                     <MudSelectItem Value="@doc1type.Id">@doc1type.SimCardNo</MudSelectItem>
@@ -55,11 +55,11 @@
 
                         <MudItem md="6">
                             <MudSelect For="@(() => model.SUnitId)"
-                            Label="@L["ReplacmentUnit"]"
+                                       Label="@L["Replacement Unit"]"
                             Required="true"
-                                       RequiredError="@L["ReplacmentUnitIsRequired"]"
+                                       RequiredError="@L["ReplacementUnit Is Required!"]"
                             @bind-Value="model.SUnitId">
-                                <MudSelectItem T="int" Value=0>@L["SelectReplacmentUnit"]</MudSelectItem>
+                                <MudSelectItem T="int" Value=0>@L["Select ReplacementUnit"]</MudSelectItem>
                                 @foreach (var doc1type in Units)
                                 {
                                     <MudSelectItem Value="@doc1type.Id">@doc1type.SNo</MudSelectItem>
@@ -82,30 +82,30 @@
                             <MudSelect For="@(() => model.CustomerId)"
                             Label="@L["Customer"]"
                             Required="true"
-                            RequiredError="@L["CustomerIsRequired"]"
+                            RequiredError="@L["Customer Is Required!"]"
                             @bind-Value="model.CustomerId">
-                                <MudSelectItem T="int" Value=0>@L["SelectCustomer"]</MudSelectItem>
+                                <MudSelectItem T="int" Value=0>@L["Select Customer"]</MudSelectItem>
                                 @foreach (var doc1type in Customers)
                                 {
                                     <MudSelectItem Value="@doc1type.Id">@doc1type.Name</MudSelectItem>
                                 }
                             </MudSelect>
                         </MudItem>
-                        <MudItem md="12">
+@*                         <MudItem md="12">
 
                             <Installers @bind-InstallerId="model.InstallerId"></Installers>
-                        </MudItem>
+                        </MudItem> *@
 
 
                         <MudItem md="6">
-                            <MudCheckBox Label="@L["IsTampred"]"
+                            <MudCheckBox Label="@L["Is Tampered?"]"
                                          For="@(() => model.IsTampred)"
                                          @bind-Value="model.IsTampred">
                             </MudCheckBox>
                         </MudItem>
 
                         <MudItem md="6">
-                            <MudCheckBox Label="@L["CreateDeservedServices?"]"
+                            <MudCheckBox Label="@L["Create Deserved Services?"]"
                                          For="@(() => model.CreateDeservedServices)"
                                          @bind-Value="model.CreateDeservedServices">
                             </MudCheckBox>
@@ -114,11 +114,11 @@
 
                         <MudItem md="6">
                             <MudDatePicker Class="pa-4"
-                            Label="@L["Date"]"
+                                           Label="@L["TaskDate"]"
                             Editable @bind-Date="_date"
                             For="@(() => _date)"
                             Required="true"
-                                           RequiredError="@L["TaskDateIsRequired"]" />
+                                           RequiredError="@L["TaskDate Is Required!"]" />
                         </MudItem>
                     </MudGrid>
                 </MudForm>

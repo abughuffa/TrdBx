@@ -9,7 +9,7 @@ public class AssignTicketCommand : ICacheInvalidatorRequest<Result<int>>
 {
     [Description("Id")] public int Id { get; set; }
     [Description("TaDate")] public DateOnly TaDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
-    [Description("InstallerId")] public string InstallerId { get; set; } = string.Empty;
+    //[Description("InstallerId")] public string InstallerId { get; set; } = string.Empty;
 
      public IEnumerable<string> Tags => TicketCacheKey.Tags;
     //private class Mapping : Profile
@@ -53,7 +53,7 @@ public class AssignTicketCommandHandler : IRequestHandler<AssignTicketCommand, R
 
         ticket.TicketStatus = TicketStatus.Assigned;
         ticket.TaDate = request.TaDate;
-        ticket.InstallerId = request.InstallerId;
+        //ticket.InstallerId = request.InstallerId;
         ticket.Note = string.Empty;
 
 

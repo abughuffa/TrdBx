@@ -18,6 +18,9 @@ public class UpdateSimCardCommand : ICacheInvalidatorRequest<Result<int>>
     [Description("ExDate")]
     public DateOnly? ExDate { get; set; }
 
+    [Description("IsOwen")]
+    public bool IsOwen { get; set; } = true;
+
     public string CacheKey => SimCardCacheKey.GetAllCacheKey;
     public IEnumerable<string> Tags => SimCardCacheKey.Tags;
     //private class Mapping : Profile

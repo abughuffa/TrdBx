@@ -11,6 +11,7 @@ public partial interface IApplicationDbContext
     DbSet<TrackingUnit> TrackingUnits { get; set; }
     DbSet<Customer> Customers { get; set; }
     DbSet<CusPrice> CusPrices { get; set; }
+    DbSet<SProvider> SProviders { get; set; }
     DbSet<SPackage> SPackages { get; set; }
     DbSet<SimCard> SimCards { get; set; }
     DbSet<TrackedAsset> TrackedAssets { get; set; }

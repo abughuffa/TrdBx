@@ -12,7 +12,7 @@
 
 @inherits MudComponentBase
 @inject IValidationService Validator
-@inject IStringLocalizer<DailyTasks> L
+@inject IStringLocalizer<TrackingUnits> L
 @attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.TrackingUnits.Reserve)]
 
 <PageTitle>@Title</PageTitle>
@@ -37,9 +37,9 @@
                             <MudSelect For="@(() => model.CustomerId)"
                             Label="@L["Customer"]"
                             Required="true"
-                            RequiredError="@L["CustomerIsRequired"]"
+                            RequiredError="@L["Customer Is Required!"]"
                             @bind-Value="model.CustomerId">
-                                <MudSelectItem T="int" Value=0>@L["SelectCustomer"]</MudSelectItem>
+                                <MudSelectItem T="int" Value=0>@L["Select Customer"]</MudSelectItem>
                                 @foreach (var doc1type in Customers)
                                 {
                                     <MudSelectItem Value="@doc1type.Id">@doc1type.Name</MudSelectItem>

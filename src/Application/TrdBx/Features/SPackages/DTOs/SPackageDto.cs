@@ -15,9 +15,15 @@ public class SPackageDto
     [Description("Id")]
     public int Id { get; set; } = 0;
     [Description("Name")]
+
     public string? Name { get; set; }
+    [Description("SProviderId")]
+    public int SProviderId { get; set; }
+
     [Description("OldId")]
     public int? OldId { get; set; } = null;
+
+    [Description("SProvider")] public string? SProvider { get; set; }
 
     //private class Mapping : Profile
     //{

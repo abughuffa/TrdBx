@@ -71,7 +71,7 @@ public class Customer : BaseAuditableEntity
 }
 public class CusPrice : BaseAuditableEntity
 {
-    public AssignedTo AssignedTo { get; set; } = AssignedTo.Null;
+    //public AssignedTo AssignedTo { get; set; } = AssignedTo.Null;
     public int CustomerId { get; set; }
     public int TrackingUnitModelId { get; set; }
     public decimal Host { get; set; } = 0.0m;
@@ -83,9 +83,16 @@ public class CusPrice : BaseAuditableEntity
 #endregion
 
 #region SIM
+public class SProvider : BaseEntity
+{
+    public required string Name { get; set; } = string.Empty;
+    public List<SPackage>? SPackages { get; set; } = null;
+}
 public class SPackage : BaseEntity
 {
     public required string Name { get; set; } = string.Empty;
+    public int SProviderId { get; set; }
+    public SProvider? SProvider { get; set; } = null;
     public int? OldId { get; set; } = null;
     public List<SimCard>? SimCards { get; set; } = null;
 }
@@ -96,7 +103,14 @@ public class SimCard : BaseAuditableEntity
     public int SPackageId { get; set; }
     public SPackage? SPackage { get; set; } = null;
     public SStatus SStatus { get; set; } = SStatus.New;
+    //public DateOnly? JoDate { get; set; } = null;
+    //public DateOnly? BExDate { get; set; } = null;
+    //public DateOnly? DExDate { get; set; } = null;
+    //public DateOnly? DOExDate { get; set; } = null;
+    public bool IsOwen { get; set; } = true;
     public DateOnly? ExDate { get; set; } = null;
+
+
     public int? OldId { get; set; } = null;
     public TrackingUnit? TrackingUnits { get; set; } = null;
 }
@@ -123,20 +137,18 @@ public class ServiceLog : BaseAuditableEntity
     public string ServiceNo { get; set; } = string.Empty;
     public ServiceTask ServiceTask { get; set; }
     public int CustomerId { get; set; }
-    public required string InstallerId { get; set; }
+    //public required string InstallerId { get; set; }
     public string Desc { get; set; } = string.Empty;
     public DateOnly SerDate { get; set; }
     public bool IsDeserved { get; set; } = true;
     public bool IsBilled { get; set; } = false;
     public decimal Amount { get; set; } = 0.0m;
     public Customer? Customer { get; set; } = null;
-    public ApplicationUser? Installer { get; set; } = null;
+    //public ApplicationUser? Installer { get; set; } = null;
     public InvoiceItem? InvoiceItem { get; set; } = null;
     public List<Subscription>? Subscriptions { get; set; } = null;
     public List<WialonTask>? WialonTasks { get; set; } = null;
-
-    
-    
+    public virtual ApplicationUser? CreatedByUser { get; set; }
 }
 public class ServicePrice : BaseAuditableEntity
 {
@@ -186,7 +198,7 @@ public class Invoice : BaseAuditableEntity
     public decimal Taxes { get; set; } = 0.0m;
     public decimal GrangTotal { get; set; } = 0.0m;
     public bool IsTaxable { get; set; } = false;
-    public  Customer? Customer { get; set; }
+    public Customer? Customer { get; set; }
     public List<InvoiceItem>? InvoiceItems { get; set; } = null;
 }
 public class InvoiceItem : BaseEntity
@@ -194,10 +206,50 @@ public class InvoiceItem : BaseEntity
     public int InvoiceId { get; set; }
     public int ServiceLogId { get; set; }
     public decimal Amount { get; set; } = 0.0m;
-    public  Invoice? Invoice { get; set; }
-    public  ServiceLog? ServiceLog { get; set; }
+    public Invoice? Invoice { get; set; }
+    public ServiceLog? ServiceLog { get; set; }
 }
 #endregion
+
+#region Invoices
+//public class Invoice : BaseAuditableEntity
+//{
+//    public string InvNo { get; set; } = string.Empty;
+//    public DateOnly InvDate { get; set; }
+//    public DateOnly DueDate { get; set; }
+//    public InvoiceType InvoiceType { get; set; }
+//    public IStatus IStatus { get; set; }
+//    public int CustomerId { get; set; }
+//    public string InvDesc { get; set; } = string.Empty;
+//    public decimal Total { get; set; } = 0.0m;
+//    public decimal Taxes { get; set; } = 0.0m;
+//    public decimal GrangTotal { get; set; } = 0.0m;
+//    public bool IsTaxable { get; set; } = false;
+//    public Customer? Customer { get; set; }
+//    public List<ItemGroup>? ItemGroups { get; set; } = null;
+//}
+//public class ItemGroup : BaseEntity
+//{
+//    public int InvoiceId { get; set; }
+//    public int ServiceLogId { get; set; }
+//    public decimal Amount { get; set; } = 0.0m;
+//    public Invoice? Invoice { get; set; }
+//    public ServiceLog? ServiceLog { get; set; }
+//    public List<InvoiceItem>? InvoiceItems { get; set; } = null;
+//}
+#endregion
+//public class InvoiceItem : BaseEntity
+//{
+//    public int ItemGroupId { get; set; }
+//    public int Serial { get; set; }
+//    public int SubSerial { get; set; }
+//    public string? Desc { get; set; }
+//    public decimal SubTotal { get; set; } = 0.0m;
+//    public decimal ItemTotal { get; set; } = 0.0m;
+//    public ItemGroup? ItemGroup { get; set; }
+//}
+
+
 
 #region Tickets
 public enum TicketStatus
@@ -220,12 +272,12 @@ public class Ticket : BaseAuditableEntity
     public int TrackingUnitId { get; set; }
     public DateOnly TcDate { get; set; }
     public DateOnly? TaDate { get; set; }
-    public string? InstallerId { get; set; }
+    //public string? InstallerId { get; set; }
     public DateOnly? TeDate { get; set; }
     public string? Note { get; set; } = string.Empty;
     public TrackingUnit? TrackingUnit { get; set; }
-
-    public ApplicationUser? Installer { get; set; } = null;
+    public virtual ApplicationUser? CreatedByUser { get; set; }
+    public virtual ApplicationUser? LastModifiedByUser { get; set; }
 }
 #endregion
 
@@ -255,7 +307,7 @@ public class WialonUnit : BaseEntity
     public WStatus? StatusOnWialon { get; set; } 
     public string? Note { get; set; } = string.Empty;
 }
-public class DbMatching : IEntity
+public class DataMatch : IEntity
 {
     public string? Account { get; set; }
     public string? Client { get; set; }
@@ -269,7 +321,7 @@ public class DbMatching : IEntity
     public string? TNote { get; set; }
     public string? WNote { get; set; }
 }
-public class Diagnostic : IEntity
+public class DataDiagnosis : IEntity
 {
     [Description("Account")]
     public string? Account { get; set; }

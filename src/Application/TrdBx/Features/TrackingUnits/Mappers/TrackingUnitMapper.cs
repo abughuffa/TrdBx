@@ -7,12 +7,14 @@ using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.Daily
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.ActivateTrackingUnitForHosting;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.DeactivateTrackingUnit;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Install;
+using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.ReassignOwner;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Recover;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Replace;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Reserve;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Transfer;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.Update;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.DTOs;
+using CleanArchitecture.Blazor.Application.Features.WialonTasks.DTOs;
 
 namespace CleanArchitecture.Blazor.Application.Features.TrackingUnits.Mappers;
 
@@ -21,6 +23,10 @@ namespace CleanArchitecture.Blazor.Application.Features.TrackingUnits.Mappers;
 [Mapper]
 public static partial class Mapper
 {
+    [MapProperty(nameof(TrackingUnit.Customer.Name), nameof(TrackingUnitDto.Customer))]
+    [MapProperty(nameof(TrackingUnit.SimCard.SimCardNo), nameof(TrackingUnitDto.SimCard))]
+    [MapProperty(nameof(TrackingUnit.TrackedAsset.TrackedAssetNo), nameof(TrackingUnitDto.TrackedAsset))]
+    [MapProperty(nameof(TrackingUnit.TrackingUnitModel.Name), nameof(TrackingUnitDto.TrackingUnitModel))]
     public static partial TrackingUnitDto ToDto(TrackingUnit source);
 
     [MapperIgnoreSource(nameof(TrackingUnitDto.Customer))]
@@ -84,6 +90,13 @@ public static partial class Mapper
     [MapperIgnoreSource(nameof(TrackingUnitDto.TrackingUnitModel))]
     public static partial ReserveTrackingUnitCommand ToReserveCommand(TrackingUnitDto dto);
 
+    [MapperIgnoreSource(nameof(TrackingUnitDto.Customer))]
+    [MapperIgnoreSource(nameof(TrackingUnitDto.SimCard))]
+    [MapperIgnoreSource(nameof(TrackingUnitDto.TrackedAsset))]
+    [MapperIgnoreSource(nameof(TrackingUnitDto.TrackingUnitModel))]
+    public static partial ReassignTrackingUnitOwnerCommand ToReassignOwnerCommand(TrackingUnitDto dto);
     
+
+
 }
 

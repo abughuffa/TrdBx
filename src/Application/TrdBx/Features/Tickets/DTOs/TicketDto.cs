@@ -1,5 +1,7 @@
-﻿using CleanArchitecture.Blazor.Domain.Entities;
+﻿using CleanArchitecture.Blazor.Application.Features.Identity.DTOs;
+using CleanArchitecture.Blazor.Domain.Entities;
 using CleanArchitecture.Blazor.Domain.Enums;
+using CleanArchitecture.Blazor.Domain.Identity;
 
 namespace CleanArchitecture.Blazor.Application.Features.Tickets.DTOs;
 
@@ -25,8 +27,8 @@ public class TicketDto
     [Description("TaDate")]
     public DateOnly? TaDate { get; set; }
 
-    [Description("InstallerId")]
-    public string? InstallerId { get; set; }
+    //[Description("InstallerId")]
+    //public string? InstallerId { get; set; }
     [Description("TeDate")]
     public DateOnly? TeDate { get; set; }
     [Description("Note")]
@@ -34,7 +36,12 @@ public class TicketDto
 
 
     [Description("TrackingUnit")] public string? TrackingUnit { get; set; }
-    [Description("Installer")] public string? Installer { get; set; }
+
+
+    [Description("Created By User")] public ApplicationUserDto? CreatedByUser { get; set; }
+
+    [Description("Modified By User")] public virtual ApplicationUserDto? LastModifiedByUser { get; set; }
+    //[Description("Installer")] public string? Installer { get; set; }
     //private class Mapping : Profile
     //{
     //    //public Mapping()

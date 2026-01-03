@@ -15,6 +15,8 @@ public class CreateSimCardCommand : ICacheInvalidatorRequest<Result<int>>
     public int SPackageId { get; set; }
     [Description("ExDate")]
     public DateOnly? ExDate { get; set; }
+    [Description("IsOwen")]
+    public bool IsOwen { get; set; } = true;
 
     public string CacheKey => SimCardCacheKey.GetAllCacheKey;
      public IEnumerable<string> Tags => SimCardCacheKey.Tags;

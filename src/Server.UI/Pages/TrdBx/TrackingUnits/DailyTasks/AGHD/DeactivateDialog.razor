@@ -2,7 +2,7 @@
 
 @inherits MudComponentBase
 @inject IValidationService Validator
-@inject IStringLocalizer<DailyTasks> L
+@inject IStringLocalizer<TrackingUnits> L
 @attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.TrackingUnits.Deactivate)]
 
 <MudDialog>
@@ -19,7 +19,7 @@
                                    Editable @bind-Date="_date"
                                    For="@(() => _date)"
                                    Required="true"
-                                   RequiredError="@L["TaskDateIsRequired"]" />
+                                   RequiredError="@L["TaskDate Is Required!"]" />
                 </MudItem>
             </MudGrid>
         </MudForm>

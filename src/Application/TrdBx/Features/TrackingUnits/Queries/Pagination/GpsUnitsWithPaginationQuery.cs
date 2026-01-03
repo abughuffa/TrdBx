@@ -50,7 +50,8 @@ public class TrackingUnitsWithPaginationQueryHandler :
         //    .ProjectToPaginatedDataAsync<TrackingUnit, TrackingUnitDto>(request.Specification, request.PageNumber, request.PageSize, _mapper.ConfigurationProvider, cancellationToken);
         //return data;
 
-        var data = await _context.TrackingUnits.OrderBy($"{request.OrderBy} {request.SortDirection}")
+        var data = await _context.TrackingUnits.Include(s => s.Customer).Include(s => s.SimCard)
+            .Include(s => s.TrackedAsset).Include(s => s.TrackingUnitModel).OrderBy($"{request.OrderBy} {request.SortDirection}")
                                      .ProjectToPaginatedDataAsync(request.Specification,
                                                                   request.PageNumber,
                                                                   request.PageSize,

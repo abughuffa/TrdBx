@@ -1,7 +1,8 @@
-﻿using CleanArchitecture.Blazor.Application.Features.ServiceLogs.Commands.Import;
-using CleanArchitecture.Blazor.Application.Features.SimCards.Mappers;
+﻿using System.Globalization;
+using CleanArchitecture.Blazor.Application.Features.ServiceLogs.Commands.Import;
 using CleanArchitecture.Blazor.Application.Features.SimCards.Caching;
 using CleanArchitecture.Blazor.Application.Features.SimCards.DTOs;
+using CleanArchitecture.Blazor.Application.Features.SimCards.Mappers;
 using CleanArchitecture.Blazor.Domain.Entities;
 using CleanArchitecture.Blazor.Domain.Enums;
 using CleanArchitecture.Blazor.Domain.Enums;
@@ -75,7 +76,9 @@ public class ImportSimCardsCommandHandler :
                 { _localizer[_dto.GetMemberDescription(x=>x.SStatus)], (row, item) => item.SStatus = (SStatus)Convert.ToInt32(row[_localizer[_dto.GetMemberDescription(x=>x.SStatus)]].ToString()) },
                 { _localizer[_dto.GetMemberDescription(x=>x.ExDate)], (row, item) => item.ExDate = row[_localizer[_dto.GetMemberDescription(x=>x.ExDate)]].ToString().IsNullOrEmpty() ? null : DateOnly.FromDateTime(DateTime.Parse(row[_localizer[_dto.GetMemberDescription(x=>x.ExDate)]].ToString()))},
                 //{ _localizer[_dto.GetMemberDescription(x=>x.ExDate)], (row, item) => item.ExDate = (DateOnly.TryParse((row["ExDate"] is null ? null: row["ExDate"].ToString()) , out DateOnly result) ? result : null)},
-                { _localizer[_dto.GetMemberDescription(x=>x.OldId)], (row, item) => item.OldId = (int.TryParse(row[_localizer[_dto.GetMemberDescription(x=>x.OldId)]].ToString(), out int result) == true ? result : null) }
+                { _localizer[_dto.GetMemberDescription(x=>x.OldId)], (row, item) => item.OldId = (int.TryParse(row[_localizer[_dto.GetMemberDescription(x=>x.OldId)]].ToString(), out int result) == true ? result : null) },
+                 { _localizer[_dto.GetMemberDescription(x=>x.IsOwen)], (row, item) => item.IsOwen =Convert.ToBoolean(row[_localizer[_dto.GetMemberDescription(x=>x.IsOwen)]]) },
+
             }, _localizer[_dto.GetClassDescription()]);
         if (result.Succeeded && result.Data is not null)
         {
@@ -109,6 +112,8 @@ _localizer[_dto.GetMemberDescription(x=>x.SPackageId)],
 _localizer[_dto.GetMemberDescription(x=>x.SStatus)],
 _localizer[_dto.GetMemberDescription(x=>x.ExDate)],
 _localizer[_dto.GetMemberDescription(x=>x.OldId)],
+_localizer[_dto.GetMemberDescription(x=>x.IsOwen)],
+
 
                 };
         var result = await _excelService.CreateTemplateAsync(fields, _localizer[_dto.GetClassDescription()]);

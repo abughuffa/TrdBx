@@ -1,4 +1,5 @@
 ﻿
+using CleanArchitecture.Blazor.Application.Features.CusPrices.DTOs;
 using CleanArchitecture.Blazor.Application.Features.Customers.Commands.Create;
 using CleanArchitecture.Blazor.Application.Features.Customers.Commands.Update;
 using CleanArchitecture.Blazor.Application.Features.Customers.DTOs;
@@ -11,11 +12,13 @@ namespace CleanArchitecture.Blazor.Application.Features.Customers.Mappers;
 public static partial class Mapper
 {
 
-    [MapProperty(
-       nameof(Customer.Parent),
-       nameof(CustomerDto.Parent),
-       Use = nameof(MapParentToParentName)
-   )]
+   // [MapProperty(
+   //    nameof(Customer.Parent),
+   //    nameof(CustomerDto.Parent),
+   //    Use = nameof(MapParentToParentName)
+   //)]
+
+    [MapProperty(nameof(Customer.Parent.Name), nameof(CustomerDto.Parent))]
     public static partial CustomerDto ToDto(Customer source);
     public static partial Customer FromDto(CustomerDto dto);
 
@@ -27,8 +30,8 @@ public static partial class Mapper
     public static partial void ApplyChangesFrom(UpdateParentCommand source, Customer target);
     public static partial IQueryable<CustomerDto> ProjectTo(this IQueryable<Customer> q);
 
- private static string? MapParentToParentName(Customer? parent)
-    {
-        return parent?.Name;
-    }
+ //private static string? MapParentToParentName(Customer? parent)
+ //   {
+ //       return parent?.Name;
+ //   }
 }

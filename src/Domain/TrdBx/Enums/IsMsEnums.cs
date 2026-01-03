@@ -105,12 +105,12 @@ public enum APITask
     //[Description("Invoice Of Subscription Fees")] InvoiceOfSubscriptionFees,
     //[Description("Invoice Of Partial Subscription Fees")] InvoiceOfPartialSubscriptionFees,
 }
-public enum AssignedTo
-{
-    [Description("Null")] Null = 0,
-    [Description("Client")] Client = 1,
-    [Description("Customer")] Customer = 2
-}
+//public enum AssignedTo
+//{
+//    [Description("Null")] Null = 0,
+//    [Description("Client")] Client = 1,
+//    [Description("Customer")] Customer = 2
+//}
 public enum BillingPlan
 {
     

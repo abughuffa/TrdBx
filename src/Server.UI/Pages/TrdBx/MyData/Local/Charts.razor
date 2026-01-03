@@ -1,0 +1,1167 @@
+﻿@page "/pages/TrdBx/MyData/Local/Charts"
+
+@using System.Globalization
+@using System.Threading.Tasks
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Charts.Caching
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Charts.DTOs
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Charts.Queries.GetChart
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Charts.Specifications
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.MyData.Local.Components
+@using MudBlazor
+
+@inject IStringLocalizer<Charts> L
+@inject IJSRuntime JSRuntime
+@inject IDialogService DialogService
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.Charts.View)]
+@implements IDisposable
+
+<PageTitle>Data Analysis</PageTitle>
+
+<!-- Advanced Search -->
+<AdvancedSearchCharts TRequest="Query" OnConditionChanged="ConditionChanged" />
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge">
+    <!-- Main Content -->
+    <MudCard Class="mt-3">
+        <MudToolBar>
+            <MudStack Row Spacing="0" Class="flex-grow-1" Justify="Justify.SpaceBetween">
+                <MudStack Row AlignItems="AlignItems.Start">
+                    <MudIcon Icon="@Icons.Material.Filled.Window" Size="Size.Large" />
+                    <MudStack Spacing="0">
+                        <MudEnumSelect Style="min-width:120px" TEnum="ChartListView" ValueChanged="OnChangedListView" Value="Query.ListView" Dense="true" Label="@L["List View"]">
+                        </MudEnumSelect>
+                    </MudStack>
+                </MudStack>
+                <MudStack Spacing="0" AlignItems="AlignItems.End">
+                    <MudToolBar Dense WrapContent="true" Class="py-1 px-0">
+                        <MudButton Disabled="@_loading"
+                                   OnClick="@(() => OnRefresh())"
+                                   StartIcon="@Icons.Material.Outlined.Refresh">
+                            @ConstantString.Refresh
+                        </MudButton>
+                    </MudToolBar>
+                </MudStack>
+            </MudStack>
+        </MudToolBar>
+
+        <MudCardContent Class="pa-4">
+            <!-- Statistics Summary -->
+            @if (FilteredTable.Any())
+            {
+                <MudGrid Class="mt-3">
+                    <MudItem xs="12">
+                        <MudPaper Class="pa-2" Elevation="0" Outlined="true">
+                            <MudStack Row Spacing="2" Justify="Justify.SpaceBetween">
+                                <MudStack Spacing="1">
+                                    <MudText Typo="Typo.caption" Color="Color.Secondary">@L["Total Items"]</MudText>
+                                    <MudText Typo="Typo.h6">@FilteredTable.Sum(x => x.Items.Count).ToString("N0")</MudText>
+                                </MudStack>
+                                <MudStack Spacing="1">
+                                    <MudText Typo="Typo.caption" Color="Color.Secondary">@L["Number of Groups"]</MudText>
+                                    <MudText Typo="Typo.h6">@FilteredTable.Count</MudText>
+                                </MudStack>
+                                <MudStack Spacing="1">
+                                    <MudText Typo="Typo.caption" Color="Color.Secondary">@L["Lowest Group Count"]</MudText>
+                                    <MudText Typo="Typo.body2" Color="Color.Success">@(FilteredTable.Min(x => x.Items.Count).ToString("N0"))</MudText>
+                                </MudStack>
+                                <MudStack Spacing="1">
+                                    <MudText Typo="Typo.caption" Color="Color.Secondary">@L["Highest Group Count"]</MudText>
+                                    <MudText Typo="Typo.body2" Color="Color.Error">@(FilteredTable.Max(x => x.Items.Count).ToString("N0"))</MudText>
+                                </MudStack>
+                            </MudStack>
+                        </MudPaper>
+                    </MudItem>
+                </MudGrid>
+            }
+
+            <!-- Filter Controls -->
+            <MudGrid Class="mt-3">
+                <MudItem xs="12">
+                    <MudStack Row Spacing="2" AlignItems="AlignItems.Center">
+                        <MudSwitch Value="@_excludeZeroCount"
+                                   ValueChanged="@OnExcludeZeroCountChanged"
+                                   Color="Color.Primary" Label=@L["Exclude Zeros"] />
+
+                        <MudSwitch Value="@_useLogScale"
+                                   ValueChanged="@OnUseLogScaleChanged"
+                                   Color="Color.Primary" Label=@L["Logarithmic Scale"] />
+
+                        <MudSwitch Value="@_showDataPoints"
+                                   ValueChanged="@OnShowDataPointsChanged"
+                                   Color="Color.Primary" Label=@L["Data Points"] />
+
+                        <MudSwitch Value="@_showTrendLine"
+                                   ValueChanged="@OnShowTrendLineChanged"
+                                   Color="Color.Primary" Label=@L["Trend Line"] />
+                    </MudStack>
+                </MudItem>
+            </MudGrid>
+
+            <!-- Loading Indicator -->
+            @if (_loading)
+            {
+                <MudGrid Class="mb-4">
+                    <MudItem xs="12" Class="text-center">
+                        <MudProgressCircular Indeterminate="true" Color="Color.Primary" />
+                        <MudText Class="ml-3">@L["Loading data..."]</MudText>
+                    </MudItem>
+                </MudGrid>
+            }
+
+            <!-- Data Visualization -->
+            @if (FilteredTable?.Any() == true)
+            {
+                <!-- Chart Info -->
+                <MudGrid Class="mt-2">
+                    <MudItem xs="12">
+                        <MudStack Row AlignItems="AlignItems.Center">
+                            <MudText Typo="Typo.body2" Color="Color.Secondary">@string.Format(@L["Showing {0} Impulses"],@FilteredTable.Count)</MudText>
+                            
+                            @if (_excludeZeroCount)
+                            {
+                                <MudText Typo="Typo.body2" Color="Color.Secondary">@L[": Zeros excluded"] </MudText>
+                         
+                            }
+                            @if (_useLogScale)
+                            {
+                                <MudText Typo="Typo.body2" Color="Color.Secondary">@L[", using Logarithmic Scale"] </MudText>
+                    
+                            }
+                            @if (_zoomLevel != 1.0)
+                            {
+                                <MudText Typo="Typo.body2" Color="Color.Secondary">@string.Format(@L["# Zoom: {0}x"], @_zoomLevel.ToString("0.0")) </MudText>
+            
+                            }
+                        </MudStack>
+                    </MudItem>
+                </MudGrid>
+
+                <!-- Chart Container -->
+                <MudGrid>
+                    <MudItem xs="12">
+                        <div class="chart-container" style="position: relative;">
+                            <!-- Chart Controls -->
+                            <MudStack Row Justify="Justify.FlexEnd" Class="mb-2">
+                                <MudIconButton Icon="@Icons.Material.Filled.ZoomOut"
+                                               OnClick="@ZoomOut"
+                                               Size="Size.Small"/>
+                                <MudIconButton Icon="@Icons.Material.Filled.ZoomIn"
+                                               OnClick="@ZoomIn"
+                                               Size="Size.Small"/>
+                                <MudIconButton Icon="@Icons.Material.Filled.FitScreen"
+                                               OnClick="@ResetZoom"
+                                               Size="Size.Small"/>
+                                <MudIconButton Icon="@Icons.Material.Filled.FilterCenterFocus"
+                                               OnClick="@FocusOnCurrentItem"
+                                               Size="Size.Small"
+                                               Disabled="_currentImpulse == null"/>
+                            </MudStack>
+
+                            <!-- Unit Impulse Visualization -->
+                            <div class="impulse-container"
+                                 style="position: relative; height: 300px; width: 100%; overflow-x: auto;">
+                                <svg class="impulse-svg"
+                                     style="width: @(_zoomLevel * 100)%; height: 100%; min-width: @(Math.Max(800, FilteredTable.Count * _itemSpacing))px;">
+
+                                    <!-- Y-Axis -->
+                                    <g class="y-axis">
+                                        <!-- Axis line -->
+                                        <line x1="60" y1="30" x2="60" y2="250" stroke="#666" stroke-width="1" />
+
+                                        <!-- Grid lines -->
+                                        @for (int i = 0; i <= 5; i++)
+                                        {
+                                            var y = 30 + (i * 44);
+                                            <line x1="60" y1="@y" x2="@(60 + (FilteredTable.Count * _itemSpacing))" y2="@y"
+                                                  stroke="#e0e0e0" stroke-width="1" stroke-dasharray="2,2" />
+
+                                            <!-- Y-axis labels -->
+                                            @if (_useLogScale)
+                                            {
+                                                var value = Math.Pow(10, (5 - i) * Math.Log10(_maxCount) / 5);
+                                                <div>
+                                                    <text x="55" y="@(y + 3)" text-anchor="end" font-size="9" fill="#666">
+                                                        @value.ToString("G3")
+                                                    </text>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                var value = (int)((5 - i) * _maxCount / 5);
+                                                <div>
+                                                    <text x="55" y="@(y + 3)" text-anchor="end" font-size="9" fill="#666">
+                                                        @value.ToString("N0")
+                                                    </text>
+                                                </div>
+                                            }
+                                        }
+                                        <text x="30" y="140" text-anchor="middle"
+                                              transform="rotate(-90, 30, 140)" font-size="10" fill="#666">
+                                            @L["Count"]
+                                        </text>
+                                    </g>
+
+                                    <!-- X-Axis -->
+                                    <line x1="60" y1="250" x2="@(60 + (FilteredTable.Count * _itemSpacing))" y2="250"
+                                          stroke="#666" stroke-width="1" />
+
+                                    <!-- Current Date Indicator Line -->
+                                    @if (ShowCurrentDateLine)
+                                    {
+                                        <g class="current-date-indicator">
+                                            <!-- Dashed vertical line -->
+                                            <line x1="@CurrentDateXPosition" y1="30"
+                                                  x2="@CurrentDateXPosition" y2="250"
+                                                  stroke="#4CAF50"
+                                                  stroke-width="1.5"
+                                                  stroke-dasharray="5,5" />
+
+                                            <!-- Current Date Label -->
+                                            <rect x="@(CurrentDateXPosition - 25)" y="15"
+                                                  width="50" height="20"
+                                                  fill="#4CAF50"
+                                                  rx="3" />
+
+                                            <text x="@CurrentDateXPosition" y="28" text-anchor="middle"
+                                                  font-size="9" fill="white" font-weight="bold">
+                                                
+                                                @L["Today"]
+                                            </text>
+                                        </g>
+                                    }
+
+                                    <!-- Unit Impulses -->
+                                    @for (int i = 0; i < FilteredTable.Count; i++)
+                                    {
+                                        var item = FilteredTable[i];
+                                        var x = 80 + (i * _itemSpacing);
+                                        var height = CalculateImpulseHeight((int)item.Items.Count);
+                                        var isCurrent = item == _currentImpulse;
+                                        var isHighlighted = IsDateHighlighted(item.Date);
+                                        var fillColor = GetImpulseColor(item.Items.Count, isCurrent, isHighlighted);
+
+                                        <g @key="@($"{item.Date}_{item.Items.Count}_{i}")"
+                                           class="impulse-group"
+                                           @onclick="@(() => OnImpulseClick(i))"
+                                           style="cursor: pointer;">
+
+                                            <!-- Tooltip Background (hidden by default) -->
+                                            <rect x="@(x - 40)" y="@(250 - height - 60)"
+                                                  width="80" height="50"
+                                                  fill="white" stroke="#ccc" stroke-width="1"
+                                                  rx="3" class="tooltip-bg"
+                                                  style="opacity: 0; pointer-events: none;" />
+
+                                            <!-- Impulse Line -->
+                                            <line x1="@x" y1="250"
+                                                  x2="@x" y2="@(250 - height)"
+                                                  stroke="@fillColor"
+                                                  stroke-width="@(isCurrent ? "3" : "2")"
+                                                  class="impulse-line" />
+
+                                            <!-- Impulse Head -->
+                                            @if (_showDataPoints || isCurrent)
+                                            {
+                                                <circle cx="@x" cy="@(250 - height)"
+                                                        r="@(isCurrent ? "5" : "3")"
+                                                        fill="@fillColor"
+                                                        class="impulse-head" />
+                                            }
+
+                                            <!-- X-Axis Label -->
+                                            <text x="@x" y="265" text-anchor="middle"
+                                                  font-size="9" fill="#666" class="x-axis-label">
+                                                @FormatDateLabel(item.Date)
+                                            </text>
+
+                                            <!-- Value Label (on hover) -->
+                                            <text x="@x" y="@(250 - height - 8)" text-anchor="middle"
+                                                  font-size="9" fill="@fillColor"
+                                                  class="value-label"
+                                                  style="opacity: 0;">
+                                                @FormatValueLabel((int)item.Items.Count)
+                                            </text>
+
+                                            <!-- Tooltip Content -->
+                                            <text x="@x" y="@(250 - height - 45)" text-anchor="middle"
+                                                  font-size="8" fill="#333" class="tooltip-title"
+                                                  style="opacity: 0; pointer-events: none;">
+                                                @item.Date.ToString("dd MMM yyyy")
+                                            </text>
+                                            <text x="@x" y="@(250 - height - 35)" text-anchor="middle"
+                                                  font-size="9" fill="#1976d2" font-weight="bold"
+                                                  class="tooltip-value"
+                                                  style="opacity: 0; pointer-events: none;">
+                                                @item.Items.Count.ToString("N0")
+                                            </text>
+                                            <!-- Add items count to tooltip -->
+                                            <text x="@x" y="@(250 - height - 25)" text-anchor="middle"
+                                                  font-size="8" fill="#4CAF50"
+                                                  class="tooltip-objects"
+                                                  style="opacity: 0; pointer-events: none;">
+                                                @(item.Items?.Count ?? 0) @L["items"]
+                                            </text>
+                                            <text x="@x" y="@(250 - height - 15)" text-anchor="middle"
+                                                  font-size="8" fill="#666"
+                                                  class="tooltip-day"
+                                                  style="opacity: 0; pointer-events: none;">
+                                                @item.Date.DayOfWeek.ToString().Substring(0, 3)
+                                            </text>
+                                        </g>
+                                    }
+
+                                    <!-- Trend Line (optional) -->
+                                    @if (_showTrendLine && FilteredTable.Count > 1)
+                                    {
+                                        <polyline points="@GetTrendLinePoints()"
+                                                  fill="none" stroke="#ff6b35"
+                                                  stroke-width="2" stroke-dasharray="5,5" />
+                                    }
+                                </svg>
+                            </div>
+                        </div>
+                    </MudItem>
+                </MudGrid>
+
+                <!-- Navigation Controls -->
+                <MudGrid>
+                    <MudItem xs="12">
+                        <MudStack Spacing="2" AlignItems="AlignItems.Center" Class="mt-4">
+                            <MudStack Row Spacing="2" AlignItems="AlignItems.Center">
+                                <MudButton Variant="Variant.Outlined"
+                                           Color="Color.Secondary"
+                                           OnClick="GoToFirst"
+                                           StartIcon="@Icons.Material.Filled.FirstPage"
+                                           Disabled="_currentFilteredIndex <= 0" />
+
+                                <MudButton Variant="Variant.Filled"
+                                           Color="Color.Primary"
+                                           OnClick="NavigatePrevious"
+                                           Disabled="_currentFilteredIndex <= 0"
+                                           StartIcon="@Icons.Material.Filled.ChevronLeft" />
+
+                                <MudSlider T="int"
+                                           Min="0"
+                                           Max="@Math.Max(0, FilteredTable.Count - 1)"
+                                           Value="@CurrentFilteredIndex"
+                                           ValueChanged="OnSliderValueChanged"
+                                           Immediate="true"
+                                           TickMarks="true"
+                                           Style="min-width: 300px; max-width: 300px" />
+
+                                <MudButton Variant="Variant.Filled"
+                                           Color="Color.Primary"
+                                           OnClick="NavigateNext"
+                                           Disabled="_currentFilteredIndex >= FilteredTable.Count - 1"
+                                           StartIcon="@Icons.Material.Filled.ChevronRight" />
+
+                                <MudButton Variant="Variant.Outlined"
+                                           Color="Color.Secondary"
+                                           OnClick="GoToLast"
+                                           StartIcon="@Icons.Material.Filled.LastPage"
+                                           Disabled="_currentFilteredIndex >= FilteredTable.Count - 1" />
+                            </MudStack>
+
+                            <MudText Typo="Typo.body2" Class="mt-2 text-center">
+
+                                @string.Format(@L["Point {0} of {1} • {2} • Count: {3} • Items: {4}"], 
+                                (_currentFilteredIndex + 1), 
+                                FilteredTable.Count, 
+                                (_currentImpulse?.Date.ToString("MMM dd, yyyy") ?? @L["No data"]), 
+                                (_currentImpulse?.Items.Count.ToString("N0") ?? "0"), 
+                                (_currentImpulse?.Items?.Count.ToString() ?? "0"))
+@* 
+                                Point @(_currentFilteredIndex + 1) of @FilteredTable.Count • @(_currentImpulse?.Date.ToString("MMM dd, yyyy") ?? @L["No data"]) •  Count: @(_currentImpulse?.Items.Count.ToString("N0") ?? "0") • Objects: @(_currentImpulse?.Items?.Count.ToString() ?? "0")
+
+                                Point @(_currentFilteredIndex + 1) of @FilteredTable.Count •
+                                @(_currentImpulse?.Date.ToString("MMM dd, yyyy") ?? @L["No data"]) •
+                                Count: @(_currentImpulse?.Items.Count.ToString("N0") ?? "0") •
+                                Objects: @(_currentImpulse?.Items?.Count.ToString() ?? "0") *@
+                            </MudText>
+                        </MudStack>
+                    </MudItem>
+                </MudGrid>
+
+                <!-- Current Impulse Details -->
+                @if (_currentImpulse != null)
+                {
+                    <MudGrid Class="mt-4">
+                        <MudItem xs="12">
+                            <MudCard>
+                                <MudCardContent>
+                                    <MudText Typo="Typo.h6">@L["Selected Impulse Details:"]</MudText>
+                                    <MudGrid Class="mt-2">
+                                        <MudItem xs="12" md="4">
+                                            <MudTextField Label=@L["Date"]
+                                                          Variant="Variant.Outlined"
+                                                          Value="@_currentImpulse.Date.ToString("yyyy-MM-dd")"
+                                                          ReadOnly="true" />
+                                        </MudItem>
+
+                                        <MudItem xs="12" md="4">
+                                            <MudTextField Label=@L["Day of Week"]
+                                                          Variant="Variant.Outlined"
+                                                          Value="@_currentImpulse.Date.DayOfWeek.ToString()"
+                                                          ReadOnly="true" />
+                                        </MudItem>
+                                        <MudItem xs="12" md="4">
+                                            <MudTextField Label=@L["Items Count"]
+                                                          Variant="Variant.Outlined"
+                                                          Value="@(_currentImpulse.Items.Count.ToString() ?? "0")"
+                                                          ReadOnly="true" />
+                                        </MudItem>
+                                    </MudGrid>
+                                    <MudStack AlignItems="AlignItems.Center" Class="mt-4">
+                                        <MudText Typo="Typo.body2">
+                                            @{
+                                                var daysDiff = (DateTime.Now - _currentImpulse.Date.ToDateTime(TimeOnly.MinValue)).Days;
+                                                var absDays = Math.Abs(daysDiff);
+                                                var direction = daysDiff > 0 ? @L["ago"] : @L["from now"];
+                                                string.Format(@L["Time from Today: {0} days {1}"], @absDays, @direction);
+                                            }
+
+                                        </MudText>
+                                    </MudStack>
+                                </MudCardContent>
+                            </MudCard>
+                        </MudItem>
+                    </MudGrid>
+                }
+
+                <!-- Current Impulse Items Table (Only shown when Impulse is selected) -->
+                @if (_currentImpulse != null && _currentImpulse.Items?.Any() == true)
+                {
+                    <MudGrid Class="mt-3">
+                        <MudItem xs="12">
+                            <MudCard>
+                                <MudCardHeader>
+                                    <CardHeaderContent>
+                                        <MudStack Row Spacing="2" AlignItems="AlignItems.Center">
+                                            <MudIcon Icon="@Icons.Material.Filled.List" />
+                                            <MudText Typo="Typo.h6">@string.Format(@L["Items of Selected Impulse: {0}: Count: {1}"], @_currentImpulse.Date.ToString("yyyy-MM-dd"), @_currentImpulse.Items.Count)</MudText>
+                                        </MudStack>
+                                    </CardHeaderContent>
+                                </MudCardHeader>
+                                <MudCardContent>
+                                    <!-- Items Table -->
+                                    <MudTable Items="@_currentImpulse.Items" Hover="true" Dense="true" FixedHeader="true" Height="300px">
+                                        <HeaderContent>
+                                            <MudTh>#</MudTh>
+                                            <MudTh>@L["Item"]</MudTh>
+                                            <MudTh>@L["Actions"]</MudTh>
+                                        </HeaderContent>
+                                        <RowTemplate>
+                                            @{
+                                                var index = _currentImpulse.Items.IndexOf(context);
+                                                var itemName = context.ToString();
+                                            }
+                                            <MudTd>@(index + 1)</MudTd>
+                                            <MudTd>
+                                                <MudText>@itemName</MudText>
+                                            </MudTd>
+                                        </RowTemplate>
+                                        <PagerContent>
+                                            <MudTablePager RowsPerPageString="Items per page" />
+                                        </PagerContent>
+                                    </MudTable>
+
+                                    <!-- Impulse Statistics -->
+                                    <MudGrid Class="mt-3">
+                                        <MudItem xs="12">
+                                            <MudPaper Class="pa-3" Elevation="0" Outlined="true">
+                                                <MudStack Row Spacing="3" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+                                                    <MudStack Spacing="1">
+                                                        <MudText Typo="Typo.caption" Color="Color.Secondary">@L["Total Items"]</MudText>
+                                                        <MudText Typo="Typo.h6">@_currentImpulse.Items.Count</MudText>
+                                                    </MudStack>
+                                                    <MudStack>
+                                                        <MudButton Variant="Variant.Outlined"
+                                                                   Color="Color.Primary"
+                                                                   StartIcon="@Icons.Material.Filled.FileDownload"
+                                                                   OnClick="@ExportItems"
+                                                                   Size="Size.Small">
+                                                            @L["Export"]
+                                                        </MudButton>
+                                                    </MudStack>
+                                                </MudStack>
+                                            </MudPaper>
+                                        </MudItem>
+                                    </MudGrid>
+                                </MudCardContent>
+                            </MudCard>
+                        </MudItem>
+                    </MudGrid>
+                }
+            }
+
+            <!-- Empty State -->
+            @if (!_loading && FilteredTable?.Any() != true)
+            {
+                <MudGrid Class="mt-4">
+                    <MudItem xs="12" Class="text-center">
+                        <MudPaper Class="pa-6" Elevation="1">
+                            <MudIcon Icon="@Icons.Material.Filled.BarChart" Size="Size.Large" Color="Color.Secondary" Class="mb-3" />
+                            <MudText Typo="Typo.h6" Class="mb-2">@L["No Data Available"]</MudText>
+                            <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mb-4">
+                                @GetEmptyStateMessage()
+                            </MudText>
+                            <MudButton Variant="Variant.Filled"
+                                       Color="Color.Primary"
+                                       OnClick="@OnRefresh"
+                                       StartIcon="@Icons.Material.Filled.Refresh">
+                                @L["Refresh Data"]
+                            </MudButton>
+                        </MudPaper>
+                    </MudItem>
+                </MudGrid>
+            }
+        </MudCardContent>
+    </MudCard>
+</MudContainer>
+
+<style>
+    .chart-container {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        background: white;
+        padding: 16px;
+    }
+
+    .impulse-container {
+        border-radius: 4px;
+        background: #fafafa;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .impulse-line {
+        transition: all 0.2s ease;
+    }
+
+    .impulse-head {
+        transition: all 0.2s ease;
+    }
+
+    .impulse-group:hover .impulse-line {
+        stroke-width: 3;
+        filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1));
+    }
+
+    .impulse-group:hover .value-label {
+        opacity: 1;
+        font-weight: bold;
+    }
+
+    .impulse-group:hover .tooltip-bg,
+    .impulse-group:hover .tooltip-title,
+    .impulse-group:hover .tooltip-value,
+    .impulse-group:hover .tooltip-objects,
+    .impulse-group:hover .tooltip-day {
+        opacity: 1;
+    }
+
+    .x-axis-label {
+        transition: all 0.2s ease;
+        user-select: none;
+    }
+
+    .impulse-group:hover .x-axis-label {
+        font-weight: bold;
+        fill: #333;
+        transform: translateY(-2px);
+    }
+
+    .current-date-indicator {
+        pointer-events: none;
+    }
+
+    .current-date-line {
+        animation: pulse 2s infinite;
+    }
+
+    .y-axis text {
+        user-select: none;
+    }
+
+    .trend-line {
+        pointer-events: none;
+    }
+
+    .selected-row {
+        background-color: #e3f2fd !important;
+        font-weight: 500;
+    }
+
+    .tooltip-bg {
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    }
+
+    @@keyframes pulse {
+        0%, 100% {
+            opacity: 0.7;
+        }
+
+        50% {
+            opacity: 1;
+        }
+    }
+
+    /* Smooth scrolling for chart container */
+    .impulse-container::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    .impulse-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+
+    .impulse-container::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 4px;
+    }
+
+        .impulse-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+    /* Object table specific styles */
+    .object-table-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .object-row:hover {
+        background-color: #f5f7fa;
+    }
+
+    .object-actions {
+        min-width: 120px;
+    }
+
+    /* Badge styling for object types */
+    .mud-badge.object-type-badge {
+        font-size: 0.65rem;
+        padding: 2px 6px;
+    }
+
+    /* Selected row highlight */
+    .selected-object-row {
+        background-color: #e8f4fd !important;
+        border-left: 3px solid #2196f3;
+    }
+</style>
+
+@code {
+    // Data
+    private List<ChartDto> _originalTable = new();
+    private List<ChartDto> _filteredTable = new();
+    private GetChartsQuery Query { get; set; } = new();
+
+    // UI State
+    private bool _loading = false;
+    private bool _useLogScale = true;
+    private bool _excludeZeroCount = true;
+    private bool _showDataPoints = true;
+    private bool _showTrendLine = false;
+
+    // Current selection
+    private int _currentFilteredIndex = 0;
+    private ChartDto? _currentImpulse = null;
+
+    // Chart settings
+    private double _zoomLevel = 1.0;
+    private int _itemSpacing = 60;
+    private double _maxCount = 1;
+
+    // Services
+    private CancellationTokenSource _refreshCts = new();
+
+    // Constants
+    private const int MIN_ITEM_SPACING = 40;
+    private const int MAX_ITEM_SPACING = 100;
+    private const double MIN_ZOOM = 0.5;
+    private const double MAX_ZOOM = 3.0;
+    private const double ZOOM_STEP = 0.25;
+
+    // Computed properties
+    private List<ChartDto> FilteredTable => _filteredTable;
+    private bool ShowCurrentDateLine => CurrentDateXPosition > 0;
+    private double CurrentDateXPosition { get; set; }
+
+    private int CurrentFilteredIndex
+    {
+        get => _currentFilteredIndex;
+        set
+        {
+            if (_currentFilteredIndex != value && value >= 0 && value < FilteredTable.Count)
+            {
+                _currentFilteredIndex = value;
+                UpdateCurrentImpulse();
+                StateHasChanged(); // Ensure UI updates when selection changes
+            }
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDataAsync();
+        CalculateCurrentDatePosition();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            InitializeChartSettings();
+        }
+    }
+
+    public void Dispose()
+    {
+        _refreshCts?.Cancel();
+        _refreshCts?.Dispose();
+    }
+
+    #region Event Handlers
+    private void ConditionChanged(string condition) => _ = RefreshDataAsync();
+
+    private async Task OnChangedListView(ChartListView listView)
+    {
+        Query.ListView = listView;
+        await LoadDataAsync();
+    }
+
+    private async Task OnRefresh() => await RefreshDataAsync();
+
+    private void OnSliderValueChanged(int newIndex) => SetCurrentIndex(newIndex);
+
+    private void OnImpulseClick(int index)
+    {
+        SetCurrentIndex(index);
+
+        // Ensure the impulse is visible in the viewport
+        ScrollToImpulse(index);
+    }
+
+    private EventCallback<bool> OnExcludeZeroCountChanged =>
+           EventCallback.Factory.Create<bool>(this, async (newValue) =>
+           {
+               if (_excludeZeroCount != newValue)
+               {
+                   _excludeZeroCount = newValue;
+                   await ApplyFilter();
+                   await ShowNotification(@L["Filter applied successfully"]);
+               }
+           });
+
+    private EventCallback<bool> OnUseLogScaleChanged =>
+       EventCallback.Factory.Create<bool>(this, async (newValue) =>
+       {
+           if (_useLogScale != newValue)
+           {
+               _useLogScale = newValue;
+               await InvokeAsync(StateHasChanged);
+           }
+       });
+
+    private EventCallback<bool> OnShowDataPointsChanged =>
+    EventCallback.Factory.Create<bool>(this, async (newValue) =>
+    {
+        if (_showDataPoints != newValue)
+        {
+            _showDataPoints = newValue;
+            await InvokeAsync(StateHasChanged);
+        }
+    });
+
+    private EventCallback<bool> OnShowTrendLineChanged =>
+    EventCallback.Factory.Create<bool>(this, async (newValue) =>
+    {
+        if (_showTrendLine != newValue)
+        {
+            _showTrendLine = newValue;
+            await InvokeAsync(StateHasChanged);
+        }
+    });
+
+    private void NavigatePrevious() => SetCurrentIndex(CurrentFilteredIndex - 1);
+
+    private void NavigateNext() => SetCurrentIndex(CurrentFilteredIndex + 1);
+
+    private void GoToFirst() => SetCurrentIndex(0);
+
+    private void GoToLast() => SetCurrentIndex(FilteredTable.Count - 1);
+
+    private void ClearSelection()
+    {
+        _currentImpulse = null;
+        _currentFilteredIndex = -1;
+        StateHasChanged();
+    }
+
+    private void SelectItem(ChartDto item)
+    {
+        var index = FilteredTable.IndexOf(item);
+        if (index >= 0)
+        {
+            SetCurrentIndex(index);
+            StateHasChanged();
+        }
+    }
+
+    private async Task ZoomIn()
+    {
+        _zoomLevel = Math.Min(MAX_ZOOM, _zoomLevel + ZOOM_STEP);
+        UpdateItemSpacing(); // Update spacing based on new zoom level
+        await InvokeAsync(StateHasChanged);
+        await ShowNotification(string.Format(@L["Zoom level: {0}x"], $"{_zoomLevel:F1}"), Severity.Info);
+    }
+
+    private async Task ZoomOut()
+    {
+        _zoomLevel = Math.Max(MIN_ZOOM, _zoomLevel - ZOOM_STEP);
+        UpdateItemSpacing(); // Update spacing based on new zoom level
+        await InvokeAsync(StateHasChanged);
+        await ShowNotification(string.Format(@L["Zoom level: {0}x"], $"{_zoomLevel:F1}"), Severity.Info);
+    }
+
+    private async Task ResetZoom()
+    {
+        _zoomLevel = 1.0;
+        UpdateItemSpacing(); // Reset to default spacing
+        await InvokeAsync(StateHasChanged);
+        await ShowNotification(@L["Zoom reset to default"], Severity.Info);
+    }
+
+    private async Task FocusOnCurrentItem()
+    {
+        if (_currentImpulse != null)
+        {
+            var index = FilteredTable.IndexOf(_currentImpulse);
+            if (index >= 0)
+            {
+                await ScrollToImpulse(index);
+                await ShowNotification(@L["Focused on selected item"], Severity.Info);
+            }
+        }
+    }
+    #endregion
+
+    #region Data Operations
+    private async Task LoadDataAsync()
+    {
+        if (_loading) return;
+
+        _loading = true;
+        try
+        {
+            var result = await Mediator.Send(Query).ConfigureAwait(false);
+            _originalTable = result?.ToList() ?? new List<ChartDto>();
+
+            if (_originalTable.Any())
+            {
+                _maxCount = _originalTable.Max(x => x.Items.Count);
+                await ApplyFilter();
+
+                await ShowNotification(string.Format(@L["Loaded {0} data points"], _originalTable.Count), Severity.Success);
+            }
+            else
+            {
+                await ShowNotification(@L["No data available for the selected criteria"], Severity.Info);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // Ignore cancellation
+        }
+        catch (Exception ex)
+        {
+
+            Console.WriteLine(string.Format(@L["Error loading data: {0}", ex.Message], _originalTable.Count));
+            _originalTable = new List<ChartDto>();
+            _filteredTable = new List<ChartDto>();
+            _currentImpulse = null;
+            await ShowNotification(string.Format(@L["Error loading data: {0}", ex.Message], _originalTable.Count), Severity.Error);
+        }
+        finally
+        {
+            _loading = false;
+            // StateHasChanged();
+        }
+    }
+
+    private async Task ApplyFilter()
+    {
+        // Apply zero count filter
+        _filteredTable = _excludeZeroCount
+            ? _originalTable.Where(x => x.Items.Count > 0).ToList()
+            : _originalTable.ToList();
+
+        // Update max count for visualization
+        _maxCount = _filteredTable.Any() ? _filteredTable.Max(x => x.Items.Count) : 1;
+
+        // Reset current selection
+        if (_filteredTable.Any())
+        {
+            CurrentFilteredIndex = 0;
+        }
+        else
+        {
+            _currentFilteredIndex = -1;
+            _currentImpulse = null;
+        }
+
+        CalculateCurrentDatePosition();
+        UpdateItemSpacing();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task RefreshDataAsync()
+    {
+        _refreshCts?.Cancel();
+        _refreshCts = new CancellationTokenSource();
+
+        ChartCacheKey.Refresh();
+        await LoadDataAsync();
+    }
+
+    private void SetCurrentIndex(int newIndex)
+    {
+        if (newIndex >= 0 && newIndex < FilteredTable.Count && newIndex != CurrentFilteredIndex)
+        {
+            CurrentFilteredIndex = newIndex;
+            StateHasChanged();
+        }
+    }
+    #endregion
+
+    #region Visualization Helpers
+    private void InitializeChartSettings()
+    {
+        UpdateItemSpacing();
+    }
+
+    private void UpdateItemSpacing()
+    {
+        if (!_filteredTable.Any())
+        {
+            _itemSpacing = 60;
+            return;
+        }
+
+        // Base item spacing based on data count
+        var count = _filteredTable.Count;
+        int baseSpacing;
+
+        if (count > 100)
+            baseSpacing = MIN_ITEM_SPACING;
+        else if (count > 50)
+            baseSpacing = 50;
+        else if (count > 25)
+            baseSpacing = 60;
+        else
+            baseSpacing = MAX_ITEM_SPACING;
+
+        // Apply zoom factor to spacing
+        // When zoomed in, increase spacing for better visibility
+        // When zoomed out, decrease spacing to fit more items
+        _itemSpacing = (int)(baseSpacing * _zoomLevel);
+
+        // Ensure spacing stays within reasonable bounds
+        _itemSpacing = Math.Max(MIN_ITEM_SPACING, Math.Min(MAX_ITEM_SPACING, _itemSpacing));
+
+
+
+        Console.WriteLine(string.Format(@L["Updated item spacing: {0}px (base: {1}, zoom: {2}x)"], _itemSpacing, baseSpacing, $"{_zoomLevel:F1}"));
+    }
+
+    private double CalculateImpulseHeight(int countValue)
+    {
+        if (!_filteredTable.Any() || _maxCount <= 0) return 0;
+
+        try
+        {
+            double normalized;
+
+            if (_useLogScale && countValue > 0)
+            {
+                var logCountValue = Math.Log10(countValue);
+                var logMax = Math.Log10(_maxCount);
+                var logMin = Math.Log10(Math.Max(1, _filteredTable.Min(x => x.Items.Count)));
+
+                normalized = (logCountValue - logMin) / (logMax - logMin);
+            }
+            else
+            {
+                normalized = (double)countValue / _maxCount;
+            }
+
+            return Math.Max(10, normalized * 200); // 200px max height
+        }
+        catch
+        {
+            return 50;
+        }
+    }
+
+    private string GetImpulseColor(double count, bool isCurrent, bool isHighlighted)
+    {
+        if (isCurrent) return "#ff4444";
+        if (isHighlighted) return "#ff6b35";
+
+        // Color based on value percentile
+        var percentile = count / _maxCount;
+        return percentile switch
+        {
+            >= 0.8 => "#1976d2",  // High values - blue
+            >= 0.5 => "#4caf50",  // Medium-high - green
+            >= 0.3 => "#ff9800",  // Medium - orange
+            _ => "#9e9e9e"        // Low values - gray
+        };
+    }
+
+    private bool IsDateHighlighted(DateOnly date)
+    {
+        return DateOnly.FromDateTime(DateTime.Now) == date;
+    }
+
+    private string GetTrendLinePoints()
+    {
+        var points = new List<string>();
+        for (int i = 0; i < FilteredTable.Count; i++)
+        {
+            var x = 80 + (i * _itemSpacing);
+            var height = CalculateImpulseHeight((int)FilteredTable[i].Items.Count);
+            var y = 250 - height;
+            points.Add($"{x},{y}");
+        }
+        return string.Join(" ", points);
+    }
+
+    private string FormatValueLabel(int countValue) => countValue.ToString("N0");
+
+    private string FormatDateLabel(DateOnly date) => date.ToString("dd-MM", CultureInfo.InvariantCulture);
+
+    private void CalculateCurrentDatePosition()
+    {
+        if (!FilteredTable.Any())
+        {
+            CurrentDateXPosition = 0;
+            return;
+        }
+
+        var today = DateOnly.FromDateTime(DateTime.Now);
+        var totalWidth = Math.Max(800, FilteredTable.Count * _itemSpacing);
+        var chartStartX = 60;
+        var chartEndX = chartStartX + (FilteredTable.Count * _itemSpacing);
+
+        // Find current date in filtered items
+        var todayItem = FilteredTable.FirstOrDefault(x => x.Date == today);
+        if (todayItem != null)
+        {
+            var index = FilteredTable.IndexOf(todayItem);
+            CurrentDateXPosition = 80 + (index * _itemSpacing);
+        }
+        else
+        {
+            // Interpolate position based on date range
+            var minDate = FilteredTable.Min(x => x.Date);
+            var maxDate = FilteredTable.Max(x => x.Date);
+
+            if (today < minDate)
+            {
+                CurrentDateXPosition = chartStartX - 20;
+            }
+            else if (today > maxDate)
+            {
+                CurrentDateXPosition = chartEndX + 20;
+            }
+            else
+            {
+                var totalDays = (maxDate.DayNumber - minDate.DayNumber);
+                var daysFromStart = (today.DayNumber - minDate.DayNumber);
+                var percentage = (double)daysFromStart / totalDays;
+                CurrentDateXPosition = chartStartX + (percentage * (chartEndX - chartStartX));
+            }
+        }
+
+        // Ensure within visible bounds
+        CurrentDateXPosition = Math.Max(chartStartX - 50, Math.Min(chartEndX + 50, CurrentDateXPosition));
+    }
+
+    private async Task ScrollToImpulse(int index)
+    {
+        try
+        {
+            // Calculate approximate scroll position
+            var scrollPosition = (index * _itemSpacing * _zoomLevel) - 200;
+            scrollPosition = Math.Max(0, scrollPosition);
+
+            // Use JS interop to scroll the container
+            await JSRuntime.InvokeVoidAsync("scrollChartToPosition", scrollPosition);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(string.Format(@L["Error scrolling to impulse: {0}", ex.Message]));
+        }
+    }
+    #endregion
+
+    #region Helper Methods
+    private void UpdateCurrentImpulse()
+    {
+        _currentImpulse = (CurrentFilteredIndex >= 0 && CurrentFilteredIndex < FilteredTable.Count)
+            ? FilteredTable[CurrentFilteredIndex]
+            : null;
+
+        if (_currentImpulse != null)
+        {
+            Console.WriteLine(string.Format(@L["Selected impulse: {0} with {1} items", _currentImpulse.Date, _currentImpulse.Items.Count]));
+        }
+    }
+
+    private string GetEmptyStateMessage()
+    {
+        if (_originalTable.Any() && !_filteredTable.Any())
+        {
+            return @L["No data matches your filter criteria. Try adjusting your filters."];
+    }
+        return @L["No data available for the selected criteria."];
+    }
+
+    private async Task ShowNotification(string message, Severity severity = Severity.Info)
+    {
+        Snackbar.Add(message, severity);
+        await Task.CompletedTask;
+    }
+    #endregion
+
+    #region Items Actions
+    private async Task ExportItems()
+    {
+        if (_currentImpulse?.Items?.Any() != true)
+            return;
+
+        try
+        {
+            var exportContent = string.Join(Environment.NewLine, _currentImpulse.Items);
+            var fileName = $"items-{_currentImpulse.Date:yyyyMMdd}-{DateTime.Now:HHmmss}.txt";
+
+            // Implement your export logic here
+            // This depends on how you handle file downloads in your app
+
+            await ShowNotification(string.Format(@L["Exporting {0} items..."], _currentImpulse.Items.Count), Severity.Info);
+            // await ShowNotification($"Exporting {_currentImpulse.Items.Count} items...", Severity.Info);
+
+            // Example using JS interop (requires implementation in JS)
+            // await JSRuntime.InvokeVoidAsync("downloadFile", fileName, exportContent);
+            await ShowNotification(@L["Export ready!"], Severity.Success);
+        }
+        catch (Exception ex)
+        {
+            await ShowNotification(string.Format(@L["Export failed: {0}"], ex.Message), Severity.Error);
+        }
+    }
+    #endregion
+
+}

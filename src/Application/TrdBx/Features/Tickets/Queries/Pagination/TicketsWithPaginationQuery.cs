@@ -52,7 +52,7 @@ public class TicketsWithPaginationQueryHandler :
         //                                            cancellationToken);
         //return data;
 
-        var data = await _context.Tickets.OrderBy($"{request.OrderBy} {request.SortDirection}")
+        var data = await _context.Tickets.Include(s => s.TrackingUnit).OrderBy($"{request.OrderBy} {request.SortDirection}")
                                      .ProjectToPaginatedDataAsync(request.Specification,
                                                                   request.PageNumber,
                                                                   request.PageSize,

@@ -4,7 +4,8 @@ public class AddEditSPackageCommandValidator : AbstractValidator<AddEditSPackage
 {
     public AddEditSPackageCommandValidator()
     {
-                RuleFor(v => v.Name).MaximumLength(50).NotEmpty(); 
+        RuleFor(v => v.SProviderId).NotNull();
+        RuleFor(v => v.Name).MaximumLength(50).NotEmpty(); 
 
 
      }

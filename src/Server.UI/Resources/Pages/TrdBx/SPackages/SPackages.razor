@@ -1,0 +1,275 @@
+﻿@using CleanArchitecture.Blazor.Application.Features.SPackages.Mappers
+@using CleanArchitecture.Blazor.Application.Features.SPackages.Commands.AddEdit
+@using CleanArchitecture.Blazor.Application.Features.SPackages.Commands.Delete
+@using CleanArchitecture.Blazor.Application.Features.SPackages.DTOs
+@using CleanArchitecture.Blazor.Application.Features.SPackages.Queries.GetAll
+@* @using CleanArchitecture.Blazor.Application.Features.SPackages.Mappers *@
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.SPackages.Components
+
+@inherits MudComponentBase
+@inject IStringLocalizer<SPackages> L
+@attribute [Authorize(Policy = Permissions.SPackages.View)]
+
+
+<MudGrid>
+  @*   Label="@L["SPackage"]" *@
+    <MudItem md="8">
+        <MudSelect T="int"
+                   
+                   Required="true"
+                   RequiredError="@L["SPackage is required!"]"
+                   Value="SPackageId"
+                   ValueChanged="OnSPackageChanged">
+            <MudSelectItem Value=0>Select a SPackage</MudSelectItem>
+
+            @foreach (var doc1type in spackages)
+            {
+                <MudSelectItem Value="doc1type.Id">@doc1type.Name</MudSelectItem>
+            }
+        </MudSelect>
+    </MudItem>
+    <MudItem md="1">
+        <MudIconButton Variant="Variant.Outlined"
+                       OnClick="@(()=>OnView(SelectedSPackage))"
+                       Disabled="isDisabled"
+                       Icon="@Icons.Material.Filled.Preview"
+                       Size="Size.Small"
+                       Color="Color.Primary">
+        </MudIconButton>
+    </MudItem>
+
+    <MudItem md="1">
+        <MudIconButton Variant="Variant.Outlined"
+                       OnClick="@(()=>OnEdit(SelectedSPackage))"
+                       Disabled="isDisabled"
+                       Icon="@Icons.Material.Filled.Edit"
+                       Size="Size.Small"
+                       Color="Color.Primary">
+        </MudIconButton>
+    </MudItem>
+
+    <MudItem md="1">
+        <MudIconButton Variant="Variant.Outlined"
+                       OnClick="@(()=>OnCreate())"
+                       Icon="@Icons.Material.Filled.Add"
+                       Size="Size.Small"
+                       Color="Color.Primary">
+        </MudIconButton>
+    </MudItem>
+
+    <MudItem md="1">
+        <MudIconButton Variant="Variant.Outlined"
+                       OnClick="@(()=>OnDelete(SelectedSPackage))"
+                       Disabled="isDisabled"
+                       Icon="@Icons.Material.Filled.Delete"
+                       Size="Size.Small"
+                       Color="Color.Primary">
+        </MudIconButton>
+    </MudItem>
+
+
+
+</MudGrid>
+
+@code {
+
+    [Parameter]
+    public EventCallback<int> SPackageIdChanged { get; set; }
+
+    private int _gpsUnitModelId;
+    [Parameter]
+    public int SPackageId
+    {
+        get => _gpsUnitModelId;
+        set
+        {
+            if (_gpsUnitModelId != value)
+            {
+                _gpsUnitModelId = value;
+                SPackageIdChanged.InvokeAsync(value);
+            }
+        }
+    }
+
+
+    private IEnumerable<SPackageDto> spackages = default!;
+    private GetAllSPackagesQuery GetAllSPackagesQuery { get; set; } = new();
+
+    public SPackageDto SelectedSPackage { get; set; } = null!;
+    private void OnSPackageChanged(int id)
+    {
+        SPackageId = id;
+        SelectedSPackage = spackages.FirstOrDefault(m => m.Id == id);
+    }
+
+    bool isDisabled => (SelectedSPackage is null);
+
+    protected override async Task OnInitializedAsync()
+    {
+        spackages = await LoadSPackages();
+    }
+
+    private async Task<IEnumerable<SPackageDto>> LoadSPackages()
+    {
+        var result = await Mediator.Send(GetAllSPackagesQuery).ConfigureAwait(false);
+        return result;
+    }
+
+    #region Curd
+
+    private async Task OnCreate()
+    {
+        var title = L["Create SPackage"];
+        var command = Mapper.ToEditCommand(new SPackageDto());
+        var parameters = new DialogParameters<SPackageAddEditDialog>
+            {
+                { x=>x.model,command },
+            };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        var dialog = DialogService.Show<SPackageAddEditDialog>(title, parameters, options);
+        var state = await dialog.Result;
+
+        if (state != null && !state.Canceled)
+        {
+            spackages = await LoadSPackages();
+
+            SelectedSPackage = null;
+        }
+    }
+
+    private async Task OnEdit(SPackageDto dto)
+    {
+        var title = L["Update SPackage"];
+        var command = Mapper.ToEditCommand(dto);
+        var parameters = new DialogParameters<SPackageAddEditDialog>
+            {
+                { x=>x.model,command },
+            };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        var dialog = DialogService.Show<SPackageAddEditDialog>(title, parameters, options);
+        var state = await dialog.Result;
+
+        if (state != null && !state.Canceled)
+        {
+            spackages = await LoadSPackages();
+
+            SelectedSPackage = null;
+        }
+
+
+    }
+
+    private async Task OnDelete(SPackageDto dto)
+    {
+        var contentText = string.Format(ConstantString.DeleteConfirmation, dto.Name);
+        var command = new DeleteSPackageCommand(new int[] { dto.Id });
+        await DialogServiceHelper.ShowDeleteConfirmationDialogAsync(command, ConstantString.DeleteConfirmationTitle, contentText, async () =>
+        {
+            await InvokeAsync(async () =>
+            {
+                spackages = await LoadSPackages();
+
+                SelectedSPackage = null;
+            });
+        });
+    }
+
+
+
+    private async Task OnView(SPackageDto dto)
+    {
+        var title = L["View SPackage"];
+        // var command = Mapper.ToEditCommand(dto);
+        var parameters = new DialogParameters<SPackageViewDialog>
+            {
+                { x=>x.model,dto },
+            };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        var dialog = DialogService.Show<SPackageViewDialog>(title, parameters, options);
+        var state = await dialog.Result;
+
+        // if (state != null && !state.Canceled)
+        // {
+        //     items = await LoadSPackageModels();
+
+        //     SelectedItem = null;
+        // }
+    }
+
+    #endregion
+
+    // private async Task OnView(SPackageDto dto)
+    // {
+    //     await ShowViewFormDialog("SPackage", dto);
+    //     SelectedSPackage = dto;
+    // }
+
+    // private async Task OnCreate()
+    // {
+
+    //     // var command = Mapper.Map<AddEditSPackageCommand>(new SPackageDto());
+    //     var command = Mapper.CloneFromDto(new SPackageDto());
+    //     // var command = new AddEditSPackageCommand();
+    //     await ShowAddEditFormDialog(string.Format(ConstantString.CreateAnItem, L["SPackage"]), command);
+    // }
+
+    // private async Task OnEdit(SPackageDto dto)
+    // {
+    //     // var command = Mapper.Map<AddEditSPackageCommand>(dto);
+    //     var command = Mapper.CloneFromDto(dto);
+    //     // var command = new AddEditSPackageCommand() { Id = dto.Id, Name = dto.Name};
+    //     await ShowAddEditFormDialog(string.Format(ConstantString.EditTheItem, L["SPackage"]), command);
+    // }
+
+    // private async Task OnDelete(SPackageDto dto)
+    // {
+    //     var contentText = string.Format(ConstantString.DeleteConfirmation, dto.Name);
+    //     var command = new DeleteSPackageCommand(new int[] { dto.Id });
+
+    //     await DialogServiceHelper.ShowDeleteConfirmationDialogAsync(command, ConstantString.DeleteConfirmationTitle, contentText, async () =>
+    //   {
+    //       await InvokeAsync(async () =>
+    //       {
+    //           gpsUnitModels = await LoadSPackages();
+
+    //           SelectedSPackage = null;
+    //       });
+    //   });
+
+
+    // }
+
+
+    // private async Task ShowAddEditFormDialog(string title, AddEditSPackageCommand command)
+    // {
+    //     var parameters = new DialogParameters<SPackageAddEditDialog>
+    //         {
+    //             { x=>x.model,command },
+    //         };
+    //     var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+    //     var dialog = DialogService.Show<SPackageAddEditDialog>(title, parameters, options);
+    //     var state = await dialog.Result;
+
+    //     if (state != null && !state.Canceled)
+    //     {
+    //         gpsUnitModels = await LoadSPackages();
+    //     }
+    // }
+
+    // private async Task ShowViewFormDialog(string title, SPackageDto dto)
+    // {
+    //     var parameters = new DialogParameters<SPackageViewDialog>
+    //         {
+    //             { x=>x.model,dto},
+    //         };
+    //     var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+    //     var dialog = DialogService.Show<SPackageViewDialog>(title, parameters, options);
+    //     var state = await dialog.Result;
+
+    //     if (state != null && !state.Canceled)
+    //     {
+    //         gpsUnitModels = await LoadSPackages();
+    //         SelectedSPackage = dto;
+    //     }
+    // }
+}

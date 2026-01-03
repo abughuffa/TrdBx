@@ -11,7 +11,7 @@ public class XReplaceGpsUnitCommand : ICacheInvalidatorRequest<Result<int>>
     [Description("SUnitId")] public int SUnitId { get; set; }
     [Description("SimCardId")] public int SimCardId { get; set; } = 0;
     [Description("CustomerId")] public int CustomerId { get; set; }
-    [Description("InstallerId")] public string InstallerId { get; set; } = string.Empty;
+    //[Description("InstallerId")] public string InstallerId { get; set; } = string.Empty;
     [Description("SubPackage")] public SubPackage SubPackage { get; set; } = SubPackage.Active;
     [Description("InsMode")] public InsMode InsMode { get; set; }
     [Description("CreateDeservedServices")] public bool CreateDeservedServices { get; set; }
@@ -75,10 +75,10 @@ public class XReplaceGpsUnitCommandHandler : SubscriptionSharedLogic, IRequestHa
 #pragma warning restore CS8601 // Possible null reference assignment.
 
 #pragma warning disable CS8629 // Nullable value type may be null.
-        var rprice = GetCPrice(_context,  (int)runit.CustomerId, runit.TrackingUnitModelId);
+        var rprice = await GetCPrice(_context,  (int)runit.CustomerId, runit.TrackingUnitModelId);
 #pragma warning restore CS8629 // Nullable value type may be null.
 
-        var sprice = GetCPrice(_context,  (int)sunit.CustomerId, sunit.TrackingUnitModelId);
+        var sprice = await GetCPrice(_context,  (int)sunit.CustomerId, sunit.TrackingUnitModelId);
 
         var T = request.IsTampred;  //IsTampred
         var R = runit.WryDate < request.TsDate; //Replaced Unit Warrenty
@@ -88,14 +88,14 @@ public class XReplaceGpsUnitCommandHandler : SubscriptionSharedLogic, IRequestHa
         var Rw = R && S;
         var Sw = !T && R && S;
 
-        var serviceNo = GenSerialNo(_context, "ServiceLog", request.TsDate).Result;
+        var serviceNo = await GenSerialNo(_context, "ServiceLog", request.TsDate);
 
         var serviceLog = new ServiceLog()
         {
             ServiceNo = serviceNo,
             ServiceTask = ServiceTask.Replace,
             CustomerId = request.CustomerId,
-            InstallerId = request.InstallerId,
+            //InstallerId = request.InstallerId,
             SerDate = request.TsDate,
             IsDeserved = IsObserved,
             IsBilled = false,
@@ -108,7 +108,7 @@ public class XReplaceGpsUnitCommandHandler : SubscriptionSharedLogic, IRequestHa
             case UStatus.Used:
                 {
                     serviceLog.Desc = string.Format("استبدال الوحدة ({0}) بالوحدة المستعملة ({1}) للأصل ({2})", runit.SNo, sunit.SNo, asset.TrackedAssetNo);
-                    serviceLog.Amount = GetSPrice(_context, ServiceTask.Replace);
+                    serviceLog.Amount = await GetSPrice(_context, ServiceTask.Replace);
 
                     sunit.WryDate = Sw ? request.TsDate : sunit.WryDate;
 

@@ -75,22 +75,21 @@ public class ImportSubscriptionsCommandHandler :
                { _localizer[_dto.GetMemberDescription(x=>x.LastPaidFees)], (row, item) => item.LastPaidFees = (SubPackageFees)Convert.ToInt32(row[_localizer[_dto.GetMemberDescription(x=>x.LastPaidFees)]].ToString()) },
                { _localizer[_dto.GetMemberDescription(x=>x.DailyFees)], (row, item) => item.DailyFees = decimal.Parse(row[_localizer[_dto.GetMemberDescription(x=>x.DailyFees)]].ToString())},
                { _localizer[_dto.GetMemberDescription(x=>x.Days)], (row, item) => item.Days = int.Parse(row[_localizer[_dto.GetMemberDescription(x=>x.Days)]].ToString())},
-               { _localizer[_dto.GetMemberDescription(x=>x.Amount)], (row, item) => item.Amount = decimal.Parse(row[_localizer[_dto.GetMemberDescription(x=>x.Amount)]].ToString())},
-               //{ _localizer[_dto.GetMemberDescription(x=>x.IsBilled)], (row, item) => item.IsBilled =Convert.ToBoolean(row[_localizer[_dto.GetMemberDescription(x=>x.IsBilled)]]) },
+               { _localizer[_dto.GetMemberDescription(x=>x.Amount)], (row, item) => item.Amount = decimal.Parse(row[_localizer[_dto.GetMemberDescription(x=>x.Amount)]].ToString())}
         }, _localizer[_dto.GetClassDescription()]);
         if (result.Succeeded && result.Data is not null)
         {
             foreach (var dto in result.Data)
             {
-                //var exists = await _context.Subscriptions.AnyAsync(x => x.s == dto.SimNo, cancellationToken);
-                //if (!exists)
-                //{
-                //var item = _mapper.Map<Subscription>(dto);
-                var item = Mapper.FromDto(dto);
-                // add create domain events if this entity implement the IHasDomainEvent interface
-                // item.AddDomainEvent(new ContactCreatedEvent(item));
-                await _context.Subscriptions.AddAsync(item, cancellationToken);
-                //}
+                var exists = await _context.Subscriptions.AnyAsync(x => x.Id == dto.Id, cancellationToken);
+                if (!exists)
+                {
+                    //var item = _mapper.Map<Subscription>(dto);
+                    var item = Mapper.FromDto(dto);
+                    // add create domain events if this entity implement the IHasDomainEvent interface
+                    // item.AddDomainEvent(new SubscriptionCreatedEvent(item));
+                    await _context.Subscriptions.AddAsync(item, cancellationToken);
+                }
             }
             await _context.SaveChangesAsync(cancellationToken);
             return await Result<int>.SuccessAsync(result.Data.Count());
@@ -114,8 +113,7 @@ _localizer[_dto.GetMemberDescription(x=>x.SeDate)],
 _localizer[_dto.GetMemberDescription(x=>x.Desc)],
 _localizer[_dto.GetMemberDescription(x=>x.DailyFees)],
 _localizer[_dto.GetMemberDescription(x=>x.Days)],
-_localizer[_dto.GetMemberDescription(x=>x.Amount)],
-//_localizer[_dto.GetMemberDescription(x=>x.IsBilled)],
+_localizer[_dto.GetMemberDescription(x=>x.Amount)]
 
                 };
         var result = await _excelService.CreateTemplateAsync(fields, _localizer[_dto.GetClassDescription()]);

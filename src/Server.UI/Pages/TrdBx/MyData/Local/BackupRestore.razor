@@ -1,0 +1,245 @@
+﻿@page "/pages/TrdBx/MyData/Local/BackupRestore"
+
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.BackupRestore.Commands.Create
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.BackupRestore.Commands.Delete
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.BackupRestore.Commands.Restore
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.BackupRestore.DTOs
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.BackupRestore.Queries
+
+@inject IStringLocalizer<BackupRestore> L
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.BackupRestore.View)]
+
+<PageTitle>@Title</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge">  
+    <MudCard>
+        <MudToolBar>
+            <MudStack Row Spacing="3" Class="flex-grow-1" Justify="Justify.SpaceBetween">
+                <MudItem xs="6" md="6">
+                    <MudStack AlignItems="AlignItems.Start">
+                        <MudTextField @bind-Value="backupName" Label=@L["Backup Name"] Variant="Variant.Outlined" FullWidth />
+                    </MudStack>
+                </MudItem>
+                <MudItem xs="6" md="6">
+                <MudStack AlignItems="AlignItems.End">
+                    <MudLoadingButton Loading="_uploading" Variant="Variant.Filled" Color="Color.Primary" OnClick="OnCreateBackup"
+                                      Disabled="@((backupName is null) && !_canCreate)" Class="ml-2" StartIcon="@Icons.Material.Filled.Backup">
+                        @L["Create Backup"]
+                    </MudLoadingButton>
+                </MudStack>
+                </MudItem>
+            </MudStack>
+        </MudToolBar>
+        <MudCardContent>
+           <MudStack Spacing="5" Class="flex-grow-1" Justify="Justify.SpaceBetween">
+
+                <MudStack Row Spacing="3" Class="flex-grow-1" Justify="Justify.SpaceBetween">
+                    <MudItem xs="6" md="6">
+                    <MudStack Row AlignItems="AlignItems.Start">
+                        <MudText Typo="Typo.h6" Class="mb-4">@L["Available Backups"]</MudText>
+                    </MudStack>
+                    </MudItem>
+                    <MudItem xs="6" md="6">
+                    <MudStack Spacing="3" AlignItems="AlignItems.End">
+                        <MudButton Disabled="@_loading"
+                                   OnClick="@(() => OnRefresh())"
+                                   StartIcon="@Icons.Material.Outlined.Refresh">
+                            @ConstantString.Refresh
+                        </MudButton>
+                    </MudStack>
+                    </MudItem>
+                </MudStack>
+    
+
+                <MudStack Spacing="5" Class="flex-grow-1" Justify="Justify.SpaceBetween">
+                @if (backups.Count == 0)
+                {
+                     <MudItem xs="12" md="12">
+                    <MudAlert Severity="Severity.Warning" Class="mt-4">
+                        @L["No backups found. Create your first backup using the form above."]
+                    </MudAlert>
+                    </MudItem>
+                }
+                else
+                {
+                    <MudItem xs="12" md="12">
+                    <MudTable Items="@backups" Hover="true" Dense="true" Breakpoint="Breakpoint.Sm">
+                        <HeaderContent>
+                            <MudTh>@L["Backup Name"]</MudTh>
+                                <MudTh>@L["Size"]</MudTh>
+                                <MudTh>@L["Created"]</MudTh>
+                                    <MudTh>@L["Actions"]</MudTh>
+                        </HeaderContent>
+                        <RowTemplate>
+                            <MudTd>@context.Name</MudTd>
+                            <MudTd>@context.FormattedSize</MudTd>
+                            <MudTd>@context.FormattedDate</MudTd>
+                            <MudTd>
+                                <MudIconButton Icon="@Icons.Material.Filled.Restore" Color="Color.Warning"
+                                               Disabled="@(!_canRestore)"
+                                               OnClick="() => OnRestore(context.Name)" />
+                                <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error"
+                                               Disabled="@(!_canDelete)"
+                                               OnClick="() => OnDelete(context.Name)" Class="ml-2" />
+                            </MudTd>
+                        </RowTemplate>
+                    </MudTable>
+                    </MudItem>
+                }
+                </MudStack>
+            </MudStack>
+        </MudCardContent>
+    </MudCard>
+</MudContainer>
+
+
+
+
+
+@code {
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthState { get; set; } = default!;
+    [CascadingParameter]
+    private UserProfile? UserProfile { get; set; }
+    public string? Title { get; private set; }
+    // private BackupRestoreAccessRights _accessRights = new();
+
+    private List<BackupFileDto> backups = new();
+    private string? backupName = null;
+    private string? selectedBackup = null;
+
+    private bool _loading;
+    private bool _uploading;
+
+    [Inject]
+    private IBlazorDownloadFileService BlazorDownloadFileService { get; set; } = null!;
+
+    private bool _canCreate;
+    private bool _canRestore;
+    private bool _canDelete;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Title = L["Backup & Restore"];
+        var state = await AuthState;
+        _canCreate = (await AuthService.AuthorizeAsync(state.User, Permissions.BackupRestore.Create)).Succeeded;
+        _canRestore = (await AuthService.AuthorizeAsync(state.User, Permissions.BackupRestore.Restore)).Succeeded;
+        _canDelete = (await AuthService.AuthorizeAsync(state.User, Permissions.BackupRestore.Delete)).Succeeded;
+
+        await LoadBackups();
+    }
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     _accessRights = await PermissionService.GetAccessRightsAsync<BackupRestoreAccessRights>();
+    //     await LoadBackups();
+    // }
+
+    private async Task OnRefresh()
+    {
+        await LoadBackups();
+    }
+    private async Task LoadBackups()
+    {
+        try
+        {
+            backups = await Mediator.Send(new GetBackupsQuery());
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(string.Format(@L["Error loading backups: {0}"], ex.Message), Severity.Error);
+        }
+    }
+
+    private async Task OnCreateBackup()
+    {
+
+        try
+        {
+            _uploading = true;
+
+            var result = await Mediator.Send(new CreateBackupCommand(backupName));
+
+            if (result)
+            {
+                Snackbar.Add(@L["Backup file created Successfully"], MudBlazor.Severity.Info);
+            await LoadBackups();
+                backupName = null;
+            }
+            else
+            {
+                Snackbar.Add(@L["Backup failed"], Severity.Error);
+            }
+
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(string.Format(@L["Backup failed: {0}"],  ex.Message), Severity.Error);
+        }
+        finally
+        {
+            _uploading = false;
+        }
+
+    }
+
+
+
+    private async Task OnRestore(string backupName)
+    {
+        try
+        {
+            _uploading = true;
+
+            var result = await Mediator.Send(new RestoreBackupCommand(backupName));
+
+            if (result)
+            {
+                Snackbar.Add(@L["Backup file restored Successfully"], MudBlazor.Severity.Info);
+                backupName = "";
+            }
+            else
+            {
+                Snackbar.Add(@L["Restore failed"], Severity.Error);
+            }
+
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(string.Format(@L["Restore failed: {0}"], ex.Message), Severity.Error);
+
+        }
+        finally
+        {
+            _uploading = false;
+        }
+
+        // var contentText = string.Format(ConstantString.ExecuteConfirmation, "Restore", backupName);
+        // var command = new RestoreBackupCommand(backupName);
+        // await DialogServiceHelper.ShowExecuteConfirmationDialogAsync(command, ConstantString.ExecuteConfirmationTitle, contentText, async () =>
+        // {
+        //     await InvokeAsync(async () =>
+        //     {
+        //         await LoadBackups();
+        //     });
+        // });
+    }
+
+
+
+    private async Task OnDelete(string backupName)
+    {
+        var contentText = string.Format(ConstantString.DeleteConfirmation, backupName);
+        var command = new DeleteBackupCommand(backupName);
+        await DialogServiceHelper.ShowDeleteConfirmationDialogAsync(command, ConstantString.DeleteConfirmationTitle, contentText, async () =>
+        {
+            await InvokeAsync(async () =>
+            {
+                await LoadBackups();
+            });
+        });
+    }
+
+
+}

@@ -47,7 +47,7 @@ public class ServiceLogsWithPaginationQueryHandler :
         {
             //var data = await _context.ServiceLogs.Include(s => s.Subscriptions).Include(s => s.WialonTasks).OrderBy($"{request.OrderBy} {request.SortDirection}")
             //.ProjectToPaginatedDataAsync<ServiceLog, ServiceLogDto>(request.Specification, request.PageNumber, request.PageSize, _mapper.ConfigurationProvider, cancellationToken);
-            var data = await _context.ServiceLogs.Include(s => s.Subscriptions).Include(s => s.WialonTasks).OrderBy($"{request.OrderBy} {request.SortDirection}")
+            var data = await _context.ServiceLogs.Include(s => s.Customer).Include(s => s.Subscriptions).Include(s => s.WialonTasks).OrderBy($"{request.OrderBy} {request.SortDirection}")
                                                .ProjectToPaginatedDataAsync(request.Specification,request.PageNumber,request.PageSize,Mapper.ToDto,cancellationToken);
             return data;
         }
@@ -63,7 +63,7 @@ public class ServiceLogsWithPaginationQueryHandler :
                     //.Include(s => s.Subscriptions).Include(s => s.WialonTasks).OrderBy($"{request.OrderBy} {request.SortDirection}")
                   //.ProjectToPaginatedDataAsync<ServiceLog, ServiceLogDto>(request.Specification, request.PageNumber, request.PageSize, _mapper.ConfigurationProvider, cancellationToken);
                 var data = await _context.ServiceLogs.Where(x => customerIds.Contains(x.CustomerId))
-                    .Include(s => s.Subscriptions).Include(s => s.WialonTasks).OrderBy($"{request.OrderBy} {request.SortDirection}")
+                    .Include(s => s.Customer).Include(s => s.Subscriptions).Include(s => s.WialonTasks).OrderBy($"{request.OrderBy} {request.SortDirection}")
                                    .ProjectToPaginatedDataAsync(request.Specification, request.PageNumber, request.PageSize, Mapper.ToDto, cancellationToken);
                 return data;
             }
@@ -74,7 +74,7 @@ public class ServiceLogsWithPaginationQueryHandler :
                 //.Include(s => s.Subscriptions).Include(s => s.WialonTasks).OrderBy($"{request.OrderBy} {request.SortDirection}")
                 //.ProjectToPaginatedDataAsync<ServiceLog, ServiceLogDto>(request.Specification, request.PageNumber, request.PageSize, _mapper.ConfigurationProvider, cancellationToken);
                 var data = await _context.ServiceLogs.Where(x => x.CustomerId.Equals(request.CustomerId))
-    .Include(s => s.Subscriptions).Include(s => s.WialonTasks).OrderBy($"{request.OrderBy} {request.SortDirection}")
+    .Include(s => s.Customer).Include(s => s.Subscriptions).Include(s => s.WialonTasks).OrderBy($"{request.OrderBy} {request.SortDirection}")
                    .ProjectToPaginatedDataAsync(request.Specification, request.PageNumber, request.PageSize, Mapper.ToDto, cancellationToken);
                 return data;
             }

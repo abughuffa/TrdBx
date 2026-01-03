@@ -74,7 +74,7 @@
 
     private int selectedItemId;
 
-    private IEnumerable<TrackingUnitModelDto> items = default!;
+    private IEnumerable<TrackingUnitModelDto> items = new List<TrackingUnitModelDto>();
 
     private GetAllTrackingUnitModelsQuery GetAllTrackingUnitModelsQuery { get; set; } = new();
 
@@ -95,6 +95,8 @@
 
     private bool isDisabled => (SelectedItem is null);
 
+
+
     protected override async Task OnInitializedAsync()
     {
         items = await LoadTrackingUnitModels();
@@ -105,6 +107,7 @@
         SelectedItemId = id; // is null ? null: id;
         SelectedItem = items.FirstOrDefault(m => m.Id == id);
     }
+
 
     private async Task<IEnumerable<TrackingUnitModelDto>> LoadTrackingUnitModels()
     {

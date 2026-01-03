@@ -1,0 +1,76 @@
+﻿
+@using CleanArchitecture.Blazor.Application.Features.SProviders.Commands.AddEdit
+
+@inherits MudComponentBase
+@inject IValidationService Validator
+@inject IStringLocalizer<SProviders> L
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.SProviders.Create)]
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.SProviders.Edit)]
+
+@* <PageTitle>@Title</PageTitle> *@
+
+<MudDialog>
+    <DialogContent>
+        <MudForm Model="@model" @ref="@_form" Validation="@(Validator.ValidateValue(model))">
+            <MudGrid>
+                @*TODO: define mudform that should be edit fields, for example:*@
+                <MudItem md="12">
+                    <MudTextField Label="@L[model.GetMemberDescription(x=>x.Name)]" @bind-Value="model.Name" For="@(() => model.Name)" Required="false" RequiredError="@L["SProvider name is required!"]"></MudTextField>
+                </MudItem>
+            </MudGrid>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudLoadingButton Loading="@_saveing" OnClick="OnSave">@ConstantString.Save</MudLoadingButton>
+        <MudButton OnClick="Cancel">@ConstantString.Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    MudForm? _form;
+    private bool _saveing = false;
+    [CascadingParameter]
+    IMudDialogInstance MudDialog { get; set; } = default!;
+    AddEditSProviderCommandValidator _modelValidator = new();
+    [EditorRequired][Parameter] public AddEditSProviderCommand model { get; set; } = null!;
+
+
+    async Task OnSave()
+    {
+        try
+        {
+            _saveing = true;
+            await _form!.Validate().ConfigureAwait(false);
+            if (!_form!.IsValid)
+                return;
+            var result = await Mediator.Send(model);
+            result.Match(
+   data =>
+   {
+       Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+       MudDialog.Close(DialogResult.Ok(true));
+       return data;
+   },
+   errors =>
+   {
+       Snackbar.Add(errors, MudBlazor.Severity.Error);
+       return -1;
+   });
+
+    //         result.Match(
+    // data =>
+    // {
+    // Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+    // },
+    // errors =>
+    // {
+    // Snackbar.Add(errors, MudBlazor.Severity.Error);
+    // });
+        }
+        finally
+        {
+            _saveing = false;
+        }
+    }
+    void Cancel() => MudDialog.Cancel();
+}

@@ -49,7 +49,7 @@ public class CusPricesWithPaginationQueryHandler :
         //    .ProjectToPaginatedDataAsync<CusPrice, CusPriceDto>(request.Specification, request.PageNumber, request.PageSize, _mapper.ConfigurationProvider, cancellationToken);
         //return data;
 
-        var data = await _context.CusPrices.OrderBy($"{request.OrderBy} {request.SortDirection}")
+        var data = await _context.CusPrices.Include(s => s.TrackingUnitModel).Include(s => s.Customer).OrderBy($"{request.OrderBy} {request.SortDirection}")
                                                   .ProjectToPaginatedDataAsync(request.Specification,
                                                                                request.PageNumber,
                                                                                request.PageSize,

@@ -13,9 +13,11 @@ public class SubscriptionConfiguration : IEntityTypeConfiguration<Subscription>
     {
         builder.Property(t => t.TrackingUnitId).IsRequired();
         builder.Property(t => t.Desc).HasMaxLength(256).IsRequired();
-        builder.Property(t => t.SsDate).HasMaxLength(256).IsRequired();
-        builder.Property(o => o.Days).HasComputedColumnSql($"{GetComputedColumnSql("Sqlite")}", stored: true);
-        builder.Property(o => o.Amount).HasComputedColumnSql($"({GetComputedColumnSql("Sqlite")}) * DailyFees", stored: true);
+        builder.Property(t => t.SsDate).IsRequired();
+        builder.Property(t => t.SeDate).IsRequired();
+        builder.Property(t => t.DailyFees).IsRequired();
+        builder.Property(o => o.Days).HasComputedColumnSql($"{GetComputedColumnSql("postgresql")}", stored: true);
+        builder.Property(o => o.Amount).HasComputedColumnSql($"({GetComputedColumnSql("postgresql")}) * daily_fees", stored: true);
         builder.Ignore(e => e.DomainEvents);
     }
 
@@ -26,7 +28,11 @@ public class SubscriptionConfiguration : IEntityTypeConfiguration<Subscription>
         {
             return "julianday(SeDate) - julianday(SsDate)";
         }
-        else if (databaseProvider == "SqlServer")
+        else if (databaseProvider == "postgresql")
+        {
+            return "(Se_Date - Ss_Date) / 86400";
+        }
+        else if (databaseProvider == "mssql")
         {
             return "DATEDIFF(day, SsDate, SeDate)";
         }

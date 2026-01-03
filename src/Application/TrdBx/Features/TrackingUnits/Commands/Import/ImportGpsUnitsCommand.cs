@@ -125,7 +125,7 @@ public class ImportTrackingUnitsCommandHandler :
                     _localizer[_dto.GetMemberDescription(x=>x.IsOnWialon)],
                     _localizer[_dto.GetMemberDescription(x=>x.InsMode)],
                      _localizer[_dto.GetMemberDescription(x=>x.WUnitId)],
-                      _localizer[_dto.GetMemberDescription(x=>x.OldId)],
+                      _localizer[_dto.GetMemberDescription(x=>x.OldId)]
 
 
                 };

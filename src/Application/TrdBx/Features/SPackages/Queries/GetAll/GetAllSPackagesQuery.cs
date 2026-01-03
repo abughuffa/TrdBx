@@ -38,7 +38,7 @@ public class GetAllSPackagesQueryHandler :
         //    .ToListAsync(cancellationToken);
         //return data;
 
-        var data = await _context.SPackages.ProjectTo()
+        var data = await _context.SPackages.Include(s=>s.SProvider).ProjectTo()
                                            .AsNoTracking()
                                            .ToListAsync(cancellationToken);
         return data;

@@ -8,7 +8,7 @@ public class ActivateTrackingUnitForGprsCommand :  ICacheInvalidatorRequest<Resu
 {
     [Description("Id")] public int Id { get; set; }
     [Description("TsDate")] public DateOnly TsDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
-    [Description("InstallerId")] public string InstallerId { get; set; } = string.Empty;
+    //[Description("InstallerId")] public string InstallerId { get; set; } = string.Empty;
     [Description("ApplyChangesToDatabase")] public bool ApplyChangesToDatabase { get; set; } = true;
     [Description("ApplyChangesOnWialon")] public bool ApplyChangesOnWialon { get; set; } = true;
 
@@ -69,9 +69,9 @@ public class ActivateTrackingUnitForGprsCommandHandler : SubscriptionSharedLogic
             return await Result.FailureAsync("Tracking Unit status should be InstalledInactive, InstalledActive Or InstalledActiveHosting to Activate it for Gprs.");
         }
 
-        var price = GetCPrice(_context, (int)unit.CustomerId, unit.TrackingUnitModelId);
+        var price = await GetCPrice(_context, (int)unit.CustomerId, unit.TrackingUnitModelId);
 
-        var serviceNo = GenSerialNo(_context, "ServiceLog", request.TsDate).Result;
+        var serviceNo = await GenSerialNo(_context, "ServiceLog", request.TsDate);
 
         var serviceLog = new ServiceLog()
         {
@@ -79,7 +79,7 @@ public class ActivateTrackingUnitForGprsCommandHandler : SubscriptionSharedLogic
             ServiceNo = serviceNo,
             ServiceTask = ServiceTask.ActivateUnitForGprs,
             CustomerId = (int)unit.CustomerId,
-            InstallerId = request.InstallerId,
+            //InstallerId = request.InstallerId,
             SerDate = request.TsDate,
             Amount = 0.0m,
             IsDeserved = true,

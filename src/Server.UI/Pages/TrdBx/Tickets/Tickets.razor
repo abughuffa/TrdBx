@@ -40,7 +40,7 @@
                 <MudIcon Icon="@Icons.Material.Filled.Window" Size="Size.Large" />
                 <MudStack Spacing="0">
                     <MudText Typo="Typo.subtitle2" Class="mb-2">@Title</MudText>
-                    <MudEnumSelect Style="min-width:120px" TEnum="TicketListView" ValueChanged="OnChangedListView" Value="Query.ListView" Dense="true" Label="@L["List View"]">
+                    <MudEnumSelect Style="min-width:120px" TEnum="TicketListView" ValueChanged="OnChangedListView" Value="Query.ListView" Dense="true" Label=@ConstantString.ListView>
                     </MudEnumSelect>
                 </MudStack>
             </MudStack>
@@ -123,19 +123,19 @@
                        
                         @if (_canApprove)
                         {
-                            <MudMenuItem Disabled="!(context.Item.TicketStatus == TicketStatus.JustCreated)" OnClick="@(() => OnApprove(context.Item))">Approve</MudMenuItem>
+                            <MudMenuItem Disabled="!(context.Item.TicketStatus == TicketStatus.JustCreated)" OnClick="@(() => OnApprove(context.Item))">"@L["Approve"]"</MudMenuItem>
                         }
                         @if (_canReject)
                         {
-                            <MudMenuItem Disabled="!(context.Item.TicketStatus == TicketStatus.JustCreated || context.Item.TicketStatus == TicketStatus.Released)" OnClick="@(() => OnReject(context.Item))">Reject</MudMenuItem>
+                            <MudMenuItem Disabled="!(context.Item.TicketStatus == TicketStatus.JustCreated || context.Item.TicketStatus == TicketStatus.Released)" OnClick="@(() => OnReject(context.Item))">"@L["Reject"]"</MudMenuItem>
                         }
                         @if (_canAssign)
                         {
-                            <MudMenuItem Disabled="!(context.Item.TicketStatus == TicketStatus.Approved || context.Item.TicketStatus == TicketStatus.Released)" OnClick="@(() => OnAssign(context.Item))">Assign</MudMenuItem>
+                            <MudMenuItem Disabled="!(context.Item.TicketStatus == TicketStatus.Approved || context.Item.TicketStatus == TicketStatus.Released)" OnClick="@(() => OnAssign(context.Item))">"@L["Assign"]"</MudMenuItem>
                         }
                         @if (_canUnReject)
                         {
-                            <MudMenuItem Disabled="!(context.Item.TicketStatus == TicketStatus.Rejected)" OnClick="@(() => OnUnReject(context.Item))">UnReject</MudMenuItem>
+                            <MudMenuItem Disabled="!(context.Item.TicketStatus == TicketStatus.Rejected)" OnClick="@(() => OnUnReject(context.Item))">"@L["UnReject"]"</MudMenuItem>
                         }
                     </MudMenu>
                 }
@@ -154,6 +154,7 @@
         </TemplateColumn>
 
         <PropertyColumn Property="x => x.TicketNo" Title="@L[_currentDto.GetMemberDescription(x=>x.TicketNo)]" />
+        <PropertyColumn Property="x => x.CreatedByUser.DisplayName" Title="@L[_currentDto.GetMemberDescription(x => x.CreatedByUser)]" />
         <PropertyColumn Property="x => x.ServiceTask" Title="@L[_currentDto.GetMemberDescription(x => x.ServiceTask)]" />
         <PropertyColumn Property="x => x.Desc" Title="@L[_currentDto.GetMemberDescription(x=>x.Desc)]" />
         <PropertyColumn Property="x => x.TicketStatus" Title="@L[_currentDto.GetMemberDescription(x=>x.TicketStatus)]" />
@@ -161,7 +162,7 @@
         @* <PropertyColumn Property="x => x.TrackingUnitId" Title="@L[_currentDto.GetMemberDescription(x=>x.TrackingUnitId)]" /> *@
         <PropertyColumn Property="x => x.TrackingUnit" Title="@L[_currentDto.GetMemberDescription(x => x.TrackingUnit)]" />
         <PropertyColumn Property="x => x.TaDate" Title="@L[_currentDto.GetMemberDescription(x=>x.TaDate)]" />
-        <PropertyColumn Property="x => x.InstallerId" Title="@L[_currentDto.GetMemberDescription(x => x.InstallerId)]" />
+        <PropertyColumn Property="x => x.LastModifiedByUser.DisplayName" Title="@L[_currentDto.GetMemberDescription(x => x.LastModifiedByUser)]" />
         <PropertyColumn Property="x => x.TeDate" Title="@L[_currentDto.GetMemberDescription(x => x.TeDate)]" />
 
     </Columns>

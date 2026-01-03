@@ -25,8 +25,8 @@ public class SubscriptionDto
     public DateOnly SsDate { get; set; }
     [Description("SeDate")]
     public DateOnly SeDate { get; set; }
-    [Description("IsBilled")]
-    public bool IsBilled { get; set; }
+    //[Description("IsBilled")]
+    //public bool IsBilled { get; set; }
     [Description("DailyFees")]
     public decimal DailyFees { get; set; }
 

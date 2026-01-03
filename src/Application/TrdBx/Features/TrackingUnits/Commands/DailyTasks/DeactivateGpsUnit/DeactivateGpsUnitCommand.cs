@@ -8,7 +8,7 @@ public class DeactivateTrackingUnitCommand : ICacheInvalidatorRequest<Result>
 {
     [Description("Id")] public int Id { get; set; }
     [Description("TsDate")] public DateOnly TsDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
-    [Description("InstallerId")] public string InstallerId { get; set; } = string.Empty;
+    //[Description("InstallerId")] public string InstallerId { get; set; } = string.Empty;
     [Description("ApplyChangesToDatabase")] public bool ApplyChangesToDatabase { get; set; } = true;
     [Description("ApplyChangesOnWialon")] public bool ApplyChangesOnWialon { get; set; } = true;
 
@@ -67,9 +67,9 @@ public class DeactivateTrackingUnitCommandHandler : SubscriptionSharedLogic, IRe
             return await Result.FailureAsync("Tracking Unit status should be InstalledActive, InstalledActiveGprs Or InstalledActiveHosting to Deactivate it.");
         }
 
-        var price = GetCPrice(_context, (int)unit.CustomerId, unit.TrackingUnitModelId);
+        var price = await  GetCPrice(_context, (int)unit.CustomerId, unit.TrackingUnitModelId);
 
-        var serviceNo = GenSerialNo(_context, "ServiceLog", request.TsDate).Result;
+        var serviceNo = await GenSerialNo(_context, "ServiceLog", request.TsDate);
 
         //if (request.ApplyChangesToDatabase)
         //{
@@ -79,7 +79,7 @@ public class DeactivateTrackingUnitCommandHandler : SubscriptionSharedLogic, IRe
                 ServiceNo = serviceNo,
                 ServiceTask = ServiceTask.DeactivateUnit,
                 CustomerId = (int)unit.CustomerId,
-                InstallerId = request.InstallerId,
+                //InstallerId = request.InstallerId,
                 SerDate = request.TsDate,
                 Amount = 0.0m,
                 IsDeserved = true,

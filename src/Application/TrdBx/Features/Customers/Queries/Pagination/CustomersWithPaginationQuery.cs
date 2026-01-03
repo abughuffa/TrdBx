@@ -52,7 +52,7 @@ public class CustomersWithPaginationQueryHandler :
         //return data;
 
 
-        var data = await _context.Customers.OrderBy($"{request.OrderBy} {request.SortDirection}")
+        var data = await _context.Customers.Include(s => s.Parent).OrderBy($"{request.OrderBy} {request.SortDirection}")
                                                    .ProjectToPaginatedDataAsync(request.Specification,
                                                                                 request.PageNumber,
                                                                                 request.PageSize,

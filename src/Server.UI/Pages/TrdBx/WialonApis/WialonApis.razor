@@ -2,13 +2,10 @@
 @using CleanArchitecture.Blazor.Application.Features.WialonApis.Commands.Connect
 @using CleanArchitecture.Blazor.Application.Features.WialonApis.Commands.Disconnect
 
-
-
 @inject IStringLocalizer<WialonApis> L
 
 <PageTitle>@Title</PageTitle>
 
-<PageTitle>@Title</PageTitle>
 <MudContainer Class="mt-3" MaxWidth="MaxWidth.Small">
     <MudCard Class="pa-2">
         <MudCardHeader>
@@ -33,12 +30,13 @@
     public string? Title { get; private set; }
 
     public bool LoginFlag { get; set; } = false;
-    public string Btn { get; set; } = "Connect";
+    public string Btn { get; set; }
 
 
     protected override async Task OnInitializedAsync()
     {
-        Title = "Wialon API Tests";
+        Btn= L["Connect"];
+        Title = L["Wialon API Tests"];
 
     }
 
@@ -50,7 +48,7 @@
             if (await Mediator.Send(new DisconnectWialonCommand()))
             {
                 LoginFlag = false;
-                Btn = "Connect";
+                Btn = L["Connect"];
             }
         }      
         else
@@ -58,7 +56,7 @@
             if (await Mediator.Send(new ConnectWialonCommand()))
             {
                 LoginFlag = true;
-                Btn = "Disonnect";
+                Btn = L["Disonnect"];
             }
         }
 

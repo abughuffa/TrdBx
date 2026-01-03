@@ -14,6 +14,11 @@ public class ServiceLogConfiguration : IEntityTypeConfiguration<ServiceLog>
         builder.HasIndex(t => t.ServiceNo).IsUnique(true);
         builder.Property(t => t.Desc).HasMaxLength(256).IsRequired();
         builder.Ignore(e => e.DomainEvents);
+        builder.HasOne(x => x.CreatedByUser)
+    .WithMany()
+    .HasForeignKey(x => x.CreatedBy)
+    .OnDelete(DeleteBehavior.Restrict);
+        builder.Navigation(e => e.CreatedByUser).AutoInclude();
     }
 }
 

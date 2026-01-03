@@ -79,6 +79,7 @@ public class ExportSimCardsQueryHandler :
 {_localizer[_dto.GetMemberDescription(x=>x.SStatus)],item => item.SStatus},
 {_localizer[_dto.GetMemberDescription(x=>x.ExDate)],item => item.ExDate},
  {_localizer[_dto.GetMemberDescription(x=>x.OldId)],item => item.OldId},
+  {_localizer[_dto.GetMemberDescription(x=>x.IsOwen)],item => item.IsOwen},
 
                     }
                     , _localizer[_dto.GetClassDescription()]);

@@ -51,9 +51,9 @@ public static partial class DependencyInjection
             case DbProviderKeys.SqlServer:
                 services.AddScoped<IDatabaseBackupRestoreStrategy, SqlServerBackupRestoreStrategy>();
                 break;
-            //case DbProviderKeys.Npgsql:
-            //    services.AddScoped<IDatabaseBackupRestoreStrategy, PostgresBackupRestoreStrategy>();
-            //    break;
+            case DbProviderKeys.Npgsql:
+                services.AddScoped<IDatabaseBackupRestoreStrategy, PostgresBackupRestoreStrategy>();
+                break;
             default:
                 throw new InvalidOperationException($"DB Provider {databaseSettings.DBProvider} is not supported.");
         }

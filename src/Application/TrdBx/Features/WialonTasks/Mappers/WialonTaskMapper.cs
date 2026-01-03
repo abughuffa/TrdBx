@@ -1,4 +1,5 @@
 ﻿using CleanArchitecture.Blazor.Application.Features.CusPrices.DTOs;
+using CleanArchitecture.Blazor.Application.Features.Subscriptions.DTOs;
 using CleanArchitecture.Blazor.Application.Features.WialonTasks.DTOs;
 
 namespace CleanArchitecture.Blazor.Application.Features.WialonTasks.Mappers;
@@ -8,6 +9,8 @@ namespace CleanArchitecture.Blazor.Application.Features.WialonTasks.Mappers;
 [Mapper]
 public static partial class Mapper
 {
+    [MapProperty(nameof(WialonTask.TrackingUnit.SNo), nameof(WialonTaskDto.TrackingUnit))]
+    [MapProperty(nameof(WialonTask.ServiceLog.ServiceNo), nameof(WialonTaskDto.ServiceLog))]
     public static partial WialonTaskDto ToDto(WialonTask source);
 
 

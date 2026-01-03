@@ -66,6 +66,7 @@ public class ImportSPackagesCommandHandler :
         var result = await _excelService.ImportAsync(request.Data, mappers: new Dictionary<string, Func<DataRow, SPackageDto, object?>>
             {
                 { _localizer[_dto.GetMemberDescription(x=>x.Id)], (row, item) => item.Id = int.Parse(row[_localizer[_dto.GetMemberDescription(x=>x.Id)]].ToString()) },
+                 { _localizer[_dto.GetMemberDescription(x=>x.SProviderId)], (row, item) => item.SProviderId = int.Parse(row[_localizer[_dto.GetMemberDescription(x=>x.SProviderId)]].ToString()) },
                 { _localizer[_dto.GetMemberDescription(x=>x.Name)], (row, item) => item.Name = row[_localizer[_dto.GetMemberDescription(x=>x.Name)]].ToString() },
                  { _localizer[_dto.GetMemberDescription(x=>x.OldId)], (row, item) => item.OldId = (int.TryParse(row[_localizer[_dto.GetMemberDescription(x=>x.OldId)]].ToString(), out int result) == true ? result : null) }
             }, _localizer[_dto.GetClassDescription()]);
@@ -96,6 +97,8 @@ public class ImportSPackagesCommandHandler :
     public async Task<Result<byte[]>> Handle(CreateSPackagesTemplateCommand request, CancellationToken cancellationToken)
     {
         var fields = new string[] {
+            
+             _localizer[_dto.GetMemberDescription(x=>x.SProviderId)],
                   _localizer[_dto.GetMemberDescription(x=>x.Name)],
                   _localizer[_dto.GetMemberDescription(x=>x.OldId)],
 

@@ -55,7 +55,7 @@
                             <MudIcon Icon="@Icons.Material.Filled.Window" Size="Size.Large" />
                             <MudStack Spacing="0">
                                 <MudText Typo="Typo.subtitle2" Class="mb-2">@Title</MudText>
-                                <MudEnumSelect Style="min-width:120px" TEnum="TrackingUnitListView" ValueChanged="OnChangedListView" Value="Query.ListView" Dense="true" Label="@L["List View"]"></MudEnumSelect>
+                    <MudEnumSelect Style="min-width:120px" TEnum="TrackingUnitListView" ValueChanged="OnChangedListView" Value="Query.ListView" Dense="true" Label=@ConstantString.ListView></MudEnumSelect>
                             </MudStack>
                         </MudStack>
 
@@ -80,14 +80,14 @@
                                      {
                                              <MudButton Disabled="@(!(_selectedItems.Count > 0))"
                                                         OnClick="OnRenewSubscriptionChecked">
-                                                       @L["RenewSubscription"]
+                                                       @L["Renew Subscription"]
                                              </MudButton>
                                      }
                                  @if (_canCreateTicket)
                                      {
                                              <MudButton Disabled="@(!(_selectedItems.Count > 0))"
                                                    OnClick="OnCreateTicketChecked">
-                           @(L["CreateTicket"])
+                                                   @(L["Create Ticket"])
                                                    
                                              </MudButton>
                                      }
@@ -163,8 +163,16 @@
                         }
                         @if (_canReserve)
                         {
+                            <MudMenuItem OnClick="@(() => OnReassignOwner(context.Item))"
+                                         Disabled="(((context.Item.UStatus == UStatus.New) || (context.Item.UStatus == UStatus.Reserved)))">
+                                @L["Reassign Owner"]
+
+                            </MudMenuItem>
+                        }
+                        @if (_canReserve)
+                        {
                             <MudMenuItem OnClick="@(()=>OnReserve(context.Item))"
-                                         Disabled="(!((context.Item.UStatus == UStatus.New) || (context.Item.UStatus == UStatus.Reserved) || (context.Item.UStatus == UStatus.Used)))">
+                                         Disabled="(!((context.Item.UStatus == UStatus.New) || (context.Item.UStatus == UStatus.Reserved)))">
                                 @L["Reserve"]
                                 
                             </MudMenuItem>
@@ -173,14 +181,14 @@
                         {
                             <MudMenuItem OnClick="@(()=>OnMarkAsUsed(context.Item))"
                                          Disabled="(!((context.Item.UStatus == UStatus.Recovered) || (context.Item.UStatus == UStatus.Damaged)))">
-                                @L["MarkAsUsed"]
+                                @L["Mark as used"]
                             </MudMenuItem>
                         }
                         @if (_canMarkAsDamaged)
                         {
                             <MudMenuItem OnClick="@(()=>OnMarkAsDamaged(context.Item))"
                                          Disabled="(!((context.Item.UStatus == UStatus.Recovered) || (context.Item.UStatus == UStatus.Used)))">
-                                @L["MarkAsDamaged"]
+                                @L["Mark as damaged"]
                             </MudMenuItem>
                         }
                     </MudMenu>
@@ -251,7 +259,7 @@
                                                             || (context.Item.UStatus == UStatus.InstalledActiveHosting)
                                                             || (context.Item.UStatus == UStatus.InstalledInactive)))">
                                 
-                            @L["ActivateGprs"]
+                            @L["ActivateForGprs"]
                             </MudMenuItem>
                         }
 
@@ -262,7 +270,7 @@
                                                             || (context.Item.UStatus == UStatus.InstalledActiveGprs)
                                                             || (context.Item.UStatus == UStatus.InstalledInactive)))">
 
-                            @L["ActivateHosting"]
+                            @L["ActivateForHosting"]
                             </MudMenuItem>
                         }
 
@@ -275,7 +283,17 @@
                                 
                             @L["Deactivate"]
                             </MudMenuItem>
-                        }
+                                                }
+                        @if (_canRenewSubscription)
+                        {
+                            <MudMenuItem OnClick="@(() => OnRenewSubscription(context.Item))"
+                                         Disabled="(!((context.Item.UStatus == UStatus.InstalledActive)
+                                                                                         || (context.Item.UStatus == UStatus.InstalledActiveGprs)
+                                                                                         || (context.Item.UStatus == UStatus.InstalledActiveHosting)))">
+
+                            @L["Renew Subscription"]
+                        </MudMenuItem>
+                                                }
 
                     </MudMenu>
                     <!-- Subscriptions Menu -->
@@ -287,20 +305,20 @@
                              IconColor="Color.Info"
                              AnchorOrigin="Origin.CenterLeft">
 
-                        <MudMenuItem OnClick="@(()=>OnViewWialonTasks(context.Item))">View Wialon Tasks</MudMenuItem>
+                        <MudMenuItem OnClick="@(() => OnViewServiceLogs(context.Item))">
+                            @L["View Services Logs"]
 
-                        <MudMenuItem OnClick="@(()=>OnViewSubscriptions(context.Item))">View Subscription periods</MudMenuItem>
+                        </MudMenuItem>
 
-                        @if (_canRenewSubscription)
-                        {
-                            <MudMenuItem OnClick="@(()=>OnRenewSubscription(context.Item))"
-                                         Disabled="(!((context.Item.UStatus == UStatus.InstalledActive)
-                                                || (context.Item.UStatus == UStatus.InstalledActiveGprs)
-                                                || (context.Item.UStatus == UStatus.InstalledActiveHosting)))">
-
-                            @L["RenewSubscriptionMenu"]
+                        <MudMenuItem OnClick="@(()=>OnViewWialonTasks(context.Item))">
+                            @L["View Wialon Tasks"]
                             </MudMenuItem>
-                        }
+
+                        <MudMenuItem OnClick="@(() => OnViewSubscriptions(context.Item))">
+                            @L["View subscription periods"]
+                        </MudMenuItem>
+
+
 
                     </MudMenu>
                     <!-- Services log Menu -->
@@ -315,15 +333,12 @@
                         @if (_canCreateTicket)
                         {
                             <MudButton OnClick="@(()=>OnCreateTicket(context.Item))">
-                                @L["CreateTicket"]
+                                @L["Create Ticket"]
                                 
                             </MudButton>
                         }
 
-                        <MudMenuItem OnClick="@(()=>OnViewServiceLogs(context.Item))">
-                            @L["ViewServicesLog"]
-                            
-                        </MudMenuItem>
+            
 
                        
 
@@ -679,7 +694,7 @@
     {
         // var command = Mapper.Map<ActivateTrackingUnitCommand>(dto);
         var command = Mapper.ToActivateCommand(dto);
-        command.InstallerId = UserProfile.UserId;
+        // command.InstallerId = UserProfile.UserId;
         return DialogServiceHelper.ShowFormDialogWithContentTextAsync<ActivateDialog, ActivateTrackingUnitCommand>(
             string.Format(L["Activate TrackingUnit {0}"], dto.SNo),
             L["Select Activation date to activate tracking unit's subscription."],
@@ -696,7 +711,7 @@
 
         // var command = Mapper.Map<ActivateTrackingUnitForHostingCommand>(dto);
         var command = Mapper.ToActivateHostingCommand(dto);
-        command.InstallerId = UserProfile.UserId;
+        // command.InstallerId = UserProfile.UserId;
         return DialogServiceHelper.ShowFormDialogWithContentTextAsync<ActivateForHostingDialog, ActivateTrackingUnitForHostingCommand>(
             string.Format(L["Activate TrackingUnit {0} for hosting"], dto.SNo),
             L["Select Activation date to activate tracking unit's subscription for hosting."],
@@ -713,7 +728,7 @@
 
         // var command = Mapper.Map<ActivateTrackingUnitForGprsCommand>(dto);
         var command = Mapper.ToActivateGprsCommand(dto);
-        command.InstallerId = UserProfile.UserId;
+        // command.InstallerId = UserProfile.UserId;
         return DialogServiceHelper.ShowFormDialogWithContentTextAsync<ActivateForGprsDialog, ActivateTrackingUnitForGprsCommand>(
             string.Format(L["Activate TrackingUnit {0} for Gprs"], dto.SNo),
             L["Select Activation date to activate tracking unit's subscription for Gprs."],
@@ -729,7 +744,7 @@
     {
         // var command = Mapper.Map<DeactivateTrackingUnitCommand>(dto);
         var command = Mapper.ToDeactivateCommand(dto);
-        command.InstallerId = UserProfile.UserId;
+        // command.InstallerId = UserProfile.UserId;
         return DialogServiceHelper.ShowFormDialogWithContentTextAsync<DeactivateDialog, DeactivateTrackingUnitCommand>(
             string.Format(L["Deactivate TrackingUnit {0}"], dto.SNo),
             L["Select Deactivation date to deactivate tracking unit's subscription."],
@@ -749,7 +764,7 @@
         var title = string.Format(L["Renew Subscription for {0}"], dto.SNo);
         var contentText = L["Select Renew date to Renew tracking unit's subscription."];
         var command = new RenewTrackingUnitSubscriptionCommand(new int[] { dto.Id });
-        command.InstallerId = UserProfile.UserId;
+        // command.InstallerId = UserProfile.UserId;
         return RenewSubscriptionInternal(command, title, contentText);
     }
 
@@ -758,7 +773,7 @@
         var title = string.Format(L["Renew Subscriptions"]);
         var contentText = L["Select Renew date to Renew subscriptions of selected tracking units."];
         var command = new RenewTrackingUnitSubscriptionCommand(_selectedItems.Select(x => x.Id).ToArray());
-        command.InstallerId = UserProfile.UserId;
+        // command.InstallerId = UserProfile.UserId;
         return RenewSubscriptionInternal(command, title, contentText);
     }
 
@@ -878,6 +893,11 @@
         return Task.CompletedTask;
     }
     
+    private Task OnReassignOwner(TrackingUnitDto dto)
+    {
+        Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits/ReassignOwner/{dto.Id}");
+        return Task.CompletedTask;
+    }
 
     // private Task OnDelete(TrackingUnitDto dto)
     // {

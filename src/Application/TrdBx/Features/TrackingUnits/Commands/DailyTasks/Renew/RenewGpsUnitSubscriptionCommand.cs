@@ -17,7 +17,7 @@ public class RenewTrackingUnitSubscriptionCommand : ICacheInvalidatorRequest<Res
     }
     [Description("TsDate")] public DateOnly TsDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
     [Description("CreateAnnualSub")] public bool CreateAnnualSub { get; set; } = false;
-    [Description("InstallerId")] public string InstallerId { get; set; } = string.Empty;
+    //[Description("InstallerId")] public string InstallerId { get; set; } = string.Empty;
 }
 public class RenewTrackingUnitSubscriptionCommandHandler : PriceSharedLogic, IRequestHandler<RenewTrackingUnitSubscriptionCommand, Result<int>>
 {
@@ -48,7 +48,7 @@ public class RenewTrackingUnitSubscriptionCommandHandler : PriceSharedLogic, IRe
     {
         //await using var _context = await _dbContextFactory.CreateAsync(cancellationToken);
 
-        var items = await _context.TrackingUnits.Where(x => request.Id.Contains(x.Id)).Include(x => x.Subscriptions).ToListAsync(cancellationToken);
+        var items = await _context.TrackingUnits.Where(x => request.Id.Contains(x.Id)).Include(u => u.Subscriptions).ThenInclude(s => s.ServiceLog).ToListAsync(cancellationToken);
 
         if (!items.Any(u => u.UStatus == UStatus.InstalledActiveHosting || u.UStatus == UStatus.InstalledActiveGprs || u.UStatus == UStatus.InstalledActive))
         {
@@ -68,9 +68,9 @@ public class RenewTrackingUnitSubscriptionCommandHandler : PriceSharedLogic, IRe
 
         foreach (var item in items)
         {
-            var serviceNo = GenSerialNo(_context, "ServiceLog", request.TsDate).Result;
+            var serviceNo = await GenSerialNo(_context, "ServiceLog", request.TsDate);
 
-            var price = GetCPrice(_context, (int)item.CustomerId, item.TrackingUnitModelId);
+            var price = await GetCPrice(_context, (int)item.CustomerId, item.TrackingUnitModelId);
 
             var currentSubscription = item.Subscriptions?.OrderBy(x => x.Id).LastOrDefault();
 
@@ -90,7 +90,7 @@ public class RenewTrackingUnitSubscriptionCommandHandler : PriceSharedLogic, IRe
                     ServiceNo = serviceNo,
                     ServiceTask = ServiceTask.RenewUnitSub,
                     CustomerId = (int)item.CustomerId,
-                    InstallerId = request.InstallerId,
+                    //InstallerId = request.InstallerId,
                     SerDate = request.TsDate,
                     Amount = 0.0m,
                     IsDeserved = true,

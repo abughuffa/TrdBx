@@ -1,0 +1,274 @@
+﻿@using CleanArchitecture.Blazor.Application.Features.SProviders.Mappers
+@using CleanArchitecture.Blazor.Application.Features.SProviders.Commands.AddEdit
+@using CleanArchitecture.Blazor.Application.Features.SProviders.Commands.Delete
+@using CleanArchitecture.Blazor.Application.Features.SProviders.DTOs
+@using CleanArchitecture.Blazor.Application.Features.SProviders.Queries.GetAll
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.SProviders.Components
+
+@inherits MudComponentBase
+@inject IStringLocalizer<SProviders> L
+@attribute [Authorize(Policy = Permissions.SProviders.View)]
+
+
+<MudGrid>
+  @*   Label="@L["SProvider"]" *@
+    <MudItem md="8">
+        <MudSelect T="int"
+                   
+                   Required="true"
+                   RequiredError="@L["SProvider is required!"]"
+                   Value="SProviderId"
+                   ValueChanged="OnSProviderChanged">
+            <MudSelectItem Value=0>Select a SProvider</MudSelectItem>
+
+            @foreach (var doc1type in spackages)
+            {
+                <MudSelectItem Value="doc1type.Id">@doc1type.Name</MudSelectItem>
+            }
+        </MudSelect>
+    </MudItem>
+    <MudItem md="1">
+        <MudIconButton Variant="Variant.Outlined"
+                       OnClick="@(()=>OnView(SelectedSProvider))"
+                       Disabled="isDisabled"
+                       Icon="@Icons.Material.Filled.Preview"
+                       Size="Size.Small"
+                       Color="Color.Primary">
+        </MudIconButton>
+    </MudItem>
+
+    <MudItem md="1">
+        <MudIconButton Variant="Variant.Outlined"
+                       OnClick="@(()=>OnEdit(SelectedSProvider))"
+                       Disabled="isDisabled"
+                       Icon="@Icons.Material.Filled.Edit"
+                       Size="Size.Small"
+                       Color="Color.Primary">
+        </MudIconButton>
+    </MudItem>
+
+    <MudItem md="1">
+        <MudIconButton Variant="Variant.Outlined"
+                       OnClick="@(()=>OnCreate())"
+                       Icon="@Icons.Material.Filled.Add"
+                       Size="Size.Small"
+                       Color="Color.Primary">
+        </MudIconButton>
+    </MudItem>
+
+    <MudItem md="1">
+        <MudIconButton Variant="Variant.Outlined"
+                       OnClick="@(()=>OnDelete(SelectedSProvider))"
+                       Disabled="isDisabled"
+                       Icon="@Icons.Material.Filled.Delete"
+                       Size="Size.Small"
+                       Color="Color.Primary">
+        </MudIconButton>
+    </MudItem>
+
+
+
+</MudGrid>
+
+@code {
+
+    [Parameter]
+    public EventCallback<int> SProviderIdChanged { get; set; }
+
+    private int _sproviderId;
+    [Parameter]
+    public int SProviderId
+    {
+        get => _sproviderId;
+        set
+        {
+            if (_sproviderId != value)
+            {
+                _sproviderId = value;
+                SProviderIdChanged.InvokeAsync(value);
+            }
+        }
+    }
+
+
+    private IEnumerable<SProviderDto> spackages = default!;
+    private GetAllSProvidersQuery GetAllSProvidersQuery { get; set; } = new();
+
+    public SProviderDto SelectedSProvider { get; set; } = null!;
+    private void OnSProviderChanged(int id)
+    {
+        SProviderId = id;
+        SelectedSProvider = spackages.FirstOrDefault(m => m.Id == id);
+    }
+
+    bool isDisabled => (SelectedSProvider is null);
+
+    protected override async Task OnInitializedAsync()
+    {
+        spackages = await LoadSProviders();
+    }
+
+    private async Task<IEnumerable<SProviderDto>> LoadSProviders()
+    {
+        var result = await Mediator.Send(GetAllSProvidersQuery).ConfigureAwait(false);
+        return result;
+    }
+
+    #region Curd
+
+    private async Task OnCreate()
+    {
+        var title = L["Create SProvider"];
+        var command = Mapper.ToEditCommand(new SProviderDto());
+        var parameters = new DialogParameters<SProviderAddEditDialog>
+            {
+                { x=>x.model,command },
+            };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        var dialog = DialogService.Show<SProviderAddEditDialog>(title, parameters, options);
+        var state = await dialog.Result;
+
+        if (state != null && !state.Canceled)
+        {
+            spackages = await LoadSProviders();
+
+            SelectedSProvider = null;
+        }
+    }
+
+    private async Task OnEdit(SProviderDto dto)
+    {
+        var title = L["Update SProvider"];
+        var command = Mapper.ToEditCommand(dto);
+        var parameters = new DialogParameters<SProviderAddEditDialog>
+            {
+                { x=>x.model,command },
+            };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        var dialog = DialogService.Show<SProviderAddEditDialog>(title, parameters, options);
+        var state = await dialog.Result;
+
+        if (state != null && !state.Canceled)
+        {
+            spackages = await LoadSProviders();
+
+            SelectedSProvider = null;
+        }
+
+
+    }
+
+    private async Task OnDelete(SProviderDto dto)
+    {
+        var contentText = string.Format(ConstantString.DeleteConfirmation, dto.Name);
+        var command = new DeleteSProviderCommand(new int[] { dto.Id });
+        await DialogServiceHelper.ShowDeleteConfirmationDialogAsync(command, ConstantString.DeleteConfirmationTitle, contentText, async () =>
+        {
+            await InvokeAsync(async () =>
+            {
+                spackages = await LoadSProviders();
+
+                SelectedSProvider = null;
+            });
+        });
+    }
+
+
+
+    private async Task OnView(SProviderDto dto)
+    {
+        var title = L["View SProvider"];
+        // var command = Mapper.ToEditCommand(dto);
+        var parameters = new DialogParameters<SProviderViewDialog>
+            {
+                { x=>x.model,dto },
+            };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        var dialog = DialogService.Show<SProviderViewDialog>(title, parameters, options);
+        var state = await dialog.Result;
+
+        // if (state != null && !state.Canceled)
+        // {
+        //     items = await LoadSProviderModels();
+
+        //     SelectedItem = null;
+        // }
+    }
+
+    #endregion
+
+    // private async Task OnView(SProviderDto dto)
+    // {
+    //     await ShowViewFormDialog("SProvider", dto);
+    //     SelectedSProvider = dto;
+    // }
+
+    // private async Task OnCreate()
+    // {
+
+    //     // var command = Mapper.Map<AddEditSProviderCommand>(new SProviderDto());
+    //     var command = Mapper.CloneFromDto(new SProviderDto());
+    //     // var command = new AddEditSProviderCommand();
+    //     await ShowAddEditFormDialog(string.Format(ConstantString.CreateAnItem, L["SProvider"]), command);
+    // }
+
+    // private async Task OnEdit(SProviderDto dto)
+    // {
+    //     // var command = Mapper.Map<AddEditSProviderCommand>(dto);
+    //     var command = Mapper.CloneFromDto(dto);
+    //     // var command = new AddEditSProviderCommand() { Id = dto.Id, Name = dto.Name};
+    //     await ShowAddEditFormDialog(string.Format(ConstantString.EditTheItem, L["SProvider"]), command);
+    // }
+
+    // private async Task OnDelete(SProviderDto dto)
+    // {
+    //     var contentText = string.Format(ConstantString.DeleteConfirmation, dto.Name);
+    //     var command = new DeleteSProviderCommand(new int[] { dto.Id });
+
+    //     await DialogServiceHelper.ShowDeleteConfirmationDialogAsync(command, ConstantString.DeleteConfirmationTitle, contentText, async () =>
+    //   {
+    //       await InvokeAsync(async () =>
+    //       {
+    //           gpsUnitModels = await LoadSProviders();
+
+    //           SelectedSProvider = null;
+    //       });
+    //   });
+
+
+    // }
+
+
+    // private async Task ShowAddEditFormDialog(string title, AddEditSProviderCommand command)
+    // {
+    //     var parameters = new DialogParameters<SProviderAddEditDialog>
+    //         {
+    //             { x=>x.model,command },
+    //         };
+    //     var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+    //     var dialog = DialogService.Show<SProviderAddEditDialog>(title, parameters, options);
+    //     var state = await dialog.Result;
+
+    //     if (state != null && !state.Canceled)
+    //     {
+    //         gpsUnitModels = await LoadSProviders();
+    //     }
+    // }
+
+    // private async Task ShowViewFormDialog(string title, SProviderDto dto)
+    // {
+    //     var parameters = new DialogParameters<SProviderViewDialog>
+    //         {
+    //             { x=>x.model,dto},
+    //         };
+    //     var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+    //     var dialog = DialogService.Show<SProviderViewDialog>(title, parameters, options);
+    //     var state = await dialog.Result;
+
+    //     if (state != null && !state.Canceled)
+    //     {
+    //         gpsUnitModels = await LoadSProviders();
+    //         SelectedSProvider = dto;
+    //     }
+    // }
+}

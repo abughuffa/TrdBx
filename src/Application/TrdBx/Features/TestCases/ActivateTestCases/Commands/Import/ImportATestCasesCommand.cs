@@ -1,5 +1,5 @@
-﻿
-using CleanArchitecture.Blazor.Application.Features.TestCases.Commands;
+﻿using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Commands.Delete;
+using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Commands.Import;
 
 namespace CleanArchitecture.Blazor.Application.Features.TestCases.ActivateTestCases.Commands.Import;
 
@@ -24,7 +24,7 @@ public class ImportATestCasesCommandHandler :
     public async Task<Result<bool>> Handle(ImportATestCasesCommand request, CancellationToken cancellationToken)
     {
 
-        var deleteXDataCommand = await request.Mediator.Send(new DeleteAllDataCommand());
+        var deleteXDataCommand = await request.Mediator.Send(new DeleteDataCommand());
         if (deleteXDataCommand.Succeeded == true)
         {
 

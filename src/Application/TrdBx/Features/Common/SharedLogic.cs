@@ -1,71 +1,72 @@
-﻿using CleanArchitecture.Blazor.Domain.Entities;
+﻿using System.Text;
+using System.Text.RegularExpressions;
+using CleanArchitecture.Blazor.Domain.Entities;
 using CleanArchitecture.Blazor.Domain.Enums;
 using CleanArchitecture.Blazor.Domain.Events;
-using System.Text;
-using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Blazor.Application.Features.Common;
 public class PriceSharedLogic : SerialForSharedLogic
 {
     #region MyRegion
-    public static decimal GetSPrice(IApplicationDbContext cnx, ServiceTask serviceTask)
+    public static async Task<decimal>  GetSPrice(IApplicationDbContext cnx, ServiceTask serviceTask)
     {
         // Get the Ccs record
-        var sp = cnx.ServicePrices.SingleOrDefault(c => c.ServiceTask == serviceTask);
+        var sp = await cnx.ServicePrices.SingleOrDefaultAsync(c => c.ServiceTask == serviceTask);
         return sp == null ? 0.0m : sp.Price;
     }
 
-    public static List<CPrice> GetCPrices(IApplicationDbContext cnx, int customerId)
+    //public static List<CPrice> GetCPrices(IApplicationDbContext cnx, int customerId)
+    //{
+    //    // Get the Ccs record
+    //    var cc = cnx.Customers.SingleOrDefault(c => c.Id == customerId) ?? throw new Exception("Customer record not found");
+    //    // Determine which Id to use based on the BillingPlan
+    //    var ccId = cc.BillingPlan == BillingPlan.Advanced ? (int)cc.ParentId : cc.Id;
+    //    // Get the GPS unit models
+    //    var gpsUnitModels = cnx.TrackingUnitModels.ToList();
+    //    // Prepare the result list
+    //    var result = new List<CPrice>();
+
+    //    foreach (var gpsUnitModel in gpsUnitModels)
+    //    {
+    //        var cusPrice = cnx.CusPrices
+    //            .SingleOrDefault(cp => cp.CustomerId == ccId && cp.TrackingUnitModelId == gpsUnitModel.Id);
+
+    //        if (cusPrice != null)
+    //        {
+    //            result.Add(new CPrice
+    //            {
+    //                TrackingUnitModelId = gpsUnitModel.Id,
+    //                Price = cusPrice.Price,
+    //                Host = cusPrice.Host,
+    //                Gprs = cusPrice.Gprs
+    //            });
+    //        }
+    //        else
+    //        {
+    //            result.Add(new CPrice
+    //            {
+    //                TrackingUnitModelId = gpsUnitModel.Id,
+    //                Price = gpsUnitModel.DefualtPrice,
+    //                Host = gpsUnitModel.DefualtHost,
+    //                Gprs = gpsUnitModel.DefualtGprs
+    //            });
+    //        }
+    //    }
+
+    //    return result;
+    //}
+
+    public static async Task<CPrice>  GetCPrice(IApplicationDbContext cnx, int customerId, int umId)
     {
         // Get the Ccs record
-        var cc = cnx.Customers.SingleOrDefault(c => c.Id == customerId) ?? throw new Exception("Customer record not found");
-        // Determine which Id to use based on the BillingPlan
-        var ccId = cc.BillingPlan == BillingPlan.Advanced ? (int)cc.ParentId : cc.Id;
-        // Get the GPS unit models
-        var gpsUnitModels = cnx.TrackingUnitModels.ToList();
-        // Prepare the result list
-        var result = new List<CPrice>();
-
-        foreach (var gpsUnitModel in gpsUnitModels)
-        {
-            var cusPrice = cnx.CusPrices
-                .SingleOrDefault(cp => cp.CustomerId == ccId && cp.TrackingUnitModelId == gpsUnitModel.Id);
-
-            if (cusPrice != null)
-            {
-                result.Add(new CPrice
-                {
-                    TrackingUnitModelId = gpsUnitModel.Id,
-                    Price = cusPrice.Price,
-                    Host = cusPrice.Host,
-                    Gprs = cusPrice.Gprs
-                });
-            }
-            else
-            {
-                result.Add(new CPrice
-                {
-                    TrackingUnitModelId = gpsUnitModel.Id,
-                    Price = gpsUnitModel.DefualtPrice,
-                    Host = gpsUnitModel.DefualtHost,
-                    Gprs = gpsUnitModel.DefualtGprs
-                });
-            }
-        }
-
-        return result;
-    }
-
-    public static CPrice GetCPrice(IApplicationDbContext cnx, int customerId, int umId)
-    {
-        // Get the Ccs record
-        var cc = cnx.Customers.SingleOrDefault(c => c.Id == customerId) ?? throw new Exception("Cc record not found");
-        var um = cnx.TrackingUnitModels.SingleOrDefault(c => c.Id == umId) ?? throw new Exception("TrackingUnitModel record not found");
+        var cc = await cnx.Customers.SingleOrDefaultAsync(c => c.Id == customerId) ?? throw new Exception("Cc record not found");
+        var um = await cnx.TrackingUnitModels.SingleOrDefaultAsync(c => c.Id == umId) ?? throw new Exception("TrackingUnitModel record not found");
         // Determine which Id to use based on the BillingPlan
         var _customerId = cc.BillingPlan == BillingPlan.Advanced ? (int)cc.ParentId : cc.Id;
 
-        var cusPrice = cnx.CusPrices
-            .SingleOrDefault(cp => cp.CustomerId == _customerId && cp.TrackingUnitModelId == umId);
+        var cusPrice = await cnx.CusPrices
+            .SingleOrDefaultAsync(cp => cp.CustomerId == _customerId && cp.TrackingUnitModelId == umId);
 
         if (cusPrice != null)
         {

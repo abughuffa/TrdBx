@@ -1,4 +1,5 @@
 ﻿
+using CleanArchitecture.Blazor.Application.Features.ServiceLogs.DTOs;
 using CleanArchitecture.Blazor.Application.Features.SimCards.DTOs;
 using CleanArchitecture.Blazor.Application.Features.Subscriptions.Commands.AddEdit;
 //using CleanArchitecture.Blazor.Application.Features.Subscriptions.Commands.Create;
@@ -12,6 +13,8 @@ namespace CleanArchitecture.Blazor.Application.Features.Subscriptions.Mappers;
 [Mapper]
 public static partial class Mapper
 {
+    [MapProperty(nameof(Subscription.TrackingUnit.SNo), nameof(SubscriptionDto.TrackingUnit))]
+    [MapProperty(nameof(Subscription.ServiceLog.ServiceNo), nameof(SubscriptionDto.ServiceLog))]
     public static partial SubscriptionDto ToDto(Subscription source);
 
     [MapperIgnoreSource(nameof(Subscription.ServiceLog))]

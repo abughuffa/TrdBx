@@ -1,0 +1,28 @@
+﻿@if (!string.IsNullOrEmpty(Message))
+{
+    <MudGrid>
+        <MudItem xs="12" Class="text-center py-8">
+            <MudIcon Icon="@Icon" Size="Size.Large" Color="Color.Secondary" />
+            <MudText Typo="Typo.h6" Class="mt-2" Color="Color.Secondary">
+                @Message
+            </MudText>
+            @if (!string.IsNullOrEmpty(ActionText))
+            {
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           OnClick="OnAction"
+                           Class="mt-3">
+                    <MudIcon Icon="@Icons.Material.Filled.Refresh" Class="mr-2" />
+                    @ActionText
+                </MudButton>
+            }
+        </MudItem>
+    </MudGrid>
+}
+
+@code {
+    [Parameter] public string Message { get; set; } = string.Empty;
+    [Parameter] public string ActionText { get; set; } = string.Empty;
+    [Parameter] public EventCallback OnAction { get; set; }
+    [Parameter] public string Icon { get; set; } = Icons.Material.Filled.Info;
+} 

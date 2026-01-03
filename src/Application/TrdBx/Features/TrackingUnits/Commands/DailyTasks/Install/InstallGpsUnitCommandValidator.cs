@@ -8,7 +8,7 @@ public class InstallTrackingUnitCommandValidator : AbstractValidator<InstallTrac
         RuleFor(v => v.SimCardId).NotNull();
         RuleFor(v => v.TrackedAssetId).NotNull();
         RuleFor(v => v.CustomerId).NotNull();
-        RuleFor(v => v.InstallerId).NotNull();
+        //RuleFor(v => v.InstallerId).NotNull();
         RuleFor(v => v.SubPackage).NotNull();
         RuleFor(v => v.InsMode).NotNull();
         RuleFor(v => v.TsDate).NotNull().LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.Now));

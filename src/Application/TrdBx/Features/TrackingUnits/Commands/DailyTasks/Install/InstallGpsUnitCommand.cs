@@ -15,7 +15,7 @@ public class InstallTrackingUnitCommand : ICacheInvalidatorRequest<Result<int>>
     [Description("SimCardId")] public int SimCardId { get; set; }
     [Description("TrackedAssetId")] public int TrackedAssetId { get; set; }
     [Description("CustomerId")] public int CustomerId { get; set; }
-    [Description("InstallerId")] public string InstallerId { get; set; } = string.Empty;
+    //[Description("InstallerId")] public string InstallerId { get; set; } = string.Empty;
     [Description("SubPackage")] public SubPackage SubPackage { get; set; } = SubPackage.Active;
     [Description("InsMode")] public InsMode InsMode { get; set; } = InsMode.Advanced;
     [Description("CreateDeservedServices")] public bool CreateDeservedServices { get; set; } = true;
@@ -76,7 +76,7 @@ public class InstallTrackingUnitCommandHandler : SubscriptionSharedLogic, IReque
     {
         //await using var _context = await _dbContextFactory.CreateAsync(cancellationToken);
 
-        var unit = await _context.TrackingUnits.Include(x => x.Subscriptions).Where(x => x.Id == request.Id).FirstAsync() ?? throw new NotFoundException($"TrackingUnit with id: [{request.Id}] not found.");
+        var unit = await _context.TrackingUnits.Include(u => u.Subscriptions).ThenInclude(s => s.ServiceLog).Where(x => x.Id == request.Id).FirstAsync() ?? throw new NotFoundException($"TrackingUnit with id: [{request.Id}] not found.");
 
         if (!(unit.UStatus == UStatus.New || unit.UStatus == UStatus.Reserved || unit.UStatus == UStatus.Used))
         {
@@ -92,15 +92,15 @@ public class InstallTrackingUnitCommandHandler : SubscriptionSharedLogic, IReque
 
         var asset = await _context.TrackedAssets.FindAsync(new object[] { request.TrackedAssetId }, cancellationToken) ?? throw new NotFoundException($"TrackedAsset with id: [{request.TrackedAssetId}] not found.");
 
-        var price = GetCPrice(_context, (int)request.CustomerId, unit.TrackingUnitModelId);
+        var price = await GetCPrice(_context, (int)request.CustomerId, unit.TrackingUnitModelId);
 
-        var serviceNo = GenSerialNo(_context, "ServiceLog", request.TsDate).Result;
+        var serviceNo = await GenSerialNo(_context, "ServiceLog", request.TsDate);
 
         var serviceLog = new ServiceLog()
         {
             ServiceNo = serviceNo,
             CustomerId = (int)request.CustomerId,
-            InstallerId = request.InstallerId,
+            //InstallerId = request.InstallerId,
             SerDate = request.TsDate,
             IsBilled = false,
             Subscriptions = [],
@@ -114,7 +114,7 @@ public class InstallTrackingUnitCommandHandler : SubscriptionSharedLogic, IReque
                     serviceLog.ServiceTask = ServiceTask.ReInstall;
                     serviceLog.Desc = string.Format("إعادة تركيب الوحدة المستعملة ({0}) في الأصل ({1}).", unit.SNo, asset.TrackedAssetNo);
                     serviceLog.IsDeserved = request.CreateDeservedServices;
-                    serviceLog.Amount = GetSPrice(_context, ServiceTask.ReInstall);
+                    serviceLog.Amount = await GetSPrice(_context, ServiceTask.ReInstall);
 
                     unit.CustomerId = request.CustomerId;
 

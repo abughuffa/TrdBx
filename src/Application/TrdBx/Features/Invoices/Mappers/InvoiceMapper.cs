@@ -1,4 +1,5 @@
 ﻿
+using CleanArchitecture.Blazor.Application.Features.Customers.DTOs;
 using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.Create;
 using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.Update;
 using CleanArchitecture.Blazor.Application.Features.Invoices.DTOs;
@@ -10,10 +11,14 @@ namespace CleanArchitecture.Blazor.Application.Features.Invoices.Mappers;
 [Mapper]
 public static partial class Mapper
 {
+    [MapProperty(nameof(Invoice.Customer.Name), nameof(InvoiceDto.Customer))]
     public static partial InvoiceDto ToDto(Invoice source);
     public static partial Invoice FromDto(InvoiceDto dto);
     //public static partial CusPrice FromEditCommand(AddEditCusPriceCommand command);
     public static partial Invoice FromCreateCommand(CreateInvoiceCommand command);
+
+    public static partial Invoice FromxCreateCommand(xCreateInvoiceCommand command);
+
     public static partial UpdateInvoiceCommand ToUpdateCommand(InvoiceDto dto);
     //public static partial AddEditCusPriceCommand CloneFromDto(CusPriceDto dto);
     public static partial void ApplyChangesFrom(UpdateInvoiceCommand source, Invoice target);

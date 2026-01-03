@@ -71,7 +71,7 @@
                 <Columns>
 
 
-                    <TemplateColumn Title="Actions" HeaderStyle="width:80px" Sortable="false">
+                    <TemplateColumn Title=@ConstantString.Actions HeaderStyle="width:80px" Sortable="false">
                         <CellTemplate>
 
                             <MudStack Spacing="2" Row="true" Justify="Justify.FlexStart">
@@ -98,9 +98,10 @@
 
 
                     <PropertyColumn Property="x => x.ServiceNo" Title="@L[_currentDto.GetMemberDescription(x=>x.ServiceNo)]" />
+                    <PropertyColumn Property="x => x.CreatedByUser.DisplayName" Title="@L[_currentDto.GetMemberDescription(x => x.CreatedByUser)]" />
                     <PropertyColumn Property="x => x.Customer" Title="@L[_currentDto.GetMemberDescription(x => x.Customer)]" />
                    @*  <PropertyColumn Property="x => x.InstallerId" Title="@L[_currentDto.GetMemberDescription(x => x.InstallerId)]" /> *@
-                    <PropertyColumn Property="x => x.Installer" Title="@L[_currentDto.GetMemberDescription(x => x.Installer)]" />
+                    @* <PropertyColumn Property="x => x.Installer" Title="@L[_currentDto.GetMemberDescription(x => x.Installer)]" /> *@
                        <PropertyColumn Property="x => x.Desc" Title="@L[_currentDto.GetMemberDescription(x=>x.Desc)]" />
                     <PropertyColumn Property="x => x.SerDate" Title="@L[_currentDto.GetMemberDescription(x=>x.SerDate)]" />
                     <PropertyColumn Property="x => x.IsDeserved" Title="@L[_currentDto.GetMemberDescription(x=>x.IsDeserved)]" />

@@ -8,6 +8,7 @@ namespace CleanArchitecture.Blazor.Application.Features.SPackages.Commands.AddEd
 public class AddEditSPackageCommand: ICacheInvalidatorRequest<Result<int>>
 {
     [Description("Id")] public int Id { get; set; }
+    [Description("SProviderId")] public int SProviderId { get; set; }
     [Description("Name")] public string Name { get; set; } = string.Empty;
 
 

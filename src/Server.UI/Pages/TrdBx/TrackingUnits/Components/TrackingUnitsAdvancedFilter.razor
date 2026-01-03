@@ -13,7 +13,7 @@
          <MudItem md="6">
             <AvaliableCustomers @bind-Value="TRequest.CustomerId"
                                 WithAdvParents ="true"
-                                Placeholder="@L["Search by Customer"]"
+                                Placeholder="@L["Filter by Customer"]"
                                 Clearable="true"
                                 OnConditionChanged="TextChanged">
             </AvaliableCustomers>
@@ -21,7 +21,7 @@
 
         <MudItem md="6">
             <MudEnumSelect Style="min-width:120px"
-                           Placeholder="@L["Status"]"
+                           Placeholder="@L["Filter by Status"]"
                            TEnum="UStatus"
                            Value="TRequest.UStatus"
                            ValueChanged="OnUStatusChanged"

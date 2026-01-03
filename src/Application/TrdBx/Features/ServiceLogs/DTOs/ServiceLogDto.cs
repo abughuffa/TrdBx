@@ -1,5 +1,6 @@
-﻿using CleanArchitecture.Blazor.Domain.Enums;
+﻿using CleanArchitecture.Blazor.Application.Features.Identity.DTOs;
 using CleanArchitecture.Blazor.Domain.Entities;
+using CleanArchitecture.Blazor.Domain.Enums;
 using CleanArchitecture.Blazor.Domain.Enums;
 
 namespace CleanArchitecture.Blazor.Application.Features.ServiceLogs.DTOs;
@@ -15,8 +16,8 @@ public class ServiceLogDto
     public ServiceTask ServiceTask { get; set; }
     [Description("CustomerId")]
     public int CustomerId { get; set; }
-    [Description("InstallerId")]
-    public  string InstallerId { get; set; } = string.Empty;
+    //[Description("InstallerId")]
+    //public  string InstallerId { get; set; } = string.Empty;
     [Description("Desc")]
     public string Desc { get; set; } = string.Empty;
     [Description("SerDate")]
@@ -30,7 +31,7 @@ public class ServiceLogDto
 
 
     [Description("Customer")] public string? Customer { get; set; }
-    [Description("Installer")] public string? Installer { get; set; }
+    [Description("Created By User")] public ApplicationUserDto? CreatedByUser { get; set; }
 
     //private class Mapping : Profile
     //{

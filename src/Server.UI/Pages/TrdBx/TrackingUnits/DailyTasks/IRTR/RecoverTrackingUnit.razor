@@ -3,11 +3,11 @@
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Mappers
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Recover
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Queries.GetById
-@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Installers
+@* @using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Installers *@
 
 @inherits MudComponentBase
 @inject IValidationService Validator
-@inject IStringLocalizer<DailyTasks> L
+@inject IStringLocalizer<TrackingUnits> L
 @attribute [Authorize(Policy = Permissions.TrackingUnits.Recover)]
 
 <PageTitle>@Title</PageTitle>
@@ -28,15 +28,15 @@
                         <MudItem md="12">
                             <MudText>Selected Unit Serial No</MudText>
                         </MudItem>
-
+@* 
                         <MudItem md="12">
 
                             <Installers @bind-InstallerId="model.InstallerId"></Installers>
 
-                        </MudItem>
+                        </MudItem> *@
 
                         <MudItem md="6">
-                            <MudCheckBox Label="@L["CreateDeservedServices?"]"
+                            <MudCheckBox Label="@L["Create Deserved Services?"]"
                             For="@(() => model.CreateDeservedServices)"
                             @bind-Value="model.CreateDeservedServices">
                             </MudCheckBox>
@@ -49,7 +49,7 @@
                             Editable @bind-Date="_date"
                             For="@(() => _date)"
                             Required="true"
-                                           RequiredError="@L["TaskDateIsRequired"]" />
+                                           RequiredError="@L["TaskDate Is Required!"]" />
                         </MudItem>
                     </MudGrid>
                 </MudForm>

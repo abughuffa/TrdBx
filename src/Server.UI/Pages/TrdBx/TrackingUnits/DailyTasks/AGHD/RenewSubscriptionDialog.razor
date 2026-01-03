@@ -1,6 +1,6 @@
 ﻿
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Renew
-@inject IStringLocalizer<DailyTasks> L
+@inject IStringLocalizer<TrackingUnits> L
 @attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.TrackingUnits.RenewSubscription)]
 
 <MudDialog>
@@ -16,7 +16,7 @@
 
 
                 <MudItem md="6">
-                    <MudCheckBox Label="@L["CreateAnnualSubscription"]"
+                    <MudCheckBox Label="@L["Create Annual Subscription?"]"
                                  For="@(() => _model.CreateAnnualSub)"
                                  @bind-Value="_model.CreateAnnualSub">
                     </MudCheckBox>
@@ -27,7 +27,7 @@
                                    Editable @bind-Date="_date"
                                    For="@(() => _date)"
                                    Required="true"
-                                   RequiredError="@L["TaskDateIsRequired"]" />
+                                   RequiredError="@L["TaskDate Is Required!"]" />
                 </MudItem>
             </MudGrid>
         </MudForm>
