@@ -1,7 +1,5 @@
 ﻿using CleanArchitecture.Blazor.Application.Features.Invoices.Caching;
 using CleanArchitecture.Blazor.Domain.Enums;
-using CleanArchitecture.Blazor.Domain.Enums;
-using CleanArchitecture.Blazor.Domain.Events;
 
 namespace CleanArchitecture.Blazor.Application.Features.Invoices.Commands.SetAsCanceled;
 
@@ -41,9 +39,9 @@ public class SetAsCanceledInvoiceCommandHandler : IRequestHandler<SetAsCanceledI
         //await using var _context = await _dbContextFactory.CreateAsync(cancellationToken);
         var item = await _context.Invoices.FindAsync(request.Id, cancellationToken);
         if (item == null) return await Result<int>.FailureAsync("Invoice not found");
-        if (!(item.IStatus != IStatus.Billed || item.IStatus != IStatus.Paid))
+        if (!(item.IStatus != IStatus.Billed || item.IStatus != IStatus.PartaillyPaid || item.IStatus != IStatus.Paid))
         {
-            return await Result<int>.FailureAsync($"Faild to set Invoice with id: [{request.Id}] as Paid.");
+            return await Result<int>.FailureAsync($"Faild to set Invoice with id: [{request.Id}] as Canceled.");
         }
 
         item.IStatus = IStatus.Canceled;

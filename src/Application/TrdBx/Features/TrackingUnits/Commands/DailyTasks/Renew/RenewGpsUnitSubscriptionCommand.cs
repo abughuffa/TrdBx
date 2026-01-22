@@ -1,6 +1,5 @@
 ﻿using CleanArchitecture.Blazor.Application.Features.Common;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Caching;
-using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Replace;
 using CleanArchitecture.Blazor.Domain.Enums;
 using DocumentFormat.OpenXml.Wordprocessing;
 
@@ -65,10 +64,13 @@ public class RenewTrackingUnitSubscriptionCommandHandler : PriceSharedLogic, IRe
 
         var OLF = SubPackageFees.ZeroFees;
 
+        var serviceNo = await GenSerialNo(_context, "ServiceLog", request.TsDate);
+
+        var sequenceNumber = 1;
 
         foreach (var item in items)
-        {
-            var serviceNo = await GenSerialNo(_context, "ServiceLog", request.TsDate);
+        { 
+            var xserviceNo  = $"{serviceNo}{sequenceNumber:D3}";
 
             var price = await GetCPrice(_context, (int)item.CustomerId, item.TrackingUnitModelId);
 
@@ -87,7 +89,7 @@ public class RenewTrackingUnitSubscriptionCommandHandler : PriceSharedLogic, IRe
                 var serviceLog = new ServiceLog()
                 {
                     Desc = string.Format("تجديد اشتراك الوحدة ({0}).", item.SNo),
-                    ServiceNo = serviceNo,
+                    ServiceNo = xserviceNo,
                     ServiceTask = ServiceTask.RenewUnitSub,
                     CustomerId = (int)item.CustomerId,
                     //InstallerId = request.InstallerId,
@@ -111,8 +113,8 @@ public class RenewTrackingUnitSubscriptionCommandHandler : PriceSharedLogic, IRe
                                     SsDate = startDate,
                                     SeDate = endDate,
                                     DailyFees = dailyFees,
-                                    Days = days,
-                                    Amount = Math.Round(days * dailyFees, 3, MidpointRounding.AwayFromZero),
+                                    //Days = days,
+                                    //Amount = Math.Round(days * dailyFees, 3, MidpointRounding.AwayFromZero),
                                 }];
                             serviceLog.WialonTasks = [];
                             break;
@@ -129,8 +131,8 @@ public class RenewTrackingUnitSubscriptionCommandHandler : PriceSharedLogic, IRe
                                     SsDate = startDate,
                                     SeDate = endDate,
                                     DailyFees = dailyFees,
-                                    Days = days,
-                                    Amount = Math.Round(days * dailyFees, 3, MidpointRounding.AwayFromZero),
+                                    //Days = days,
+                                    //Amount = Math.Round(days * dailyFees, 3, MidpointRounding.AwayFromZero),
                                 }];
                             serviceLog.WialonTasks = [];
                             break;
@@ -147,8 +149,8 @@ public class RenewTrackingUnitSubscriptionCommandHandler : PriceSharedLogic, IRe
                                     SsDate = startDate,
                                     SeDate = endDate,
                                     DailyFees = dailyFees,
-                                    Days = days,
-                                    Amount = Math.Round(days * dailyFees, 3, MidpointRounding.AwayFromZero),
+                                    //Days = days,
+                                    //Amount = Math.Round(days * dailyFees, 3, MidpointRounding.AwayFromZero),
                                 }];
                             serviceLog.WialonTasks = [];
                             break;
@@ -164,8 +166,8 @@ public class RenewTrackingUnitSubscriptionCommandHandler : PriceSharedLogic, IRe
                                     SsDate = startDate,
                                     SeDate = startDate,
                                     DailyFees = 0.0m,
-                                    Days = 0,
-                                    Amount = 0.0m,
+                                    //Days = 0,
+                                    //Amount = 0.0m,
                                 }];
                             serviceLog.WialonTasks = [];
                             break;
@@ -175,6 +177,9 @@ public class RenewTrackingUnitSubscriptionCommandHandler : PriceSharedLogic, IRe
                 serviceLog.AddDomainEvent(new ServiceLogCreatedEvent(serviceLog));
 
                 _context.ServiceLogs.Add(serviceLog);
+
+                sequenceNumber++;
+
             }
         }
 

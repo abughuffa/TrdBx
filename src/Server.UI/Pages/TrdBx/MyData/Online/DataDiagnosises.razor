@@ -6,13 +6,14 @@
 @using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Online.DataDiagnosises.Queries.Export
 @using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Online.DataDiagnosises.Queries.Pagination
 @using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Online.DataDiagnosises.Specifications
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.MyData.Online.Components
 
 @inject IStringLocalizer<DataDiagnosises> L
 @attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.DataDiagnosises.View)]
 
 <PageTitle>@Title</PageTitle>
 
-<AdvancedSearchDataDiagnosiss TRequest="Query" OnConditionChanged="ConditionChanged"></AdvancedSearchDataDiagnosiss>
+<AdvancedSearchDiagnostics TRequest="Query" OnConditionChanged="ConditionChanged"></AdvancedSearchDiagnostics>
 
 <MudDataGrid ServerData="@(ServerReload)"
              FixedHeader="true"

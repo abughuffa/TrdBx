@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Text.RegularExpressions;
+using Azure.Identity;
 using CleanArchitecture.Blazor.Domain.Entities;
 using CleanArchitecture.Blazor.Domain.Enums;
 using CleanArchitecture.Blazor.Domain.Events;
@@ -849,7 +850,10 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                         }
                 }
 
+                //TODO: Subscriptions.Count SHOULD BE (Subscriptions.where(s => s.TrackingUnitId = Unit.Id) == 256) 
                 if (servcieLog.Subscriptions.Count == 256) servcieLog.IsDeserved = false;
+
+
 
                 //Update Sub. Statuses
                 unit.UStatus = UStatus.InstalledActiveHosting;
@@ -1719,7 +1723,6 @@ public class SubscriptionSharedLogic : PriceSharedLogic
     #endregion
 
 }
-
 public class SerialForSharedLogic
 {
 
@@ -1770,10 +1773,10 @@ public class SerialForSharedLogic
             case "Invoice":
                 {
                     // Get latest invoice number for current month
-                    var lastInvoice = await cnx.Invoices.Where(i => i.InvNo.StartsWith(prefix)).AsNoTracking().OrderByDescending(i => i.InvNo).FirstOrDefaultAsync();
+                    var lastInvoice = await cnx.Invoices.Where(i => i.InvoiceNo.StartsWith(prefix)).AsNoTracking().OrderByDescending(i => i.InvoiceNo).FirstOrDefaultAsync();
                     if (lastInvoice != null)
                     {
-                        var match = Regex.Match(lastInvoice.InvNo, @$"^{prefix}(\d+)$");
+                        var match = Regex.Match(lastInvoice.InvoiceNo, @$"^{prefix}(\d+)$");
                         if (match.Success && int.TryParse(match.Groups[1].Value, out int lastSequence))
                         {
                             sequenceNumber = lastSequence + 1;

@@ -1,9 +1,6 @@
 ﻿using CleanArchitecture.Blazor.Application.Features.Customers.Caching;
-using CleanArchitecture.Blazor.Domain.Enums;
-using CleanArchitecture.Blazor.Domain.Entities;
-using CleanArchitecture.Blazor.Domain.Enums;
-using CleanArchitecture.Blazor.Domain.Events;
 using CleanArchitecture.Blazor.Application.Features.Customers.Mappers;
+using CleanArchitecture.Blazor.Domain.Enums;
 
 namespace CleanArchitecture.Blazor.Application.Features.Customers.Commands.Create;
 

@@ -2,7 +2,6 @@
 using CleanArchitecture.Blazor.Application.Features.Invoices.DTOs;
 using CleanArchitecture.Blazor.Application.Features.Invoices.Mappers;
 using CleanArchitecture.Blazor.Application.Features.Invoices.Specifications;
-using CleanArchitecture.Blazor.Domain.Entities;
 
 namespace CleanArchitecture.Blazor.Application.Features.Invoices.Queries.Pagination;
 
@@ -17,7 +16,7 @@ public class InvoicesWithPaginationQuery : InvoiceAdvancedFilter, ICacheableRequ
     public IEnumerable<string> Tags => InvoiceCacheKey.Tags;
     public InvoiceAdvancedSpecification Specification => new InvoiceAdvancedSpecification(this);
 }
-    
+
 public class InvoicesWithPaginationQueryHandler :
          IRequestHandler<InvoicesWithPaginationQuery, PaginatedData<InvoiceDto>>
 {
@@ -39,7 +38,7 @@ public class InvoicesWithPaginationQueryHandler :
         _context = context;
     }
     public async Task<PaginatedData<InvoiceDto>> Handle(InvoicesWithPaginationQuery request, CancellationToken cancellationToken)
-        {
+    {
         //await using var _context = await _dbContextFactory.CreateAsync(cancellationToken);
         //var data = await _context.Invoices.OrderBy($"{request.OrderBy} {request.SortDirection}")
         //                                            .ProjectToPaginatedDataAsync<Invoice, InvoiceDto>(request.Specification,

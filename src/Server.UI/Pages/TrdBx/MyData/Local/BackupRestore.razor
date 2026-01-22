@@ -22,8 +22,13 @@
                 </MudItem>
                 <MudItem xs="6" md="6">
                 <MudStack AlignItems="AlignItems.End">
-                    <MudLoadingButton Loading="_uploading" Variant="Variant.Filled" Color="Color.Primary" OnClick="OnCreateBackup"
-                                      Disabled="@((backupName is null) && !_canCreate)" Class="ml-2" StartIcon="@Icons.Material.Filled.Backup">
+                        <MudLoadingButton Class="ml-2" 
+                                      Loading="_uploading"
+                                      Variant="Variant.Filled" 
+                                      Color="Color.Primary" 
+                                      OnClick="OnCreateBackup"
+                                      Disabled="@((backupName is null) && !_canCreate)" 
+                                      StartIcon="@Icons.Material.Filled.Backup">
                         @L["Create Backup"]
                     </MudLoadingButton>
                 </MudStack>
@@ -41,11 +46,13 @@
                     </MudItem>
                     <MudItem xs="6" md="6">
                     <MudStack Spacing="3" AlignItems="AlignItems.End">
-                        <MudButton Disabled="@_loading"
+                        <MudLoadingButton 
+                                   Disabled="@_loading"
+                                   Loading="@_loading"
                                    OnClick="@(() => OnRefresh())"
                                    StartIcon="@Icons.Material.Outlined.Refresh">
                             @ConstantString.Refresh
-                        </MudButton>
+                        </MudLoadingButton>
                     </MudStack>
                     </MudItem>
                 </MudStack>
@@ -110,6 +117,8 @@
 
     private bool _loading;
     private bool _uploading;
+    private bool _restoring;
+    
 
     [Inject]
     private IBlazorDownloadFileService BlazorDownloadFileService { get; set; } = null!;
@@ -190,14 +199,14 @@
     {
         try
         {
-            _uploading = true;
+            _restoring = true;
 
             var result = await Mediator.Send(new RestoreBackupCommand(backupName));
 
             if (result)
             {
                 Snackbar.Add(@L["Backup file restored Successfully"], MudBlazor.Severity.Info);
-                backupName = "";
+                backupName = null;
             }
             else
             {
@@ -212,7 +221,7 @@
         }
         finally
         {
-            _uploading = false;
+            _restoring = false;
         }
 
         // var contentText = string.Format(ConstantString.ExecuteConfirmation, "Restore", backupName);

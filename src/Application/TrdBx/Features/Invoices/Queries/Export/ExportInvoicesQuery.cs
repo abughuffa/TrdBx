@@ -7,15 +7,15 @@ namespace CleanArchitecture.Blazor.Application.Features.Invoices.Queries.Export;
 
 public class ExportInvoicesQuery : InvoiceAdvancedFilter, ICacheableRequest<Result<byte[]>>
 {
-      public InvoiceAdvancedSpecification Specification => new InvoiceAdvancedSpecification(this);
-      public IEnumerable<string> Tags => InvoiceCacheKey.Tags;
+    public InvoiceAdvancedSpecification Specification => new InvoiceAdvancedSpecification(this);
+    public IEnumerable<string> Tags => InvoiceCacheKey.Tags;
     public override string ToString()
     {
         return $"Listview:{ListView}, Search:{Keyword},Client/Customer:{CustomerId},InvoiceType:{InvoiceType},IStatus:{IStatus}, SortDirection:{SortDirection}, OrderBy:{OrderBy}, {PageNumber}, {PageSize}";
     }
     public string CacheKey => InvoiceCacheKey.GetExportCacheKey($"{this}");
 }
-    
+
 public class ExportInvoicesQueryHandler :
          IRequestHandler<ExportInvoicesQuery, Result<byte[]>>
 {
@@ -52,7 +52,7 @@ public class ExportInvoicesQueryHandler :
         _localizer = localizer;
     }
     public async Task<Result<byte[]>> Handle(ExportInvoicesQuery request, CancellationToken cancellationToken)
-        {
+    {
 
         //await using var db = await _dbContextFactory.CreateAsync(cancellationToken);
         //var data = await db.Invoices.ApplySpecification(request.Specification)
@@ -71,22 +71,24 @@ public class ExportInvoicesQueryHandler :
             new Dictionary<string, Func<InvoiceDto, object?>>()
             {
                     {_localizer[_dto.GetMemberDescription(x=>x.Id)],item => item.Id},
-                    {_localizer[_dto.GetMemberDescription(x=>x.InvNo)],item => item.InvNo},
-{_localizer[_dto.GetMemberDescription(x=>x.InvDate)],item => item.InvDate},
+                    {_localizer[_dto.GetMemberDescription(x=>x.InvoiceNo)],item => item.InvoiceNo},
+{_localizer[_dto.GetMemberDescription(x=>x.InvoiceDate)],item => item.InvoiceDate},
 {_localizer[_dto.GetMemberDescription(x=>x.DueDate)],item => item.DueDate},
 {_localizer[_dto.GetMemberDescription(x=>x.InvoiceType)],item => item.InvoiceType},
 {_localizer[_dto.GetMemberDescription(x=>x.IStatus)],item => item.IStatus},
 {_localizer[_dto.GetMemberDescription(x=>x.CustomerId)],item => item.CustomerId},
-{_localizer[_dto.GetMemberDescription(x=>x.InvDesc)],item => item.InvDesc},
+{_localizer[_dto.GetMemberDescription(x=>x.Description)],item => item.Description},
 
 {_localizer[_dto.GetMemberDescription(x=>x.Total)],item => item.Total},
-{_localizer[_dto.GetMemberDescription(x=>x.Taxes)],item => item.Taxes},
-{_localizer[_dto.GetMemberDescription(x=>x.GrangTotal)],item => item.GrangTotal}
+{_localizer[_dto.GetMemberDescription(x=>x.DiscountAmount)],item => item.DiscountAmount},
+{_localizer[_dto.GetMemberDescription(x=>x.TaxableAmount)],item => item.TaxableAmount},
+{_localizer[_dto.GetMemberDescription(x=>x.TaxAmount)],item => item.TaxAmount},
+{_localizer[_dto.GetMemberDescription(x=>x.GrandTotal)],item => item.GrandTotal}
 
             }
             , _localizer[_dto.GetClassDescription()]);
 
         return await Result<byte[]>.SuccessAsync(result);
 
-        }
+    }
 }

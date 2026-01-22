@@ -90,6 +90,8 @@ public class ActivateTrackingUnitForGprsCommandHandler : SubscriptionSharedLogic
 
         ActivateForGprs(unit, serviceLog, request.TsDate, price, request.ApplyChangesToDatabase);
 
+        if (serviceLog.Subscriptions.Count == 0) serviceLog.IsDeserved = false;
+
         serviceLog.AddDomainEvent(new ServiceLogCreatedEvent(serviceLog));
 
         _context.ServiceLogs.Add(serviceLog);

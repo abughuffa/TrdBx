@@ -1,5 +1,4 @@
-﻿using CleanArchitecture.Blazor.Domain.Entities;
-using CleanArchitecture.Blazor.Domain.Enums;
+﻿using CleanArchitecture.Blazor.Domain.Enums;
 
 namespace CleanArchitecture.Blazor.Application.Features.Invoices.Specifications;
 #nullable disable warnings
@@ -14,7 +13,7 @@ public class InvoiceAdvancedSpecification : Specification<Invoice>
         var todayrange = today.GetDateRange(InvoiceListView.TODAY.ToString());
         var last30daysrange = today.GetDateRange(InvoiceListView.LAST_30_DAYS.ToString());
 
-        Query.Where(q => q.InvNo != null)
+        Query.Where(q => q.InvoiceNo != null)
              .Where(filter.Keyword, !string.IsNullOrEmpty(filter.Keyword))
              .Where(x => x.CustomerId.Equals(filter.CustomerId), !(filter.CustomerId.Equals(0) || filter.CustomerId.Equals(null)))
              .Where(x => x.InvoiceType == filter.InvoiceType, !filter.InvoiceType.Equals(InvoiceType.All))

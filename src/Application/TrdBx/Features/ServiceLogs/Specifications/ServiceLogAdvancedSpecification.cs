@@ -1,7 +1,4 @@
-﻿using CleanArchitecture.Blazor.Application.Features.ServiceLogs.Specifications;
-using CleanArchitecture.Blazor.Domain.Enums;
-using CleanArchitecture.Blazor.Domain.Entities;
-using CleanArchitecture.Blazor.Domain.Enums;
+﻿using CleanArchitecture.Blazor.Domain.Enums;
 
 namespace CleanArchitecture.Blazor.Application.Features.ServiceLogs.Specifications;
 #nullable disable warnings

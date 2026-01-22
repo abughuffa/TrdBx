@@ -68,6 +68,7 @@ public class Customer : BaseAuditableEntity
 
     public Customer? Parent { get; set; } = null;
     public List<Customer>? Childs { get; set; } = null;
+    public List<Invoice>? Invoices { get; set; } = null;
 }
 public class CusPrice : BaseAuditableEntity
 {
@@ -146,6 +147,7 @@ public class ServiceLog : BaseAuditableEntity
     public Customer? Customer { get; set; } = null;
     //public ApplicationUser? Installer { get; set; } = null;
     public InvoiceItem? InvoiceItem { get; set; } = null;
+    public InvoiceItemGroup? InvoiceItemGroup { get; set; } = null;
     public List<Subscription>? Subscriptions { get; set; } = null;
     public List<WialonTask>? WialonTasks { get; set; } = null;
     public virtual ApplicationUser? CreatedByUser { get; set; }
@@ -166,10 +168,13 @@ public class Subscription : BaseEntity
     public DateOnly SsDate { get; set; }
     public DateOnly SeDate { get; set; }
     public int Days { get; set; }
+    //public int Days => (int)(SeDate.ToDateTime(TimeOnly.MinValue) - SsDate.ToDateTime(TimeOnly.MinValue)).TotalDays;
     public decimal DailyFees { get; set; } = 0.0m;
     public decimal Amount { get; set; }
+    //public decimal Amount => Math.Round(Days * DailyFees, 3, MidpointRounding.AwayFromZero);
     public ServiceLog? ServiceLog { get; set; } = null;
     public TrackingUnit? TrackingUnit { get; set; } = null;
+    public InvoiceItem? InvoiceItem { get; set; } = null;
 }
 public class WialonTask : BaseEntity
 {
@@ -184,70 +189,62 @@ public class WialonTask : BaseEntity
 }
 #endregion
 
+
+
 #region Invoices
 public class Invoice : BaseAuditableEntity
 {
-    public string InvNo { get; set; } = string.Empty;
-    public DateOnly InvDate { get; set; }
+    public string InvoiceNo { get; set; } = string.Empty;
+    public DateOnly InvoiceDate { get; set; }
     public DateOnly DueDate { get; set; }
+    public DateOnly? PaymentDate { get; set; }
+    public decimal PaidAmount { get; set; } = 0.0m;
     public InvoiceType InvoiceType { get; set; }
     public IStatus IStatus { get; set; }
+    public string DisplayCusName { get; set; } = string.Empty; 
     public int CustomerId { get; set; }
-    public string InvDesc { get; set; } = string.Empty;
-    public decimal Total { get; set; } = 0.0m;
-    public decimal Taxes { get; set; } = 0.0m;
-    public decimal GrangTotal { get; set; } = 0.0m;
+    public string Description { get; set; } = string.Empty;
     public bool IsTaxable { get; set; } = false;
+    public bool IsTaxIgnored { get; set; } = true;
+    public decimal Total { get; set; } = 0.0m;
+    public decimal DiscountRate { get; set; } = 0.0m;
+    public decimal DiscountAmount { get; set; } = 0.0m;
+    public decimal TaxRate { get; set; } = 0.0m;
+    public decimal TaxAmount { get; set; } = 0.0m;
+    public decimal TaxableAmount { get; set; } = 0.0m;
+    public decimal GrandTotal { get; set; } = 0.0m;
+
     public Customer? Customer { get; set; }
-    public List<InvoiceItem>? InvoiceItems { get; set; } = null;
+    public List<InvoiceItemGroup>? InvoiceItemGroups { get; set; } = null;
 }
-public class InvoiceItem : BaseEntity
+public class InvoiceItemGroup : BaseEntity
 {
+    public int SerialIndex { get; set; }
     public int InvoiceId { get; set; }
     public int ServiceLogId { get; set; }
+    public string Description { get; set; } = string.Empty;
     public decimal Amount { get; set; } = 0.0m;
+    public decimal SubTotal { get; set; } = 0.0m;
     public Invoice? Invoice { get; set; }
     public ServiceLog? ServiceLog { get; set; }
+    public List<InvoiceItem>? InvoiceItems { get; set; } = null;
 }
+
+public class InvoiceItem : BaseEntity
+{
+    public int SubSerialIndex { get; set; }
+    public int InvoiceItemGroupId { get; set; }
+    public int SubscriptionId { get; set; }
+    public string? Description { get; set; }
+    //public DateOnly StartDate { get; set; }
+    //public DateOnly EndDate { get; set; }
+    public decimal Amount { get; set; } = 0.0m;
+    public Subscription? Subscription { get; set; }
+    public InvoiceItemGroup? InvoiceItemGroup { get; set; }
+}
+
 #endregion
 
-#region Invoices
-//public class Invoice : BaseAuditableEntity
-//{
-//    public string InvNo { get; set; } = string.Empty;
-//    public DateOnly InvDate { get; set; }
-//    public DateOnly DueDate { get; set; }
-//    public InvoiceType InvoiceType { get; set; }
-//    public IStatus IStatus { get; set; }
-//    public int CustomerId { get; set; }
-//    public string InvDesc { get; set; } = string.Empty;
-//    public decimal Total { get; set; } = 0.0m;
-//    public decimal Taxes { get; set; } = 0.0m;
-//    public decimal GrangTotal { get; set; } = 0.0m;
-//    public bool IsTaxable { get; set; } = false;
-//    public Customer? Customer { get; set; }
-//    public List<ItemGroup>? ItemGroups { get; set; } = null;
-//}
-//public class ItemGroup : BaseEntity
-//{
-//    public int InvoiceId { get; set; }
-//    public int ServiceLogId { get; set; }
-//    public decimal Amount { get; set; } = 0.0m;
-//    public Invoice? Invoice { get; set; }
-//    public ServiceLog? ServiceLog { get; set; }
-//    public List<InvoiceItem>? InvoiceItems { get; set; } = null;
-//}
-#endregion
-//public class InvoiceItem : BaseEntity
-//{
-//    public int ItemGroupId { get; set; }
-//    public int Serial { get; set; }
-//    public int SubSerial { get; set; }
-//    public string? Desc { get; set; }
-//    public decimal SubTotal { get; set; } = 0.0m;
-//    public decimal ItemTotal { get; set; } = 0.0m;
-//    public ItemGroup? ItemGroup { get; set; }
-//}
 
 
 

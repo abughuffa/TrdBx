@@ -1,7 +1,5 @@
 ﻿using CleanArchitecture.Blazor.Application.Features.Invoices.Caching;
 using CleanArchitecture.Blazor.Domain.Enums;
-using CleanArchitecture.Blazor.Domain.Enums;
-using CleanArchitecture.Blazor.Domain.Events;
 
 namespace CleanArchitecture.Blazor.Application.Features.Invoices.Commands.SetNextStatus;
 
@@ -44,7 +42,7 @@ public class SetNextStatusInvoiceCommandHandler : IRequestHandler<SetNextStatusI
         var item = await _context.Invoices.FindAsync(request.Id, cancellationToken);
         if (item == null) return await Result<int>.FailureAsync("Invoice not found");
 
-        if (!(item.IStatus != IStatus.Draft || item.IStatus != IStatus.SentToTax || item.IStatus != IStatus.Ready))
+        if (!(item.IStatus != IStatus.Draft || item.IStatus != IStatus.SentToTax || item.IStatus != IStatus.Ready || item.IStatus != IStatus.PartaillyPaid || item.IStatus != IStatus.Paid))
         {
             return await Result<int>.FailureAsync($"Faild to set Invoice with id: [{request.Id}] to next status.");
         }

@@ -5,6 +5,7 @@
 @using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Online.DataMatches.Queries.Export
 @using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Online.DataMatches.Queries.Pagination
 @using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Online.DataMatches.Specifications
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.MyData.Online.Components
 @using CleanArchitecture.Blazor.Domain.Enums
 
 @inject IStringLocalizer<DataMatches> L
@@ -12,7 +13,9 @@
 
 <PageTitle>@Title</PageTitle>
 
-<AdvancedSearchDataMatchs TRequest="Query" OnConditionChanged="ConditionChanged"></AdvancedSearchDataMatchs>
+<AdvancedSearchDbMatchings TRequest="Query" OnConditionChanged="ConditionChanged"></AdvancedSearchDbMatchings>
+
+
 
 <MudDataGrid ServerData="@(ServerReload)"
              FixedHeader="true"

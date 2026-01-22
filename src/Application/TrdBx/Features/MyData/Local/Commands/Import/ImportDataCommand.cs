@@ -67,14 +67,14 @@ public class ImportDataCommandHandler :
                                             if (importSubscriptionsCommand.Succeeded)
                                             {
 
-                                            var importWialonTasksCommand = await request.Mediator.Send(new ImportWialonTasksCommand(request.FileName, request.Data));
-                                            if (importWialonTasksCommand.Succeeded)
-                                            {
+                                            //var importWialonTasksCommand = await request.Mediator.Send(new ImportWialonTasksCommand(request.FileName, request.Data));
+                                            //if (importWialonTasksCommand.Succeeded)
+                                            //{
 
                                                 return await Result<bool>.SuccessAsync(true);
 
-                                            }
-                                            else return await Result<bool>.FailureAsync("Faild to Import WialonTasks");
+                                            //}
+                                            //else return await Result<bool>.FailureAsync("Faild to Import WialonTasks");
 
                                         }
                                             else return await Result<bool>.FailureAsync("Faild to Import Subscriptions");

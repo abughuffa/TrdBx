@@ -13,7 +13,7 @@ internal static class TrdBxMenu
                 new ()
                 {
                     Title = "System Objects",
-                    Icon = Icons.Material.Filled.ShoppingCart,
+                    Icon = Icons.Material.Filled.Dashboard,
                     PageStatus = PageStatus.Completed,
                     IsParent = true,
                     MenuItems = new List<MenuSectionSubItemModel>

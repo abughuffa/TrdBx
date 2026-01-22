@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using CleanArchitecture.Blazor.Domain.Enums;
-using CleanArchitecture.Blazor.Domain.Entities;
-using CleanArchitecture.Blazor.Domain.Enums;
 
 namespace CleanArchitecture.Blazor.Application.Features.ServicePrices.DTOs;
 

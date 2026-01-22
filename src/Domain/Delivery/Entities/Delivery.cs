@@ -20,7 +20,7 @@ public class WayPoint : BaseEntity
 public class BidRecord : BaseAuditableEntity
 {
     public int ShipmentId { get; set; }
-    public int TransporterId { get; set; }
+    public string TransporterId { get; set; } = string.Empty;
     public decimal Price { get; set; } = 0.0m;
     public Shipment? Shipment { get; set; }
     public ApplicationUser? Transporter { get; set; }
@@ -65,28 +65,9 @@ public class Vehicle : BaseAuditableEntity
 }
 
 
-//public class Warehouse : BaseAuditableEntity
-//{
-//    public string Name { get; set; } = string.Empty;
-//    public double Latitude { get; set; } = 32.8877;
-//    public double Longitude { get; set; } = 13.1872;
-//}
 
-//public class Shipment : BaseAuditableEntity
-//{
-//    public string ShipmentNo { get; set; }
-//    public ShipmentStatus ShipmentStatus { get; set; } = ShipmentStatus.JustCreated;
-//    public string StartLocation { get; set; } = $"0.0,0.0";
-//    public string EndLocation { get; set; } = $"0.0,0.0";
-//    public decimal Price { get; set; } = 0.0m;
-//    public bool IsBidable { get; set; } = false;
-//    public int? VehicleId { get; set; }
-//    //public int[] RecVehicleTypes { get; set; } = Array.Empty<int>();
-//    public Vehicle? Vehicle { get; set; }
 
-//    // Navigation property
-//    public virtual ICollection<ShipmentVehicleType> VehicleTypes { get; set; } = new HashSet<ShipmentVehicleType>();
-//}
+
 
 
 

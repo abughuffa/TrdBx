@@ -19,8 +19,8 @@ public partial interface IApplicationDbContext
     DbSet<Subscription> Subscriptions { get; set; }
     DbSet<WialonTask> WialonTasks { get; set; }
     DbSet<ServicePrice> ServicePrices { get; set; }
-    DbSet<Invoice> Invoices { get; set; }
-    DbSet<InvoiceItem> InvoiceItems { get; set; }
+    //DbSet<Invoice> Invoices { get; set; }
+    //DbSet<InvoiceItem> InvoiceItems { get; set; }
     DbSet<DeactivateTestCase> DeactivateTestCases { get; set; }
     DbSet<ActivateTestCase> ActivateTestCases { get; set; }
     DbSet<ActivateGprsTestCase> ActivateGprsTestCases { get; set; }
@@ -28,4 +28,10 @@ public partial interface IApplicationDbContext
     DbSet<Ticket> Tickets { get; set; }
     DbSet<LibyanaSimCard> LibyanaSimCards { get; set; }
     DbSet<WialonUnit> WialonUnits { get; set; }
+
+
+
+    DbSet<Invoice> Invoices { get; set; }
+    DbSet<InvoiceItemGroup> InvoiceItemGroups { get; set; }
+    DbSet<InvoiceItem> InvoiceItems { get; set; }
 }

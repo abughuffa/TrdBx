@@ -1,7 +1,5 @@
 ﻿using CleanArchitecture.Blazor.Application.Features.Invoices.Caching;
 using CleanArchitecture.Blazor.Domain.Enums;
-using CleanArchitecture.Blazor.Domain.Enums;
-using CleanArchitecture.Blazor.Domain.Events;
 
 namespace CleanArchitecture.Blazor.Application.Features.Invoices.Commands.SetPreviousStatus;
 
@@ -43,7 +41,8 @@ public class SetPreviousStatusInvoiceCommandHandler : IRequestHandler<SetPreviou
         if (item == null) return await Result<int>.FailureAsync("Invoice not found");
 
         if (!(item.IStatus != IStatus.SentToTax || item.IStatus != IStatus.Ready
-            || item.IStatus != IStatus.Billed || item.IStatus != IStatus.Paid || item.IStatus != IStatus.Canceled))
+            || item.IStatus != IStatus.Billed || item.IStatus != IStatus.PartaillyPaid 
+            || item.IStatus != IStatus.Paid || item.IStatus != IStatus.Canceled))
         {
             return await Result<int>.FailureAsync($"Faild to set Invoice with id: [{request.Id}] to previous status.");
         }

@@ -1,4 +1,6 @@
-﻿namespace CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Commands.Delete;
+﻿using CleanArchitecture.Blazor.Domain.Events;
+
+namespace CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Commands.Delete;
 
 public class DeleteDataCommand : IRequest<Result<bool>>
 {
@@ -44,6 +46,16 @@ public class DeleteDataCommandHandler : IRequestHandler<DeleteDataCommand, Resul
                 }
             }
 
+            var InvoiceItemGroups = _context.InvoiceItemGroups.ToList();
+            if (InvoiceItemGroups.Any())
+            {
+                foreach (var item in InvoiceItemGroups)
+                {
+                    // raise a delete domain event
+                    item.AddDomainEvent(new InvoiceItemGroupDeletedEvent(item));
+                    _context.InvoiceItemGroups.Remove(item);
+                }
+            }
 
 
             var Invoices = _context.Invoices.ToList();

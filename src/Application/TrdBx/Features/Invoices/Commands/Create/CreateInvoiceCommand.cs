@@ -1,7 +1,11 @@
 ﻿using CleanArchitecture.Blazor.Application.Features.Common;
+using CleanArchitecture.Blazor.Application.Features.ServiceLogs.Specifications;
 using CleanArchitecture.Blazor.Application.Features.Invoices.Caching;
+using CleanArchitecture.Blazor.Application.Features.Invoices.DTOs;
+using CleanArchitecture.Blazor.Application.Features.Invoices.Helper;
 using CleanArchitecture.Blazor.Application.Features.Invoices.Mappers;
-using CleanArchitecture.Blazor.Application.Features.Invoices.Specifications;
+using CleanArchitecture.Blazor.Domain.Entities;
+//using CleanArchitecture.Blazor.Application.Features.Invoices.Specifications;
 using CleanArchitecture.Blazor.Domain.Enums;
 
 
@@ -10,15 +14,16 @@ namespace CleanArchitecture.Blazor.Application.Features.Invoices.Commands.Create
 public class CreateInvoiceCommand : ICacheInvalidatorRequest<Result<int>>
 {
 
-    [Description("InvDate")]
-    public DateOnly InvDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
-
+    [Description("InvoiceDate")]
+    public DateOnly InvoiceDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
     [Description("CustomerId")]
     public int CustomerId { get; set; }
-
     [Description("InvoiceType")]
     public InvoiceType InvoiceType { get; set; }
-
+    [Description("Discount Rate")]
+    public decimal DiscountRate { get; set; } = 0.0m;
+    [Description("Tax Rate")]
+    public decimal TaxRate { get; set; } = 1.0m;
     [Description("IgnoreTaxes")]
     public bool IgnoreTaxes { get; set; } = false;
 
@@ -59,73 +64,241 @@ public class CreateInvoiceCommandHandler : SerialForSharedLogic, IRequestHandler
     }
     public async Task<Result<int>> Handle(CreateInvoiceCommand request, CancellationToken cancellationToken)
     {
-        //await using var _context = await _dbContextFactory.CreateAsync(cancellationToken);
 
-        Result<Invoice>? result = null;
+        var customer = await _context.Customers.Where(c => c.Id == request.CustomerId).Include(c => c.Parent).FirstAsync(cancellationToken);
 
-        //var item = _mapper.Map<Invoice>(request);
+        // Validate customer exists in database
+        if (customer == null) throw new ArgumentException($"Customer with ID {request.CustomerId} not found.");
 
-        var item = Mapper.FromCreateCommand(request);
+        List<ServiceLog> serviceLogs = [];
 
-        item.InvoiceType = request.InvoiceType;
-        item.InvDate = request.InvDate;
-        item.DueDate = request.InvDate.AddDays(30);
-        item.InvNo = GenSerialNo(_context, "Invoice", request.InvDate).Result;
-        item.IStatus = IStatus.Draft;
-        item.CustomerId = request.CustomerId;
+        var invoiceNo = await GenSerialNo(_context, "Invoice", request.InvoiceDate); // Generate unique invoice number
 
-
-        item.InvoiceItems = [];
-
-        
+        // Create new invoice instance with basic information
+        var invoice = new InvoiceDto()
+        {
+            DisplayCusName = customer.Parent is null ? customer.Name : $"{customer.Parent.Name}-{customer.Name}",
+            CustomerId = request.CustomerId,
+            InvoiceType = request.InvoiceType,
+            InvoiceDate = request.InvoiceDate,
+            DiscountRate = request.DiscountRate,
+            TaxRate = request.TaxRate,
+            IsTaxIgnored = request.IgnoreTaxes,
+            DueDate = request.InvoiceDate.AddDays(30),
+            InvoiceNo = invoiceNo, // Generate unique invoice number
+            IStatus = IStatus.Draft, // Default status for new invoices
+            ItemGroups = []
+        };
 
         switch (request.InvoiceType)
         {
             case InvoiceType.Check:
                 {
-                    item.InvDesc = "فاتورة فحص فني";
-                    result = await CreateCheckInvoice(_context, item, cancellationToken);
-                    //result = await Mediator.Send(new CreateCheckInvoiceCommand() { invoice = item });
-                    break;
+                   
+                    //var customer = await _context.Customers.Where(c => c.Id == request.CustomerId).FirstAsync(cancellationToken);
+
+                    if (customer.BillingPlan == BillingPlan.Advanced && customer.ParentId is null)
+                    {
+                        // Get all unbilled servicelogs for for all child customers of a parent
+                        serviceLogs = await _context.ServiceLogs.Include(sl => sl.Subscriptions) // Eager load Subscriptions collection
+                                           .Where(s => s.SerDate <= request.InvoiceDate)
+                                           .ApplySpecification(new UnBilledCheckInvoiceByCustomerParentSpecification(request.CustomerId))
+                                           .OrderBy(sl => sl.Id)
+                                           .ToListAsync(cancellationToken);
+                    }
+                    else
+                    {
+                        //get all unbilled servicelogs for a child customer
+                        serviceLogs = await _context.ServiceLogs.Include(sl => sl.Subscriptions) // Eager load Subscriptions collection
+                                           .Where(s => s.SerDate <= request.InvoiceDate)
+                                           .ApplySpecification(new UnBilledCheckInvoiceByCustomerChildSpecification(request.CustomerId))
+                                           .OrderBy(sl => sl.Id)
+                                           .ToListAsync(cancellationToken);
+                    }
+
+                    // Validate serviceLogs exists in database
+                    if (!serviceLogs.Any()) return await Result<int>.FailureAsync("No unbilled service logs found for the specified criteria.");
+
+
+
+                    // Add Invoice Desc as basic information
+                    invoice.IsTaxable = customer.IsTaxable;
+                    invoice.Description = "فاتورة فحص فني";
+                    var xresult =  await GenerateInvoiceAsync(_context, invoice, serviceLogs,request.IgnoreTaxes, cancellationToken);
+                    return await Result<int>.SuccessAsync(xresult);
                 }
             case InvoiceType.Install:
                 {
-                    item.InvDesc = "فاتورة سداد وحدات تتبع";
-                    result = await CreatePaymentInvoice(_context, item, cancellationToken);
-                    //result = await Mediator.Send(new CreatePaymentInvoiceCommand() { invoice = item });
-                    break;
+                    //var customer = await _context.Customers.Where(c => c.Id == request.CustomerId).FirstAsync(cancellationToken);
+
+                    if (customer.BillingPlan == BillingPlan.Advanced && customer.ParentId is null)
+                    {
+                        // Get all unbilled servicelogs for for all child customers of a parent
+                        serviceLogs = await _context.ServiceLogs
+                                           .Include(s => s.Subscriptions)
+                                           .Include(s => s.Customer).Where(s => s.SerDate <= request.InvoiceDate)
+                                           .ApplySpecification(new UnBilledPaymentInvoiceByCustomerParentSpecification(request.CustomerId))
+                                           .ToListAsync(cancellationToken);
+                    }
+                    else
+                    {
+                        //get all unbilled servicelogs for a child customer
+                        serviceLogs = await _context.ServiceLogs
+                                           .Include(s => s.Subscriptions)
+                                           .Include(s => s.Customer).Where(s => s.SerDate <= request.InvoiceDate)
+                                           .ApplySpecification(new UnBilledPaymentInvoiceByCustomerChildSpecification(request.CustomerId))
+                                           .ToListAsync(cancellationToken);
+                    }
+                    
+                    // Validate serviceLogs exists in database
+                    if (!serviceLogs.Any()) return await Result<int>.FailureAsync("No unbilled service logs found for the specified criteria.");
+
+                 
+
+                    // Add Invoice Desc as basic information
+                    invoice.IsTaxable = customer.IsTaxable;
+                    invoice.Description = "فاتورة سداد وحدات تتبع";
+                    var xresult = await GenerateInvoiceAsync(_context, invoice, serviceLogs, request.IgnoreTaxes, cancellationToken);
+                    return await Result<int>.SuccessAsync(xresult);
                 }
             case InvoiceType.Replace:
                 {
-                    item.InvDesc = "فاتورة استبدال وحدات";
-                    result = await CreateReplaceInvoice(_context, item, cancellationToken);
-                    //result = await Mediator.Send(new CreateReplaceInvoiceCommand() { invoice = item });
-                    break;
+                    //var customer = await _context.Customers.Where(c => c.Id == request.CustomerId).FirstAsync(cancellationToken);
+
+                    if (customer.BillingPlan == BillingPlan.Advanced && customer.ParentId is null)
+                    {
+                        // Get all unbilled servicelogs for for all child customers of a parent
+                        serviceLogs = await _context.ServiceLogs
+                                           .Include(s => s.Subscriptions)
+                                           .Include(s => s.Customer).Where(s => s.SerDate <= request.InvoiceDate)
+                                           .ApplySpecification(new UnBilledReplaceInvoiceByCustomerParentSpecification(request.CustomerId))
+                                           .ToListAsync(cancellationToken);
+                    }
+                    else
+                    {
+                        //get all unbilled servicelogs for a child customer
+                        serviceLogs = await _context.ServiceLogs
+                                           .Include(s => s.Subscriptions)
+                                           .Include(s => s.Customer).Where(s => s.SerDate <= request.InvoiceDate)
+                                           .ApplySpecification(new UnBilledReplaceInvoiceByCustomerChildSpecification(request.CustomerId))
+                                           .ToListAsync(cancellationToken);
+                    }
+
+                    // Validate serviceLogs exists in database
+                    if (!serviceLogs.Any()) return await Result<int>.FailureAsync("No unbilled service logs found for the specified criteria.");
+
+                    // Add Invoice Desc as basic information
+                    invoice.IsTaxable = customer.IsTaxable;
+                    invoice.Description = "فاتورة استبدال وحدات";
+                    var xresult = await GenerateInvoiceAsync(_context, invoice, serviceLogs, request.IgnoreTaxes, cancellationToken);
+                    return await Result<int>.SuccessAsync(xresult);
                 }
             case InvoiceType.Renew:
                 {
-                    item.InvDesc = "فاتورة تجديد اشتراك";
-                    result = await CreateRenewInvoice(_context, item, cancellationToken);
-                    //result = await Mediator.Send(new CreateRenewInvoiceCommand() { invoice = item });
-                    break;
+                    //var customer = await _context.Customers.Where(c => c.Id == request.CustomerId).FirstAsync(cancellationToken);
+
+                    if (customer.BillingPlan == BillingPlan.Advanced && customer.ParentId is null)
+                    {
+                        // Get all unbilled servicelogs for for all child customers of a parent
+                        serviceLogs = await _context.ServiceLogs
+                                           .Include(s => s.Subscriptions)
+                                           .Include(s => s.Customer).Where(s => s.SerDate <= request.InvoiceDate)
+                                           .ApplySpecification(new UnBilledRenewInvoiceByCustomerParentSpecification(request.CustomerId))
+                                           .ToListAsync(cancellationToken);
+                    }
+                    else
+                    {
+                        //get all unbilled servicelogs for a child customer
+                        serviceLogs = await _context.ServiceLogs
+                                           .Include(s => s.Subscriptions)
+                                           .Include(s => s.Customer).Where(s => s.SerDate <= request.InvoiceDate)
+                                           .ApplySpecification(new UnBilledRenewInvoiceByCustomerChildSpecification(request.CustomerId))
+                                           .ToListAsync(cancellationToken);
+                    }
+
+                    // Validate serviceLogs exists in database
+                    if (!serviceLogs.Any()) return await Result<int>.FailureAsync("No unbilled service logs found for the specified criteria.");
+
+                    // Add Invoice Desc as basic information
+                    invoice.IsTaxable = customer.IsTaxable;
+                    invoice.Description = "فاتورة تجديد اشتراك";
+                    var xresult = await GenerateInvoiceAsync(_context, invoice, serviceLogs, request.IgnoreTaxes, cancellationToken);
+                    return await Result<int>.SuccessAsync(xresult);
                 }
             case InvoiceType.Subscription:
                 {
-                    item.InvDesc = "فاتورة تفعيل / إلغاء تفعيل الاشتراك";
-                    result = await CreateSubscriptionInvoice(_context, item, cancellationToken);
-                    //result = await Mediator.Send(new CreateSubscriptionInvoiceCommand() { invoice = item });
-                    break;
+                    //var customer = await _context.Customers.Where(c => c.Id == request.CustomerId).FirstAsync(cancellationToken);
+
+                    if (customer.BillingPlan == BillingPlan.Advanced && customer.ParentId is null)
+                    {
+                        // Get all unbilled servicelogs for for all child customers of a parent
+                        serviceLogs = await _context.ServiceLogs
+                                           .Include(s => s.Subscriptions)
+                                           .Include(s => s.Customer).Where(s => s.SerDate <= request.InvoiceDate)
+                                           .ApplySpecification(new UnBilledSubscriptionInvoiceByCustomerParentSpecification(request.CustomerId))
+                                           .ToListAsync(cancellationToken);
+                    }
+                    else
+                    {
+                        //get all unbilled servicelogs for a child customer
+                        serviceLogs = await _context.ServiceLogs
+                                           .Include(s => s.Subscriptions)
+                                           .Include(s => s.Customer).Where(s => s.SerDate <= request.InvoiceDate)
+                                           .ApplySpecification(new UnBilledSubscriptionInvoiceByCustomerChildSpecification(request.CustomerId))
+                                           .ToListAsync(cancellationToken);
+                    }
+
+                    // Validate serviceLogs exists in database
+                    if (!serviceLogs.Any()) return await Result<int>.FailureAsync("No unbilled service logs found for the specified criteria.");
+
+                    // Add Invoice Desc as basic information
+                    invoice.IsTaxable = customer.IsTaxable;
+                    invoice.Description = "فاتورة تفعيل / إلغاء تفعيل الاشتراك";
+                    var xresult = await GenerateInvoiceAsync(_context, invoice, serviceLogs, request.IgnoreTaxes, cancellationToken);
+                    return await Result<int>.SuccessAsync(xresult);
                 }
             case InvoiceType.Support:
                 {
-                    item.InvDesc = "فاتورة اعمال دعم فني";
-                    result = await CreateSupportInvoice(_context, item, cancellationToken);
-                    //result = await Mediator.Send(new CreateSupportInvoiceCommand() { invoice = item });
-                    break;
+                    //var customer = await _context.Customers.Where(c => c.Id == request.CustomerId).FirstAsync(cancellationToken);
+
+                    if (customer.BillingPlan == BillingPlan.Advanced && customer.ParentId is null)
+                    {
+                        // Get all unbilled servicelogs for for all child customers of a parent
+                        serviceLogs = await _context.ServiceLogs
+                                           .Include(s => s.Subscriptions)
+                                           .Include(s => s.Customer).Where(s => s.SerDate <= request.InvoiceDate)
+                                           .ApplySpecification(new UnBilledSupportInvoiceByCustomerParentSpecification(request.CustomerId))
+                                           .ToListAsync(cancellationToken);
+                    }
+                    else
+                    {
+                        //get all unbilled servicelogs for a child customer
+                        serviceLogs = await _context.ServiceLogs
+                                           .Include(s => s.Subscriptions)
+                                           .Include(s => s.Customer).Where(s => s.SerDate <= request.InvoiceDate)
+                                           .ApplySpecification(new UnBilledSupportInvoiceByCustomerChildSpecification(request.CustomerId))
+                                           .ToListAsync(cancellationToken);
+                    }
+
+                    // Validate serviceLogs exists in database
+                    if (!serviceLogs.Any()) return await Result<int>.FailureAsync("No unbilled service logs found for the specified criteria.");
+
+                    // Add Invoice Desc as basic information
+                    invoice.IsTaxable = customer.IsTaxable;
+                    invoice.Description = "فاتورة اعمال دعم فني";
+                    var xresult = await GenerateInvoiceAsync(_context, invoice, serviceLogs, request.IgnoreTaxes, cancellationToken);
+                    return await Result<int>.SuccessAsync(xresult);
+
                 }
 
+            default:
+                {
+                    return await Result<int>.FailureAsync("requested Invoice Type not implemented");
+                }
         }
 
+        // Call main generation method with all found IDs
+  
         //CC:  IsTaxable     =>    Invoice:   IgnoreTaxes
 
         //       False                          False           ==> To = x, Tx = 0, GT = To             Invoice: IsTaxable = False           
@@ -133,302 +306,58 @@ public class CreateInvoiceCommandHandler : SerialForSharedLogic, IRequestHandler
         //       True                           False           ==> To = x, Tx = x/100, GT = To + Tx    Invoice: IsTaxable = true
         //       True                            True           ==> To = x, Tx = 0, GT = To             Invoice: IsTaxable = true    
 
+    }
 
-        if (result.Succeeded && result.Data is not null)
-        {
-            var total = item.InvoiceItems.Sum(ii => ii.Amount);
 
-            item.Total = total;
 
-            if (request.IgnoreTaxes)
+
+
+private async Task<int> GenerateInvoiceAsync(IApplicationDbContext _context,InvoiceDto xinvoice, List<ServiceLog> serviceLogs,bool ignoreTaxes, CancellationToken cancellationToken)
+{
+        // Start database transaction to ensure data consistency
+        //using var transaction = await _context.Database.BeginTransactionAsync();
+
+    try
+    {
+        // Process service logs and convert them to invoice item groups
+        await InvoiceLogic.ProcessServiceLogsForInvoiceAsync(xinvoice, serviceLogs);
+
+            xinvoice.DiscountAmount = xinvoice.Total * (xinvoice.DiscountRate/100);
+
+            xinvoice.TaxableAmount = xinvoice.Total - xinvoice.DiscountAmount;
+
+            if (ignoreTaxes)
             {
-                item.Taxes = 0.0m;
-                item.GrangTotal = total;
+                xinvoice.TaxAmount = 0.0m;
+                xinvoice.GrandTotal = xinvoice.TaxableAmount;
             }
 
             else
 
             {
-                item.Taxes = Math.Round(total / 100, 3, MidpointRounding.AwayFromZero);
-                item.GrangTotal = Math.Round(total + total / 100, 3, MidpointRounding.AwayFromZero);
+                var taxAmount = Math.Round((xinvoice.TaxableAmount * (xinvoice.TaxRate / 100)), 3, MidpointRounding.AwayFromZero);
+                xinvoice.TaxAmount = taxAmount;
+                xinvoice.GrandTotal = Math.Round((xinvoice.TaxableAmount + taxAmount), 3, MidpointRounding.AwayFromZero);
             }
 
-            item.AddDomainEvent(new InvoiceCreatedEvent(item));
-            _context.Invoices.Add(item);
-            await _context.SaveChangesAsync(cancellationToken);
+            var invoice = Mapper.FromDto(xinvoice);
+            // Save invoice and all related entities to database
+            _context.Invoices.Add(invoice);
+            // raise a update domain event
+            invoice.AddDomainEvent(new InvoiceUpdatedEvent(invoice));
 
-            return await Result<int>.SuccessAsync(item.Id);
-        }
-        else
-        {
-            return await Result<int>.FailureAsync(result.Errors);
-        }
+        return await _context.SaveChangesAsync(cancellationToken);
 
     }
-
-
-
-    private static async Task<Result<Invoice>> CreateCheckInvoice(IApplicationDbContext cnx, Invoice invoice,CancellationToken cancellationToken)
+    catch (Exception ex)
     {
-
-        List<ServiceLog> serviceLogs;
-
-        var customer = await cnx.Customers.Where(c => c.Id == invoice.CustomerId).FirstAsync(cancellationToken);
-
-        invoice.IsTaxable = customer.IsTaxable;
-
-        if (customer.BillingPlan == BillingPlan.Advanced && customer.ParentId is null)
-        {
-            //get invoice for all customers of a client
-            serviceLogs = await cnx.ServiceLogs
-                               .Include(s => s.Subscriptions)
-                               .Include(s => s.Customer).Where(s => s.SerDate <= invoice.InvDate)
-                               .ApplySpecification(new UnBilledCheckInvoiceByCustomerParentSpecification(invoice.CustomerId))
-                               .ToListAsync(cancellationToken);
-        }
-        else
-        {
-            //get invoice for customer
-            serviceLogs = await cnx.ServiceLogs
-                               .Include(s => s.Subscriptions)
-                               .Include(s => s.Customer).Where(s => s.SerDate <= invoice.InvDate)
-                               .ApplySpecification(new UnBilledCheckInvoiceByCustomerChildSpecification(invoice.CustomerId))
-                               .ToListAsync(cancellationToken);
-        }
-
-
-
-        foreach (var sl in serviceLogs)
-        {
-
-            invoice.InvoiceItems?.Add(new InvoiceItem
-            {
-
-                ServiceLogId = sl.Id,
-                Amount = sl.Amount
-            });
-            sl.IsBilled = true;
-            sl.AddDomainEvent(new ServiceLogUpdatedEvent(sl));
-
-        }
-
-        return await Result<Invoice>.SuccessAsync(invoice);
+        //await transaction.RollbackAsync(); // Rollback on error to maintain data consistency
+        //_logger.LogError(ex, $"Error generating invoice for customer {customerId}");
+        throw; // Re-throw exception for caller to handle
     }
-    private static async Task<Result<Invoice>> CreatePaymentInvoice(IApplicationDbContext cnx, Invoice invoice, CancellationToken cancellationToken)
-    {
-        List<ServiceLog> serviceLogs;
-
-        var customer = await cnx.Customers.Where(c => c.Id == invoice.CustomerId).FirstAsync(cancellationToken);
-
-        invoice.IsTaxable = customer.IsTaxable;
-
-        if (customer.BillingPlan == BillingPlan.Advanced && customer.ParentId is null)
-        {
-            //get invoice for all customers of a client
-            serviceLogs = await cnx.ServiceLogs
-                               .Include(s => s.Subscriptions)
-                               .Include(s => s.Customer).Where(s => s.SerDate <= invoice.InvDate)
-                               .ApplySpecification(new UnBilledPaymentInvoiceByCustomerParentSpecification(invoice.CustomerId))
-                               .ToListAsync(cancellationToken);
-        }
-        else
-        {
-            //get invoice for customer
-            serviceLogs = await cnx.ServiceLogs
-                               .Include(s => s.Subscriptions)
-                               .Include(s => s.Customer).Where(s => s.SerDate <= invoice.InvDate)
-                               .ApplySpecification(new UnBilledPaymentInvoiceByCustomerChildSpecification(invoice.CustomerId))
-                               .ToListAsync(cancellationToken);
-        }
+}
 
 
-        foreach (var sl in serviceLogs)
-        {
-            invoice.InvoiceItems?.Add(new InvoiceItem
-            {
-
-                ServiceLogId = sl.Id,
-                Amount = sl.Subscriptions is null ? sl.Amount : sl.Amount + sl.Subscriptions.Sum(s => s.Amount)
-            });
-            sl.IsBilled = true;
-            sl.AddDomainEvent(new ServiceLogUpdatedEvent(sl));
-        }
-
-        return await Result<Invoice>.SuccessAsync(invoice);
-    }
-    private static async Task<Result<Invoice>> CreateReplaceInvoice(IApplicationDbContext cnx, Invoice invoice, CancellationToken cancellationToken)
-    {
-        List<ServiceLog> serviceLogs;
-
-        var customer = await cnx.Customers.Where(c => c.Id == invoice.CustomerId).FirstAsync(cancellationToken);
-
-        invoice.IsTaxable = customer.IsTaxable;
-
-        if (customer.BillingPlan == BillingPlan.Advanced && customer.ParentId is null)
-        {
-            //get invoice for all customers of a client
-            serviceLogs = await cnx.ServiceLogs
-                               .Include(s => s.Subscriptions)
-                               .Include(s => s.Customer).Where(s => s.SerDate <= invoice.InvDate)
-                               .ApplySpecification(new UnBilledReplaceInvoiceByCustomerParentSpecification(invoice.CustomerId))
-                               .ToListAsync(cancellationToken);
-        }
-        else
-        {
-            //get invoice for customer
-            serviceLogs = await cnx.ServiceLogs
-                               .Include(s => s.Subscriptions)
-                               .Include(s => s.Customer).Where(s => s.SerDate <= invoice.InvDate)
-                               .ApplySpecification(new UnBilledReplaceInvoiceByCustomerChildSpecification(invoice.CustomerId))
-                               .ToListAsync(cancellationToken);
-        }
-
-        foreach (var sl in serviceLogs)
-        {
-
-            invoice.InvoiceItems?.Add(new InvoiceItem
-            {
-
-                ServiceLogId = sl.Id,
-                //ServiceLog = sl,
-                Amount = sl.Subscriptions is null ? sl.Amount : sl.Amount + sl.Subscriptions.Sum(s => s.Amount)
-            });
-            sl.IsBilled = true;
-            sl.AddDomainEvent(new ServiceLogUpdatedEvent(sl));
-
-        }
-        return await Result<Invoice>.SuccessAsync(invoice);
-    }
-    private static async Task<Result<Invoice>> CreateRenewInvoice(IApplicationDbContext cnx, Invoice invoice, CancellationToken cancellationToken)
-    {
-        List<ServiceLog> serviceLogs;
-
-        var customer = await cnx.Customers.Where(c => c.Id == invoice.CustomerId).FirstAsync(cancellationToken);
-
-        invoice.IsTaxable = customer.IsTaxable;
-
-        if (customer.BillingPlan == BillingPlan.Advanced && customer.ParentId is null)
-        {
-            //get invoice for all customers of a client
-            serviceLogs = await cnx.ServiceLogs
-                               .Include(s => s.Subscriptions)
-                               .Include(s => s.Customer).Where(s => s.SerDate <= invoice.InvDate)
-                               .ApplySpecification(new UnBilledRenewInvoiceByCustomerParentSpecification(invoice.CustomerId))
-                               .ToListAsync(cancellationToken);
-        }
-        else
-        {
-            //get invoice for customer
-            serviceLogs = await cnx.ServiceLogs
-                               .Include(s => s.Subscriptions)
-                               .Include(s => s.Customer).Where(s => s.SerDate <= invoice.InvDate)
-                               .ApplySpecification(new UnBilledRenewInvoiceByCustomerChildSpecification(invoice.CustomerId))
-                               .ToListAsync(cancellationToken);
-        }
-
-        foreach (var sl in serviceLogs)
-        {
-
-            invoice.InvoiceItems?.Add(new InvoiceItem
-            {
-
-                ServiceLogId = sl.Id,
-                //ServiceLog = sl,
-                Amount = sl.Subscriptions is null ? sl.Amount : sl.Amount + sl.Subscriptions.Sum(s => s.Amount)
-            });
-            sl.IsBilled = true;
-            sl.AddDomainEvent(new ServiceLogUpdatedEvent(sl));
-
-        }
-
-        return await Result<Invoice>.SuccessAsync(invoice);
-    }
-    private static async Task<Result<Invoice>> CreateSubscriptionInvoice(IApplicationDbContext cnx, Invoice invoice, CancellationToken cancellationToken)
-    {
-        List<ServiceLog> serviceLogs;
-
-        var customer = await cnx.Customers.Where(c => c.Id == invoice.CustomerId).FirstAsync(cancellationToken);
-
-        invoice.IsTaxable = customer.IsTaxable;
-
-        if (customer.BillingPlan == BillingPlan.Advanced && customer.ParentId is null)
-        {
-            //get invoice for all customers of a client
-            serviceLogs = await cnx.ServiceLogs
-                               .Include(s => s.Subscriptions)
-                               .Include(s => s.Customer).Where(s => s.SerDate <= invoice.InvDate)
-                               .ApplySpecification(new UnBilledSubscriptionInvoiceByCustomerParentSpecification(invoice.CustomerId))
-                               .ToListAsync(cancellationToken);
-        }
-        else
-        {
-            //get invoice for customer
-            serviceLogs = await cnx.ServiceLogs
-                               .Include(s => s.Subscriptions)
-                               .Include(s => s.Customer).Where(s => s.SerDate <= invoice.InvDate)
-                               .ApplySpecification(new UnBilledSubscriptionInvoiceByCustomerChildSpecification(invoice.CustomerId))
-                               .ToListAsync(cancellationToken);
-        }
-
-
-        foreach (var sl in serviceLogs)
-        {
-            invoice.InvoiceItems?.Add(new InvoiceItem
-            {
-                ServiceLogId = sl.Id,
-                Amount = sl.Subscriptions is null ? sl.Amount : sl.Amount + sl.Subscriptions.Sum(s => s.Amount)
-            });
-
-            sl.IsBilled = true;
-            sl.AddDomainEvent(new ServiceLogUpdatedEvent(sl));
-        }
-
-        return await Result<Invoice>.SuccessAsync(invoice);
-    }
-    private static async Task<Result<Invoice>> CreateSupportInvoice(IApplicationDbContext cnx, Invoice invoice, CancellationToken cancellationToken)
-    {
-        List<ServiceLog> serviceLogs;
-
-        var customer = await cnx.Customers.Where(c => c.Id == invoice.CustomerId).FirstAsync(cancellationToken);
-
-        invoice.IsTaxable = customer.IsTaxable;
-
-        if (customer.BillingPlan == BillingPlan.Advanced && customer.ParentId is null)
-        {
-            //get invoice for all customers of a client
-            serviceLogs = await cnx.ServiceLogs
-                               .Include(s => s.Subscriptions)
-                               .Include(s => s.Customer).Where(s => s.SerDate <= invoice.InvDate)
-                               .ApplySpecification(new UnBilledSupportInvoiceByCustomerParentSpecification(invoice.CustomerId))
-                               .ToListAsync(cancellationToken);
-        }
-        else
-        {
-            //get invoice for customer
-            serviceLogs = await cnx.ServiceLogs
-                               .Include(s => s.Subscriptions)
-                               .Include(s => s.Customer).Where(s => s.SerDate <= invoice.InvDate)
-                               .ApplySpecification(new UnBilledSupportInvoiceByCustomerChildSpecification(invoice.CustomerId))
-                               .ToListAsync(cancellationToken);
-        }
-
-        invoice.IsTaxable = customer.IsTaxable;
-
-        foreach (var sl in serviceLogs)
-        {
-
-            invoice.InvoiceItems?.Add(new InvoiceItem
-            {
-
-                ServiceLogId = sl.Id,
-                Amount = sl.Subscriptions is null ? sl.Amount : sl.Amount + sl.Subscriptions.Sum(s => s.Amount)
-            });
-            sl.IsBilled = true;
-            sl.AddDomainEvent(new ServiceLogUpdatedEvent(sl));
-        }
-
-        return await Result<Invoice>.SuccessAsync(invoice);
-    }
 }
 
 

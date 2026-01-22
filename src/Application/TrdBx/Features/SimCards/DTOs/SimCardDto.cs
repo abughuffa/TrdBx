@@ -1,10 +1,4 @@
-﻿using CleanArchitecture.Blazor.Application.Features.SimCards.Commands.AddEdit;
-using CleanArchitecture.Blazor.Application.Features.SimCards.Commands.Create;
-using CleanArchitecture.Blazor.Application.Features.SimCards.Commands.Update;
-using CleanArchitecture.Blazor.Domain.Entities;
-using CleanArchitecture.Blazor.Domain.Enums;
-using CleanArchitecture.Blazor.Domain.Enums;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿using CleanArchitecture.Blazor.Domain.Enums;
 
 namespace CleanArchitecture.Blazor.Application.Features.SimCards.DTOs;
 

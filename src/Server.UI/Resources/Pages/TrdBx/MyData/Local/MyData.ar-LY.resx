@@ -124,7 +124,7 @@
     <value>الاصول</value>
   </data>
   <data name="Assets, Sim Cards and Customers" xml:space="preserve">
-    <value>الأصول، الشرائح و الزبائن</value>
+    <value>الأصول، الشرائح والزبائن</value>
   </data>
   <data name="Basic Data" xml:space="preserve">
     <value>البيانات الأساسية</value>
@@ -147,8 +147,8 @@
   <data name="Service Logs" xml:space="preserve">
     <value>سجل الخدمات</value>
   </data>
-  <data name="Services Log, Subscriptions and Wialon Tasks" xml:space="preserve">
-    <value>سجل الخدمات، الاشتراكات و مهام المنصة</value>
+  <data name="Tracking Units, Services Log &amp; Subscriptions" xml:space="preserve">
+    <value>وحدات التتبع، سجل الخدمات ودورات الاشتراك</value>
   </data>
   <data name="Sim card Packages" xml:space="preserve">
     <value>باقات الشرائح</value>

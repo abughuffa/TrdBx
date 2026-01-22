@@ -1,6 +1,4 @@
 ﻿using CleanArchitecture.Blazor.Domain.Enums;
-using CleanArchitecture.Blazor.Domain.Entities;
-using CleanArchitecture.Blazor.Domain.Enums;
 
 namespace CleanArchitecture.Blazor.Application.Features.SimCards.Specifications;
 #nullable disable warnings

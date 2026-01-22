@@ -90,9 +90,11 @@ public class DeactivateTrackingUnitCommandHandler : SubscriptionSharedLogic, IRe
 
             var result = Deactivate(unit, serviceLog, request.TsDate, price, request.ApplyChangesToDatabase);
 
+            if (serviceLog.Subscriptions.Count == 0) serviceLog.IsDeserved = false;
+
             serviceLog.AddDomainEvent(new ServiceLogCreatedEvent(serviceLog));
 
-        _context.ServiceLogs.Add(serviceLog);
+           _context.ServiceLogs.Add(serviceLog);
 
             unit.AddDomainEvent(new TrackingUnitUpdatedEvent(unit));
 

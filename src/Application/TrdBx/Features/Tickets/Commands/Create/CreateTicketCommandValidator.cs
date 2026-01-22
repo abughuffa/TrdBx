@@ -1,5 +1,4 @@
 ﻿using CleanArchitecture.Blazor.Domain.Enums;
-using CleanArchitecture.Blazor.Domain.Enums;
 
 namespace CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Create;
 

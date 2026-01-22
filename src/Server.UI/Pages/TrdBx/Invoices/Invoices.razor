@@ -1,15 +1,14 @@
 ﻿@page "/pages/TrdBx/Invoices"
 
+@using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.AddPayment
+@using CleanArchitecture.Blazor.Application.Features.Invoices.Queries.Download
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Caching
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.Create
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.Delete
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.SetAsCanceled
-@using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.SetAsPaid
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.SetNextStatus
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.SetPreviousStatus
-@using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.Update
 @using CleanArchitecture.Blazor.Application.Features.Invoices.DTOs
-@using CleanArchitecture.Blazor.Application.Features.Invoices.Queries.Download
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Queries.Export
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Queries.Pagination
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Mappers
@@ -96,24 +95,23 @@
                     <MudMenu Icon="@Icons.Material.Filled.Edit" Variant="Variant.Filled" Size="Size.Small"
                     Dense="true"
                     EndIcon="@Icons.Material.Filled.KeyboardArrowDown" IconColor="Color.Info" AnchorOrigin="Origin.CenterLeft">
-
-                        @if (_canExport)
+                        @if (_canDownload)
+                        {
+                            <MudMenuItem OnClick="@(() => OnDownLoad(context.Item))">@ConstantString.Download</MudMenuItem>
+                        }
+                        @if (_canAddPayment)
+                        {
+                            <MudMenuItem OnClick="@(() => OnAddPayment(context.Item))">Add Payment</MudMenuItem>
+                        }
+                        @if (_canChangeStatus)
                         {
                             <MudMenuItem OnClick="@(()=>OnSetNextStatus(context.Item))">Next Status</MudMenuItem>
                         }
-                        @if (_canExport)
+                        @if (_canChangeStatus)
                         {
                             <MudMenuItem OnClick="@(()=>OnSetPreviousStatus(context.Item))">Previous Status</MudMenuItem>
                         }
-                        @if (_canExport)
-                        {
-                            <MudMenuItem OnClick="@(()=>OnDownLoad(context.Item))">@ConstantString.Download</MudMenuItem>
-                        }
-                        @if (_canEdit)
-                        {
-                            <MudMenuItem Disabled="@(!(context.Item.IStatus == IStatus.Draft))" OnClick="@(()=>OnEdit(context.Item))">@ConstantString.Edit</MudMenuItem>
-                        }
-                        }
+
                         @if (_canDelete)
                         {
                             <MudMenuItem OnClick="@(()=>OnDelete(context.Item))">@ConstantString.Delete</MudMenuItem>
@@ -132,16 +130,16 @@
                 }
             </CellTemplate>
         </TemplateColumn>
-        <PropertyColumn Property="x => x.InvNo" Title="@L[_currentDto.GetMemberDescription(x=>x.InvNo)]" />
+        <PropertyColumn Property="x => x.InvoiceNo" Title="@L[_currentDto.GetMemberDescription(x=>x.InvoiceNo)]" />
         <PropertyColumn Property="x => x.IStatus" Title="@L[_currentDto.GetMemberDescription(x=>x.IStatus)]" />
-        <PropertyColumn Property="x => x.InvDate" Title="@L[_currentDto.GetMemberDescription(x=>x.InvDate)]" />
+        <PropertyColumn Property="x => x.InvoiceDate" Title="@L[_currentDto.GetMemberDescription(x=>x.InvoiceDate)]" />
         <PropertyColumn Property="x => x.DueDate" Title="@L[_currentDto.GetMemberDescription(x=>x.DueDate)]" />
        @*  <PropertyColumn Property="x => x.CustomerId" Title="@L[_currentDto.GetMemberDescription(x=>x.CustomerId)]" /> *@
         <PropertyColumn Property="x => x.Customer" Title="@L[_currentDto.GetMemberDescription(x => x.Customer)]" />
-        <PropertyColumn Property="x => x.InvDesc" Title="@L[_currentDto.GetMemberDescription(x=>x.InvDesc)]" />
-        <PropertyColumn Property="x => x.Total" Title="@L[_currentDto.GetMemberDescription(x=>x.Total)]" />
-        <PropertyColumn Property="x => x.Taxes" Title="@L[_currentDto.GetMemberDescription(x=>x.Taxes)]" />
-        <PropertyColumn Property="x => x.GrangTotal" Title="@L[_currentDto.GetMemberDescription(x=>x.GrangTotal)]" />
+        <PropertyColumn Property="x => x.Description" Title="@L[_currentDto.GetMemberDescription(x=>x.Description)]" />
+@*         <PropertyColumn Property="x => x.TotalAmount" Title="@L[_currentDto.GetMemberDescription(x=>x.TotalAmount)]" />
+        <PropertyColumn Property="x => x.Taxes" Title="@L[_currentDto.GetMemberDescription(x=>x.Taxes)]" /> *@
+        <PropertyColumn Property="x => x.GrandTotal" Title="@L[_currentDto.GetMemberDescription(x=>x.GrandTotal)]" />
     </Columns>
     <NoRecordsContent>
         <MudText>@ConstantString.NoRecords</MudText>
@@ -157,10 +155,10 @@
 
 
 @code {
-    [CascadingParameter]
-    private Task<AuthenticationState> AuthState { get; set; } = default!;
-    [CascadingParameter]
-    private UserProfile? UserProfile { get; set; }
+
+
+    [CascadingParameter] public Task<AuthenticationState> AuthState { get; set; } = default!;
+    [CascadingParameter] public UserProfile? UserProfile { get; set; }
     public string? Title { get; private set; }
     private HashSet<InvoiceDto> _selectedItems = new();
     private MudDataGrid<InvoiceDto> _table = default!;
@@ -184,6 +182,10 @@
     private bool _canDelete;
     private bool _canExport;
 
+    private bool _canChangeStatus;
+    private bool _canAddPayment;
+    private bool _canDownload;
+
     protected override async Task OnInitializedAsync()
     {
         Title = L[_currentDto.GetClassDescription()];
@@ -193,6 +195,10 @@
         _canEdit = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.Edit)).Succeeded;
         _canDelete = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.Delete)).Succeeded;
         _canExport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.Export)).Succeeded;
+
+        _canChangeStatus = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.ChangeStatus)).Succeeded;
+        _canAddPayment = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.AddPayment)).Succeeded;
+        _canDownload = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.Download)).Succeeded;
     }
 
     private void ConditionChanged(string s)
@@ -249,10 +255,26 @@
 
     private Task OnView(InvoiceDto dto)
     {
-        Navigation.NavigateTo($"/pages/TrdBx/Invoices/{dto.Id}/view");
+        Navigation.NavigateTo($"/pages/TrdBx/Invoices{dto.Id}/details");
         return Task.CompletedTask;
     }
 
+
+    private Task OnAddPayment(InvoiceDto dto)
+    {
+
+        var command = new AddPaymentCommand() {Id = dto.Id };
+
+        return DialogServiceHelper.ShowFormDialogWithContentTextAsync<InvoiceAddPaymentFormDialog, AddPaymentCommand>(
+            string.Format(L["Add payment {0}"], dto.InvoiceNo),
+            L["Enter the amount of payment and Select Payment date."],
+            command,
+            async () =>
+            {
+                await _table.ReloadServerData();
+                _selectedItems.Clear();
+            });
+    }
     #region Curd
 
     private async Task OnCreate()
@@ -273,30 +295,11 @@
             _selectedItems.Clear();
         }
     }
-    private async Task OnEdit(InvoiceDto dto)
-    {
-        var title = L["Update Invoice"];
-        var command = Mapper.ToUpdateCommand(dto);
-        var parameters = new DialogParameters<InvoiceEditFormDialog>
-            {
-                { x=>x._model,command },
-            };
-        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
-        var dialog = DialogService.Show<InvoiceEditFormDialog>(title, parameters, options);
-        var state = await dialog.Result;
 
-        if (state != null && !state.Canceled)
-        {
-            await _table.ReloadServerData();
-            _selectedItems.Clear();
-        }
-
-
-    }
 
     private async Task OnDelete(InvoiceDto dto)
     {
-        var contentText = string.Format(ConstantString.DeleteConfirmation, dto.InvNo);
+        var contentText = string.Format(ConstantString.DeleteConfirmation, dto.InvoiceNo);
         var command = new DeleteInvoiceCommand(dto.Id);
         await DialogServiceHelper.ShowDeleteConfirmationDialogAsync(command, ConstantString.DeleteConfirmationTitle, contentText, async () =>
         {
@@ -339,42 +342,12 @@
         _exporting = false;
     }
     #endregion
-    // private Task OnCreate()
-    // {
-    //     var command = new CreateInvoiceCommand() {};
-    //     return DialogServiceHelper.ShowFormDialogAsync<InvoiceCreateFormDialog, CreateInvoiceCommand>(
-    //         L["Create Invoice"],
-    //        new DialogParameters<InvoiceCreateFormDialog>
-    //        {
-    //                         { x=>x._model,command}
-    //        },
-    //        async () =>
-    //        {
-    //            await _table.ReloadServerData();
-    //            _selectedItems.Clear();
-    //        });
-    // }
 
-    // private Task OnEdit(InvoiceDto dto)
-    // {
-    //     var command = Mapper.Map<UpdateInvoiceCommand>(dto);
-    //     return DialogServiceHelper.ShowFormDialogAsync<InvoiceEditFormDialog, UpdateInvoiceCommand>(
-    //        L["Update Invoice"],
-    //        new DialogParameters<InvoiceEditFormDialog>
-    //        {
-    //                         { x=>x._model,command}
-    //        },
-    //        async () =>
-    //        {
-    //            await _table.ReloadServerData();
-    //            _selectedItems.Clear();
-    //        });
-    // }
 
 
     private Task OnSetNextStatus(InvoiceDto dto)
     {
-        var contentText = string.Format(ConstantString.ExecuteConfirmation, " Set Next Status for Invoice ", dto.InvNo);
+        var contentText = string.Format(ConstantString.ExecuteConfirmation, " Set Next Status for Invoice ", dto.InvoiceNo);
         var command = new SetAsCanceledInvoiceCommand(dto.Id);
         return DialogServiceHelper.ShowExecuteConfirmationDialogAsync(command, ConstantString.ExecuteConfirmationTitle, contentText, async () =>
         {
@@ -388,7 +361,7 @@
 
     private Task OnSetPreviousStatus(InvoiceDto dto)
     {
-        var contentText = string.Format(ConstantString.ExecuteConfirmation, " Set Previous Status for Invoice ", dto.InvNo);
+        var contentText = string.Format(ConstantString.ExecuteConfirmation, " Set Previous Status for Invoice ", dto.InvoiceNo);
         var command = new SetAsCanceledInvoiceCommand(dto.Id);
         return DialogServiceHelper.ShowExecuteConfirmationDialogAsync(command, ConstantString.ExecuteConfirmationTitle, contentText, async () =>
         {
@@ -400,23 +373,10 @@
         });
     }
 
-    private Task OnSetAsPaid(InvoiceDto dto)
-    {
-        var contentText = string.Format(ConstantString.ExecuteConfirmation, " Set Invoice " + dto.InvNo, "as Paid");
-        var command = new SetAsCanceledInvoiceCommand(dto.Id);
-        return DialogServiceHelper.ShowExecuteConfirmationDialogAsync(command, ConstantString.ExecuteConfirmationTitle, contentText, async () =>
-        {
-            await InvokeAsync(async () =>
-            {
-                await _table.ReloadServerData();
-                _selectedItems.Clear();
-            });
-        });
-    }
 
     private Task OnSetAsCanceled(InvoiceDto dto)
     {
-        var contentText = string.Format(ConstantString.ExecuteConfirmation," Cancel Invoice", dto.InvNo);
+        var contentText = string.Format(ConstantString.ExecuteConfirmation, " Cancel Invoice", dto.InvoiceNo);
         var command = new SetAsCanceledInvoiceCommand(dto.Id);
 
         return DialogServiceHelper.ShowExecuteConfirmationDialogAsync(command, ConstantString.ExecuteConfirmationTitle, contentText, async () =>
@@ -428,68 +388,6 @@
             });
         });
     }
-
-
-
-    // private Task OnDelete(InvoiceDto dto)
-    // {
-    //     var contentText = string.Format(ConstantString.DeleteConfirmation, dto.InvNo);
-    //     var command = new DeleteInvoiceCommand(dto.Id);
-    //     return DialogServiceHelper.ShowDeleteConfirmationDialogAsync(
-    //         command,
-    //         ConstantString.DeleteConfirmationTitle,
-    //         contentText,
-    //         async () =>
-    //         {
-    //             await _table.ReloadServerData();
-    //             _selectedItems.Clear();
-    //         });
-    // }
-
-
-    // private async Task OnExport()
-    // {
-    //     _exporting = true;
-    //     var request = new ExportInvoicesQuery()
-    //         {
-
-    //              Keyword = Query.Keyword,
-    //             ListView = Query.ListView,
-    //             CustomerId = Query.CustomerId,
-    //             InvoiceType = Query.InvoiceType,
-    //             IStatus = Query.IStatus,
-    //             OrderBy = _table.SortDefinitions.Values.FirstOrDefault()?.SortBy ?? "InvNo",
-    //             SortDirection = _table.SortDefinitions.Values.FirstOrDefault()?.Descending ?? false
-    //                                         ? SortDirection.Descending.ToString()
-    //                                         : SortDirection.Ascending.ToString(),
-    //             CurrentUser = UserProfile,
-
-
-    //         };
-
-    //     var result = await Mediator.Send(request);
-    //     await result.MatchAsync(
-    //         async data =>
-    //         {
-    //             if (result.Data != null)
-    //             {
-    //                 await BlazorDownloadFileService.DownloadFileAsync($"{L[_currentDto.GetClassDescription()]}.xlsx", result.Data, contentType: "application/octet-stream");
-    //                 Snackbar.Add($"{ConstantString.ExportSuccess}", MudBlazor.Severity.Info);
-    //             }
-    //             else
-    //             {
-    //                 Snackbar.Add($"{ConstantString.ExecuteFail}", MudBlazor.Severity.Error);
-    //             }
-    //         },
-    //         errors =>
-    //         {
-    //             Snackbar.Add($"{errors}", MudBlazor.Severity.Error);
-    //             return Task.CompletedTask;
-    //         });
-    //     _exporting = false;
-
-
-    // }
 
 
     private async Task OnDownLoad(InvoiceDto dto)
@@ -502,7 +400,7 @@
 
         if (result.Succeeded)
         {
-            await BlazorDownloadFileService.DownloadFile($"{dto.InvNo}.pdf", result.Data, "application/octet-stream");
+            await BlazorDownloadFileService.DownloadFile($"{dto.InvoiceNo}.pdf", result.Data, "application/octet-stream");
             Snackbar.Add($"{ConstantString.ExportSuccess}", Severity.Info);
         }
         else

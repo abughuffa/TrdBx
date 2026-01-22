@@ -156,7 +156,7 @@ public class TransferTrackingUnitCommandHandler : SubscriptionSharedLogic, IRequ
         }
 
 
-        serviceLog.Amount += 0.0m;
+        //serviceLog.Amount += 0.0m;
 
         serviceLog.AddDomainEvent(new ServiceLogCreatedEvent(serviceLog));
 

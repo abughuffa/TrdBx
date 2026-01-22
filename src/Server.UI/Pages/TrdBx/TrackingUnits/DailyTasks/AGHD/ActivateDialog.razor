@@ -1,5 +1,4 @@
-﻿
-@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.ActivateTrackingUnit
+﻿@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.ActivateTrackingUnit
 
 
 
@@ -20,26 +19,26 @@
 
                 <MudItem md="12">
                     <MudDatePicker Class="pa-4"
-                    Editable @bind-Date="_date"
-                    For="@(() => _date)"
-                    Required="true"
-                    RequiredError="@L["TaskDate Is Required!"]" />
+                                   Editable @bind-Date="_date"
+                                   For="@(() => _date)"
+                                   Required="true"
+                                   RequiredError="@L["TaskDate Is Required!"]" />
                 </MudItem>
             </MudGrid>
         </MudForm>
     </DialogContent>
-    <DialogActions>   
+    <DialogActions>
         <MudLoadingButton Loading="@_submitting" OnClick="Submit">@ConstantString.Submit</MudLoadingButton>
         <MudButton OnClick="Cancel">@ConstantString.Cancel</MudButton>
     </DialogActions>
 </MudDialog>
 
-@code 
+@code
 {
     private MudForm? _form;
     private bool _submitting = false;
     [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;
-    [EditorRequired] [Parameter] public ActivateTrackingUnitCommand _model { get; set; } = default!;
+    [EditorRequired][Parameter] public ActivateTrackingUnitCommand _model { get; set; } = default!;
     [Parameter] public string? _contentText { get; set; } = default!;
 
     private DateTime? _date
@@ -81,4 +80,4 @@
 
     void Cancel() => MudDialog.Cancel();
 
-    }
+}

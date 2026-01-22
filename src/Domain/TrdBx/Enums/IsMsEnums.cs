@@ -120,13 +120,14 @@ public enum BillingPlan
 }
 public enum IStatus
 {
-    [Description("All")] All = 6, //just created invoice
-    [Description("Draft")] Draft = 0, //just created invoice
-    [Description("SentToTax")] SentToTax = 1, //invoice in tax process
-    [Description("Ready")] Ready = 2, //invoice retrived from taxes
-    [Description("Billed")] Billed = 3, //invoice sent to customer
-    [Description("Paid")] Paid = 4, //invoice paid
-    [Description("Canceled")] Canceled = 5 //invoice canceled
+    [Description("All")] All = 0, //just created invoice
+    [Description("Draft")] Draft = 1, //just created invoice
+    [Description("SentToTax")] SentToTax = 2, //invoice in tax process
+    [Description("Ready")] Ready = 3, //invoice retrived from taxes
+    [Description("Billed")] Billed = 4, //invoice sent to customer
+    [Description("Partailly Paid")] PartaillyPaid = 5, //invoice paid
+    [Description("Paid")] Paid = 6, //invoice paid
+    [Description("Canceled")] Canceled = 7 //invoice canceled
 }
 public enum InvoiceType
 {

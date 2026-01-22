@@ -1,8 +1,8 @@
 ﻿namespace CleanArchitecture.Blazor.Application.Features.Invoices.Commands.SetAsCanceled;
 
-public class SetAsCanceledInvoiceCommandValidator : AbstractValidator<SetAsCanceledInvoiceCommand>
+public class SetAsCanceledXInvoiceCommandValidator : AbstractValidator<SetAsCanceledInvoiceCommand>
 {
-    public SetAsCanceledInvoiceCommandValidator()
+    public SetAsCanceledXInvoiceCommandValidator()
     {
         RuleFor(v => v.Id).NotNull().GreaterThan(0);
     }

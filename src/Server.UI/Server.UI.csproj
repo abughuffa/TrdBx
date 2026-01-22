@@ -56,11 +56,8 @@
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Backups\" />
-      <Folder Include="Database\" />
       <Folder Include="log\" />
       <Folder Include="Resources\Pages\TrdBx\MyData\Online\" />
     </ItemGroup>
-   
-
 
 </Project>

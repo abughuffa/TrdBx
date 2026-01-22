@@ -1,6 +1,4 @@
-﻿using CleanArchitecture.Blazor.Domain.Entities;
-
-namespace CleanArchitecture.Blazor.Application.Features.Invoices.Specifications;
+﻿namespace CleanArchitecture.Blazor.Application.Features.Invoices.Specifications;
 
 /// <summary>
 /// Specification class for filtering Invoices by their ID.

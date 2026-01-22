@@ -16,12 +16,20 @@ public class SubscriptionConfiguration : IEntityTypeConfiguration<Subscription>
         builder.Property(t => t.SsDate).IsRequired();
         builder.Property(t => t.SeDate).IsRequired();
         builder.Property(t => t.DailyFees).IsRequired();
-        builder.Property(o => o.Days).HasComputedColumnSql($"{GetComputedColumnSql("postgresql")}", stored: true);
-        builder.Property(o => o.Amount).HasComputedColumnSql($"({GetComputedColumnSql("postgresql")}) * daily_fees", stored: true);
+        builder.Property(o => o.Days).HasComputedColumnSql($"{GetComputedDayColumn("postgresql")}", stored: true);
+        builder.Property(o => o.Amount).HasComputedColumnSql($"{GetComputedAmountColumn("postgresql")}", stored: true);
         builder.Ignore(e => e.DomainEvents);
+
+
+
+        //    .HasComputedColumnSql(null) // Not computed in DB
+        //.ValueGeneratedOnAddOrUpdate(); // Mark as computed;//.HasComputedColumnSql($"{GetComputedColumnSql("postgresql")}", stored: true);
+        //builder.Property(o => o.Amount).HasComputedColumnSql(null) // Not computed in DB
+        //.ValueGeneratedOnAddOrUpdate(); // Mark as computed//.HasComputedColumnSql($"({GetComputedColumnSql("postgresql")}) * daily_fees", stored: true);
+        //.HasComputedColumnSql(, stored: true);
     }
 
-    private string GetComputedColumnSql(string databaseProvider)
+    private string GetComputedDayColumn(string databaseProvider)
     {
 
         if (databaseProvider == "Sqlite")
@@ -30,11 +38,33 @@ public class SubscriptionConfiguration : IEntityTypeConfiguration<Subscription>
         }
         else if (databaseProvider == "postgresql")
         {
-            return "(Se_Date - Ss_Date) / 86400";
+           
+            return "\"se_date\" - \"ss_date\"";
         }
         else if (databaseProvider == "mssql")
         {
-            return "DATEDIFF(day, SsDate, SeDate)";
+            return "DATEDIFF(day, [SsDate], [SeDate])";
+        }
+        else
+        {
+            throw new NotSupportedException("This database provider is not supported.");
+        }
+    }
+
+    private string GetComputedAmountColumn(string databaseProvider)
+    {
+
+        if (databaseProvider == "Sqlite")
+        {
+            return "julianday(SeDate) - julianday(SsDate) * DailyFees";
+        }
+        else if (databaseProvider == "postgresql")
+        {
+            return "(\"se_date\" - \"ss_date\") * daily_fees";
+        }
+        else if (databaseProvider == "mssql")
+        {
+            return "DATEDIFF(day, [SsDate], [SeDate]) * DailyFees";
         }
         else
         {

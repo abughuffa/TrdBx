@@ -21,8 +21,8 @@ public partial class ApplicationDbContext
     public DbSet<Subscription> Subscriptions { get; set; }
     public DbSet<WialonTask> WialonTasks { get; set; }
     public DbSet<ServicePrice> ServicePrices { get; set; }
-    public DbSet<Invoice> Invoices { get; set; }
-    public DbSet<InvoiceItem> InvoiceItems { get; set; }
+    //public DbSet<Invoice> Invoices { get; set; }
+    //public DbSet<InvoiceItem> InvoiceItems { get; set; }
     public DbSet<Ticket> Tickets { get; set; }
     public DbSet<DeactivateTestCase> DeactivateTestCases { get; set; }
     public DbSet<ActivateTestCase> ActivateTestCases { get; set; }
@@ -32,6 +32,9 @@ public partial class ApplicationDbContext
     public DbSet<WialonUnit> WialonUnits { get; set; }
     #endregion
 
+    public DbSet<Invoice> Invoices { get; set; }
+    public DbSet<InvoiceItemGroup> InvoiceItemGroups { get; set; }
+    public DbSet<InvoiceItem> InvoiceItems { get; set; }
 
 
 
@@ -39,7 +42,6 @@ public partial class ApplicationDbContext
 
 
 
-    
 
 
 

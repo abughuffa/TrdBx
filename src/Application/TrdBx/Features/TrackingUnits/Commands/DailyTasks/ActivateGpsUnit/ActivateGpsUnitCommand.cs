@@ -1,5 +1,6 @@
 ﻿using CleanArchitecture.Blazor.Application.Features.Common;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Caching;
+using CleanArchitecture.Blazor.Domain.Entities;
 using CleanArchitecture.Blazor.Domain.Enums;
 
 
@@ -88,6 +89,8 @@ public class ActivateTrackingUnitCommandHandler : SubscriptionSharedLogic, IRequ
         };
 
         Activate(unit, serviceLog, request.TsDate, price, request.ApplyChangesToDatabase);
+
+        if (serviceLog.Subscriptions.Count == 0) serviceLog.IsDeserved = false;
 
         serviceLog.AddDomainEvent(new ServiceLogCreatedEvent(serviceLog));
 

@@ -12,216 +12,311 @@
 @using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Commands.Delete
 @using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Commands.Import
 @using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.DTOs
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Queries.Export
 @using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Queries.GetDataCounts
 @using MudBlazor.Utilities
 @inject IStringLocalizer<MyData> L
 <PageTitle>@Title</PageTitle>
 
 <MudContainer MaxWidth="MaxWidth.Large">
-    <div class="@ContentClassNames">
+
         <MudPaper Class="pa-4 mb-3">
+
+        <MudExpansionPanel 
+            style="border-radius: var(--mud-default-borderradius) !important;"
+                           Class="mud-elevation-25 pa-2 mb-3" Text=@L["All data"]>
+
+            <div class="lp-app-grid">
+                <MudPaper Class="py-4 px-6 rounded-lg d-flex align-center">
+
+
+                    <MudStack Row Spacing="3" Class="flex-grow-1" Justify="Justify.SpaceBetween">
+                        <MudItem xs="4" md="4">
+                            <MudStack AlignItems="AlignItems.Start">
+                                <MudFileUpload T="IBrowserFile" FilesChanged="OnImportData" Accept=".xlsx">
+                                    <ActivatorContent>
+                                        <MudLoadingButton Variant="Variant.Text"
+                                                          DropShadow="false"
+                                                          Loading="@_uploading"
+                                                          Color="Color.Info"
+                                                          StartIcon="@Icons.Material.Filled.Upload">
+                                            @L["Import All Data"]
+                                        </MudLoadingButton>
+                                    </ActivatorContent>
+                                </MudFileUpload>
+                            </MudStack>
+                        </MudItem>
+                        <MudItem xs="4" md="4">
+                            <MudStack AlignItems="AlignItems.End">
+                                <MudLoadingButton Variant="Variant.Text"
+                                                  DropShadow="false"
+                                                  Loading="@_exporting"
+                                                  OnClick="OnExportData"
+                                                  Color="Color.Success"
+                                                  StartIcon="@Icons.Material.Filled.Download">
+                                    @L["Export All Data"]
+                                </MudLoadingButton>
+                            </MudStack>
+                        </MudItem>
+                        <MudItem xs="4" md="4">
+                            <MudStack AlignItems="AlignItems.End">
+                                <MudLoadingButton Variant="Variant.Text"
+                                                  DropShadow="false"
+                                                  Loading="@_deleting"
+                                                  OnClick="OnDeleteData"
+                                                  Color="Color.Error"
+                                                  StartIcon="@Icons.Material.Filled.DeleteForever">
+                                    @L["Delete All Data"]
+                                </MudLoadingButton>
+                            </MudStack>
+                        </MudItem>
+                    </MudStack>
+                </MudPaper>
+            </div>
+
+        </MudExpansionPanel>
 
             <MudExpansionPanel
                                Style="border-radius: var(--mud-default-borderradius) !important;"
                                Class="mud-elevation-25 pa-2 mb-3" Text=@L["Basic Data"]>
 
                 <div class="lp-app-grid">
+
                     <MudPaper Class="py-4 px-6 rounded-lg d-flex align-center">
-                        <div class="flex-grow-1">
-                            <MudText Typo="Typo.h6">@L["Unit Models"]</MudText>
-                            <MudText Typo="Typo.h4">@_dataCount.TrackingUnitModels</MudText>
-                        </div>
-                        <div class="d-flex align-end justify-end mud-height-full py-8">
-                            <MudFileUpload T="IBrowserFile" FilesChanged="OnUnitModelsImport" Accept=".xlsx">
-                                <ActivatorContent>
-                                    <MudLoadingButton Class="pa-0 ma-0" Style="font-weight:400;text-transform:none;"
-                                                      Variant="Variant.Text"
-                                                      Loading="@_unitModelsUploading">
-                                        @ConstantString.Import
-                                    </MudLoadingButton>
-                                </ActivatorContent>
-                            </MudFileUpload>
-                        </div>
+                        <MudStack>
+                            <MudStack>
+                                <MudText Typo="Typo.h6">@L["GSM Service Providers"]</MudText>
+                            </MudStack>
+                        <MudStack Row Justify="Justify.SpaceBetween">
+                                <MudText Typo="Typo.h4">@_dataCount.SProviders</MudText>
+                                <MudFileUpload T="IBrowserFile" FilesChanged="OnSPackagesImport" Accept=".xlsx">
+                                    <ActivatorContent>
+                                        <MudLoadingButton Class="pa-0 ma-0"
+                                                          Style="font-weight:400;text-transform:none;"
+                                                          Variant="Variant.Text"
+                                                          Color="Color.Success"
+                                                          StartIcon="@Icons.Material.Filled.Upload"
+                                                          Loading="@_sprovidersUploading">
+                                            @ConstantString.Import
+                                        </MudLoadingButton>
+                                    </ActivatorContent>
+                                </MudFileUpload>
+                            </MudStack>
+                        </MudStack>
+
                     </MudPaper>
                     <MudPaper Class="py-4 px-6 rounded-lg d-flex align-center">
-                        <div class="flex-grow-1">
-                            <MudText Typo="Typo.h6">@L["GSM Service Providers"]</MudText>
-                            <MudText Typo="Typo.h4">@_dataCount.SProviders</MudText>
-                        </div>
-                        <div class="d-flex align-end justify-end mud-height-full py-8">
-                            <MudFileUpload T="IBrowserFile" FilesChanged="OnSProvidersImport" Accept=".xlsx">
-                                <ActivatorContent>
-                                    <MudLoadingButton Class="pa-0 ma-0" Style="font-weight:400;text-transform:none;"
-                                                      Variant="Variant.Text"
-                                                      Loading="@_sprovidersUploading">
-                                        @ConstantString.Import
-                                    </MudLoadingButton>
-                                </ActivatorContent>
-                            </MudFileUpload>
-                        </div>
+                    <MudStack Class="flex-grow-1">
+                            <MudStack>
+                                <MudText Typo="Typo.h6">@L["Sim card Packages"]</MudText>
+                            </MudStack>
+                        <MudStack Row Justify="Justify.SpaceBetween">
+                          
+                                <MudStack AlignItems="AlignItems.Start">
+                                    <MudText Typo="Typo.h4">@_dataCount.SPackages</MudText>
+                                </MudStack>
+                           
+                           
+                                <MudStack AlignItems="AlignItems.End">
+                                    <MudFileUpload T="IBrowserFile" FilesChanged="OnSPackagesImport" Accept=".xlsx">
+                                        <ActivatorContent>
+                                            <MudLoadingButton Class="pa-0 ma-0"
+                                                              Style="font-weight:400;text-transform:none;"
+                                                              Variant="Variant.Text"
+                                                              Color="Color.Success"
+                                                              StartIcon="@Icons.Material.Filled.Upload"
+                                                              Loading="@_unitModelsUploading">
+                                                @ConstantString.Import
+                                            </MudLoadingButton>
+                                        </ActivatorContent>
+                                    </MudFileUpload>
+                                </MudStack>
+                         
+                        </MudStack>
+                    </MudStack>
                     </MudPaper>
                     <MudPaper Class="py-4 px-6 rounded-lg d-flex align-center">
-                        <div class="flex-grow-1">
-                            <MudText Typo="Typo.h6">@L["Sim card Packages"]</MudText>
-                            <MudText Typo="Typo.h4">@_dataCount.SPackages</MudText>
-                        </div>
-                        <div class="d-flex align-end justify-end mud-height-full py-8">
-                            <MudFileUpload T="IBrowserFile" FilesChanged="OnSPackagesImport" Accept=".xlsx">
-                                <ActivatorContent>
-                                    <MudLoadingButton Class="pa-0 ma-0" Style="font-weight:400;text-transform:none;"
-                                                      Variant="Variant.Text"
-                                                      Loading="@_unitModelsUploading">
-                                        @ConstantString.Import
-                                    </MudLoadingButton>
-                                </ActivatorContent>
-                            </MudFileUpload>
-                        </div>
+                        <MudStack>
+                            <MudStack>
+                                <MudText Typo="Typo.h6">@L["Unit Models"]</MudText>
+                            </MudStack>
+                        <MudStack Row Justify="Justify.SpaceBetween">
+                                <MudText Typo="Typo.h4">@_dataCount.TrackingUnitModels</MudText>
+                                <MudFileUpload T="IBrowserFile" FilesChanged="OnUnitModelsImport" Accept=".xlsx">
+                                    <ActivatorContent>
+                                        <MudLoadingButton Class="pa-0 ma-0"
+                                                          Style="font-weight:400;text-transform:none;"
+                                                          Variant="Variant.Text"
+                                                          Color="Color.Success"
+                                                          StartIcon="@Icons.Material.Filled.Upload"
+                                            Loading="@_unitModelsUploading">
+                                            @ConstantString.Import
+                                        </MudLoadingButton>
+                                    </ActivatorContent>
+                                </MudFileUpload>
+                            </MudStack>
+                        </MudStack>
+
                     </MudPaper>
+
                 </div>
 
             </MudExpansionPanel>
        
-            <MudExpansionPanel Style="border-radius: var(--mud-default-borderradius) !important;"
+            <MudExpansionPanel 
+                Style="border-radius: var(--mud-default-borderradius) !important;"
                                Class="mud-elevation-25 pa-2 mb-3" Text=@L["Assets, Sim Cards and Customers"]>
 
                 <div class="lp-app-grid">
                     <MudPaper Class="py-4 px-6 rounded-lg d-flex align-center">
-                        <div class="flex-grow-1">
-                            <MudText Typo="Typo.h6">@L["Assets"]</MudText>
-                            <MudText Typo="Typo.h4">@_dataCount.TrackedAssets</MudText>
-                        </div>
-                        <div class="d-flex align-end justify-end mud-height-full py-8">
-                            <MudFileUpload T="IBrowserFile" FilesChanged="OnAssetsImport" Accept=".xlsx">
-                                <ActivatorContent>
-                                    <MudLoadingButton Class="pa-0 ma-0" Style="font-weight:400;text-transform:none;"
-                                                      Variant="Variant.Text"
-                                                      Loading="@_assetsUploading">
-                                        @ConstantString.Import
-                                    </MudLoadingButton>
-                                </ActivatorContent>
-                            </MudFileUpload>
-                        </div>
+                        <MudStack>
+                            <MudStack>
+                                <MudText Typo="Typo.h6">@L["Assets"]</MudText>
+                            </MudStack>
+                            <MudStack Row>
+                                <MudText Typo="Typo.h4">@_dataCount.TrackedAssets</MudText>
+                                <MudFileUpload T="IBrowserFile" FilesChanged="OnAssetsImport" Accept=".xlsx">
+                                    <ActivatorContent>
+                                        <MudLoadingButton Class="pa-0 ma-0"
+                                                          Style="font-weight:400;text-transform:none;"
+                                                          Variant="Variant.Text"
+                                                          Color="Color.Success"
+                                                          StartIcon="@Icons.Material.Filled.Upload"
+                                                          Loading="@_assetsUploading">
+                                            @ConstantString.Import
+                                        </MudLoadingButton>
+                                    </ActivatorContent>
+                                </MudFileUpload>
+                            </MudStack>
+                        </MudStack>
+
                     </MudPaper>
                     <MudPaper Class="py-4 px-6 rounded-lg d-flex align-center">
-                        <div class="flex-grow-1">
-                            <MudText Typo="Typo.h6">@L["Sim cards"]</MudText>
-                            <MudText Typo="Typo.h4">@_dataCount.SimCards</MudText>
-                        </div>
-                        <div class="d-flex align-end justify-end mud-height-full py-8">
-                            <MudFileUpload T="IBrowserFile" FilesChanged="OnSimCardsImport" Accept=".xlsx">
-                                <ActivatorContent>
-                                    <MudLoadingButton Class="pa-0 ma-0" Style="font-weight:400;text-transform:none;"
-                                                      Variant="Variant.Text"
-                                                      Loading="@_simcardsUploading">
-                                        @ConstantString.Import
-                                    </MudLoadingButton>
-                                </ActivatorContent>
-                            </MudFileUpload>
-                        </div>
+                        <MudStack>
+                            <MudStack>
+                                <MudText Typo="Typo.h6">@L["Customers"]</MudText>
+                            </MudStack>
+                            <MudStack Row>
+                                <MudStack>
+                                    <MudText Typo="Typo.h4">@_dataCount.ParentCustomer</MudText>
+                                    <MudText Typo="Typo.h4">@_dataCount.ChildCustomers</MudText>
+                                </MudStack>
+                                <MudFileUpload T="IBrowserFile" FilesChanged="OnCustomersImport" Accept=".xlsx">
+                                    <ActivatorContent>
+                                        <MudLoadingButton Class="pa-0 ma-0"
+                                                          Style="font-weight:400;text-transform:none;"
+                                                          Variant="Variant.Text"
+                                                          Color="Color.Success"
+                                                          StartIcon="@Icons.Material.Filled.Upload"
+                                            Loading="@_customersUploading">
+                                            @ConstantString.Import
+                                        </MudLoadingButton>
+                                    </ActivatorContent>
+                                </MudFileUpload>
+                            </MudStack>
+                        </MudStack>
+
                     </MudPaper>
                     <MudPaper Class="py-4 px-6 rounded-lg d-flex align-center">
-                        <div class="flex-grow-1">
-                            <MudText Typo="Typo.h6">@L["Customers"]</MudText>
-                            <MudText Typo="Typo.h4">@_dataCount.ParentCustomer</MudText>
-                            <MudText Typo="Typo.h4">@_dataCount.ChildCustomers</MudText>
-                        </div>
-                        <div class="d-flex align-end justify-end mud-height-full py-8">
-                            <MudFileUpload T="IBrowserFile" FilesChanged="OnCustomersImport" Accept=".xlsx">
-                                <ActivatorContent>
-                                    <MudLoadingButton Class="pa-0 ma-0" Style="font-weight:400;text-transform:none;"
-                                                      Variant="Variant.Text"
-                                                      Loading="@_customersUploading">
-                                        @ConstantString.Import
-                                    </MudLoadingButton>
-                                </ActivatorContent>
-                            </MudFileUpload>
-                        </div>
+                        <MudStack>
+                            <MudStack>
+                                <MudText Typo="Typo.h6">@L["Sim cards"]</MudText>
+                            </MudStack>
+                            <MudStack Row>
+                                <MudText Typo="Typo.h4">@_dataCount.SimCards</MudText>
+                                <MudFileUpload T="IBrowserFile" FilesChanged="OnSimCardsImport" Accept=".xlsx">
+                                    <ActivatorContent>
+                                        <MudLoadingButton Class="pa-0 ma-0" 
+                                                          Style="font-weight:400;text-transform:none;"
+                                                          Variant="Variant.Text"
+                                                          Color="Color.Success"
+                                                          StartIcon="@Icons.Material.Filled.Upload"
+                                                          Loading="@_simcardsUploading">
+                                            @ConstantString.Import
+                                        </MudLoadingButton>
+                                    </ActivatorContent>
+                                </MudFileUpload>
+                            </MudStack>
+                        </MudStack>
+
                     </MudPaper>
                 </div>
 
             </MudExpansionPanel>
-         
-           
-            <MudExpansionPanel Style="border-radius: var(--mud-default-borderradius) !important;"
-                               Class="mud-elevation-25 pa-2 mb-3" Text=@L["Tracking Units"]>
+
+            <MudExpansionPanel 
+                Style="border-radius: var(--mud-default-borderradius) !important;"
+                               Class="mud-elevation-25 pa-2 mb-3" Text=@L["Tracking Units, Services Log & Subscriptions"]>
 
                 <div class="lp-app-grid">
                     <MudPaper Class="py-4 px-6 rounded-lg d-flex align-center">
-                        <div class="flex-grow-1">
-                            <MudText Typo="Typo.h6">@L["Tracking Units"]</MudText>
-                            <MudText Typo="Typo.h4">@_dataCount.TrackingUnits</MudText>
-                        </div>
-                        <div class="d-flex align-end justify-end mud-height-full py-8">
-                            <MudFileUpload T="IBrowserFile" FilesChanged="OnUnitsImport" Accept=".xlsx">
-                                <ActivatorContent>
-                                    <MudLoadingButton Class="pa-0 ma-0" Style="font-weight:400;text-transform:none;"
-                                                      Variant="Variant.Text"
-                                                      Loading="@_unitsUploading">
-                                        @ConstantString.Import
-                                    </MudLoadingButton>
-                                </ActivatorContent>
-                            </MudFileUpload>
-                        </div>
-                    </MudPaper>
-                </div>
+                        <MudStack>
+                            <MudStack>
+                                <MudText Typo="Typo.h6">@L["Tracking Units"]</MudText>
+                            </MudStack>
+                            <MudStack Row>
+                                <MudText Typo="Typo.h4">@_dataCount.TrackingUnits</MudText>
+                                <MudFileUpload T="IBrowserFile" FilesChanged="OnUnitsImport" Accept=".xlsx">
+                                    <ActivatorContent>
+                                        <MudLoadingButton Class="pa-0 ma-0"
+                                                          Style="font-weight:400;text-transform:none;"
+                                                          Variant="Variant.Text"
+                                                          Color="Color.Success"
+                                                          StartIcon="@Icons.Material.Filled.Upload"
+                                            Loading="@_unitsUploading">
+                                            @ConstantString.Import
+                                        </MudLoadingButton>
+                                    </ActivatorContent>
+                                </MudFileUpload>
+                            </MudStack>
+                        </MudStack>
 
-            </MudExpansionPanel>
-          
-          
-            <MudExpansionPanel Style="border-radius: var(--mud-default-borderradius) !important;"
-                               Class="mud-elevation-25 pa-2 mb-3" Text=@L["Services Log, Subscriptions and Wialon Tasks"]>
-
-                <div class="lp-app-grid">
-                    <MudPaper Class="py-4 px-6 rounded-lg d-flex align-center">
-                        <div class="flex-grow-1">
-                            <MudText Typo="Typo.h6">@L["Service Logs"]</MudText>
-                            <MudText Typo="Typo.h4">@_dataCount.ServiceLogs</MudText>
-                        </div>
-                        <div class="d-flex align-end justify-end mud-height-full py-8">
-                            <MudFileUpload T="IBrowserFile" FilesChanged="OnServiceLogsImport" Accept=".xlsx">
-                                <ActivatorContent>
-                                    <MudLoadingButton Class="pa-0 ma-0" Style="font-weight:400;text-transform:none;"
-                                                      Variant="Variant.Text"
-                                                      Loading="@_servicelogsUploading">
-                                        @ConstantString.Import
-                                    </MudLoadingButton>
-                                </ActivatorContent>
-                            </MudFileUpload>
-                        </div>
                     </MudPaper>
                     <MudPaper Class="py-4 px-6 rounded-lg d-flex align-center">
-                        <div class="flex-grow-1">
+                        <MudStack>
+                            <MudStack>
+                                <MudText Typo="Typo.h6">@L["Service Logs"]</MudText>
+                            </MudStack>
+                            <MudStack Row>
+                                <MudText Typo="Typo.h4">@_dataCount.ServiceLogs</MudText>
+                                <MudFileUpload T="IBrowserFile" FilesChanged="OnServiceLogsImport" Accept=".xlsx">
+                                    <ActivatorContent>
+                                        <MudLoadingButton Class="pa-0 ma-0"
+                                                          Style="font-weight:400;text-transform:none;"
+                                                          Variant="Variant.Text"
+                                                          Color="Color.Success"
+                                                          StartIcon="@Icons.Material.Filled.Upload"
+                                                          Loading="@_servicelogsUploading">
+                                            @ConstantString.Import
+                                        </MudLoadingButton>
+                                    </ActivatorContent>
+                                </MudFileUpload>
+                            </MudStack>
+                        </MudStack>
+
+                    </MudPaper>
+                    <MudPaper Class="py-4 px-6 rounded-lg d-flex align-center">
+                        <MudStack>
+                         <MudStack>
                             <MudText Typo="Typo.h6">@L["Subscriptions"]</MudText>
+                            </MudStack>
+                            <MudStack Row>
                             <MudText Typo="Typo.h4">@_dataCount.Subscriptions</MudText>
-                        </div>
-                        <div class="d-flex align-end justify-end mud-height-full py-8">
                             <MudFileUpload T="IBrowserFile" FilesChanged="OnSubscriptionsImport" Accept=".xlsx">
                                 <ActivatorContent>
-                                    <MudLoadingButton Class="pa-0 ma-0" Style="font-weight:400;text-transform:none;"
-                                                      Variant="Variant.Text"
+                                        <MudLoadingButton Class="pa-0 ma-0"
+                                                          Style="font-weight:400;text-transform:none;"
+                                                          Variant="Variant.Text"
+                                                          Color="Color.Success"
+                                                          StartIcon="@Icons.Material.Filled.Upload"
                                                       Loading="@_subscriptionsUploading">
                                         @ConstantString.Import
                                     </MudLoadingButton>
                                 </ActivatorContent>
                             </MudFileUpload>
-                        </div>
-                    </MudPaper>
-                    <MudPaper Class="py-4 px-6 rounded-lg d-flex align-center">
-                        <div class="flex-grow-1">
-                            <MudText Typo="Typo.h6">@L["Wialon Tasks"]</MudText>
-                            <MudText Typo="Typo.h4">@_dataCount.WialonTasks</MudText>
-                        </div>
-                        <div class="d-flex align-end justify-end mud-height-full py-8">
-                            <MudFileUpload T="IBrowserFile" FilesChanged="OnWialonTasksImport" Accept=".xlsx">
-                                <ActivatorContent>
-                                    <MudLoadingButton Class="pa-0 ma-0" Style="font-weight:400;text-transform:none;"
-                                                      Variant="Variant.Text"
-                                                      Loading="@_wialontasksUploading">
-                                        @ConstantString.Import
-                                    </MudLoadingButton>
-                                </ActivatorContent>
-                            </MudFileUpload>
-                        </div>
+                            </MudStack>
+                        </MudStack>
+
                     </MudPaper>
                 </div>
 
@@ -229,42 +324,10 @@
 
             
 
-            <MudExpansionPanel Style="border-radius: var(--mud-default-borderradius) !important;"
-                               Class="mud-elevation-25 pa-2 mb-3" Text=@L["All data"]>
 
-                <div class="lp-app-grid">
-                    <MudPaper Class="py-4 px-6 rounded-lg d-flex align-center">
-
-                        <div class="d-flex align-end justify-center mud-height-full py-8">
-                            <MudLoadingButton Color="Color.Primary" 
-                            DropShadow="false" 
-                            Loading="@_deleting" 
-                            OnClick="OnDeleteData">
-                            @L["Delete All Data"]
-                            </MudLoadingButton>
-                        </div>
-                      
-                        
-
-                        <div class="d-flex align-end justify-center mud-height-full py-8">
-
-                            <MudFileUpload T="IBrowserFile" FilesChanged="OnImportData" Accept=".xlsx">
-                                <ActivatorContent>
-                                    <MudLoadingButton Class="pa-0 ma-0" Style="font-weight:400;text-transform:none;"
-                                                      Variant="Variant.Text"
-                                                      Loading="@_uploading">
-                                        @L["Import All Data"]
-                                    </MudLoadingButton>
-                                </ActivatorContent>
-                            </MudFileUpload>
-                        </div>
-                    </MudPaper>
-                </div>
-
-            </MudExpansionPanel>
         </MudPaper>
 
-    </div>
+
 
 </MudContainer>
 
@@ -283,6 +346,8 @@
     private Task<AuthenticationState> AuthState { get; set; } = default!;
     [CascadingParameter]
     private UserProfile? UserProfile { get; set; }
+    [Inject]
+    private IBlazorDownloadFileService BlazorDownloadFileService { get; set; } = null!;
     public string? Title { get; private set; }
 
     private DataCountDto _dataCount = new();
@@ -293,6 +358,7 @@
     private bool _loading;
 
     private bool _deleting = false;
+    private bool _exporting = false;
     private bool _uploading = false;
 
     private bool _unitModelsUploading = false;
@@ -339,18 +405,6 @@
             var result = await Mediator.Send(Query).ConfigureAwait(false);
             _dataCount = result.Data;
 
-            // result.Match(
-            //     data =>
-            //     {
-            //         Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
-            //         return data;
-            //     },
-            //     errors =>
-            //     {
-            //         Snackbar.Add(errors, MudBlazor.Severity.Error);
-            //         return -1;
-            //     });
-
         }
         catch (OperationCanceledException)
         {
@@ -358,11 +412,7 @@
         }
         catch (Exception ex)
         {
-            // Console.WriteLine($"Error loading data: {ex.Message}");
-            // _originalTable = new List<ChartDto>();
-            // _filteredTable = new List<ChartDto>();
-            // _currentImpulse = null;
-            // await ShowNotification($"Error loading data: {ex.Message}", Severity.Error);
+
         }
         finally
         {
@@ -371,6 +421,10 @@
         }
     }
 
+    private async Task OnRefreash()
+    {
+        await LoadDataAsync();
+    }
 
     private async Task OnDeleteData()
     {
@@ -389,14 +443,12 @@
             _deleting = false;
         }
     }
-
-
     private async Task OnImportData(IBrowserFile file)
     {
         _uploading = true;
         // Read the stream here, for example into a MemoryStream or process it.
         var memoryStream = new MemoryStream();
-        await file.OpenReadStream(maxAllowedSize: 3145728).CopyToAsync(memoryStream);
+        await file.OpenReadStream(maxAllowedSize: 5242880).CopyToAsync(memoryStream);
         var command = new ImportDataCommand(file.Name, memoryStream.ToArray(), Mediator);
         var result = await Mediator.Send(command);
         if (result.Succeeded)
@@ -406,6 +458,36 @@
         _uploading = false;
 
     }
+    private async Task OnExportData()
+    {
+        try
+        {
+            _exporting = true;
+            var model = new ExportDataQuery();
+            var result = await Mediator.Send(model);
+
+
+            await result.MatchAsync<byte[]>(
+        async data =>
+        {
+            var downloadresult = await BlazorDownloadFileService.DownloadFile($"{L["AllTrdBxData"]}.xlsx", result.Data, contentType: "application/octet-stream");
+            Snackbar.Add($"{ConstantString.ExportSuccess}", MudBlazor.Severity.Info);
+            return data;
+        },
+        errors =>
+        {
+            Snackbar.Add($"{errors}", MudBlazor.Severity.Error);
+            return Task.FromResult(Array.Empty<byte>());
+        });
+
+        }
+        finally
+        {
+            _exporting = false;
+        }
+    }
+
+    
 
     private async Task OnUnitModelsImport(IBrowserFile file)
     {
@@ -428,7 +510,6 @@
         }
         _unitModelsUploading = false;
     }
-
     private async Task OnSProvidersImport(IBrowserFile file)
     {
         _sprovidersUploading = true;
@@ -450,7 +531,6 @@
         }
         _sprovidersUploading = false;
     }
-
     private async Task OnSPackagesImport(IBrowserFile file)
     {
         _spackagesUploading = true;
@@ -472,8 +552,6 @@
         }
         _spackagesUploading = false;
     }
-
-
     private async Task OnAssetsImport(IBrowserFile file)
     {
         _assetsUploading = true;
@@ -495,7 +573,6 @@
         }
         _assetsUploading = false;
     }
-
     private async Task OnSimCardsImport(IBrowserFile file)
     {
         _simcardsUploading = true;
@@ -517,7 +594,6 @@
         }
         _simcardsUploading = false;
     }
-
     private async Task OnCustomersImport(IBrowserFile file)
     {
         _customersUploading = true;
@@ -539,7 +615,6 @@
         }
         _customersUploading = false;
     }
-
     private async Task OnUnitsImport(IBrowserFile file)
     {
         _unitsUploading = true;
@@ -561,7 +636,6 @@
         }
         _unitsUploading = false;
     }
-
     private async Task OnServiceLogsImport(IBrowserFile file)
     {
         _servicelogsUploading = true;

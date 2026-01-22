@@ -44,6 +44,14 @@
                         RequiredError="@L["Invoice Date is required!"]" />
                     </MudItem>
 
+                <MudItem md="6">
+                    <MudTextField Label="@L[_model.GetMemberDescription(x => x.TaxRate)]" @bind-Value="_model.TaxRate" For="@(() => _model.TaxRate)" Required="true" RequiredError="@L["TaxRate is required!"]" />
+                </MudItem>
+
+                <MudItem md="6">
+                    <MudTextField Label="@L[_model.GetMemberDescription(x => x.DiscountRate)]" @bind-Value="_model.DiscountRate" For="@(() => _model.DiscountRate)" Required="true" RequiredError="@L["DiscountRate is required!"]" />
+                </MudItem>
+
                     <MudItem md="12">
                         <MudCheckBox Label="@L["Ignore Taxes even if it was required!"]"
                         For="@(() => _model.IgnoreTaxes)"
@@ -64,7 +72,7 @@
 @code {
 
     [CascadingParameter] IMudDialogInstance MudDialog { get; set; } = default!;
-    [EditorRequired][Parameter] public CreateInvoiceCommand _model { get; set; } = null!;
+    [EditorRequired][Parameter] public CreateInvoiceCommand _model { get; set; } = null;
     [EditorRequired][Parameter] public EventCallback<string> OnConditionChanged { get; set; }
 
     MudForm _contactForm = new();
@@ -88,12 +96,12 @@
     }
     private DateTime? _date
     {
-        get => _model.InvDate.ToDateTime(TimeOnly.MinValue);
+        get => _model.InvoiceDate.ToDateTime(TimeOnly.MinValue);
         set
         {
             if (value is not null)
             {
-                _model.InvDate = DateOnly.FromDateTime((DateTime)value);
+                _model.InvoiceDate = DateOnly.FromDateTime((DateTime)value);
             }
         }
     }

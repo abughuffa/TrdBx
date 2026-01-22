@@ -38,17 +38,17 @@ public class GetDataCountsQueryHandler :
         var datacount =
             new DataCountDto
             {
-                SProviders = await _context.SProviders.CountAsync(),
-                SPackages = await _context.SPackages.CountAsync(),
-                TrackingUnitModels = await _context.TrackingUnitModels.CountAsync(),
-                SimCards = await _context.SimCards.CountAsync(),
-                ParentCustomer = await _context.Customers.CountAsync(x => x.ParentId == null),
-                ChildCustomers = await _context.Customers.CountAsync(x => x.ParentId != null),
-                TrackedAssets = await _context.TrackedAssets.CountAsync(),
-                TrackingUnits = await _context.TrackingUnits.CountAsync(),
-                ServiceLogs = await _context.ServiceLogs.CountAsync(),
-                Subscriptions = await _context.Subscriptions.CountAsync(),
-                WialonTasks = await _context.WialonTasks.CountAsync(),
+                SProviders = _context.SProviders.Count(),
+                SPackages =  _context.SPackages.Count(),
+                TrackingUnitModels =  _context.TrackingUnitModels.Count(),
+                SimCards =  _context.SimCards.Count(),
+                ParentCustomer =  _context.Customers.Count(x => x.ParentId == null),
+                ChildCustomers =  _context.Customers.Count(x => x.ParentId != null),
+                TrackedAssets =  _context.TrackedAssets.Count(),
+                TrackingUnits =  _context.TrackingUnits.Count(),
+                ServiceLogs =  _context.ServiceLogs.Count(),
+                Subscriptions =  _context.Subscriptions.Count(),
+                WialonTasks =  _context.WialonTasks.Count(),
             };
 
             return await Result<DataCountDto>.SuccessAsync(datacount);

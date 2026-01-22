@@ -16,7 +16,7 @@ public class MenuService : IMenuService
             }, 
         },
 
-        ShipmentDeliveryMenu.ShipmentDeliveryMenuSection,
+        //ShipmentDeliveryMenu.ShipmentDeliveryMenuSection,
 
         TrdBxMenu.TrdBxMenuSection,
 
