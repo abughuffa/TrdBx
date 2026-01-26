@@ -16,14 +16,14 @@ public class InvoiceLogic
         {
             // Convert service log to invoice item group with proper serial index
             var itemGroup = await CreateInvoiceItemGroupAsync(serviceLog, groupSerialIndex++);
-            invoice.ItemGroups.Add(itemGroup); // Add group to invoice
+            invoice.InvoiceItemGroups.Add(itemGroup); // Add group to invoice
 
             // Mark service log as billed since it's now included in invoice
             serviceLog.IsBilled = true;
         }
 
         // Calculate total invoice Total by summing all group subtotals
-        invoice.Total = invoice.ItemGroups.Sum(ig => ig.SubTotal);
+        invoice.Total = invoice.InvoiceItemGroups.Sum(ig => ig.SubTotal);
     }
 
     public static async Task<InvoiceItemGroupDto> CreateInvoiceItemGroupAsync(ServiceLog serviceLog, int serialIndex)
@@ -41,7 +41,7 @@ public class InvoiceLogic
             Description = serviceLog.Desc, // Copy description
             Amount = serviceLog.Amount,
             SubTotal = 0.0m,
-            Items = new()
+            InvoiceItems = new()
         };
 
 
@@ -51,7 +51,7 @@ public class InvoiceLogic
         {
             // Convert Sub to invoice item
             var invoiceItem = await CreateInvoiceItemAsync(subscription, itemSubSerialIndex++);
-            itemGroup.Items.Add(invoiceItem); // Add item to group
+            itemGroup.InvoiceItems.Add(invoiceItem); // Add item to group
             subsTotal += (decimal)invoiceItem.Amount; // Accumulate Sub amounts
         }
 

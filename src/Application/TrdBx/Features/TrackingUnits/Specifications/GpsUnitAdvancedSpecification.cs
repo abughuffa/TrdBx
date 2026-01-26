@@ -15,7 +15,8 @@ public class TrackingUnitAdvancedSpecification : Specification<TrackingUnit>
         var last30daysrange = today.GetDateRange(TrackingUnitListView.LAST_30_DAYS.ToString(),filter.LocalTimezoneOffset);
 
         Query.Where(q => q.SNo != null)
-             .Where(filter.Keyword,!string.IsNullOrEmpty(filter.Keyword))
+             .Where(filter.Keyword, !string.IsNullOrEmpty(filter.Keyword))
+             //.Where(q => q.SNo.Contains(filter.Keyword) || q.SimCard.SimCardNo!.Contains(filter.Keyword), !string.IsNullOrEmpty(filter.Keyword))
              .Where(x => x.CustomerId.Equals(filter.CustomerId), !(filter.CustomerId.Equals(0) || filter.CustomerId.Equals(null)))
              .Where(x => x.UStatus == filter.UStatus, !filter.UStatus.Equals(UStatus.All))
              .Where(x => x.Created >= todayrange.Start && x.Created < todayrange.End.AddDays(1), filter.ListView == TrackingUnitListView.TODAY)

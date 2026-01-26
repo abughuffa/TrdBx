@@ -87,7 +87,7 @@ public class CreateInvoiceCommandHandler : SerialForSharedLogic, IRequestHandler
             DueDate = request.InvoiceDate.AddDays(30),
             InvoiceNo = invoiceNo, // Generate unique invoice number
             IStatus = IStatus.Draft, // Default status for new invoices
-            ItemGroups = []
+            InvoiceItemGroups = []
         };
 
         switch (request.InvoiceType)

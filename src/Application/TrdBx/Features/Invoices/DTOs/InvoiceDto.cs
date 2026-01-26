@@ -55,7 +55,7 @@ public class InvoiceDto
 
     //[Description("Customer")] public string? Customer { get; set; }
 
-    public List<InvoiceItemGroupDto>? ItemGroups { get; set; } = null;
+    public List<InvoiceItemGroupDto>? InvoiceItemGroups { get; set; } = null;
 
     //private class Mapping : Profile
     //{

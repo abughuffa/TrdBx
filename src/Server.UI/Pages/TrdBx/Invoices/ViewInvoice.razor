@@ -84,7 +84,7 @@
                 <MudText Typo="Typo.h6" Class="mb-3">Invoice Items</MudText>
                 
                 <MudExpansionPanels MultiExpansion="true" Class="mb-4">
-                    @foreach (var itemGroup in model.ItemGroups.OrderBy(ig => ig.SerialIndex))
+                    @foreach (var itemGroup in model.InvoiceItemGroups.OrderBy(ig => ig.SerialIndex))
                     {
                         <MudExpansionPanel>
                           <TitleContent>
@@ -109,7 +109,7 @@
                        
                             <ChildContent>
                                 <!-- Items DataGrid for this Item Group -->
-                                <MudDataGrid Items="@itemGroup.Items.OrderBy(i => i.SubSerialIndex)"
+                                <MudDataGrid Items="@itemGroup.InvoiceItems.OrderBy(i => i.SubSerialIndex)"
                                             T="InvoiceItemDto"
                                             Dense="true"
                                             Hover="true"
@@ -121,7 +121,7 @@
                                         <MudText Typo="Typo.subtitle2">Items in this group</MudText>
                                         <MudSpacer />
                                         <MudText Typo="Typo.body2">
-                                            @itemGroup.Items.Count items
+                                            @itemGroup.InvoiceItems.Count items
                                         </MudText>
                                     </ToolBarContent>
                                     

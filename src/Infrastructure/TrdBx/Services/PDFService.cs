@@ -113,7 +113,7 @@ public partial class PDFService : IPDFService
                             });
 
                             // Add all groups to the main table
-                            var reorderedGroups = xinvoice.ItemGroups.OrderBy(x => x.SerialIndex).ToList();
+                            var reorderedGroups = xinvoice.InvoiceItemGroups.OrderBy(x => x.SerialIndex).ToList();
                             foreach (var group in reorderedGroups)
                             {
                                 AddGroupToTable(itemsTable, group);
@@ -186,7 +186,7 @@ public partial class PDFService : IPDFService
         table.Cell().Element(GroupHeaderCellStyle).Text(group.SerialIndex.ToString()).FontSize(10).Bold().AlignCenter();
 
         // Group items
-        var reorderedItems = group.Items.OrderBy(x => x.SubSerialIndex);
+        var reorderedItems = group.InvoiceItems.OrderBy(x => x.SubSerialIndex);
         foreach (var item in reorderedItems)
         {
             // Keep items together with their group header
@@ -196,7 +196,7 @@ public partial class PDFService : IPDFService
         }
 
         // Group subtotal
-        if (group.Items.Any())
+        if (group.InvoiceItems.Any())
         {
             table.Cell().Element(GroupHeaderCellStyle).Text(group.SubTotal.ToString("N3")).Bold().AlignCenter().FontSize(8);
             table.Cell().ColumnSpan(3).Element(CellStyle);

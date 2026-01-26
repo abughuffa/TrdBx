@@ -318,7 +318,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
 
                             var startDate = caseProfile.TsDt;
                             var endDate = caseProfile.TsDt.AddDays(365);
-                            var dailyFees = Math.Round((price.Host / 365), 3, MidpointRounding.AwayFromZero);
+                            var dailyFees = Math.Round(((price.Gprs + price.Host) / 365), 3, MidpointRounding.AwayFromZero);
 
                             servcieLog.Subscriptions?.Add(new Subscription
                             {

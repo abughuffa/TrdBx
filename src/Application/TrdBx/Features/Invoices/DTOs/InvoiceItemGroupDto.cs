@@ -16,5 +16,5 @@ public class InvoiceItemGroupDto
     public string Description { get; set; } = string.Empty;
     public decimal Amount { get; set; } = 0.0m;
     public decimal SubTotal { get; set; } = 0.0m;
-    public List<InvoiceItemDto>? Items { get; set; } = null;
+    public List<InvoiceItemDto>? InvoiceItems { get; set; } = null;
 }

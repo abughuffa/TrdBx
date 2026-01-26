@@ -35,14 +35,11 @@
 </MudDialog>
 
 @code {
-
     MudForm _contactForm = new();
     private bool _saving = false;
     private bool _savingnew = false;
     [CascadingParameter] IMudDialogInstance MudDialog { get; set; } = default!;
     [EditorRequired][Parameter] public CreateTrackedAssetCommand _model { get; set; } = null!;
-
-
 
     async Task OnSave()
     {

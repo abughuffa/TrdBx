@@ -142,6 +142,23 @@ internal static class TrdBxMenu
                         }
 
                     }
+                },
+                new()
+                {
+                    Title = "Wialon Tasks",
+                    Icon = Icons.Material.Filled.Web,
+                    PageStatus = PageStatus.Completed,
+                    IsParent = true,
+                    MenuItems = new List<MenuSectionSubItemModel>
+                    {
+                        new()
+                        {
+                            Title = "Online Tasks",
+                            Href = "/pages/TrdBx/WialonTasks/0/0",
+                            PageStatus = PageStatus.Completed
+                        }
+
+                    }
                 }
             }
     };

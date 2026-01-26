@@ -1,7 +1,10 @@
-﻿using CleanArchitecture.Blazor.Application.Features.Common;
+﻿using System.Text.RegularExpressions;
+using CleanArchitecture.Blazor.Application.Features.Common;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Caching;
 using CleanArchitecture.Blazor.Domain.Enums;
+using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 namespace CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Renew;
@@ -47,30 +50,41 @@ public class RenewTrackingUnitSubscriptionCommandHandler : PriceSharedLogic, IRe
     {
         //await using var _context = await _dbContextFactory.CreateAsync(cancellationToken);
 
-        var items = await _context.TrackingUnits.Where(x => request.Id.Contains(x.Id)).Include(u => u.Subscriptions).ThenInclude(s => s.ServiceLog).ToListAsync(cancellationToken);
+        var units = await _context.TrackingUnits.Where(x => request.Id.Contains(x.Id)).Include(u => u.TrackedAsset).Include(u => u.Subscriptions).ThenInclude(s => s.ServiceLog).ToListAsync(cancellationToken);
 
-        if (!items.Any(u => u.UStatus == UStatus.InstalledActiveHosting || u.UStatus == UStatus.InstalledActiveGprs || u.UStatus == UStatus.InstalledActive))
+        if (!units.Any(u => u.UStatus == UStatus.InstalledActiveHosting || u.UStatus == UStatus.InstalledActiveGprs || u.UStatus == UStatus.InstalledActive))
         {
             return await Result<int>.FailureAsync(_localizer["StatusControlException"]);
         }
 
-        if (items.Any(u => u.Subscriptions?.OrderBy(x => x.Id).LastOrDefault().SeDate >= DateOnly.FromDateTime(new DateTime(request.TsDate.Year, 12, 31))))
+        var items = units.Where(u => u.Subscriptions?.OrderBy(x => x.Id).LastOrDefault().SeDate < DateOnly.FromDateTime(new DateTime(request.TsDate.Year, 12, 31)));
+
+        if (!items.Any())
         {
             //throw new Exception("Tracking Unit Subscription End date should be less than current period end date to Renew it.");
-            return await Result<int>.FailureAsync(_localizer["TsDateLessThanExDateException"]);
+            return await Result<int>.FailureAsync("All selected units Subscriptions greater than current period end date");
         }
 
         var dailyFees = 0.0m;
-
         var OLF = SubPackageFees.ZeroFees;
 
-        var serviceNo = await GenSerialNo(_context, "ServiceLog", request.TsDate);
-
+        var prefix = $"{request.TsDate:yyyyMM}-";
         var sequenceNumber = 1;
+        var serialNo = string.Empty;
+        var lastserviceLog = await _context.ServiceLogs.Where(i => i.ServiceNo.StartsWith(prefix)).AsNoTracking().OrderByDescending(i => i.ServiceNo).FirstOrDefaultAsync();
+        if (lastserviceLog != null)
+            {
+                var match = Regex.Match(lastserviceLog.ServiceNo, @$"^{prefix}(\d+)$");
+                if (match.Success && int.TryParse(match.Groups[1].Value, out int lastSequence))
+                {
+                    sequenceNumber = lastSequence +1;
+                }
+            }
+
 
         foreach (var item in items)
         { 
-            var xserviceNo  = $"{serviceNo}{sequenceNumber:D3}";
+            var xserviceNo  = $"{prefix}{sequenceNumber:D3}";
 
             var price = await GetCPrice(_context, (int)item.CustomerId, item.TrackingUnitModelId);
 
@@ -88,7 +102,8 @@ public class RenewTrackingUnitSubscriptionCommandHandler : PriceSharedLogic, IRe
             {
                 var serviceLog = new ServiceLog()
                 {
-                    Desc = string.Format("تجديد اشتراك الوحدة ({0}).", item.SNo),
+                    Desc = $"تجديد اشتراك الوحدة ({item.SNo}) بالمركبة ({item.UnitName}).",
+                    //Desc = string.Format("تجديد اشتراك الوحدة ({0}).", item.SNo),
                     ServiceNo = xserviceNo,
                     ServiceTask = ServiceTask.RenewUnitSub,
                     CustomerId = (int)item.CustomerId,

@@ -1,4 +1,5 @@
-﻿using CleanArchitecture.Blazor.Application.Features.Common;
+﻿using System.Text.RegularExpressions;
+using CleanArchitecture.Blazor.Application.Features.Common;
 using CleanArchitecture.Blazor.Application.Features.TrackedAssets.Caching;
 using CleanArchitecture.Blazor.Application.Features.TrackedAssets.Mappers;
 
@@ -60,19 +61,52 @@ public class CreateTrackedAssetCommandHandler : SerialForSharedLogic, IRequestHa
         //var item = _mapper.Map<TrackedAsset>(request);
 
         var item = Mapper.FromCreateCommand(request);
-        item.TrackedAssetNo = GenSerialNo(_context, "TrackedAsset", null).Result;
+        item.TrackedAssetNo = await GenTrackedAssetSerialNo(_context);
         item.TrackedAssetCode = request.TrackedAssetCode ?? request.PlateNo ?? request.VinSerNo ?? "غير محدد";
         // raise a create domain event
-        item.AddDomainEvent(new TrackedAssetCreatedEvent(item));
-        _context.TrackedAssets.Add(item);
-        await _context.SaveChangesAsync(cancellationToken);
-        return await Result<int>.SuccessAsync(item.Id);
+
+
+        try
+        {
+            item.AddDomainEvent(new TrackedAssetCreatedEvent(item));
+            _context.TrackedAssets.Add(item);
+
+            await _context.SaveChangesAsync(cancellationToken);
+            return await Result<int>.SuccessAsync(item.Id);
+        }
+        catch(Exception EX)
+        {
+            await _context.SaveChangesAsync(cancellationToken);
+            return await Result<int>.FailureAsync(EX.Message);
+        }
+
 
 
     }
 
 
-}
+    private async Task<string> GenTrackedAssetSerialNo(IApplicationDbContext cnx)
+    {
+        //var now = date is null ? DateOnly.FromDateTime(DateTime.Now) : date;
+        var prefix = $"{DateTime.Now:yyyyMM}-";
+        var sequenceNumber = 1;
+        var serialNo = string.Empty;
+        var lastTrackedAsset = await cnx.TrackedAssets.Where(i => i.TrackedAssetNo.StartsWith(prefix)).AsNoTracking().OrderByDescending(i => i.TrackedAssetNo).FirstOrDefaultAsync();
+                    
+        if (lastTrackedAsset != null)
+           {
+              var match = Regex.Match(lastTrackedAsset.TrackedAssetNo, @$"^{prefix}(\d+)$");
+                  if (match.Success && int.TryParse(match.Groups[1].Value, out int lastSequence))
+                        {
+                            sequenceNumber = lastSequence + 1;
+                        }
+           }
+        serialNo = $"{prefix}{sequenceNumber:D3}";
+
+        return serialNo;
+        }
+
+        }
 
 
 

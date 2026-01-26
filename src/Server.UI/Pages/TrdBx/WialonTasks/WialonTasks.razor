@@ -1,8 +1,11 @@
 ﻿@page "/pages/TrdBx/WialonTasks/{trackingunitid:int}/{servicelogid:int}"
 
+@using CleanArchitecture.Blazor.Application.Features.WialonTasks.Mappers
 @using CleanArchitecture.Blazor.Application.Features.WialonTasks.Caching
+@using CleanArchitecture.Blazor.Application.Features.WialonTasks.Commands.Execute
 @using CleanArchitecture.Blazor.Application.Features.WialonTasks.DTOs
 @using CleanArchitecture.Blazor.Application.Features.WialonTasks.Queries.Pagination
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.WialonTasks.Components
 
 @inject IStringLocalizer<WialonTasks> L
 
@@ -50,13 +53,26 @@
                 </ToolBarContent>
 
                 <Columns>
+
+                    <TemplateColumn Title="Actions" HeaderStyle="width:80px" Sortable="false">
+                        <CellTemplate>
+                            <MudStack Spacing="2" Row="true" Justify="Justify.FlexStart">
+
+                                <MudIconButton Icon="@Icons.Material.Filled.Web" Color="Color.Warning"
+                                               Disabled="@(!(_canExecute && (!context.Item.IsExecuted)))"
+                                               OnClick="() => OnExecute(context.Item)" />
+                            </MudStack>
+                        </CellTemplate>
+                    </TemplateColumn>
 @*                     <PropertyColumn Property="x => x.ServiceLogId" Title="@L[_currentDto.GetMemberDescription(x=>x.ServiceLogId)]" />
                     <PropertyColumn Property="x => x.TrackingUnitId" Title="@L[_currentDto.GetMemberDescription(x=>x.TrackingUnitId)]" /> *@
-                    <PropertyColumn Property="x => x.ServiceLog" Title="@L[_currentDto.GetMemberDescription(x => x.ServiceLog)]" />
+                    <PropertyColumn Property="x => x.ServiceLog" Title="@L[_currentDto.GetMemberDescription(x => x.ServiceLog)]" Groupable="true" />
                     <PropertyColumn Property="x => x.TrackingUnit" Title="@L[_currentDto.GetMemberDescription(x => x.TrackingUnit)]" />
                     <PropertyColumn Property="x => x.Desc" Title="@L[_currentDto.GetMemberDescription(x=>x.Desc)]" />
                     <PropertyColumn Property="x => x.ExcDate" Title="@L[_currentDto.GetMemberDescription(x=>x.ExcDate)]" />
                     <PropertyColumn Property="x => x.IsExecuted" Title="@L[_currentDto.GetMemberDescription(x=>x.IsExecuted)]" />
+
+
                 </Columns>
                 <NoRecordsContent>
                     <MudText>@ConstantString.NoRecords</MudText>
@@ -149,6 +165,23 @@
         Query.TrackingUnitId = TrackingUnitId;
         Query.ServiceLogId = ServiceLogId;
         await _table.ReloadServerData();
+    }
+
+
+    private Task OnExecute(WialonTaskDto dto)
+    {
+        // var command = Mapper.Map<ActivateTrackingUnitCommand>(dto);
+        var command = Mapper.ToExecuteCommand(dto);
+        // command.InstallerId = UserProfile.UserId;
+        return DialogServiceHelper.ShowFormDialogWithContentTextAsync<WialonTaskExecuteDialog, ExecuteWialonTaskCommand>(
+            L["Execute Wialon Task"],
+            L["Select Execution date to Execute Wialon Task and mark it as executed."],
+            command,
+            async () =>
+            {
+                await _table.ReloadServerData();
+                _selectedItems.Clear();
+            });
     }
 
     void OnGoBack()

@@ -56,7 +56,7 @@ public class ReassignTrackingUnitOwnerCommandHandler : IRequestHandler<ReassignT
 
         var unit = await _context.TrackingUnits.Where(x => x.Id == request.Id).FirstAsync() ?? throw new NotFoundException($"TrackingUnit with id: [{request.Id}] not found.");
 
-        if (!(unit.UStatus == UStatus.New || unit.UStatus == UStatus.Reserved || unit.UStatus == UStatus.Used))
+        if ((unit.UStatus == UStatus.New || unit.UStatus == UStatus.Reserved))
         {
             return await Result<int>.FailureAsync("Tracking Unit status shouldn't be New or Reserved to procced");
         }

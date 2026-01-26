@@ -67,6 +67,9 @@
         SelectedCustomer = customers.FirstOrDefault(m => m.Id == id);
     }
 
+
+
+
     protected override async Task OnInitializedAsync()
     {
         GetAvaliableCustomersQuery = new GetAvaliableCustomersQuery() { WithAdvParents = WithAdvParents };

@@ -131,13 +131,14 @@
     }
 </MudContainer>
 
-@code {
+    @code {
     [CascadingParameter]
     private UserProfile? UserProfile { get; set; }
 
     private MudForm? _form;
 
     private ReplaceTrackingUnitCommand model = new();
+    private ReplaceTrackingUnitCommand _model { get; set; }
     public string? Title { get; private set; }
     // public bool CanAssignOtherUser = false;
     private bool _submiting = false;
@@ -176,6 +177,32 @@
         }
     }
 
+    protected override async Task OnParametersSetAsync()
+    {
+        if (model != _model)
+        {
+            var result = await Mediator.Send(new GetTrackingUnitByIdQuery() { Id = TrackingUnitId });
+
+            SimCards = await Mediator.Send(new GetAvaliableSimCardsQuery() { Ids = new int[] { (int)result.Data.SimCardId } });
+            Units = await Mediator.Send(new GetAvaliableTrackingUnitsQuery() { Id = (int)result.Data.CustomerId });
+            Customers = await Mediator.Send(new GetAvaliableChildsByParentIdQuery() { Id = (int)result.Data.CustomerId });
+
+            result.Map(data =>
+     {
+         model = Mapper.ToReplaceCommand(data);
+         return data;
+     }).Match(data =>
+     {
+         return data;
+
+     }, errors =>
+     {
+         Snackbar.Add(errors, MudBlazor.Severity.Error);
+         return null!;
+     });
+        }
+        await base.OnParametersSetAsync();
+    }
     protected override async Task OnInitializedAsync()
     {
         Title = L["Replace TrackingUnit"];
@@ -183,25 +210,7 @@
         // CanAssignOtherUser = UserProfile.AssignedRoles.Contains("Admin");
 
 
-        var result = await Mediator.Send(new GetTrackingUnitByIdQuery() { Id = TrackingUnitId });
 
-        SimCards = await Mediator.Send(new GetAvaliableSimCardsQuery() { Ids = new int[] { (int)result.Data.SimCardId } });
-        Units = await Mediator.Send(new GetAvaliableTrackingUnitsQuery() { Id = (int)result.Data.CustomerId});
-        Customers = await Mediator.Send(new GetAvaliableChildsByParentIdQuery() { Id = (int)result.Data.CustomerId });
-
-        result.Map(data =>
- {
-     model = Mapper.ToReplaceCommand(data);
-     return data;
- }).Match(data =>
- {
-     return data;
-
- }, errors =>
- {
-     Snackbar.Add(errors, MudBlazor.Severity.Error);
-     return null!;
- });
 
         // result.Map(data =>
         // {

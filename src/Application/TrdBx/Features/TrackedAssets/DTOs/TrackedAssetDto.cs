@@ -1,4 +1,6 @@
-﻿using CleanArchitecture.Blazor.Domain.Entities;
+﻿using CleanArchitecture.Blazor.Application.Features.TrackingUnits.DTOs;
+using CleanArchitecture.Blazor.Application.TrdBx.Features.Invoices.DTOs;
+using CleanArchitecture.Blazor.Domain.Entities;
 
 namespace CleanArchitecture.Blazor.Application.Features.TrackedAssets.DTOs;
 
@@ -24,6 +26,10 @@ public class TrackedAssetDto
     public int? OldId { get; set; } = null;
     [Description("OldVehicleNo")]
     public string? OldVehicleNo { get; set; } = null;
+
+
+    
+    public List<TrackingUnitDto>? TrackingUnits { get; set; } = null;
 
     //private class Mapping : Profile
     //{

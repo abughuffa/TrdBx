@@ -46,7 +46,7 @@ public class TrackedAssetsWithPaginationQueryHandler :
         //    .ProjectToPaginatedDataAsync<TrackedAsset, TrackedAssetDto>(request.Specification, request.PageNumber, request.PageSize, _mapper.ConfigurationProvider, cancellationToken);
         //return data;
 
-        var data = await _context.TrackedAssets.OrderBy($"{request.OrderBy} {request.SortDirection}")
+        var data = await _context.TrackedAssets.Include(a=>a.TrackingUnits).OrderBy($"{request.OrderBy} {request.SortDirection}")
                                      .ProjectToPaginatedDataAsync(request.Specification,
                                                                   request.PageNumber,
                                                                   request.PageSize,

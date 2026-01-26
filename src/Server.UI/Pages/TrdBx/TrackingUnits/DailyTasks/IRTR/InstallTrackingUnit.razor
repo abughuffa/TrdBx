@@ -129,19 +129,23 @@
     }
 </MudContainer>
 
-@code {
+    @code {
 
     [CascadingParameter]
     private UserProfile? UserProfile { get; set; }
+    [Parameter]
+    public int TrackingUnitId { get; set; }
 
     private MudForm? _form;
     private InstallTrackingUnitCommand model = new();
+
+
     public string? Title { get; private set; }
     // public bool CanAssignOtherUser = false;
-    private bool _submiting = false;
 
-    [Parameter]
-    public int TrackingUnitId { get; set; }
+    private InstallTrackingUnitCommand _model { get; set; }
+
+    private bool _submiting = false;
 
     private IEnumerable<SimCardDto> SimCards = new List<SimCardDto>();
     private IEnumerable<TrackedAssetDto> TrackedAssets = new List<TrackedAssetDto>();
@@ -175,38 +179,50 @@
         }
     }
 
+    protected override async Task OnParametersSetAsync()
+    {
+        if (model != _model)
+        {
+            _model  = model;
+            var result = await Mediator.Send(new GetTrackingUnitByIdQuery() { Id = TrackingUnitId });
+
+            if (result.Data.SimCardId is null)
+                SimCards = await Mediator.Send(new GetAvaliableSimCardsQuery() { Ids = null });
+            else
+                SimCards = await Mediator.Send(new GetAvaliableSimCardsQuery() { Ids = new int[] { (int)result.Data.SimCardId } });
+
+            TrackedAssets = await Mediator.Send(new GetAvaliableTrackedAssetsQuery());
+
+            if (result.Data.CustomerId is null)
+                Customers = await Mediator.Send(new GetAvaliableChildsByParentIdQuery() { Id = null });
+            else
+                Customers = await Mediator.Send(new GetAvaliableChildsByParentIdQuery() { Id = (int)result.Data.CustomerId });
+
+            result.Map(data =>
+    {
+        model = Mapper.ToInstallCommand(data);
+        return data;
+    }).Match(data =>
+    {
+        return data;
+
+    }, errors =>
+    {
+        Snackbar.Add(errors, MudBlazor.Severity.Error);
+        return null!;
+    });
+
+        }
+
+        await base.OnParametersSetAsync();
+    }
+
     protected override async Task OnInitializedAsync()
     {
 
         Title = L["Install TrackingUnit"];
 
-        var result = await Mediator.Send(new GetTrackingUnitByIdQuery() { Id = TrackingUnitId });
 
-        if (result.Data.SimCardId is null)
-            SimCards = await Mediator.Send(new GetAvaliableSimCardsQuery() { Ids = null });
-        else
-            SimCards = await Mediator.Send(new GetAvaliableSimCardsQuery() { Ids = new int[] { (int)result.Data.SimCardId } });
-
-        TrackedAssets = await Mediator.Send(new GetAvaliableTrackedAssetsQuery());
-
-        if (result.Data.CustomerId is null)
-            Customers = await Mediator.Send(new GetAvaliableChildsByParentIdQuery() { Id = null });
-        else
-            Customers = await Mediator.Send(new GetAvaliableChildsByParentIdQuery() { Id = (int)result.Data.CustomerId });
-
-        result.Map(data =>
-{
-    model = Mapper.ToInstallCommand(data);
-   return data;
-}).Match(data =>
-{
-   return data;
-
-}, errors =>
-{
-   Snackbar.Add(errors, MudBlazor.Severity.Error);
-   return null!;
-});
 
        //  result.Match(
        // data =>
@@ -246,7 +262,7 @@
 data =>
 {
 Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
-    Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits");
+    // Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits");
 return data;
 },
 errors =>

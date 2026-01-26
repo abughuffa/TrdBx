@@ -9,7 +9,7 @@ public class ExecuteWialonTaskCommand : ICacheInvalidatorRequest<Result<int>>
 {
     public int Id { get; set; }
     public DateOnly ExcDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
-    public bool ApplyChangesToWialon { get; set; } = true;
+    public bool ApplyChangesToWialon { get; set; } = false;
     public string CacheKey => WialonTaskCacheKey.GetAllCacheKey;
      public IEnumerable<string> Tags => WialonTaskCacheKey.Tags;
     public ExecuteWialonTaskCommand()
@@ -59,7 +59,7 @@ public class ExecuteWialonTaskCommandHandler :
         x.IsExecuted == false &&
         !(x.ExcDate > item.ExcDate)).ToListAsync(cancellationToken);
 
-        if (oldItems.Count != 0) return await Result<int>.FailureAsync("For this unit, Execute an older Wialon Tasks first!");
+        if (oldItems.Count != 0) return await Result<int>.FailureAsync("For this unit, Execute the older Wialon Tasks first!");
 
 
         //Execute Wialon Task

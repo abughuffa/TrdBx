@@ -134,10 +134,9 @@
 
        
        @*  <PropertyColumn Property="x => x.ParentId" Title="@L[_currentDto.GetMemberDescription(x => x.ParentId)]" /> *@
-        <PropertyColumn Property="x => x.Name" Title="@L[_currentDto.GetMemberDescription(x => x.Name)]" />
-        <PropertyColumn Property="x => x.Parent" Title="@L[_currentDto.GetMemberDescription(x => x.Parent)]" />
+        <PropertyColumn Property="x => x.Name" Title="@L[_currentDto.GetMemberDescription(x => x.Name)]" Sortable="true"/>
+        <PropertyColumn Property="x => x.Parent" Title="@L[_currentDto.GetMemberDescription(x => x.Parent)]" Sortable="false" Groupable="true" />
         <PropertyColumn Property="x => x.Account" Title="@L[_currentDto.GetMemberDescription(x => x.Account)]" Groupable="true" />
-        
         <PropertyColumn Property="x => x.UserName" Title="@L[_currentDto.GetMemberDescription(x => x.UserName)]" />
         <PropertyColumn Property="x => x.BillingPlan" Title="@L[_currentDto.GetMemberDescription(x => x.BillingPlan)]" />
         <PropertyColumn Property="x => x.IsTaxable" Title="@L[_currentDto.GetMemberDescription(x => x.IsTaxable)]" />

@@ -1,5 +1,6 @@
 ﻿@page "/pages/TrdBx/SimCards"
 
+@using CleanArchitecture.Blazor.Application.Features.SimCards.Commands.SetUsed
 @using CleanArchitecture.Blazor.Application.Features.SimCards.Mappers
 @using CleanArchitecture.Blazor.Application.Features.SimCards.Caching
 @using CleanArchitecture.Blazor.Application.Features.SimCards.Commands.Create
@@ -11,6 +12,7 @@
 @using CleanArchitecture.Blazor.Application.Features.SimCards.Queries.Pagination
 @using CleanArchitecture.Blazor.Application.Features.SimCards.Specifications
 
+@using CleanArchitecture.Blazor.Domain.Enums
 @using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.SimCards.Components
 
 @inject IStringLocalizer<SimCards> L
@@ -112,6 +114,12 @@
                             <MudMenuItem OnClick="@(()=>OnEdit(context.Item))">@ConstantString.Edit</MudMenuItem>
                         }
                         
+                        @if (_canEdit)
+                        {
+                            <MudMenuItem Disabled="(!((context.Item.SStatus == SStatus.Recovered) || (context.Item.SStatus == SStatus.Lost)))"
+                                OnClick="@(()=>OnSetAsUsed(context.Item))">Set as Used</MudMenuItem>
+                        }
+
                         @if (_canDelete)
                         {
                             <MudMenuItem OnClick="@(()=>OnDelete(context.Item))">@ConstantString.Delete</MudMenuItem>
@@ -247,6 +255,38 @@
         return Task.CompletedTask;
     }
 
+
+    private async Task OnSetAsUsed(SimCardDto dto)
+    {
+
+        var command = new SetUsedSimCardCommand() { Id = dto.Id };
+        var result = await Mediator.Send(command);
+
+        if (result.Succeeded)
+        {
+            Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+            await InvokeAsync(async () =>
+                                           {
+                                               await _table.ReloadServerData();
+                                               _selectedItems.Clear();
+                                           });
+        }
+        else
+        {
+            Snackbar.Add(result.ErrorMessage, MudBlazor.Severity.Error);
+        }
+        // var contentText = string.Format(ConstantString.ExecuteConfirmation, "Set as Used", $"Set the status of Sim Card {dto.SimCardNo} as Used.");
+        // var command = new SetUsedSimCardCommand() { Id = dto.Id };
+
+        // return DialogServiceHelper.ShowExecuteConfirmationDialogAsync(command, ConstantString.ExecuteConfirmationTitle, contentText, async () =>
+        // {
+        //     await InvokeAsync(async () =>
+        //     {
+        //         await _table.ReloadServerData();
+        //         _selectedItems.Clear();
+        //     });
+        // });
+    }
     // private async Task OnCreate()
     // {
 
