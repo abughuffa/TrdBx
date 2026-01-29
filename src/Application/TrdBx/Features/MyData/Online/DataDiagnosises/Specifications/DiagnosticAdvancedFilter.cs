@@ -17,9 +17,9 @@ public enum DataDiagnosisListView
 
 public class DataDiagnosisAdvancedFilter : PaginationFilter
 {
-    public UStatus StatusOnTrdBx { get; set; } = UStatus.All;
-    public WStatus StatusOnWialon { get; set; } = WStatus.All;
-    public SLStatus SimCardStatus { get; set; } = SLStatus.All;
+    public UStatus? StatusOnTrdBx { get; set; } = null;
+    public WStatus? StatusOnWialon { get; set; } = null;
+    public SLStatus? SimCardStatus { get; set; } = null;
     public DateTime? ExpiersBefore { get; set; } = null;
     public DataDiagnosisListView ListView { get; set; } = DataDiagnosisListView.SimCardsOfUnitsWhichAreExistOnTrdBxAndWialon;
 

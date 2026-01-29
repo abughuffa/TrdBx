@@ -12,30 +12,30 @@ Class="mud-elevation-25 pa-2 mb-3" Text="@ConstantString.AdvancedSearch">
     <MudGrid Spacing="2">
 
         <MudItem md="4">
-            <AvaliableCustomers  
-                @bind-Value="TRequest.CustomerId"
-            Placeholder="@L["Search by Customer"]"
-            Clearable="true"
-                                Disabled="@Disabled"
+            <AvaliableCustomers @bind-Value="@TRequest.CustomerId"
+                                PHolder="@L["Filter by Customer"]"
                                 WithAdvParents="false"
-            OnConditionChanged="TextChanged">
+                                Clearable="true"
+                                OnCustomerChanged="FilterChanged">
             </AvaliableCustomers>
         </MudItem>
 
         <MudItem md="4">
             <MudEnumSelect Style="min-width:120px"
-                           Disabled="@Disabled"
-            TEnum="ServiceTask" 
-            Value="TRequest.ServiceTask"
-            ValueChanged="OnServiceTaskChanged"
-            Dense="true" Label="@L["ServiceTask"]">
+                           Placeholder="@L["Filter By Service"]"
+                           TEnum="ServiceTask?"
+                           Value="@TRequest.ServiceTask"
+                           ValueChanged="OnServiceTaskChanged"
+                           Dense="true">
             </MudEnumSelect>
+
         </MudItem>
 
         <MudItem md="4">
-            <MudCheckBox Disabled="@Disabled"
+            <MudCheckBox Disabled="false"
                 T="bool?" 
                 TriState ="true"
+            Label="@L["Bill Status"]"
             Value ="@(TRequest.IsBilled == null ? null : TRequest.IsBilled)"
             ValueChanged="OnIsBilledChanged">
             </MudCheckBox>
@@ -43,35 +43,33 @@ Class="mud-elevation-25 pa-2 mb-3" Text="@ConstantString.AdvancedSearch">
 
     </MudGrid>
 </MudExpansionPanel>
-@* ValueChanged = "OnIsBilledChanged"> *@
+
 @code
 {
     [EditorRequired][Parameter] public ServiceLogsWithPaginationQuery TRequest { get; set; } = default!;
-    [EditorRequired] [Parameter] public EventCallback<string> OnConditionChanged { get; set; }
+    [EditorRequired][Parameter] public EventCallback<string> OnFilterCriteriaChanged { get; set; }
 
-    [Parameter]
-    public bool Disabled { get; set; }
 
     private bool _advancedSearchExpanded;
 
-    private async Task TextChanged(string str)
+    private async Task FilterChanged(string str)
     {
         if (_advancedSearchExpanded)
         {
-            await OnConditionChanged.InvokeAsync(str);
+            await OnFilterCriteriaChanged.InvokeAsync(str);
         }
     }
 
-    private async Task OnServiceTaskChanged(ServiceTask ServiceTask)
+    private async Task OnServiceTaskChanged(ServiceTask? ServiceTask)
     {
         TRequest.ServiceTask = ServiceTask;
-        await TextChanged(ServiceTask.ToString());
+        await FilterChanged(ServiceTask?.ToString());
     }
 
     private async Task OnIsBilledChanged(bool? isBilled)
     {
         TRequest.IsBilled = isBilled == null ? null : isBilled;
-        await TextChanged(isBilled == null ? "" : isBilled.ToString());
+        await FilterChanged(isBilled == null ? "" : isBilled.ToString());
     }
 
 }

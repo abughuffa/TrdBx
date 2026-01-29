@@ -17,7 +17,7 @@ public class TrackingUnitsWithPaginationQuery : TrackingUnitAdvancedFilter, ICac
 
     public string CacheKey => TrackingUnitCacheKey.GetPaginationCacheKey($"{this}");
     public IEnumerable<string>? Tags => TrackingUnitCacheKey.Tags;
-    public TrackingUnitAdvancedSpecification Specification => new TrackingUnitAdvancedSpecification(this);
+    public TrackingUnitAdvancedSpecification Specification => new(this);
 
 }
     

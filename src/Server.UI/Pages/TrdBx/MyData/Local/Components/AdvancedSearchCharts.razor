@@ -9,25 +9,26 @@
                    Class="mud-elevation-25 pa-2 mb-3" Text="@ConstantString.AdvancedSearch">
     <MudGrid>
         <MudItem md="6">
-            <AvaliableCustomers  @bind-Value="TRequest.CustomerId"
-                                Placeholder="@L["Filter by Customer"]"
-                           Clearable="true"
-                           OnConditionChanged="TextChanged">
+            <AvaliableCustomers @bind-Value="@TRequest.CustomerId"
+                                PHolder="@L["Filter by Customer"]"
+                                WithAdvParents="false"
+                                Clearable="true"
+                                OnCustomerChanged="FilterChanged">
             </AvaliableCustomers>
         </MudItem>
 
         <MudItem md="3">
-            <MudDatePicker Editable @bind-Date="_fromdate"
-                           Placeholder="@L["Start Date"]"
+            <MudDatePicker Editable @bind-Date="@_fromdate"
+                           Placeholder="@L["By Start Date"]"
                            Clearable="true"
-                           TextChanged="OnStartDateChanged">
+                           FilterChanged="OnStartDateChanged">
             </MudDatePicker>
         </MudItem>
         <MudItem md="3">
-            <MudDatePicker Editable @bind-Date="_todate"
-                           Placeholder="@L["End Date"]"
+            <MudDatePicker Editable @bind-Date="@_todate"
+                           Placeholder="@L["By End Date"]"
                            Clearable="true"
-                           TextChanged="OnEndDateChanged">
+                           FilterChanged="OnEndDateChanged">
             </MudDatePicker>
         </MudItem>
      </MudGrid>
@@ -35,22 +36,22 @@
 
 @code {
         [EditorRequired][Parameter] public GetChartsQuery TRequest { get; set; } = null!;
-        [EditorRequired][Parameter] public EventCallback<string> OnConditionChanged { get; set; }
+    [EditorRequired][Parameter] public EventCallback<string> OnFilterCriteriaChanged { get; set; }
 
     private bool _advancedSearchExpanded;
 
-    private async Task TextChanged(string? str)
+    private async Task FilterChanged(string? str)
     {
         if (_advancedSearchExpanded)
         {
-            await OnConditionChanged.InvokeAsync(str);
+            await OnFilterCriteriaChanged.InvokeAsync(str);
         }
     }
 
     private async Task OnStartDateChanged(string? str)
     {
         _fromdate = DateTime.TryParse(str,out DateTime result) ? result : null;
-        await TextChanged(str);
+        await FilterChanged(str);
     }
 
     private DateTime? _fromdate
@@ -73,7 +74,7 @@
     private async Task OnEndDateChanged(string? str)
     {
         _todate = DateTime.TryParse(str, out DateTime result) ? result : null;
-        await TextChanged(str);
+        await FilterChanged(str);
     }
 
     private DateTime? _todate

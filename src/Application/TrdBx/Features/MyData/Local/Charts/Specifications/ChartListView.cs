@@ -11,7 +11,7 @@ public enum ChartListView
 
 public class ChartAdvancedFilter : PaginationFilter
 {
-    public int CustomerId { get; set; } = 0; 
+    public int? CustomerId { get; set; } = null; 
     public DateOnly? FromDate { get; set; } = null;
     public DateOnly? ToDate { get; set; } = null;
     public ChartListView ListView { get; set; } = ChartListView.SimCardsExpiryDate;

@@ -14,8 +14,8 @@ public enum DataMatchListView
 
 public class DataMatchAdvancedFilter : PaginationFilter
 {
-    public UStatus StatusOnTrdBx { get; set; } = UStatus.All;
-    public WStatus StatusOnWialon { get; set; } = WStatus.All;
+    public UStatus? StatusOnTrdBx { get; set; } = null;
+    public WStatus? StatusOnWialon { get; set; } = null;
     public DataMatchListView ListView { get; set; } = DataMatchListView.MatchedByUnitAndSimCard;
 
 }

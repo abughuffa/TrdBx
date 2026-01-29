@@ -13,7 +13,7 @@
 
 
 <MudContainer Class="mt-3">
-    <AdvancedSearchServiceLogs TRequest="Query" OnConditionChanged="ConditionChanged" Disabled="@filterDisabled"></AdvancedSearchServiceLogs>
+    <AdvancedSearchServiceLogs TRequest="Query" OnFilterCriteriaChanged="FilterCriteriaChanged"></AdvancedSearchServiceLogs>
     <MudCard>
         <MudCardHeader>
             <CardHeaderContent>
@@ -31,7 +31,6 @@
                          MultiSelection="true"
                          T="ServiceLogDto"
                          SelectOnRowClick="false"
-                         
                          @bind-SelectedItems="_selectedItems"
                          Hover="true" @ref="_table">
 
@@ -176,7 +175,7 @@
     // }
 
 
-    private void ConditionChanged(string s)
+    private void FilterCriteriaChanged(string s)
     {
         InvokeAsync(_table.ReloadServerData);
     }

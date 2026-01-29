@@ -5,19 +5,18 @@
 @inherits MudComponentBase
 @inject IStringLocalizer<Customers> L
 @attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.Customers.View)]
-
-
-<MudGrid>
+@* Value="Value" *@
+<MudGrid >
     <MudItem md="8">
         <MudSelect T="int?"
-                   Placeholder="@L["Filter by Customer"]"
-                   Disabled="false"
-                   Clearable="true"
+                   Disabled="@Disabled"
+                   Clearable="@Clearable"
+                   Placeholder="@PHolder"
                    Value="@Value"
                    ValueChanged="OnValueChanged">
             @foreach (var customer in customers)
             {
-                <MudSelectItem Value="(int?)customer.Id">@customer.ParentChild</MudSelectItem>
+                <MudSelectItem Value="customer.Id">@customer.ParentChild</MudSelectItem>
             }
         </MudSelect>
     </MudItem>
@@ -25,43 +24,58 @@
 
 
 @code {
-    [Parameter] public int? Value { get; set; }
+
     [Parameter] public EventCallback<int?> ValueChanged { get; set; }
     [Parameter] public string PHolder { get; set; } = string.Empty;
-    [Parameter] public bool Clearable { get; set; } = false;
+    [Parameter] public bool Clearable { get; set; }
     [Parameter] public bool Disabled { get; set; } = false;
     [Parameter] public bool WithAdvParents { get; set; }
+    [EditorRequired] [Parameter] public EventCallback<string> OnConditionChanged { get; set; }
 
+    private int? _value;
 
-    [EditorRequired][Parameter] public EventCallback<string> OnCustomerChanged { get; set; }
+    [Parameter] public int? Value
+    {
+        get => _value;
+        set
+        {
+            if (_value != value)
+            {
+                _value = value;
+                ValueChanged.InvokeAsync((int)value);
+                OnConditionChanged.InvokeAsync();
+            }
+        }
+    }
 
-
-
-    private IEnumerable<CustomerDto> customers =  new List<CustomerDto>();
+    private IEnumerable<CustomerDto> customers = new List<CustomerDto>();
 
     private GetAvaliableCustomersQuery GetAvaliableCustomersQuery = new();
 
     private void OnValueChanged(int? id)
     {
         Value = id;
-        ValueChanged.InvokeAsync(id);
-        OnCustomerChanged.InvokeAsync();
     }
 
+    // protected override async Task OnParameterSetAsync()
+    // {
+    //     GetAvaliableCustomersQuery.WithAdvParents = WithAdvParents;
 
+    //     customers = await LoadAvaliableCustomers();
+    //     var b = customers;
+    // }
 
 
     protected override async Task OnInitializedAsync()
     {
         GetAvaliableCustomersQuery = new GetAvaliableCustomersQuery() { WithAdvParents = WithAdvParents };
         customers = await LoadAvaliableCustomers();
-        StateHasChanged();
-
+        var b = customers;
     }
 
     private async Task<IEnumerable<CustomerDto>> LoadAvaliableCustomers()
     {
-        var result = await Mediator.Send(GetAvaliableCustomersQuery);
+        var result = await Mediator.Send(GetAvaliableCustomersQuery).ConfigureAwait(false);
         return result;
     }
 

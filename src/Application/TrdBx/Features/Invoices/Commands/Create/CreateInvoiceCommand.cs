@@ -17,7 +17,7 @@ public class CreateInvoiceCommand : ICacheInvalidatorRequest<Result<int>>
     [Description("InvoiceDate")]
     public DateOnly InvoiceDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
     [Description("CustomerId")]
-    public int CustomerId { get; set; }
+    public int? CustomerId { get; set; } = null;
     [Description("InvoiceType")]
     public InvoiceType InvoiceType { get; set; }
     [Description("Discount Rate")]
@@ -68,7 +68,7 @@ public class CreateInvoiceCommandHandler : SerialForSharedLogic, IRequestHandler
         var customer = await _context.Customers.Where(c => c.Id == request.CustomerId).Include(c => c.Parent).FirstAsync(cancellationToken);
 
         // Validate customer exists in database
-        if (customer == null) throw new ArgumentException($"Customer with ID {request.CustomerId} not found.");
+        if (customer == null) throw new ArgumentException($"Customer with ID {(int)request.CustomerId} not found.");
 
         List<ServiceLog> serviceLogs = [];
 
@@ -78,7 +78,7 @@ public class CreateInvoiceCommandHandler : SerialForSharedLogic, IRequestHandler
         var invoice = new InvoiceDto()
         {
             DisplayCusName = customer.Parent is null ? customer.Name : $"{customer.Parent.Name}-{customer.Name}",
-            CustomerId = request.CustomerId,
+            CustomerId = customer.Id,
             InvoiceType = request.InvoiceType,
             InvoiceDate = request.InvoiceDate,
             DiscountRate = request.DiscountRate,
@@ -102,7 +102,7 @@ public class CreateInvoiceCommandHandler : SerialForSharedLogic, IRequestHandler
                         // Get all unbilled servicelogs for for all child customers of a parent
                         serviceLogs = await _context.ServiceLogs.Include(sl => sl.Subscriptions) // Eager load Subscriptions collection
                                            .Where(s => s.SerDate <= request.InvoiceDate)
-                                           .ApplySpecification(new UnBilledCheckInvoiceByCustomerParentSpecification(request.CustomerId))
+                                           .ApplySpecification(new UnBilledCheckInvoiceByCustomerParentSpecification(customer.Id))
                                            .OrderBy(sl => sl.Id)
                                            .ToListAsync(cancellationToken);
                     }
@@ -111,7 +111,7 @@ public class CreateInvoiceCommandHandler : SerialForSharedLogic, IRequestHandler
                         //get all unbilled servicelogs for a child customer
                         serviceLogs = await _context.ServiceLogs.Include(sl => sl.Subscriptions) // Eager load Subscriptions collection
                                            .Where(s => s.SerDate <= request.InvoiceDate)
-                                           .ApplySpecification(new UnBilledCheckInvoiceByCustomerChildSpecification(request.CustomerId))
+                                           .ApplySpecification(new UnBilledCheckInvoiceByCustomerChildSpecification(customer.Id))
                                            .OrderBy(sl => sl.Id)
                                            .ToListAsync(cancellationToken);
                     }
@@ -137,7 +137,7 @@ public class CreateInvoiceCommandHandler : SerialForSharedLogic, IRequestHandler
                         serviceLogs = await _context.ServiceLogs
                                            .Include(s => s.Subscriptions)
                                            .Include(s => s.Customer).Where(s => s.SerDate <= request.InvoiceDate)
-                                           .ApplySpecification(new UnBilledPaymentInvoiceByCustomerParentSpecification(request.CustomerId))
+                                           .ApplySpecification(new UnBilledPaymentInvoiceByCustomerParentSpecification(customer.Id))
                                            .ToListAsync(cancellationToken);
                     }
                     else
@@ -146,7 +146,7 @@ public class CreateInvoiceCommandHandler : SerialForSharedLogic, IRequestHandler
                         serviceLogs = await _context.ServiceLogs
                                            .Include(s => s.Subscriptions)
                                            .Include(s => s.Customer).Where(s => s.SerDate <= request.InvoiceDate)
-                                           .ApplySpecification(new UnBilledPaymentInvoiceByCustomerChildSpecification(request.CustomerId))
+                                           .ApplySpecification(new UnBilledPaymentInvoiceByCustomerChildSpecification(customer.Id))
                                            .ToListAsync(cancellationToken);
                     }
                     
@@ -171,7 +171,7 @@ public class CreateInvoiceCommandHandler : SerialForSharedLogic, IRequestHandler
                         serviceLogs = await _context.ServiceLogs
                                            .Include(s => s.Subscriptions)
                                            .Include(s => s.Customer).Where(s => s.SerDate <= request.InvoiceDate)
-                                           .ApplySpecification(new UnBilledReplaceInvoiceByCustomerParentSpecification(request.CustomerId))
+                                           .ApplySpecification(new UnBilledReplaceInvoiceByCustomerParentSpecification(customer.Id))
                                            .ToListAsync(cancellationToken);
                     }
                     else
@@ -180,7 +180,7 @@ public class CreateInvoiceCommandHandler : SerialForSharedLogic, IRequestHandler
                         serviceLogs = await _context.ServiceLogs
                                            .Include(s => s.Subscriptions)
                                            .Include(s => s.Customer).Where(s => s.SerDate <= request.InvoiceDate)
-                                           .ApplySpecification(new UnBilledReplaceInvoiceByCustomerChildSpecification(request.CustomerId))
+                                           .ApplySpecification(new UnBilledReplaceInvoiceByCustomerChildSpecification(customer.Id))
                                            .ToListAsync(cancellationToken);
                     }
 
@@ -203,7 +203,7 @@ public class CreateInvoiceCommandHandler : SerialForSharedLogic, IRequestHandler
                         serviceLogs = await _context.ServiceLogs
                                            .Include(s => s.Subscriptions)
                                            .Include(s => s.Customer).Where(s => s.SerDate <= request.InvoiceDate)
-                                           .ApplySpecification(new UnBilledRenewInvoiceByCustomerParentSpecification(request.CustomerId))
+                                           .ApplySpecification(new UnBilledRenewInvoiceByCustomerParentSpecification(customer.Id))
                                            .ToListAsync(cancellationToken);
                     }
                     else
@@ -212,7 +212,7 @@ public class CreateInvoiceCommandHandler : SerialForSharedLogic, IRequestHandler
                         serviceLogs = await _context.ServiceLogs
                                            .Include(s => s.Subscriptions)
                                            .Include(s => s.Customer).Where(s => s.SerDate <= request.InvoiceDate)
-                                           .ApplySpecification(new UnBilledRenewInvoiceByCustomerChildSpecification(request.CustomerId))
+                                           .ApplySpecification(new UnBilledRenewInvoiceByCustomerChildSpecification(customer.Id))
                                            .ToListAsync(cancellationToken);
                     }
 
@@ -235,7 +235,7 @@ public class CreateInvoiceCommandHandler : SerialForSharedLogic, IRequestHandler
                         serviceLogs = await _context.ServiceLogs
                                            .Include(s => s.Subscriptions)
                                            .Include(s => s.Customer).Where(s => s.SerDate <= request.InvoiceDate)
-                                           .ApplySpecification(new UnBilledSubscriptionInvoiceByCustomerParentSpecification(request.CustomerId))
+                                           .ApplySpecification(new UnBilledSubscriptionInvoiceByCustomerParentSpecification(customer.Id))
                                            .ToListAsync(cancellationToken);
                     }
                     else
@@ -244,7 +244,7 @@ public class CreateInvoiceCommandHandler : SerialForSharedLogic, IRequestHandler
                         serviceLogs = await _context.ServiceLogs
                                            .Include(s => s.Subscriptions)
                                            .Include(s => s.Customer).Where(s => s.SerDate <= request.InvoiceDate)
-                                           .ApplySpecification(new UnBilledSubscriptionInvoiceByCustomerChildSpecification(request.CustomerId))
+                                           .ApplySpecification(new UnBilledSubscriptionInvoiceByCustomerChildSpecification(customer.Id))
                                            .ToListAsync(cancellationToken);
                     }
 
@@ -267,7 +267,7 @@ public class CreateInvoiceCommandHandler : SerialForSharedLogic, IRequestHandler
                         serviceLogs = await _context.ServiceLogs
                                            .Include(s => s.Subscriptions)
                                            .Include(s => s.Customer).Where(s => s.SerDate <= request.InvoiceDate)
-                                           .ApplySpecification(new UnBilledSupportInvoiceByCustomerParentSpecification(request.CustomerId))
+                                           .ApplySpecification(new UnBilledSupportInvoiceByCustomerParentSpecification(customer.Id))
                                            .ToListAsync(cancellationToken);
                     }
                     else
@@ -276,7 +276,7 @@ public class CreateInvoiceCommandHandler : SerialForSharedLogic, IRequestHandler
                         serviceLogs = await _context.ServiceLogs
                                            .Include(s => s.Subscriptions)
                                            .Include(s => s.Customer).Where(s => s.SerDate <= request.InvoiceDate)
-                                           .ApplySpecification(new UnBilledSupportInvoiceByCustomerChildSpecification(request.CustomerId))
+                                           .ApplySpecification(new UnBilledSupportInvoiceByCustomerChildSpecification(customer.Id))
                                            .ToListAsync(cancellationToken);
                     }
 

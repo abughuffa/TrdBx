@@ -14,8 +14,9 @@
         <MudItem md="3">
             <MudEnumSelect Style="min-width:120px"
                            Placeholder="@L["By Status On Wialon"]"
-                           TEnum="WStatus"
-                           Value="TRequest.StatusOnWialon"
+                           TEnum="WStatus?"
+                           Value="@TRequest.StatusOnWialon"
+                           Clearable="true"
                            ValueChanged ="OnStatusOnWialonChanged"
                            Dense="true">
                           
@@ -26,8 +27,9 @@
         <MudItem md="3">
             <MudEnumSelect Style="min-width:120px"
                            Placeholder="@L["By Status On TrdBx"]"
-                           TEnum="UStatus"
-                           Value="TRequest.StatusOnTrdBx"
+                           TEnum="UStatus?"
+                           Value="@TRequest.StatusOnTrdBx"
+                           Clearable="true"
                            ValueChanged="OnStatusOnTrdBxChanged"
                            Dense="true">
             </MudEnumSelect>
@@ -39,7 +41,8 @@
 
             <MudEnumSelect Style="min-width:120px"
                            Placeholder="@L["By SimCard Status"]"
-                           TEnum="SLStatus"
+                           TEnum="SLStatus?"
+                           Clearable="true"
                            Value="TRequest.SimCardStatus"
                            ValueChanged="OnSimCardStatusChanged"
                            Dense="true">
@@ -53,7 +56,7 @@
             <MudDatePicker Editable @bind-Date="TRequest.ExpiersBefore" 
                            Placeholder="@L["By Expiers Before"]"
                            Clearable="true"
-                           TextChanged="OnExpiersBeforeChanged">
+                           FilterChanged="OnExpiersBeforeChanged">
             </MudDatePicker>
         </MudItem>
 
@@ -65,7 +68,7 @@
     [EditorRequired][Parameter] public EventCallback<string> OnConditionChanged { get; set; }
 
     private bool _advancedSearchExpanded;
-    private async Task TextChanged(string str)
+    private async Task FilterChanged(string str)
     {
         if (_advancedSearchExpanded)
         {
@@ -74,27 +77,27 @@
     }
 
 
-    private async Task OnStatusOnWialonChanged(WStatus str)
+    private async Task OnStatusOnWialonChanged(WStatus? str)
     {
         TRequest.StatusOnWialon = str;
-        await TextChanged(str.ToString());
+        await FilterChanged(str.ToString());
     }
 
-    private async Task OnStatusOnTrdBxChanged(UStatus str)
+    private async Task OnStatusOnTrdBxChanged(UStatus? str)
     {
         TRequest.StatusOnTrdBx =str;
-        await TextChanged(str.ToString());
+        await FilterChanged(str.ToString());
     }
-    private async Task OnSimCardStatusChanged(SLStatus str)
+    private async Task OnSimCardStatusChanged(SLStatus? str)
     {
         TRequest.SimCardStatus = str;
-        await TextChanged(str.ToString());
+        await FilterChanged(str.ToString());
     }
 
     private async Task OnExpiersBeforeChanged(string? str)
     {
         TRequest.ExpiersBefore = string.IsNullOrEmpty(str) ? null : DateTime.Parse(str).Add(new TimeSpan(23, 59, 59));
-        await TextChanged(str);
+        await FilterChanged(str);
     }
 
         // 

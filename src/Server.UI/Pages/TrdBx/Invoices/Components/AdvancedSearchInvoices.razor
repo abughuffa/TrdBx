@@ -12,28 +12,28 @@
     <MudGrid Spacing="2">
 
         <MudItem md="8">
-            <AvaliableCustomers  @bind-Value="TRequest.CustomerId"
-                                Placeholder="@L["Search by Customer"]"
-                           Clearable="true"
+            <AvaliableCustomers @bind-Value="@TRequest.CustomerId"
+                                PHolder="@L["Filter by Customer"]"
                                 WithAdvParents="true"
-                           OnConditionChanged="TextChanged">
+                                Clearable="true"
+                                OnCustomerChanged="FilterChanged">
             </AvaliableCustomers>
         </MudItem>
 
         <MudItem md="2">
             <MudEnumSelect Style="min-width:120px"
-                           Placeholder="@L["InvoiceType"]"
-                           TEnum="InvoiceType"
-                           Value="TRequest.InvoiceType"
+                           Placeholder="@L["Filter By Type"]"
+                           TEnum="InvoiceType?"
+                           Value="@TRequest.InvoiceType"
                            ValueChanged="OnInvoiceTypeChanged"
                            Dense="true">
             </MudEnumSelect>
         </MudItem>
         <MudItem md="2">
                 <MudEnumSelect Style="min-width:120px"
-                           Placeholder="@L["IStatus"]"
-                           TEnum="IStatus"
-                           Value="TRequest.IStatus"
+                           Placeholder="@L["Filter By Status"]"
+                           TEnum="IStatus?"
+                           Value="@TRequest.IStatus"
                            ValueChanged="OnIStatusChanged"
                            Dense="true" >
                 </MudEnumSelect>
@@ -44,28 +44,28 @@
 @code {
 
     [EditorRequired][Parameter] public InvoicesWithPaginationQuery TRequest { get; set; } = null!;
-    [EditorRequired][Parameter] public EventCallback<string> OnConditionChanged { get; set; }
+    [EditorRequired][Parameter] public EventCallback<string> OnFilterCriteriaChanged { get; set; }
 
     private bool _advancedSearchExpanded;
 
-    private async Task TextChanged(string str)
+    private async Task FilterChanged(string str)
     {
         if (_advancedSearchExpanded)
         {
-          await OnConditionChanged.InvokeAsync(str);
+            await OnFilterCriteriaChanged.InvokeAsync(str);
         }
     }
 
 
-    private async Task OnIStatusChanged(IStatus IStatus)
+    private async Task OnIStatusChanged(IStatus? IStatus)
     {
         TRequest.IStatus = IStatus;
-        await TextChanged(IStatus.ToString());
+        await FilterChanged(IStatus?.ToString());
     }
 
-    private async Task OnInvoiceTypeChanged(InvoiceType InvoiceType)
+    private async Task OnInvoiceTypeChanged(InvoiceType? InvoiceType)
     {
         TRequest.InvoiceType = InvoiceType;
-        await TextChanged(InvoiceType.ToString());
+        await FilterChanged(InvoiceType?.ToString());
     }
 }

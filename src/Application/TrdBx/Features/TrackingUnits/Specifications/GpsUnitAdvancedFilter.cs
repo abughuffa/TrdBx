@@ -21,8 +21,8 @@ public enum TrackingUnitListView
 public class TrackingUnitAdvancedFilter: PaginationFilter
 {
 
-    public int CustomerId { get; set; } = 0;
-    public UStatus UStatus { get; set; } = UStatus.All;
+    public int? CustomerId { get; set; } = null;
+    public UStatus? UStatus { get; set; } = null;
     public TimeSpan LocalTimezoneOffset { get; set; }
     public TrackingUnitListView ListView { get; set; } = TrackingUnitListView.All;
 

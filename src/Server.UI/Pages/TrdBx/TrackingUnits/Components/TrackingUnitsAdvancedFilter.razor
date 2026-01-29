@@ -9,21 +9,21 @@
                    Style="border-radius: var(--mud-default-borderradius) !important;"
                    Class="mud-elevation-25 pa-2 mb-3" Text="@ConstantString.AdvancedSearch">
     <MudGrid>
-
          <MudItem md="6">
-            <AvaliableCustomers @bind-Value="TRequest.CustomerId"
-                                WithAdvParents ="true"
-                                Placeholder="@L["Filter by Customer"]"
+            <AvaliableCustomers @bind-Value="@TRequest.CustomerId"
+                                PHolder="@L["Filter by Customer"]"
+                                WithAdvParents="true"
                                 Clearable="true"
-                                OnConditionChanged="TextChanged">
+                                OnCustomerChanged="FilterChanged">
             </AvaliableCustomers>
         </MudItem>
 
         <MudItem md="6">
             <MudEnumSelect Style="min-width:120px"
+                           Clearable="true"
                            Placeholder="@L["Filter by Status"]"
-                           TEnum="UStatus"
-                           Value="TRequest.UStatus"
+                           TEnum="UStatus?"
+                           Value="@TRequest.UStatus"
                            ValueChanged="OnUStatusChanged"
                            Dense="true">
             </MudEnumSelect>
@@ -34,20 +34,22 @@
 
 @code {
     [EditorRequired][Parameter] public TrackingUnitsWithPaginationQuery TRequest { get; set; } = null!;
-    [EditorRequired][Parameter] public EventCallback<string> OnConditionChanged { get; set; }
+    [EditorRequired][Parameter] public EventCallback<string> OnFilterCriteriaChanged { get; set; }
+
     private bool _advancedSearchExpanded;
-    private async Task TextChanged(string str)
+
+    private async Task FilterChanged(string str)
     {
         if (_advancedSearchExpanded)
         {
-          await OnConditionChanged.InvokeAsync(str);
+            await OnFilterCriteriaChanged.InvokeAsync(str);
         }
     }
 
-
-    private async Task OnUStatusChanged(UStatus UStatus)
+    private async Task OnUStatusChanged(UStatus? UStatus)
     {
-        TRequest.UStatus = UStatus;
-        await TextChanged(UStatus.ToString());
+            TRequest.UStatus = UStatus;
+            await FilterChanged(UStatus.ToString());
     }
+
 }

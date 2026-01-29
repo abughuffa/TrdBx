@@ -23,8 +23,8 @@ public enum TicketListView
 /// </summary>
 public class TicketAdvancedFilter: PaginationFilter
 {
-    public ServiceTask ServiceTask { get; set; } = ServiceTask.All;
-    public TicketStatus TicketStatus { get; set; } = TicketStatus.All;
+    public ServiceTask? ServiceTask { get; set; } = null;
+    public TicketStatus? TicketStatus { get; set; } = null;
     public TicketListView ListView { get; set; } = TicketListView.All;
     public UserProfile? CurrentUser { get; set; }
 }

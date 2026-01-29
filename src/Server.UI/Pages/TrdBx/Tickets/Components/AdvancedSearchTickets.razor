@@ -11,9 +11,10 @@
     <MudGrid>
         <MudItem md="6">
             <MudEnumSelect Style="min-width:120px"
-                           Placeholder="@L["Service Task"]"
-                           TEnum="ServiceTask"
-                           Value="TRequest.ServiceTask"
+                           Placeholder="@L["Filter By Service"]"
+                           TEnum="ServiceTask?"
+                           Clearable="true"
+                           Value="@TRequest.ServiceTask"
                            ValueChanged="OnServiceTaskChanged"
                            Dense="true">
             </MudEnumSelect>
@@ -21,9 +22,10 @@
 
         <MudItem md="6">
             <MudEnumSelect Style="min-width:120px"
-                           Placeholder="@L["Ticket Status"]"
-                           TEnum="TicketStatus"
-                           Value="TRequest.TicketStatus"
+                           Placeholder="@L["Filter By Status"]"
+                           TEnum="TicketStatus?"
+                           Clearable="true"
+                           Value="@TRequest.TicketStatus"
                            ValueChanged="OnTicketStatusChanged"
                            Dense="true">
             </MudEnumSelect>
@@ -35,7 +37,7 @@
     [EditorRequired][Parameter] public TicketsWithPaginationQuery TRequest { get; set; } = null!;
     [EditorRequired][Parameter] public EventCallback<string> OnConditionChanged { get; set; }
     private bool _advancedSearchExpanded;
-    private async Task TextChanged(string str)
+    private async Task FilterChanged(string str)
     {
         if (_advancedSearchExpanded)
         {
@@ -43,15 +45,15 @@
         }
     }
 
-    private async Task OnServiceTaskChanged(ServiceTask ticketType)
+    private async Task OnServiceTaskChanged(ServiceTask? ticketType)
     {
         TRequest.ServiceTask = ticketType;
-        await TextChanged(ticketType.ToString());
+        await FilterChanged(ticketType.ToString());
     }
 
-    private async Task OnTicketStatusChanged(TicketStatus ticketStatus)
+    private async Task OnTicketStatusChanged(TicketStatus? ticketStatus)
     {
         TRequest.TicketStatus = ticketStatus;
-        await TextChanged(ticketStatus.ToString());
+        await FilterChanged(ticketStatus.ToString());
     }
 }

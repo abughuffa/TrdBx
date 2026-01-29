@@ -11,8 +11,9 @@
         <MudItem md="6">
             <MudEnumSelect Style="min-width:120px"
                            Placeholder="@L["By Status On Wialon"]"
-                           TEnum="WStatus"
-                           Value="TRequest.StatusOnWialon"
+                           TEnum="WStatus?"
+                           Value="@TRequest.StatusOnWialon"
+                           Clearable="true"
                            ValueChanged="OnStatusOnWialonChanged"
                            Dense="true">
 
@@ -23,8 +24,9 @@
         <MudItem md="6">
             <MudEnumSelect Style="min-width:120px"
                            Placeholder="@L["By Status On TrdBx"]"
-                           TEnum="UStatus"
-                           Value="TRequest.StatusOnTrdBx"
+                           TEnum="UStatus?"
+                           Value="@TRequest.StatusOnTrdBx"
+                           Clearable="true"
                            ValueChanged="OnStatusOnTrdBxChanged"
                            Dense="true">
             </MudEnumSelect>
@@ -39,7 +41,7 @@
     [EditorRequired][Parameter] public DataMatchesWithPaginationQuery TRequest { get; set; } = null!;
     [EditorRequired][Parameter] public EventCallback<string> OnConditionChanged { get; set; }
     private bool _advancedSearchExpanded;
-    private async Task TextChanged(string str)
+    private async Task FilterChanged(string str)
     {
         if (_advancedSearchExpanded)
         {
@@ -47,16 +49,16 @@
         }
     }
 
-    private async Task OnStatusOnWialonChanged(WStatus str)
+    private async Task OnStatusOnWialonChanged(WStatus? str)
     {
         TRequest.StatusOnWialon = str;
-        await TextChanged(str.ToString());
+        await FilterChanged(str.ToString());
     }
 
-    private async Task OnStatusOnTrdBxChanged(UStatus str)
+    private async Task OnStatusOnTrdBxChanged(UStatus? str)
     {
         TRequest.StatusOnTrdBx = str;
-        await TextChanged(str.ToString());
+        await FilterChanged((str.ToString()));
     }
 
 }

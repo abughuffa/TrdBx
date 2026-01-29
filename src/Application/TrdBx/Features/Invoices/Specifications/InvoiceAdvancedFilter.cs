@@ -23,10 +23,10 @@ public enum InvoiceListView
 public class InvoiceAdvancedFilter : PaginationFilter
 {
 
-    public int CustomerId { get; set; } = 0;
+    public int? CustomerId { get; set; } = null;
 
-    public IStatus IStatus { get; set; } = IStatus.All;
-    public InvoiceType InvoiceType { get; set; } = InvoiceType.All;
+    public IStatus? IStatus { get; set; } = null;
+    public InvoiceType? InvoiceType { get; set; } = null;
 
     public InvoiceListView ListView { get; set; } = InvoiceListView.All;
     public UserProfile? CurrentUser { get; set; }

@@ -15,9 +15,9 @@ public class InvoiceAdvancedSpecification : Specification<Invoice>
 
         Query.Where(q => q.InvoiceNo != null)
              .Where(filter.Keyword, !string.IsNullOrEmpty(filter.Keyword))
-             .Where(x => x.CustomerId.Equals(filter.CustomerId), !(filter.CustomerId.Equals(0) || filter.CustomerId.Equals(null)))
-             .Where(x => x.InvoiceType == filter.InvoiceType, !filter.InvoiceType.Equals(InvoiceType.All))
-             .Where(x => x.IStatus == filter.IStatus, !filter.IStatus.Equals(IStatus.All))
+             .Where(x => x.CustomerId.Equals(filter.CustomerId),  filter.CustomerId is not null)
+             .Where(x => x.InvoiceType == filter.InvoiceType, filter.InvoiceType is not null)
+             .Where(x => x.IStatus == filter.IStatus, filter.IStatus is not null)
              .Where(q => q.CreatedBy == filter.CurrentUser.UserId, filter.ListView == InvoiceListView.My && filter.CurrentUser is not null)
              .Where(x => x.Created >= todayrange.Start && x.Created < todayrange.End.AddDays(1), filter.ListView == InvoiceListView.TODAY)
              .Where(x => x.Created >= last30daysrange.Start, filter.ListView == InvoiceListView.LAST_30_DAYS);

@@ -18,7 +18,7 @@
 <PageTitle>Data Analysis</PageTitle>
 
 <!-- Advanced Search -->
-<AdvancedSearchCharts TRequest="Query" OnConditionChanged="ConditionChanged" />
+<AdvancedSearchCharts TRequest="Query" OnFilterCriteriaChanged="FilterCriteriaChanged" />
 
 <MudContainer MaxWidth="MaxWidth.ExtraLarge">
     <!-- Main Content -->
@@ -723,7 +723,7 @@
     }
 
     #region Event Handlers
-    private void ConditionChanged(string condition) => _ = RefreshDataAsync();
+    private void FilterCriteriaChanged(string condition) => _ = RefreshDataAsync();
 
     private async Task OnChangedListView(ChartListView listView)
     {

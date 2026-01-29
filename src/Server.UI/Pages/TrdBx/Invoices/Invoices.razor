@@ -21,7 +21,7 @@
 
 <PageTitle>@Title</PageTitle>
 
-<AdvancedSearchInvoices TRequest="Query" OnConditionChanged="ConditionChanged"></AdvancedSearchInvoices>
+<AdvancedSearchInvoices TRequest="Query" OnFilterCriteriaChanged="FilterCriteriaChanged"></AdvancedSearchInvoices>
 <style>
     .mud-table-toolbar {
         height: 120px !important;
@@ -201,7 +201,7 @@
         _canDownload = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.Download)).Succeeded;
     }
 
-    private void ConditionChanged(string s)
+    private void FilterCriteriaChanged(string s)
     {
         InvokeAsync(_table.ReloadServerData);
     }
