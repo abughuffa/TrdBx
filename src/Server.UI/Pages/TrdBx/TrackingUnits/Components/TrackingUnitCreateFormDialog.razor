@@ -97,7 +97,7 @@
             {
                 Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
                 await Task.Delay(300);
-                _model = new CreateTrackingUnitCommand() { };
+                _model = new CreateTrackingUnitCommand() { TrackingUnitModelId = _model.TrackingUnitModelId };
                 return data;
             }, errors =>
             {

@@ -91,7 +91,7 @@
     }
 
 
-    private IEnumerable<SProviderDto> spackages = default!;
+    private IEnumerable<SProviderDto> spackages = new List<SProviderDto>();
     private GetAllSProvidersQuery GetAllSProvidersQuery { get; set; } = new();
 
     public SProviderDto SelectedSProvider { get; set; } = null!;
@@ -106,11 +106,13 @@
     protected override async Task OnInitializedAsync()
     {
         spackages = await LoadSProviders();
+        StateHasChanged();
+
     }
 
     private async Task<IEnumerable<SProviderDto>> LoadSProviders()
     {
-        var result = await Mediator.Send(GetAllSProvidersQuery).ConfigureAwait(false);
+        var result = await Mediator.Send(GetAllSProvidersQuery);
         return result;
     }
 

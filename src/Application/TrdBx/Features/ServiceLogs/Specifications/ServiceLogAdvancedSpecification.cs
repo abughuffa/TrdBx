@@ -13,7 +13,7 @@ public class ServiceLogAdvancedSpecification : Specification<ServiceLog>
         var todayrange = today.GetDateRange(ServiceLogListView.TODAY.ToString());
 
         Query.Where(q => q.Subscriptions.Any(s => s.TrackingUnitId == filter.TrackingUnitId) ||
-                         q.WialonTasks.Any(w => w.TrackingUnitId == filter.TrackingUnitId), filter.TrackingUnitId is not null)
+                         q.WialonTasks.Any(w => w.TrackingUnitId == filter.TrackingUnitId), !filter.TrackingUnitId.Equals(0))
             .Where(x => x.ServiceTask == filter.ServiceTask, filter.ServiceTask is not null)
             .Where(x => x.IsBilled == filter.IsBilled, filter.IsBilled is not null)
             .Where(x => x.Created >= todayrange.Start && x.Created < todayrange.End.AddDays(1), filter.ListView == ServiceLogListView.TODAY);

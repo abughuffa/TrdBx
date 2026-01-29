@@ -93,7 +93,7 @@
             {
                 Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
                 await Task.Delay(300);
-                _model = new CreateTrackedAssetCommand() { };
+                _model = new CreateTrackedAssetCommand() { TrackedAssetDesc = _model.TrackedAssetDesc };
                 return data;
             }, errors =>
             {

@@ -113,7 +113,7 @@ return -1;
             {
                 Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
                 await Task.Delay(300);
-                _model = new CreateSimCardCommand() { };
+                _model = new CreateSimCardCommand() {SPackageId =_model.SPackageId, ExDate=_model.ExDate,IsOwen=_model.IsOwen };
                 return data;
             }, errors =>
             {

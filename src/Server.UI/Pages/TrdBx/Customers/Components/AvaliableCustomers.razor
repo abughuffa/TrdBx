@@ -10,9 +10,9 @@
 <MudGrid>
     <MudItem md="8">
         <MudSelect T="int?"
-                   Placeholder="@L["Filter by Customer"]"
-                   Disabled="false"
-                   Clearable="true"
+                   Placeholder="@PHolder"
+                   Disabled="@Disabled"
+                   Clearable="@Clearable"
                    Value="@Value"
                    ValueChanged="OnValueChanged">
             @foreach (var customer in customers)

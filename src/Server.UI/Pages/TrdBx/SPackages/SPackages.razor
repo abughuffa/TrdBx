@@ -92,7 +92,7 @@
     }
 
 
-    private IEnumerable<SPackageDto> spackages = default!;
+    private IEnumerable<SPackageDto> spackages = new List<SPackageDto>();
     private GetAllSPackagesQuery GetAllSPackagesQuery { get; set; } = new();
 
     public SPackageDto SelectedSPackage { get; set; } = null!;
@@ -107,11 +107,12 @@
     protected override async Task OnInitializedAsync()
     {
         spackages = await LoadSPackages();
+        StateHasChanged();
     }
 
     private async Task<IEnumerable<SPackageDto>> LoadSPackages()
     {
-        var result = await Mediator.Send(GetAllSPackagesQuery).ConfigureAwait(false);
+        var result = await Mediator.Send(GetAllSPackagesQuery);
         return result;
     }
 

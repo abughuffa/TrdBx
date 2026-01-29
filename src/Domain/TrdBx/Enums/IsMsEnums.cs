@@ -12,7 +12,7 @@ public enum InsMode
 public enum WStatus
 {
     //[Description("Null")] Null = 0,
-    [Description("All")] All = 0,
+    //[Description("All")] All = 0,
     [Description("Active")] Active = 1,
     [Description("Inactive")] Inactive = 2,
     
@@ -30,7 +30,7 @@ public enum UStatus
     [Description("Damaged")] Damaged = 8,
     [Description("Lost")] Lost = 9,
     //[Description("Null")] Null = 99,
-    [Description("All")] All = 999,
+    //[Description("All")] All = 999,
 
 }
 public enum SubPackageFees
@@ -64,19 +64,13 @@ public enum SLStatus
     [Description("Inactive")] Inactive = 4,
     
     //[Description("Null")] Null = 99,
-    [Description("All")] All = 999
+    //[Description("All")] All = 999
 
 }
-//public enum AStatus
-//{
-//    [Description("Just Added")] JustAdded = 0,
-//    [Description("One TrackingUnit Installed")] OneTrackingUnitInstalled = 1,
-//    [Description("Tow TrackingUnits Installed")] TowTrackingUnitsInstalled = 2,
-//    [Description("TrackingUnit Recovered")] TrackingUnitRecovered = 3
-//}
+
 public enum ServiceTask
 {
-    [Description("All")] All = 0,
+    //[Description("All")] All = 0,
     [Description("Check")] Check = 1,
     [Description("Install New unit")] Install = 2,
     [Description("ReInstall Used unit")] ReInstall = 3,
@@ -120,7 +114,7 @@ public enum BillingPlan
 }
 public enum IStatus
 {
-    [Description("All")] All = 0, //just created invoice
+    //[Description("All")] All = 0, //just created invoice
     [Description("Draft")] Draft = 1, //just created invoice
     [Description("SentToTax")] SentToTax = 2, //invoice in tax process
     [Description("Ready")] Ready = 3, //invoice retrived from taxes
@@ -131,7 +125,7 @@ public enum IStatus
 }
 public enum InvoiceType
 {
-    [Description("All")] All = 0, //just created invoice
+    //[Description("All")] All = 0, //just created invoice
     [Description("Check")] Check = 1, //just created invoice
     [Description("Support")] Support = 2, //invoice in tax process
     [Description("Install")] Install = 3, //invoice retrived from taxes

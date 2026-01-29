@@ -124,7 +124,12 @@
                   {
                       Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
                       await Task.Delay(300);
-                      _model = new CreateParentCommand() { };
+                      _model = new CreateParentCommand() 
+                      { 
+                          BillingPlan = _model.BillingPlan,
+                          IsTaxable = _model.IsTaxable,
+                          IsRenewable = _model.IsRenewable
+                      };
                       return data;
                   },
                   errors =>

@@ -9,7 +9,7 @@ public class CreateTicketCommandValidator : AbstractValidator<CreateTicketComman
     public CreateTicketCommandValidator()
     {
         RuleFor(v => v.Id).NotNull().ForEach(v => v.GreaterThan(0));
-        RuleFor(v => v.ServiceTask).NotEqual(ServiceTask.All).NotEmpty();
+        RuleFor(v => v.ServiceTask).NotNull();
         RuleFor(v => v.TcDate).NotNull().LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.Now));
     }
 

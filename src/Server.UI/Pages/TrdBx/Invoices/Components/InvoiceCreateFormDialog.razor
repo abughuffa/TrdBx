@@ -19,10 +19,10 @@
 
                     <MudItem md="12">
                     <AvaliableCustomers @bind-Value="_model.CustomerId"
-                        Placeholder="@L["To Customer"]"
+                        PHolder="@L["To Customer"]"
                         Clearable="false"
                         WithAdvParents="true"
-                        OnConditionChanged="TextChanged">
+                        OnCustomerChanged="TextChanged">
                         </AvaliableCustomers>
                     </MudItem>
 
@@ -162,7 +162,12 @@ return -1;
            {
                Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
                await Task.Delay(300);
-               _model = new CreateInvoiceCommand() { };
+               _model = new CreateInvoiceCommand() { InvoiceType = _model.InvoiceType, 
+                   InvoiceDate = _model.InvoiceDate,
+                   TaxRate = _model.TaxRate,
+                   DiscountRate = _model.DiscountRate,
+                   IgnoreTaxes = _model.IgnoreTaxes
+               };
                return data;
            }, errors =>
            {

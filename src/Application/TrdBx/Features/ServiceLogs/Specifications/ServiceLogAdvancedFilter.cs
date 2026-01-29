@@ -9,7 +9,7 @@ namespace CleanArchitecture.Blazor.Application.Features.ServiceLogs.Specificatio
 /// </summary>
 public class ServiceLogAdvancedFilter : PaginationFilter
 {
-    public int? TrackingUnitId { get; set; } = null;
+    public int TrackingUnitId { get; set; } = 0;
     public int? CustomerId { get; set; } = null;
     public bool? IsBilled { get; set; } = null;
     public ServiceTask? ServiceTask { get; set; } = null;
