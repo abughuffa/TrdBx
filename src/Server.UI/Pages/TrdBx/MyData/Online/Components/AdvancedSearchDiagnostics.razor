@@ -13,7 +13,7 @@
 
         <MudItem md="3">
             <MudEnumSelect Style="min-width:120px"
-                           Placeholder="@L["By Status On Wialon"]"
+                           Placeholder="@L["Filter by Status On Wialon"]"
                            TEnum="WStatus?"
                            Value="@TRequest.StatusOnWialon"
                            Clearable="true"
@@ -26,7 +26,7 @@
 
         <MudItem md="3">
             <MudEnumSelect Style="min-width:120px"
-                           Placeholder="@L["By Status On TrdBx"]"
+                           Placeholder="@L["Filter by Status On TrdBx"]"
                            TEnum="UStatus?"
                            Value="@TRequest.StatusOnTrdBx"
                            Clearable="true"
@@ -40,7 +40,7 @@
         <MudItem md="3">
 
             <MudEnumSelect Style="min-width:120px"
-                           Placeholder="@L["By SimCard Status"]"
+                           Placeholder="@L["Filter by Sim Status"]"
                            TEnum="SLStatus?"
                            Clearable="true"
                            Value="TRequest.SimCardStatus"
@@ -54,9 +54,9 @@
 
         <MudItem md="3">
             <MudDatePicker Editable @bind-Date="TRequest.ExpiersBefore" 
-                           Placeholder="@L["By Expiers Before"]"
+                           Placeholder="@L["Filter by Expires Before"]"
                            Clearable="true"
-                           FilterChanged="OnExpiersBeforeChanged">
+                           TextChanged="OnExpiersBeforeChanged">
             </MudDatePicker>
         </MudItem>
 

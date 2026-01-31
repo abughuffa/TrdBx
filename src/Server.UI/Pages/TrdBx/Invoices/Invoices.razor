@@ -47,7 +47,7 @@
                 <MudIcon Icon="@Icons.Material.Filled.Window" Size="Size.Large" />
                 <MudStack Spacing="0">
                     <MudText Typo="Typo.subtitle2" Class="mb-2">@Title</MudText>
-                    <MudEnumSelect Style="min-width:120px" TEnum="InvoiceListView" ValueChanged="OnChangedListView" Value="Query.ListView" Dense="true" Label=@ConstantString.ListView>
+                    <MudEnumSelect Style="min-width:120px" TEnum="InvoiceListView" ValueChanged="OnChangedListView" Value="Query.ListView" Dense="true" Label="@ConstantString.ListView">
                     </MudEnumSelect>
                 </MudStack>
             </MudStack>
@@ -90,7 +90,7 @@
         <SelectColumn ShowInFooter="false"></SelectColumn>
         <TemplateColumn HeaderStyle="width:60px" Title="@ConstantString.Actions" Sortable="false">
             <CellTemplate>
-                @if (_canEdit || _canDelete)
+                @if (_canChangeStatus || _canDownload || _canAddPayment)
                 {
                     <MudMenu Icon="@Icons.Material.Filled.Edit" Variant="Variant.Filled" Size="Size.Small"
                     Dense="true"
@@ -101,21 +101,21 @@
                         }
                         @if (_canAddPayment)
                         {
-                            <MudMenuItem OnClick="@(() => OnAddPayment(context.Item))">Add Payment</MudMenuItem>
+                            <MudMenuItem OnClick="@(() => OnAddPayment(context.Item))">@L["Pay"]</MudMenuItem>
                         }
                         @if (_canChangeStatus)
                         {
-                            <MudMenuItem OnClick="@(()=>OnSetNextStatus(context.Item))">Next Status</MudMenuItem>
+                            <MudMenuItem OnClick="@(() => OnSetNextStatus(context.Item))">@L["Set Next Status"]</MudMenuItem>
                         }
                         @if (_canChangeStatus)
                         {
-                            <MudMenuItem OnClick="@(()=>OnSetPreviousStatus(context.Item))">Previous Status</MudMenuItem>
+                            <MudMenuItem OnClick="@(() => OnSetPreviousStatus(context.Item))">@L["Set Previous Status"]</MudMenuItem>
                         }
-
+@* 
                         @if (_canDelete)
                         {
                             <MudMenuItem OnClick="@(()=>OnDelete(context.Item))">@ConstantString.Delete</MudMenuItem>
-                        }
+                        } *@
                     </MudMenu>
                 }
                 else
@@ -179,7 +179,7 @@
     private bool _canSearch;
     private bool _canCreate;
     private bool _canEdit;
-    private bool _canDelete;
+    // private bool _canDelete;
     private bool _canExport;
 
     private bool _canChangeStatus;
@@ -193,7 +193,7 @@
         _canCreate = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.Create)).Succeeded;
         _canSearch = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.Search)).Succeeded;
         _canEdit = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.Edit)).Succeeded;
-        _canDelete = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.Delete)).Succeeded;
+        // _canDelete = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.Delete)).Succeeded;
         _canExport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.Export)).Succeeded;
 
         _canChangeStatus = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.ChangeStatus)).Succeeded;
@@ -266,8 +266,8 @@
         var command = new AddPaymentCommand() {Id = dto.Id };
 
         return DialogServiceHelper.ShowFormDialogWithContentTextAsync<InvoiceAddPaymentFormDialog, AddPaymentCommand>(
-            string.Format(L["Add payment {0}"], dto.InvoiceNo),
-            L["Enter the amount of payment and Select Payment date."],
+            L["Add payment"],
+            string.Format(L["Enter the amount of payment and Select Payment date. to be added to {0}"], dto.InvoiceNo),
             command,
             async () =>
             {
@@ -297,19 +297,19 @@
     }
 
 
-    private async Task OnDelete(InvoiceDto dto)
-    {
-        var contentText = string.Format(ConstantString.DeleteConfirmation, dto.InvoiceNo);
-        var command = new DeleteInvoiceCommand(dto.Id);
-        await DialogServiceHelper.ShowDeleteConfirmationDialogAsync(command, ConstantString.DeleteConfirmationTitle, contentText, async () =>
-        {
-            await InvokeAsync(async () =>
-            {
-                await _table.ReloadServerData();
-                _selectedItems.Clear();
-            });
-        });
-    }
+    // private async Task OnDelete(InvoiceDto dto)
+    // {
+    //     var contentText = string.Format(ConstantString.DeleteConfirmation, dto.InvoiceNo);
+    //     var command = new DeleteInvoiceCommand(dto.Id);
+    //     await DialogServiceHelper.ShowDeleteConfirmationDialogAsync(command, ConstantString.DeleteConfirmationTitle, contentText, async () =>
+    //     {
+    //         await InvokeAsync(async () =>
+    //         {
+    //             await _table.ReloadServerData();
+    //             _selectedItems.Clear();
+    //         });
+    //     });
+    // }
 
 
 

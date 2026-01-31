@@ -41,9 +41,9 @@ public class StartTicketCommandHandler : IRequestHandler<StartTicketCommand, Res
 
         var ticket = await _context.Tickets.Where(x => x.Id == request.Id).FirstAsync() ?? throw new NotFoundException($"Ticket with id: [{request.Id}] not found.");
 
-        if (!(ticket.TicketStatus == TicketStatus.Assigned))
+        if (!(ticket.TicketStatus == TicketStatus.Accepted))
         {
-            return await Result.FailureAsync("Ticket Status should be Assigned to Start it.");
+            return await Result.FailureAsync("Ticket Status should be Accepted to Start it.");
         }
 
         ticket.TicketStatus = TicketStatus.OnProcess;

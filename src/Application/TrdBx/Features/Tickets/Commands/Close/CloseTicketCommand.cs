@@ -3,9 +3,9 @@ using CleanArchitecture.Blazor.Application.Features.Tickets.DTOs;
 
 
 
-namespace CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Complete;
+namespace CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Close;
 
-public class CompleteTicketCommand : ICacheInvalidatorRequest<Result>
+public class CloseTicketCommand : ICacheInvalidatorRequest<Result>
 {
     [Description("Id")] public int Id { get; set; }
     [Description("TeDate")] public DateOnly TeDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
@@ -21,7 +21,7 @@ public class CompleteTicketCommand : ICacheInvalidatorRequest<Result>
     //    }
     //}
 }
-public class CompleteTicketCommandHandler : IRequestHandler<CompleteTicketCommand, Result>
+public class CloseTicketCommandHandler : IRequestHandler<CloseTicketCommand, Result>
 {
     //private readonly IApplicationDbContextFactory _dbContextFactory;
     //public CompleteTicketCommandHandler(
@@ -32,13 +32,13 @@ public class CompleteTicketCommandHandler : IRequestHandler<CompleteTicketComman
     //}
 
     private readonly IApplicationDbContext _context;
-    public CompleteTicketCommandHandler(
+    public CloseTicketCommandHandler(
         IApplicationDbContext context
     )
     {
         _context = context;
     }
-    public async Task<Result> Handle(CompleteTicketCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(CloseTicketCommand request, CancellationToken cancellationToken)
     {
 
         //await using var _context = await _dbContextFactory.CreateAsync(cancellationToken);
@@ -46,10 +46,10 @@ public class CompleteTicketCommandHandler : IRequestHandler<CompleteTicketComman
 
         if (!(ticket.TicketStatus == TicketStatus.OnProcess))
         {
-            return await Result.FailureAsync("Ticket Status should be OnProcess to Complete it.");
+            return await Result.FailureAsync("Ticket Status should be OnProcess to Close it.");
         }
 
-        ticket.TicketStatus = TicketStatus.Completed;
+        ticket.TicketStatus = TicketStatus.Closed;
         ticket.TeDate = request.TeDate;
        
 
@@ -65,7 +65,7 @@ public class CompleteTicketCommandHandler : IRequestHandler<CompleteTicketComman
             return await Result.SuccessAsync();
         }
         else
-            return await Result.FailureAsync("Ticket Completing Faild!");
+            return await Result.FailureAsync("Closing Ticket were faild!");
 
     }
 }

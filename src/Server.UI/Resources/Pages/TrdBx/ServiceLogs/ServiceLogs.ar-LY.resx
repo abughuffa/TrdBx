@@ -132,6 +132,9 @@
   <data name="Filter by Customer" xml:space="preserve">
     <value>تصفية بحسب الزبون</value>
   </data>
+  <data name="Filter By Service" xml:space="preserve">
+    <value>تصفية بحسب الخدمة</value>
+  </data>
   <data name="IsBilled" xml:space="preserve">
     <value>مفوترة؟</value>
   </data>
@@ -143,6 +146,9 @@
   </data>
   <data name="ServiceLog" xml:space="preserve">
     <value>سجل الخدمة</value>
+  </data>
+  <data name="ServiceLogs" xml:space="preserve">
+    <value>سجلات الخدمات</value>
   </data>
   <data name="ServiceNo" xml:space="preserve">
     <value>ر. سجل الخدمة</value>

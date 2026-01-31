@@ -138,13 +138,13 @@
   <data name="Desc" xml:space="preserve">
     <value>بيـــان</value>
   </data>
-  <data name="Filter by Service Task" xml:space="preserve">
-    <value>تصفية بحسب مهمة الخدمة</value>
+  <data name="Filter By Service" xml:space="preserve">
+    <value>تصفية بحسب الخدمة</value>
   </data>
-  <data name="Filter by Ticket Status" xml:space="preserve">
-    <value>تصفية بحسب حالة البطاقة</value>
+  <data name="Filter By Status" xml:space="preserve">
+    <value>تصفية بحسب حالة</value>
   </data>
-  <data name="Last Modified By User" xml:space="preserve">
+  <data name="Modified By User" xml:space="preserve">
     <value>اخر محدث</value>
   </data>
   <data name="Note" xml:space="preserve">
@@ -188,6 +188,9 @@
   </data>
   <data name="TicketNo" xml:space="preserve">
     <value>رقم البطاقة</value>
+  </data>
+  <data name="Tickets" xml:space="preserve">
+    <value>بطاقات الدعم</value>
   </data>
   <data name="TicketStatus" xml:space="preserve">
     <value>الحالة</value>

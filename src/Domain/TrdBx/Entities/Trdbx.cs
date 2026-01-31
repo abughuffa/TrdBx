@@ -251,14 +251,14 @@ public class InvoiceItem : BaseEntity
 #region Tickets
 public enum TicketStatus
 {
-    All = 0,
-    JustCreated = 1,
-    Approved = 2,
-    Assigned = 3,
-    Released = 4,
+    //All = 0,
+    Opened = 2,
+    Accepted = 3,
+    //Assigned = 4,
+    //Released = 5,
     Rejected = 5,
     OnProcess = 6,
-    Completed = 7
+    Closed = 7
 }
 public class Ticket : BaseAuditableEntity
 {

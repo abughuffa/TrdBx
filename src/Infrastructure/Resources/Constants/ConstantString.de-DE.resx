@@ -201,9 +201,6 @@
   <data name="Loading..." xml:space="preserve">
     <value>Laden...</value>
   </data>
-  <data name="Login fail" xml:space="preserve">
-    <value>Anmeldung fehlgeschlagen</value>
-  </data>
   <data name="Login successfully" xml:space="preserve">
     <value>Anmeldung erfolgreich</value>
   </data>

@@ -120,8 +120,8 @@
   <data name="as Paid" xml:space="preserve">
     <value> as Paid</value>
   </data>
-  <data name="By Customer" xml:space="preserve">
-    <value>By Customer</value>
+  <data name="To Customer" xml:space="preserve">
+    <value>To Customer</value>
   </data>
   <data name="Cancel Invoice" xml:space="preserve">
     <value> Cancel Invoice </value>
@@ -138,19 +138,19 @@
   <data name="Filter by Customer" xml:space="preserve">
     <value>Filter by Customer</value>
   </data>
-  <data name="GrangTotal" xml:space="preserve">
+  <data name="GrandTotal" xml:space="preserve">
     <value>Grand Total</value>
   </data>
   <data name="Ignore Taxes even if it was required!" xml:space="preserve">
     <value>Ignore Taxes even if it was required!</value>
   </data>
-  <data name="InvDate" xml:space="preserve">
+  <data name="InvoiceDate" xml:space="preserve">
     <value>Invoice Date</value>
   </data>
-  <data name="InvDesc" xml:space="preserve">
-    <value>Desc</value>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
   </data>
-  <data name="InvNo" xml:space="preserve">
+  <data name="InvoiceNo" xml:space="preserve">
     <value>InvoiceNo</value>
   </data>
   <data name="Invoice Date is required!" xml:space="preserve">
@@ -165,17 +165,20 @@
   <data name="IStatus" xml:space="preserve">
     <value>Status</value>
   </data>
+  <data name="Pay" xml:space="preserve">
+    <value>Pay</value>
+  </data>
   <data name="Set Invoice" xml:space="preserve">
     <value> Set Invoice </value>
   </data>
   <data name="Set Invoice {0} as Paid" xml:space="preserve">
     <value>Set Invoice {0} as Paid</value>
   </data>
-  <data name="Set Next Status for Invoice" xml:space="preserve">
-    <value> Set Next Status for Invoice </value>
+  <data name="Set Next Status" xml:space="preserve">
+    <value>Set Next Status</value>
   </data>
-  <data name="Set Previous Status for Invoice" xml:space="preserve">
-    <value> Set Previous Status for Invoice </value>
+  <data name="Set Previous Status" xml:space="preserve">
+    <value>Set Previous Status</value>
   </data>
   <data name="Taxes" xml:space="preserve">
     <value>Taxes</value>
@@ -185,5 +188,86 @@
   </data>
   <data name="Update Invoice" xml:space="preserve">
     <value>Update Invoice</value>
+  </data>
+  <data name="Enter the amount of payment and Select Payment date. to be added to {0}" xml:space="preserve">
+    <value>Enter the amount of payment and Select Payment date. to be added to {0}</value>
+  </data>
+  <data name="Invoice #" xml:space="preserve">
+    <value>Invoice # </value>
+  </data>
+  <data name="Invoice Details" xml:space="preserve">
+    <value>Invoice Details</value>
+  </data>
+  <data name="Loading invoice details..." xml:space="preserve">
+    <value>Loading invoice details...</value>
+  </data>
+  <data name="Invoice not found. Please check the invoice ID." xml:space="preserve">
+    <value>Invoice not found. Please check the invoice ID.</value>
+  </data>
+  <data name="Invoice Items" xml:space="preserve">
+    <value>Invoice Items</value>
+  </data>
+  <data name="Items Group # " xml:space="preserve">
+    <value>Items Group # </value>
+  </data>
+  <data name="Subtotal :" xml:space="preserve">
+    <value>Subtotal : </value>
+  </data>
+  <data name="Items" xml:space="preserve">
+    <value>Items</value>
+  </data>
+  <data name="Amount" xml:space="preserve">
+    <value>Amount</value>
+  </data>
+  <data name="Total:" xml:space="preserve">
+    <value>Total:</value>
+  </data>
+  <data name="Discount:" xml:space="preserve">
+    <value>Discount:</value>
+  </data>
+  <data name="Taxable:" xml:space="preserve">
+    <value>Taxable:</value>
+  </data>
+  <data name="Tax:" xml:space="preserve">
+    <value>Tax:</value>
+  </data>
+  <data name="GrandTotal:" xml:space="preserve">
+    <value>Grand Total:</value>
+  </data>
+  <data name="Invoice deleted successfully" xml:space="preserve">
+    <value>Invoice deleted successfully</value>
+  </data>
+  <data name="Item deleted successfully" xml:space="preserve">
+    <value>Item deleted successfully</value>
+  </data>
+  <data name="Item group deleted successfully" xml:space="preserve">
+    <value>Item group deleted successfully</value>
+  </data>
+  <data name="Filter By Type" xml:space="preserve">
+    <value>Filter By Type</value>
+  </data>
+  <data name="Filter By Status" xml:space="preserve">
+    <value>Filter By Status</value>
+  </data>
+  <data name="Payment Date Is Required!" xml:space="preserve">
+    <value>Payment Date Is Required!</value>
+  </data>
+  <data name="Amount is required!" xml:space="preserve">
+    <value>Amount is required!</value>
+  </data>
+  <data name="TaxRate" xml:space="preserve">
+    <value>Tax Rate</value>
+  </data>
+  <data name="Tax Rate is required!" xml:space="preserve">
+    <value>Tax Rate is required!</value>
+  </data>
+  <data name="Discount Rate" xml:space="preserve">
+    <value>Discount Rate</value>
+  </data>
+  <data name="Discount Rate is required!" xml:space="preserve">
+    <value>Discount Rate is required!</value>
+  </data>
+  <data name="Grand Total" xml:space="preserve">
+    <value>Grand Total</value>
   </data>
 </root>

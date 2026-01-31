@@ -1,11 +1,10 @@
 ﻿using CleanArchitecture.Blazor.Application.Features.Tickets.Caching;
-using CleanArchitecture.Blazor.Application.Features.Tickets.DTOs;
 
 
 
-namespace CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Approve;
+namespace CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Accept;
 
-public class ApproveTicketCommand : ICacheInvalidatorRequest<Result>
+public class AcceptTicketCommand : ICacheInvalidatorRequest<Result>
 {
     [Description("Id")] public int Id { get; set; }
 
@@ -18,7 +17,7 @@ public class ApproveTicketCommand : ICacheInvalidatorRequest<Result>
     //    }
     //}
 }
-public class ApproveTicketCommandHandler : IRequestHandler<ApproveTicketCommand, Result>
+public class AcceptTicketCommandHandler : IRequestHandler<AcceptTicketCommand, Result>
 {
     //private readonly IApplicationDbContextFactory _dbContextFactory;
     //public ApproveTicketCommandHandler(
@@ -29,7 +28,7 @@ public class ApproveTicketCommandHandler : IRequestHandler<ApproveTicketCommand,
     //}
 
     private readonly IApplicationDbContext _context;
-    public ApproveTicketCommandHandler(
+    public AcceptTicketCommandHandler(
         IApplicationDbContext context
     )
     {
@@ -37,18 +36,18 @@ public class ApproveTicketCommandHandler : IRequestHandler<ApproveTicketCommand,
     }
 
 
-    public async Task<Result> Handle(ApproveTicketCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(AcceptTicketCommand request, CancellationToken cancellationToken)
     {
         //await using var _context = await _dbContextFactory.CreateAsync(cancellationToken);
 
         var ticket = await _context.Tickets.Where(x => x.Id == request.Id).FirstAsync() ?? throw new NotFoundException($"Ticket with id: [{request.Id}] not found.");
 
-        if (!(ticket.TicketStatus == TicketStatus.JustCreated))
+        if (!(ticket.TicketStatus == TicketStatus.Opened))
         {
-            return await Result.FailureAsync("Ticket Status should be JustCreated to Approve it.");
+            return await Result.FailureAsync("Ticket Status should be Opened to Accept it.");
         }
 
-        ticket.TicketStatus = TicketStatus.Approved;
+        ticket.TicketStatus = TicketStatus.Accepted;
         ticket.Note = string.Empty;
 
 
@@ -61,7 +60,7 @@ public class ApproveTicketCommandHandler : IRequestHandler<ApproveTicketCommand,
             return await Result.SuccessAsync();
         }
         else
-            return await Result.FailureAsync("Ticket Approvement Faild!");
+            return await Result.FailureAsync("Ticket Acceptance Faild!");
 
     }
 }

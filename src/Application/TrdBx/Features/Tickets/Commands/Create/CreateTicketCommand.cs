@@ -57,11 +57,19 @@ public class CreateTicketCommandHandler : SerialForSharedLogic, IRequestHandler<
     {
         //await using var _context = await _dbContextFactory.CreateAsync(cancellationToken);
 
+        var incompletedTickets = await _context.Tickets.Where(x => request.Id.Contains(x.TrackingUnitId) && x.TicketStatus != TicketStatus.Closed).ToListAsync(cancellationToken);
+
+        if (incompletedTickets.Any())
+        {
+            return await Result<int>.FailureAsync("There is a Tracking Unit has incompleted Tickets.");
+        }
+
         var desc = string.Empty;;
         var ticketNo = GenSerialNo(_context, "Ticket", request.TcDate).Result;
 
-
         var items = await _context.TrackingUnits.Where(x => request.Id.Contains(x.Id)).ToListAsync(cancellationToken);
+
+
 
         switch (request.ServiceTask)
         {
@@ -214,7 +222,7 @@ public class CreateTicketCommandHandler : SerialForSharedLogic, IRequestHandler<
                 Desc = string.Format(desc, item.SNo),
                 TicketNo = ticketNo,
                 ServiceTask = request.ServiceTask,
-                TicketStatus = TicketStatus.JustCreated,
+                TicketStatus = TicketStatus.Opened,
                 TcDate = request.TcDate,
 
             };

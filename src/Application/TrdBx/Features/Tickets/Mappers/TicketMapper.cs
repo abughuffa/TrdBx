@@ -1,14 +1,7 @@
 ﻿
-//using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.AddEdit;
-using CleanArchitecture.Blazor.Application.Features.Documents.DTOs;
 using CleanArchitecture.Blazor.Application.Features.Identity.Mappers;
-using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Assign;
-using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Create;
 using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Reject;
-
-//using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Update;
 using CleanArchitecture.Blazor.Application.Features.Tickets.DTOs;
-using CleanArchitecture.Blazor.Application.Features.TrackingUnits.DTOs;
 
 namespace CleanArchitecture.Blazor.Application.Features.Tickets.Mappers;
 
@@ -27,7 +20,7 @@ public static partial class Mapper
     [MapperIgnoreSource(nameof(TicketDto.LastModifiedByUser))]
     public static partial Ticket FromDto(TicketDto dto);
 
-    public static partial AssignTicketCommand ToAssignCommand(TicketDto dto);
+    //public static partial AssignTicketCommand ToAssignCommand(TicketDto dto);
     public static partial RejectTicketCommand ToRejectCommand(TicketDto dto);
     //public static partial Ticket FromEditCommand(AddEditTicketCommand command);
     //public static partial Ticket FromCreateCommand(CreateTicketCommand command);

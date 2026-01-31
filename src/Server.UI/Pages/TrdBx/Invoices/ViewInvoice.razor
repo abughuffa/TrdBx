@@ -14,9 +14,9 @@
                 <MudIcon Icon="@Icons.Material.Filled.Receipt" Size="Size.Large" />
             </MudAvatar>
             <MudCardHeader>
-                <MudText Typo="Typo.h5">Invoice Details</MudText>
+                <MudText Typo="Typo.h5">@L["Invoice Details"]</MudText>
                 <MudText Typo="Typo.body2" Color="Color.Secondary">
-                    Invoice #@model?.InvoiceNo
+                    @L["Invoice # "] @model?.InvoiceNo
                 </MudText>
             </MudCardHeader>
             <MudCardActions>
@@ -29,7 +29,7 @@
                         <MudButton Color="Color.Error"
                                    StartIcon="@Icons.Material.Filled.Delete"
                                    OnClick="DeleteInvoice">
-                            Delete
+                            @ConstantString.Delete
                         </MudButton>
                     }
 
@@ -41,12 +41,12 @@
             @if (_isLoading)
             {
                 <MudProgressLinear Indeterminate="true" Class="my-6" />
-                <MudText Align="Align.Center">Loading invoice details...</MudText>
+                <MudText Align="Align.Center">@L["Loading invoice details..."]</MudText>
             }
             else if (model == null)
             {
                 <MudAlert Severity="Severity.Warning" Class="my-6">
-                    Invoice not found. Please check the invoice ID.
+                    @L["Invoice not found. Please check the invoice ID."]
                 </MudAlert>
             }
             else
@@ -54,26 +54,26 @@
                 <!-- Invoice Header Information -->
                 <MudGrid Class="mb-6">
                     <MudItem xs="12" sm="6" md="4">
-                        <MudText Typo="Typo.body2" Color="Color.Secondary">Invoice Number</MudText>
+                        <MudText Typo="Typo.body2" Color="Color.Secondary">@L["InvoiceNo"]</MudText>
                         <MudText Typo="Typo.body1">@model.InvoiceNo</MudText>
                     </MudItem>
                     <MudItem xs="12" sm="6" md="4">
-                        <MudText Typo="Typo.body2" Color="Color.Secondary">Invoice Date</MudText>
+                        <MudText Typo="Typo.body2" Color="Color.Secondary">@L["InvoiceDate"]</MudText>
                         <MudText Typo="Typo.body1">@model.InvoiceDate.ToString("dd-MM-yyyy")</MudText>
                     </MudItem>
                     <MudItem xs="12" sm="6" md="4">
-                        <MudText Typo="Typo.body2" Color="Color.Secondary">Status</MudText>
+                        <MudText Typo="Typo.body2" Color="Color.Secondary">@L["IStatus"]</MudText>
 @*                         <MudChip Color="@GetStatusColor(_invoice.IStatus)" 
                                 Label="@_invoice.IStatus" 
                                 Variant="Variant.Filled" 
                                 Size="Size.Small" /> *@
                     </MudItem>
                     <MudItem xs="12" sm="6" md="4">
-                        <MudText Typo="Typo.body2" Color="Color.Secondary">Customer</MudText>
+                        <MudText Typo="Typo.body2" Color="Color.Secondary">@L["Customer"]</MudText>
                         <MudText Typo="Typo.body1">@model.Customer</MudText>
                     </MudItem>
                     <MudItem xs="12" sm="6" md="4">
-                        <MudText Typo="Typo.body2" Color="Color.Secondary">Grand Total</MudText>
+                        <MudText Typo="Typo.body2" Color="Color.Secondary">@L["GrandTotal"]</MudText>
                         <MudText Typo="Typo.h6" Color="Color.Primary">
                             @model.GrandTotal.ToString("N3")
                         </MudText>
@@ -81,7 +81,7 @@
                 </MudGrid>
 
                 <!-- Item Groups DataGrid -->
-                <MudText Typo="Typo.h6" Class="mb-3">Invoice Items</MudText>
+                <MudText Typo="Typo.h6" Class="mb-3">@L["Invoice Items"]</MudText>
                 
                 <MudExpansionPanels MultiExpansion="true" Class="mb-4">
                     @foreach (var itemGroup in model.InvoiceItemGroups.OrderBy(ig => ig.SerialIndex))
@@ -91,7 +91,7 @@
                                 <MudGrid>
                                     <MudItem xs="12" sm="6">
                                         <MudText Typo="Typo.subtitle1">
-                                            Item Group #@itemGroup.SerialIndex
+                                            @L["Items Group # "]@itemGroup.SerialIndex
                                         </MudText>
                                         <MudText Typo="Typo.body2" Color="Color.Secondary">
                                             @itemGroup.Description
@@ -99,7 +99,7 @@
                                     </MudItem>
                                     <MudItem xs="12" sm="6" Class="text-right">
                                         <MudText Typo="Typo.h6" Color="Color.Primary">
-                                            Subtotal: @itemGroup.SubTotal.ToString("N3")
+                                            @L["Subtotal : "] @itemGroup.SubTotal.ToString("N3")
                                         </MudText>
                                     </MudItem>
                                 </MudGrid>
@@ -118,9 +118,10 @@
                                             Class="mt-2">
                                     
                                     <ToolBarContent>
-                                        <MudText Typo="Typo.subtitle2">Items in this group</MudText>
+                                        <MudText Typo="Typo.subtitle2"> @L["Items"]</MudText>
                                         <MudSpacer />
                                         <MudText Typo="Typo.body2">
+                                          @*   @L["Group's Items"] *@
                                             @itemGroup.InvoiceItems.Count items
                                         </MudText>
                                     </ToolBarContent>
@@ -128,22 +129,21 @@
                                     <Columns>
                                         <PropertyColumn Property="x => x.SubSerialIndex" 
                                                        Title="#" 
-                                                       Sortable="true"
-                                                       Width="60px" />
+                                                       Sortable="true" />
                                         
                                         <PropertyColumn Property="x => x.Description" 
-                                                       Title="Description" 
+                                                       Title=@L["Description"] 
                                                        Sortable="true" />
                                         
                                         
                
                                         
                                         <PropertyColumn Property="x => x.Amount" 
-                                                       Title="Amount" 
+                                                        Title=@L["Amount"]
                                                        Sortable="true"
                                                         Format="N3" />
                                         
-                                        <TemplateColumn Title="Actions" Width="100px">
+                                        <TemplateColumn Title="Actions">
                                             <CellTemplate>
                                                 @if (_canDeleteItem)
                                                 {
@@ -171,7 +171,7 @@
                                             <MudButton StartIcon="@Icons.Material.Filled.Delete"
                                                        Color="Color.Error"
                                                        OnClick="@(() => DeleteItemGroup(itemGroup))">
-                                                Delete Group
+                                                @ConstantString.Delete
                                             </MudButton>
                                         </MudButtonGroup>
                                     </div>
@@ -189,30 +189,30 @@
                     <MudItem xs="12" md="4">
                         <MudPaper Class="pa-4" Elevation="1">
                             <MudStack Row="true" Justify="Justify.SpaceBetween" Class="mb-2">
-                                <MudText Typo="Typo.body2">Total:</MudText>
+                                <MudText Typo="Typo.body2">@L["Total:"]</MudText>
                                 <MudText Typo="Typo.body1">
                                     @model.Total.ToString("N3")
                                 </MudText>
                             </MudStack>
                             <MudStack Row="true" Justify="Justify.SpaceBetween" Class="mb-2">
-                                <MudText Typo="Typo.body2">Discount:</MudText>
+                                <MudText Typo="Typo.body2">@L["Discount:"]</MudText>
                                 <MudText Typo="Typo.body1">
                                     @model.DiscountAmount.ToString("N3")
                                 </MudText>
                             </MudStack>
                             <MudStack Row="true" Justify="Justify.SpaceBetween" Class="mb-2">
-                                <MudText Typo="Typo.body2">Taxable:</MudText>
+                                <MudText Typo="Typo.body2">@L["Taxable:"]</MudText>
                                 <MudText Typo="Typo.body1">
                                     @model.TaxableAmount.ToString("N3")
                                 </MudText>
                             </MudStack>
                             <MudStack Row="true" Justify="Justify.SpaceBetween" Class="mb-2">
-                                <MudText Typo="Typo.body2">Tax:</MudText>
+                                <MudText Typo="Typo.body2">@L["Tax:"]</MudText>
                                 <MudText Typo="Typo.body1">@model.TaxAmount.ToString("N3")</MudText>
                             </MudStack>
                             <MudDivider Class="my-2" />
                             <MudStack Row="true" Justify="Justify.SpaceBetween">
-                                <MudText Typo="Typo.h6">GrandTotal:</MudText>
+                                <MudText Typo="Typo.h6">@L["GrandTotal:"]</MudText>
                                 <MudText Typo="Typo.h5" Color="Color.Primary">
                                     @model.GrandTotal.ToString("N3")
                                 </MudText>

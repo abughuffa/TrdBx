@@ -138,6 +138,9 @@
   <data name="SimCardNo" xml:space="preserve">
     <value>رقم الشريحة</value>
   </data>
+  <data name="SimCards" xml:space="preserve">
+    <value>شرائح الاتصال</value>
+  </data>
   <data name="SPackage" xml:space="preserve">
     <value>الباقة</value>
   </data>

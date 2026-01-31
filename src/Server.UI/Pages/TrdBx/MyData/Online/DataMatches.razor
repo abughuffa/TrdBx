@@ -34,7 +34,7 @@
                 <MudIcon Icon="@Icons.Material.Filled.Window" Size="Size.Large" />
                 <MudStack Spacing="0">
                     <MudText Typo="Typo.subtitle2" Class="mb-2">@Title</MudText>
-                    <MudEnumSelect Style="min-width:120px" TEnum="DataMatchListView" ValueChanged="OnChangedListView" Value="Query.ListView" Dense="true" Label="@L["List View"]">
+                    <MudEnumSelect Style="min-width:120px" TEnum="DataMatchListView" ValueChanged="OnChangedListView" Value="Query.ListView" Dense="true" Label="@ConstantString.ListView">
                     </MudEnumSelect>
                 </MudStack>
             </MudStack>
@@ -51,7 +51,7 @@
                                           Loading="_exporting"
                                           OnClick="@(() => OnExport())"
                                           StartIcon="@Icons.Custom.FileFormats.FileExcel">
-                            Export
+                            @ConstantString.Export
                         </MudLoadingButton>
                     }
                 </MudToolBar>
@@ -80,7 +80,7 @@
         <PropertyColumn Property="x => x.Client" Title="@L[_currentDto.GetMemberDescription(x=>x.Client)]" Groupable="true" />
         <PropertyColumn Property="x => x.Customer" Title="@L[_currentDto.GetMemberDescription(x=>x.Customer)]" Groupable="true" />
         <PropertyColumn Property="x => x.WNote" Title="@L[_currentDto.GetMemberDescription(x=>x.WNote)]" />
-        <PropertyColumn Property="x => x.TNote" Title="@L[_currentDto.GetMemberDescription(x=>x.TNote)]" />
+
 
 
     </Columns>

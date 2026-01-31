@@ -201,9 +201,6 @@
   <data name="Loading..." xml:space="preserve">
     <value>កំពុង​ផ្ទុក...</value>
   </data>
-  <data name="Login fail" xml:space="preserve">
-    <value>ការចូលបរាជ័យ</value>
-  </data>
   <data name="Login successfully" xml:space="preserve">
     <value>ចូលដោយជោគជ័យ</value>
   </data>

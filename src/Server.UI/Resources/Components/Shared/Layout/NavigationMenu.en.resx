@@ -204,4 +204,70 @@
   <data name="Contacts" xml:space="preserve">
     <value>Contacts</value>
   </data>
+  <data name="Backup &amp; Restore" xml:space="preserve">
+    <value>Backup &amp; Restore</value>
+  </data>
+  <data name="Basic Objects" xml:space="preserve">
+    <value>Basic Objects</value>
+  </data>
+  <data name="Customers" xml:space="preserve">
+    <value>Customers</value>
+  </data>
+  <data name="Impulse Charts" xml:space="preserve">
+    <value>Impulse Charts</value>
+  </data>
+  <data name="Invoices" xml:space="preserve">
+    <value>Invoices</value>
+  </data>
+  <data name="Local Data" xml:space="preserve">
+    <value>Local Data</value>
+  </data>
+  <data name="My Data" xml:space="preserve">
+    <value>My Data</value>
+  </data>
+  <data name="Online Tasks" xml:space="preserve">
+    <value>Online Tasks</value>
+  </data>
+  <data name="Services &amp; Invoices" xml:space="preserve">
+    <value>Services &amp; Invoices</value>
+  </data>
+  <data name="Services Log" xml:space="preserve">
+    <value>Services Log</value>
+  </data>
+  <data name="Services's Prices" xml:space="preserve">
+    <value>Services's Prices</value>
+  </data>
+  <data name="Tickets" xml:space="preserve">
+    <value>Tickets</value>
+  </data>
+  <data name="Sim Cards" xml:space="preserve">
+    <value>Sim Cards</value>
+  </data>
+  <data name="Tracked Assets" xml:space="preserve">
+    <value>Tracked Assets</value>
+  </data>
+  <data name="Tracking Units" xml:space="preserve">
+    <value>Tracking Units</value>
+  </data>
+  <data name="TrdBx" xml:space="preserve">
+    <value>TrdBx</value>
+  </data>
+  <data name="Wialon Tasks" xml:space="preserve">
+    <value>Wialon Tasks</value>
+  </data>
+  <data name="Online Data" xml:space="preserve">
+    <value>Online Data</value>
+  </data>
+  <data name="Wialon Units" xml:space="preserve">
+    <value>Wialon Units</value>
+  </data>
+  <data name="Libyana Sim Cards" xml:space="preserve">
+    <value>Libyana Sim Cards</value>
+  </data>
+  <data name="Data Matches" xml:space="preserve">
+    <value>Data Matches</value>
+  </data>
+  <data name="Data Diagnosises" xml:space="preserve">
+    <value>Data Diagnosises</value>
+  </data>
 </root>

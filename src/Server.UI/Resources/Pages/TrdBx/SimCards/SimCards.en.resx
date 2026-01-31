@@ -138,6 +138,9 @@
   <data name="SimCardNo" xml:space="preserve">
     <value>SimCardNo</value>
   </data>
+  <data name="SimCards" xml:space="preserve">
+    <value>Sim Cards</value>
+  </data>
   <data name="SPackage" xml:space="preserve">
     <value>SPackage</value>
   </data>

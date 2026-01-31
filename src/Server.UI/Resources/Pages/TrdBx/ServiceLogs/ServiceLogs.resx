@@ -132,6 +132,9 @@
   <data name="Filter by Customer" xml:space="preserve">
     <value>Filter by Customer</value>
   </data>
+  <data name="Filter By Service" xml:space="preserve">
+    <value>Filter By Service</value>
+  </data>
   <data name="IsBilled" xml:space="preserve">
     <value>IsBilled?</value>
   </data>
@@ -143,6 +146,9 @@
   </data>
   <data name="ServiceLog" xml:space="preserve">
     <value>ServiceLog</value>
+  </data>
+  <data name="ServiceLogs" xml:space="preserve">
+    <value>Services Log</value>
   </data>
   <data name="ServiceNo" xml:space="preserve">
     <value>ServiceNo</value>

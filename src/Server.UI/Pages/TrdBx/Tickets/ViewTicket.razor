@@ -1,6 +1,6 @@
 ﻿@page "/pages/TrdBx/Tickets/{id:int}/view"
 
-@using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Complete
+@using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Close
 @using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Start
 @using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Stop
 @using CleanArchitecture.Blazor.Application.Features.Tickets.DTOs
@@ -48,8 +48,8 @@
             <MudCardActions>
                 <MudLoadingButton Loading=_starting Disabled=CanStart Color="Color.Primary" DropShadow="false" OnClick="OnStart">Start</MudLoadingButton>
                 <MudLoadingButton Loading=_stoping Disabled=CanStop Color="Color.Primary" DropShadow="false" OnClick="OnStop">Stop</MudLoadingButton>
-                <MudLoadingButton Loading=_completeing Disabled=CanComplete Color="Color.Primary" DropShadow="false" OnClick="OnComplete">Complete</MudLoadingButton>
-                <MudButton Disabled=CanRelease Color="Color.Primary" DropShadow="false" OnClick="OnRelease">Release</MudButton>
+                <MudLoadingButton Loading=_closeing Disabled=CanClose Color="Color.Primary" DropShadow="false" OnClick="OnClose">Complete</MudLoadingButton>
+@*                 <MudButton Disabled=CanRelease Color="Color.Primary" DropShadow="false" OnClick="OnRelease">Release</MudButton> *@
                 <MudButton Color="Color.Primary" DropShadow="false" OnClick="OnGoBack">@ConstantString.GoBack</MudButton>
             </MudCardActions>
         </MudCard>
@@ -73,12 +73,12 @@
 
     bool CanStart = false;
     bool CanStop = false;
-    bool CanComplete = false;
-    bool CanRelease = false;
+    bool CanClose = false;
+    // bool CanRelease = false;
 
     bool _starting = false;
     bool _stoping = false;
-    bool _completeing = false;
+    bool _closeing = false;
 
 
 
@@ -107,10 +107,10 @@
 
     void AssignCommands()
     {
-        CanStart = !(model.TicketStatus == TicketStatus.Assigned);
+        CanStart = !(model.TicketStatus == TicketStatus.Accepted);
         CanStop = !(model.TicketStatus == TicketStatus.OnProcess);
-        CanComplete = !(model.TicketStatus == TicketStatus.OnProcess);
-        CanRelease = !(model.TicketStatus == TicketStatus.Assigned || model.TicketStatus == TicketStatus.OnProcess);
+        CanClose = !(model.TicketStatus == TicketStatus.OnProcess);
+        // CanRelease = !(model.TicketStatus == TicketStatus.Assigned || model.TicketStatus == TicketStatus.OnProcess);
     }
 
     private Task OnGoBack()
@@ -119,11 +119,11 @@
         return Task.CompletedTask;
     }
 
-    private Task OnRelease()
-    {
-        Navigation.NavigateTo($"/pages/TrdBx/Tickets/{Id}/Release?returnUrl=/pages/TrdBx/Tickets");
-        return Task.CompletedTask;
-    }
+    // private Task OnRelease()
+    // {
+    //     Navigation.NavigateTo($"/pages/TrdBx/Tickets/{Id}/Release?returnUrl=/pages/TrdBx/Tickets");
+    //     return Task.CompletedTask;
+    // }
 
     private async Task OnStart()
     {
@@ -170,12 +170,12 @@
             _stoping = false;
         }
     }
-    private async Task OnComplete()
+    private async Task OnClose()
     {
         try
         {
-            _completeing = true;
-            var command = new CompleteTicketCommand() { Id = Id };
+            _closeing = true;
+            var command = new CloseTicketCommand() { Id = Id };
             var result = await Mediator.Send(command);
             if (result.Succeeded)
             {
@@ -189,7 +189,7 @@
         }
         finally
         {
-            _completeing = false;
+            _closeing = false;
         }
     }
 

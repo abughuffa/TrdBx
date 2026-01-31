@@ -43,7 +43,7 @@ public class RejectTicketCommandHandler : IRequestHandler<RejectTicketCommand, R
 
         var ticket = await _context.Tickets.Where(x => x.Id == request.Id).FirstAsync() ?? throw new NotFoundException($"Ticket with id: [{request.Id}] not found.");
 
-        if (!(ticket.TicketStatus == TicketStatus.JustCreated || ticket.TicketStatus == TicketStatus.Released))
+        if (!(ticket.TicketStatus == TicketStatus.Opened))
         {
             return await Result<int>.FailureAsync("Ticket Status should be Released or JustCreated to Reject it.");
         }

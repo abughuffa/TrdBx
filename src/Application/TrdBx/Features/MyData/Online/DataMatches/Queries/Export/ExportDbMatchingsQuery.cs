@@ -70,8 +70,7 @@ public class ExportDataMatchesQueryHandler :
                            {_localizer[_dto.GetMemberDescription(x=>x.WSimCardNo)],item => item.WSimCardNo},
                            {_localizer[_dto.GetMemberDescription(x=>x.StatusOnTrdBx)],item => item.StatusOnTrdBx},
                            {_localizer[_dto.GetMemberDescription(x=>x.StatusOnWialon)],item => item.StatusOnWialon},
-                             {_localizer[_dto.GetMemberDescription(x=>x.WNote)],item => item.WNote},
-                            {_localizer[_dto.GetMemberDescription(x=>x.TNote)],item => item.TNote}
+                             {_localizer[_dto.GetMemberDescription(x=>x.WNote)],item => item.WNote}
                 };
 
         switch (request.ListView)

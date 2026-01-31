@@ -1,4 +1,5 @@
-﻿using CleanArchitecture.Blazor.Server.UI.Models.NavigationMenu;
+﻿using CleanArchitecture.Blazor.Infrastructure.Constants.Role;
+using CleanArchitecture.Blazor.Server.UI.Models.NavigationMenu;
 namespace CleanArchitecture.Blazor.Server.UI.Services.Navigation;
 
 internal static class TrdBxMenu
@@ -12,7 +13,7 @@ internal static class TrdBxMenu
             {
                 new ()
                 {
-                    Title = "System Objects",
+                    Title = "Basic Objects",
                     Icon = Icons.Material.Filled.Dashboard,
                     PageStatus = PageStatus.Completed,
                     IsParent = true,
@@ -49,6 +50,7 @@ internal static class TrdBxMenu
                 {
                     Title = "Services & Invoices",
                     Icon = Icons.Material.Filled.Analytics,
+
                     PageStatus = PageStatus.Completed,
                     IsParent = true,
                     MenuItems = new List<MenuSectionSubItemModel>
@@ -61,7 +63,7 @@ internal static class TrdBxMenu
                         },
                         new()
                         {
-                            Title = "Services",
+                            Title = "Services Log",
                             Href = $"/pages/TrdBx/TrackingUnits/0/ServiceLogs?returnUrl={Uri.EscapeDataString("/")}",
                             PageStatus = PageStatus.Completed
                         },
@@ -74,6 +76,7 @@ internal static class TrdBxMenu
                          new ()
                         {
                             Title = "Services's Prices",
+                            Roles = new[] { RoleName.Admin },
                             Href = "/pages/TrdBx/ServicePrices",
                             PageStatus = PageStatus.Completed
                         }
@@ -90,18 +93,20 @@ internal static class TrdBxMenu
                         new()
                         {
                             Title = "My Data",
+                            Roles = new[] { RoleName.Admin },
                             Href = "/pages/TrdBx/MyData/Local",
                             PageStatus = PageStatus.Completed
                         },
                         new()
                         {
-                            Title = "Charts",
+                            Title = "Impulse Charts",
                             Href = "/pages/TrdBx/MyData/Local/Charts",
                             PageStatus = PageStatus.Completed
                         },
                         new()
                         {
                             Title = "Backup & Restore",
+                            Roles = new[] { RoleName.Admin },
                             Href = "/pages/TrdBx/MyData/Local/BackupRestore",
                             PageStatus = PageStatus.Completed
                         }
@@ -145,7 +150,7 @@ internal static class TrdBxMenu
                 },
                 new()
                 {
-                    Title = "Wialon Tasks",
+                    Title = "Online Tasks",
                     Icon = Icons.Material.Filled.Web,
                     PageStatus = PageStatus.Completed,
                     IsParent = true,
@@ -153,7 +158,7 @@ internal static class TrdBxMenu
                     {
                         new()
                         {
-                            Title = "Online Tasks",
+                            Title = "Wialon Tasks",
                             Href = "/pages/TrdBx/WialonTasks/0/0",
                             PageStatus = PageStatus.Completed
                         }

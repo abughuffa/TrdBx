@@ -68,22 +68,49 @@ public enum SLStatus
 
 }
 
+
+public enum TicketTask
+{
+    //[Description("All")] All = 0, //just created invoice
+    [Description("Check")] Check = 10, //just created invoice
+
+    [Description("Support")] Support_Recover = 20, //invoice in tax process
+    [Description("Support")] Support_ReInstall = 21, //invoice in tax process
+    [Description("Support")] Support_Transfer = 22, //invoice in tax process
+    [Description("Support")] Support_Replace = 23, //invoice in tax process
+
+    [Description("Support")] Support_InstallSimCard = 24, //invoice in tax process
+    [Description("Support")] Support_RecoverSimCard = 25, //invoice in tax process
+    [Description("Support")] Support_ReplacSimCard = 26, //invoice in tax process
+
+    [Description("Install")] Install_New = 31, //invoice retrived from taxes
+    [Description("Install")] ReInstall_Used = 32, //invoice retrived from taxes
+
+    [Description("Renew")] Renew_RenewUnitSub = 41, //invoice sent to customer
+
+    [Description("Subscription")] Subscription_ActivateUnit = 51, //invoice paid
+    [Description("Subscription")] Subscription_ActivateUnitForGprs = 52, //invoice paid
+    [Description("Subscription")] Subscription_ActivateUnitForHosting = 53, //invoice paid
+    [Description("Subscription")] Subscription_DeactivateUnit = 54, //invoice paid
+
+}
+
 public enum ServiceTask
 {
     //[Description("All")] All = 0,
-    [Description("Check")] Check = 1,
-    [Description("Install New unit")] Install = 2,
-    [Description("ReInstall Used unit")] ReInstall = 3,
-    [Description("Recover Installed unit")] Recover = 4,
-    [Description("Transfer Installed unit")] Transfer = 5,
-    [Description("Replace Installed unit")] Replace = 6,
+    [Description("Check")] Check = 1,//
+    [Description("Install New unit")] Install = 2,//
+    [Description("ReInstall Used unit")] ReInstall = 3,//
+    [Description("Recover Installed unit")] Recover = 4,//
+    [Description("Transfer Installed unit")] Transfer = 5,//
+    [Description("Replace Installed unit")] Replace = 6,//
     [Description("Install SimCard card")] InstallSimCard = 7,
     [Description("Recover SimCard card")] RecoverSimCard = 8,
     [Description("Replace SimCard card")] ReplacSimCard = 9,
-    [Description("Activate unit's Subscription")] ActivateUnit = 10,
-    [Description("Activate unit's Subscription for GPRS")] ActivateUnitForGprs = 11,
-    [Description("Activate unit's Subscription FOR Hosting")] ActivateUnitForHosting = 12,
-    [Description("Deactivate unit's Subscription")] DeactivateUnit = 13,
+    [Description("Activate unit's Subscription")] ActivateUnit = 10,//
+    [Description("Activate unit's Subscription for GPRS")] ActivateUnitForGprs = 11,//
+    [Description("Activate unit's Subscription FOR Hosting")] ActivateUnitForHosting = 12,//
+    [Description("Deactivate unit's Subscription")] DeactivateUnit = 13,//
     [Description("Renew unit's Subscription")] RenewUnitSub = 14,
     [Description("UploadedData from TrdBx")] TrdbxDataUpload = 15
 }

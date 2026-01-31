@@ -1,7 +1,6 @@
 ﻿@page "/pages/TrdBx/Tickets"
 @using CleanArchitecture.Blazor.Application.Features.Tickets.Caching
-@using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Approve
-@using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Assign
+@using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Accept
 @using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Delete
 @using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Reject
 @using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.UnReject
@@ -40,7 +39,7 @@
                 <MudIcon Icon="@Icons.Material.Filled.Window" Size="Size.Large" />
                 <MudStack Spacing="0">
                     <MudText Typo="Typo.subtitle2" Class="mb-2">@Title</MudText>
-                    <MudEnumSelect Style="min-width:120px" TEnum="TicketListView" ValueChanged="OnChangedListView" Value="Query.ListView" Dense="true" Label=@ConstantString.ListView>
+                    <MudEnumSelect Style="min-width:120px" TEnum="TicketListView" ValueChanged="OnChangedListView" Value="Query.ListView" Dense="true" Label="@ConstantString.ListView">
                     </MudEnumSelect>
                 </MudStack>
             </MudStack>
@@ -121,18 +120,18 @@
                              EndIcon="@Icons.Material.Filled.KeyboardArrowDown" IconColor="Color.Info" AnchorOrigin="Origin.CenterLeft">
 
                        
-                        @if (_canApprove)
+                        @if (_canAccept)
                         {
-                            <MudMenuItem Disabled="!(context.Item.TicketStatus == TicketStatus.JustCreated)" OnClick="@(() => OnApprove(context.Item))">"@L["Approve"]"</MudMenuItem>
+                            <MudMenuItem Disabled="!(context.Item.TicketStatus == TicketStatus.Opened)" OnClick="@(() => OnAccept(context.Item))">"@L["Approve"]"</MudMenuItem>
                         }
                         @if (_canReject)
                         {
-                            <MudMenuItem Disabled="!(context.Item.TicketStatus == TicketStatus.JustCreated || context.Item.TicketStatus == TicketStatus.Released)" OnClick="@(() => OnReject(context.Item))">"@L["Reject"]"</MudMenuItem>
+                            <MudMenuItem Disabled="!(context.Item.TicketStatus == TicketStatus.Opened)" OnClick="@(() => OnReject(context.Item))">"@L["Reject"]"</MudMenuItem>
                         }
-                        @if (_canAssign)
+@*                         @if (_canAssign)
                         {
                             <MudMenuItem Disabled="!(context.Item.TicketStatus == TicketStatus.Approved || context.Item.TicketStatus == TicketStatus.Released)" OnClick="@(() => OnAssign(context.Item))">"@L["Assign"]"</MudMenuItem>
-                        }
+                        } *@
                         @if (_canUnReject)
                         {
                             <MudMenuItem Disabled="!(context.Item.TicketStatus == TicketStatus.Rejected)" OnClick="@(() => OnUnReject(context.Item))">"@L["UnReject"]"</MudMenuItem>
@@ -195,7 +194,7 @@
     private bool _uploading;
     private bool _exporting;
 
-    private bool _approveing;
+    private bool _accepting;
     private bool _unrejecting;
 
     bool CanAssign = false;
@@ -210,9 +209,9 @@
     private bool _canDelete;
     private bool _canExport;
 
-    private bool _canApprove;
+    private bool _canAccept;
     private bool _canReject;
-    private bool _canAssign;
+    // private bool _canAssign;
     private bool _canUnReject;
 
     protected override async Task OnInitializedAsync()
@@ -225,9 +224,9 @@
         _canDelete = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Tickets.Delete)).Succeeded;
         _canExport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Tickets.Export)).Succeeded;
 
-        _canApprove = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Tickets.Approve)).Succeeded;
+        _canAccept = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Tickets.Approve)).Succeeded;
         _canReject = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Tickets.Reject)).Succeeded;
-        _canAssign = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Tickets.Assign)).Succeeded;
+        // _canAccept = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Tickets.Assign)).Succeeded;
         _canUnReject = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Tickets.UnReject)).Succeeded;
     }
 
@@ -416,50 +415,50 @@
         }
     }
 
-    private async Task OnAssign(TicketDto dto)
-    {
-        // var command = Mapper.Map<AssignTicketCommand>(dto);
+    // private async Task OnAssign(TicketDto dto)
+    // {
+    //     // var command = Mapper.Map<AssignTicketCommand>(dto);
+    // //     var command = Mapper.ToAssignCommand(dto);
+    // //     return DialogServiceHelper.ShowFormDialogAsync<AssignTicketDialog, AssignTicketCommand>(
+    // //         L["Assign Ticket"],
+    // //          new DialogParameters<AssignTicketDialog>
+    // //        {
+    // //                         { x=>x._model,command}
+    // //        },
+    // //         async () =>
+    // //         {
+    // //             await _table.ReloadServerData();
+    // //             _selectedItems.Clear();
+    // //         });
+
+
+    //     var title = L["Assign Ticket"];
     //     var command = Mapper.ToAssignCommand(dto);
-    //     return DialogServiceHelper.ShowFormDialogAsync<AssignTicketDialog, AssignTicketCommand>(
-    //         L["Assign Ticket"],
-    //          new DialogParameters<AssignTicketDialog>
-    //        {
-    //                         { x=>x._model,command}
-    //        },
-    //         async () =>
+    //     var parameters = new DialogParameters<AssignTicketDialog>
     //         {
-    //             await _table.ReloadServerData();
-    //             _selectedItems.Clear();
-    //         });
+    //             { x=>x._model,command },
+    //         };
+    //     var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+    //     var dialog = DialogService.Show<AssignTicketDialog>(title, parameters, options);
+    //     var state = await dialog.Result;
 
-
-        var title = L["Assign Ticket"];
-        var command = Mapper.ToAssignCommand(dto);
-        var parameters = new DialogParameters<AssignTicketDialog>
-            {
-                { x=>x._model,command },
-            };
-        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
-        var dialog = DialogService.Show<AssignTicketDialog>(title, parameters, options);
-        var state = await dialog.Result;
-
-        if (state != null && !state.Canceled)
-        {
-            await _table.ReloadServerData();
-            _selectedItems.Clear();
-        }
-    }
+    //     if (state != null && !state.Canceled)
+    //     {
+    //         await _table.ReloadServerData();
+    //         _selectedItems.Clear();
+    //     }
+    // }
 
 
 
 
 
-    private async Task OnApprove(TicketDto dto)
+    private async Task OnAccept(TicketDto dto)
     {
         try
         {
-            _approveing = true;
-            var command = new ApproveTicketCommand() { Id = dto.Id };
+            _accepting = true;
+            var command = new AcceptTicketCommand() { Id = dto.Id };
             var result = await Mediator.Send(command);
 
             if (result.Succeeded)
@@ -478,7 +477,7 @@
         }
         finally
         {
-            _approveing = false;
+            _accepting = false;
         }
     }
 

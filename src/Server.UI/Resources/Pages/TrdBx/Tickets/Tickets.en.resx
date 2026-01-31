@@ -138,13 +138,13 @@
   <data name="Desc" xml:space="preserve">
     <value>Desc</value>
   </data>
-  <data name="Filter by Service Task" xml:space="preserve">
-    <value>Filter by Service Task</value>
+  <data name="Filter By Service" xml:space="preserve">
+    <value>Filter By Service</value>
   </data>
-  <data name="Filter by Ticket Status" xml:space="preserve">
-    <value>Filter by Ticket Status</value>
+  <data name="Filter By Status" xml:space="preserve">
+    <value>Filter By Status</value>
   </data>
-  <data name="Last Modified By User" xml:space="preserve">
+  <data name="Modified By User" xml:space="preserve">
     <value>Modifier</value>
   </data>
   <data name="Note" xml:space="preserve">
@@ -188,6 +188,9 @@
   </data>
   <data name="TicketNo" xml:space="preserve">
     <value>TicketNo</value>
+  </data>
+  <data name="Tickets" xml:space="preserve">
+    <value>Tickets</value>
   </data>
   <data name="TicketStatus" xml:space="preserve">
     <value>TicketStatus</value>

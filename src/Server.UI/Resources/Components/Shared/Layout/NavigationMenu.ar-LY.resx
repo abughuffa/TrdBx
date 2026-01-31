@@ -204,4 +204,70 @@
   <data name="Contacts" xml:space="preserve">
     <value>جهات اتصال</value>
   </data>
+  <data name="Backup &amp; Restore" xml:space="preserve">
+    <value>نسخ واسترجاع</value>
+  </data>
+  <data name="Basic Objects" xml:space="preserve">
+    <value>العناصر الأساسية</value>
+  </data>
+  <data name="Customers" xml:space="preserve">
+    <value>الزبائن</value>
+  </data>
+  <data name="Impulse Charts" xml:space="preserve">
+    <value>مخططات النبضة</value>
+  </data>
+  <data name="Invoices" xml:space="preserve">
+    <value>الفواتير</value>
+  </data>
+  <data name="Local Data" xml:space="preserve">
+    <value>البيانات المحلية</value>
+  </data>
+  <data name="My Data" xml:space="preserve">
+    <value>بياناتي</value>
+  </data>
+  <data name="Online Tasks" xml:space="preserve">
+    <value>مهام على الشبكة</value>
+  </data>
+  <data name="Services &amp; Invoices" xml:space="preserve">
+    <value>خدمات وفواتير</value>
+  </data>
+  <data name="Services Log" xml:space="preserve">
+    <value>سجلات الخدمات</value>
+  </data>
+  <data name="Services's Prices" xml:space="preserve">
+    <value>أسعار الخدمات</value>
+  </data>
+  <data name="Tickets" xml:space="preserve">
+    <value>بطاقات الدعم</value>
+  </data>
+  <data name="Sim Cards" xml:space="preserve">
+    <value>شرائح الاتصال</value>
+  </data>
+  <data name="Tracked Assets" xml:space="preserve">
+    <value>الأصول</value>
+  </data>
+  <data name="Tracking Units" xml:space="preserve">
+    <value>وحدات التتبع</value>
+  </data>
+  <data name="TrdBx" xml:space="preserve">
+    <value>تي ار دي بي اكس</value>
+  </data>
+  <data name="Wialon Tasks" xml:space="preserve">
+    <value>مهام ويلون</value>
+  </data>
+  <data name="Online Data" xml:space="preserve">
+    <value>بيانات على الشبكة</value>
+  </data>
+  <data name="Wialon Units" xml:space="preserve">
+    <value>الوحدات من المنصة</value>
+  </data>
+  <data name="Libyana Sim Cards" xml:space="preserve">
+    <value>الشرائح من مزود الخدمة</value>
+  </data>
+  <data name="Data Matches" xml:space="preserve">
+    <value>توافق البيانات</value>
+  </data>
+  <data name="Data Diagnosises" xml:space="preserve">
+    <value>تحليل شرائح الاتصال</value>
+  </data>
 </root>

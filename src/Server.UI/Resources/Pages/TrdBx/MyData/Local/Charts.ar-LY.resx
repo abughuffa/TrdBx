@@ -132,6 +132,12 @@
   <data name="ago" xml:space="preserve">
     <value>مضت</value>
   </data>
+  <data name="By End Date" xml:space="preserve">
+    <value>الى التاريخ</value>
+  </data>
+  <data name="By Start Date" xml:space="preserve">
+    <value>من التاريخ</value>
+  </data>
   <data name="Count" xml:space="preserve">
     <value>العدد</value>
   </data>

@@ -46,7 +46,7 @@
                 <MudIcon Icon="@Icons.Material.Filled.Window" Size="Size.Large" />
                 <MudStack Spacing="0">
                     <MudText Typo="Typo.subtitle2" Class="mb-2">@Title</MudText>
-                    <MudEnumSelect Style="min-width:120px" TEnum="LibyanaSimCardListView" ValueChanged="OnChangedListView" Value="Query.ListView" Dense="true" Label="@L["List View"]">
+                    <MudEnumSelect Style="min-width:120px" TEnum="LibyanaSimCardListView" ValueChanged="OnChangedListView" Value="Query.ListView" Dense="true" Label="@ConstantString.ListView">
                     </MudEnumSelect>
                 </MudStack>
             </MudStack>
@@ -65,7 +65,7 @@
                                                       Variant="Variant.Text"
                                                       Loading="@_uploading"
                                                   StartIcon="@Icons.Custom.FileFormats.FileExcel">
-                                        Import
+                                    @ConstantString.Import
                                     </MudLoadingButton>
                                 </ActivatorContent>
                             </MudFileUpload>
@@ -76,7 +76,7 @@
                                           Loading="_exporting"
                                           OnClick="@(() => OnExport())"
                                           StartIcon="@Icons.Custom.FileFormats.FileExcel">
-                            Export
+                            @ConstantString.Export
                         </MudLoadingButton>
                     }
                     @if (_canSyncData)
@@ -84,8 +84,8 @@
                     <MudLoadingButton Color="Color.Primary" 
                         DropShadow="false" 
                         Loading="@_updateexpairy" 
-                        OnClick="SyncExpairyDatesOfSims">
-                        Sync Local expary dates
+                                          OnClick="UpdateLocalSimsExpairyDates">
+                           @L["Update Local Sims Expairy Dates"]
                     </MudLoadingButton>
                     }
 
@@ -237,7 +237,7 @@
         await _table.ReloadServerData();
     }
 
-    async Task SyncExpairyDatesOfSims()
+    async Task UpdateLocalSimsExpairyDates()
     {
         try
         {
@@ -245,9 +245,9 @@
             var model = new SyncSimExpairyCommand();
             var result = await Mediator.Send(model);
             if (result.Succeeded)
-                Snackbar.Add("coool", MudBlazor.Severity.Info);
+                Snackbar.Add(L["Sims expairy dates updated successfully"], MudBlazor.Severity.Info);
             else
-                Snackbar.Add("DeleteFail", MudBlazor.Severity.Error);
+                Snackbar.Add(L["Sims expairy dates update failed"], MudBlazor.Severity.Error);
         }
         finally
         {

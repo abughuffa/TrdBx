@@ -32,8 +32,8 @@ public class DataMatchDto
     [Description("StatusOnTrdBx")]
     public UStatus StatusOnTrdBx { get; set; }
 
-    [Description("TNote")]
-    public string? TNote { get; set; }
+    //[Description("TNote")]
+    //public string? TNote { get; set; }
 
     [Description("WNote")]
     public string? WNote { get; set; }

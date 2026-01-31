@@ -46,7 +46,7 @@ public class UnRejectTicketCommandHandler : IRequestHandler<UnRejectTicketComman
             return await Result.FailureAsync("Ticket Status should be Rejected to UnReject it.");
         }
 
-        ticket.TicketStatus = TicketStatus.JustCreated;
+        ticket.TicketStatus = TicketStatus.Opened;
 
 
         ticket.AddDomainEvent(new TicketUpdatedEvent(ticket));

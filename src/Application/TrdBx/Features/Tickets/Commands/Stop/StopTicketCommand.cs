@@ -48,7 +48,7 @@ public class StopTicketCommandHandler : IRequestHandler<StopTicketCommand, Resul
             return await Result.FailureAsync("Ticket Status should be OnProcess to Stop it.");
         }
 
-        ticket.TicketStatus = TicketStatus.Assigned;
+        ticket.TicketStatus = TicketStatus.Accepted;
 
 
 
