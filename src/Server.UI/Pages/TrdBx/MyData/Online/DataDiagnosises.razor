@@ -54,12 +54,12 @@
                     }
                 </MudToolBar>
                 <MudStack Row Spacing="1">
-                    @if (_canSearch)
-                    {
+                  @*   @if (_canSearch)
+                    { *@
                         <MudTextField T="string" ValueChanged="@(s => OnSearch(s))" Value="@Query.Keyword" Placeholder="@ConstantString.Search" Adornment="Adornment.End"
                                       AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Small">
                         </MudTextField>
-                    }
+                    @* } *@
                 </MudStack>
             </MudStack>
         </MudStack>
@@ -142,7 +142,7 @@
     private IBlazorDownloadFileService BlazorDownloadFileService { get; set; } = null!;
 
     private bool _canExport;
-    private bool _canSearch;
+    // private bool _canSearch;
     // private bool _canDelete;
 
 
@@ -151,7 +151,7 @@
         Title = L[_currentDto.GetClassDescription()];
         var state = await AuthState;
         _canExport = (await AuthService.AuthorizeAsync(state.User, Permissions.DataMatches.Export)).Succeeded;
-        _canSearch = (await AuthService.AuthorizeAsync(state.User, Permissions.DataMatches.Search)).Succeeded;
+        // _canSearch = (await AuthService.AuthorizeAsync(state.User, Permissions.DataMatches.Search)).Succeeded;
         // _canDelete = (await AuthService.AuthorizeAsync(state.User, Permissions.DbMatchings.Delete)).Succeeded;
 
 

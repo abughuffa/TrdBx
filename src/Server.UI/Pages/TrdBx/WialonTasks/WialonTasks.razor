@@ -112,7 +112,7 @@
 
     private WialonTasksWithPaginationQuery Query { get; set; } = new();
 
-    private bool _canSearch;
+    // private bool _canSearch;
     private bool _canExecute;
     private bool _canDelete;
 
@@ -121,7 +121,7 @@
     {
         Title = L[_currentDto.GetClassDescription()];
         var state = await AuthState;
-        _canSearch = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.WialonTasks.Search)).Succeeded;
+        // _canSearch = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.WialonTasks.Search)).Succeeded;
         _canExecute = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.WialonTasks.Execute)).Succeeded;
         _canDelete = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.WialonTasks.Delete)).Succeeded;
     }

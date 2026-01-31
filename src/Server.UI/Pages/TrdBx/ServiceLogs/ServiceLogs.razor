@@ -152,22 +152,22 @@
 
     [Inject]
     private IBlazorDownloadFileService BlazorDownloadFileService { get; set; } = null!;
-    private bool _canSearch;
-    private bool _canCreate;
-    private bool _canEdit;
-    private bool _canDelete;
-    private bool _canImport;
+    // private bool _canSearch;
+    // private bool _canCreate;
+    // private bool _canEdit;
+    // private bool _canDelete;
+    // private bool _canImport;
     private bool _canExport;
 
     protected override async Task OnInitializedAsync()
     {
         Title = L[_currentDto.GetClassDescription()];
         var state = await AuthState;
-        _canCreate = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.ServiceLogs.Create)).Succeeded;
-        _canSearch = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.ServiceLogs.Search)).Succeeded;
-        _canEdit = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.ServiceLogs.Edit)).Succeeded;
-        _canDelete = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.ServiceLogs.Delete)).Succeeded;
-        _canImport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.ServiceLogs.Import)).Succeeded;
+        // _canCreate = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.ServiceLogs.Create)).Succeeded;
+        // _canSearch = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.ServiceLogs.Search)).Succeeded;
+        // _canEdit = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.ServiceLogs.Edit)).Succeeded;
+        // _canDelete = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.ServiceLogs.Delete)).Succeeded;
+        // _canImport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.ServiceLogs.Import)).Succeeded;
         _canExport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.ServiceLogs.Export)).Succeeded;
     }
     // protected override async Task OnInitializedAsync()

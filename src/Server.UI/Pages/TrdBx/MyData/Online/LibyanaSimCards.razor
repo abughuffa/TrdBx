@@ -104,15 +104,15 @@
                     }
                 </MudToolBar>
                 <MudStack Row Spacing="1">
-                    @if (_canSearch)
-                    {
+             @*        @if (_canSearch)
+                    { *@
                         <MudTextField T="string" ValueChanged="@(s => OnSearch(s))" 
                             Value="@Query.Keyword" Placeholder="@ConstantString.Search" 
                             Adornment="Adornment.End"
                             AdornmentIcon="@Icons.Material.Filled.Search" 
                             IconSize="Size.Small">
                         </MudTextField>
-                    }
+                    @* } *@
                 </MudStack>
             </MudStack>
         </MudStack>
@@ -166,8 +166,8 @@
     private LibyanaSimCardsWithPaginationQuery Query { get; set; } = new();
     [Inject]
     private IBlazorDownloadFileService BlazorDownloadFileService { get; set; } = null!;
-    private bool _canSearch;
-    private bool _canCreate;
+    // private bool _canSearch;
+    // private bool _canCreate;
     private bool _canDelete;
 
     private bool _canImport;
@@ -180,7 +180,7 @@
         Title = L[_currentDto.GetClassDescription()];
         var state = await AuthState;
 
-        _canSearch = (await AuthService.AuthorizeAsync(state.User, Permissions.LibyanaSimCards.Search)).Succeeded;
+        // _canSearch = (await AuthService.AuthorizeAsync(state.User, Permissions.LibyanaSimCards.Search)).Succeeded;
         _canDelete = (await AuthService.AuthorizeAsync(state.User, Permissions.LibyanaSimCards.Delete)).Succeeded;
 
         _canImport = (await AuthService.AuthorizeAsync(state.User, Permissions.LibyanaSimCards.Import)).Succeeded;

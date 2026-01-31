@@ -76,12 +76,12 @@
                     </MudMenu>
                 </MudToolBar>
                 <MudStack Row Spacing="1">
-                    @if (_canSearch)
-                    {
+             @*        @if (_canSearch)
+                    { *@
                         <MudTextField T="string" ValueChanged="@(s => OnSearch(s))" Value="@Query.Keyword" Placeholder="@ConstantString.Search" Adornment="Adornment.End"
                         AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Small">
                         </MudTextField>
-                    }
+                    @* } *@
                 </MudStack>
             </MudStack>
         </MudStack>
@@ -176,7 +176,7 @@
     [Inject]
     private IBlazorDownloadFileService BlazorDownloadFileService { get; set; } = null!;
 
-    private bool _canSearch;
+    // private bool _canSearch;
     private bool _canCreate;
     private bool _canEdit;
     // private bool _canDelete;
@@ -191,7 +191,7 @@
         Title = L[_currentDto.GetClassDescription()];
         var state = await AuthState;
         _canCreate = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.Create)).Succeeded;
-        _canSearch = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.Search)).Succeeded;
+        // _canSearch = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.Search)).Succeeded;
         _canEdit = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.Edit)).Succeeded;
         // _canDelete = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.Delete)).Succeeded;
         _canExport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.Export)).Succeeded;
