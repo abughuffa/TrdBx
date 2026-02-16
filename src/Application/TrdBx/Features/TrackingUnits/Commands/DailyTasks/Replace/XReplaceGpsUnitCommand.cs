@@ -144,6 +144,7 @@ public class XReplaceGpsUnitCommandHandler : SubscriptionSharedLogic, IRequestHa
             }
             else if (runit.UStatus == UStatus.InstalledInactive && runit.IsOnWialon)
             {
+                //update replaced unit's record to have selected unit's SNo, SimNo, UnitModel
                 serviceLog.WialonTasks.Add(new WialonTask()
                 {
                     TrackingUnitId = runit.Id,

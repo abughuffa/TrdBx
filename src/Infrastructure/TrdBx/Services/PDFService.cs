@@ -72,7 +72,7 @@ public partial class PDFService : IPDFService
                                     .FontColor(Colors.DeepOrange.Darken1);
                             });
                             invoiceHeaderTable.Cell().Row(3).Column(1).ColumnSpan(4).PaddingTop(5); /// empty line
-                            invoiceHeaderTable.Cell().Row(4).Column(4).Text(": السيد(ة) / السادة").Bold().AlignRight();
+                            invoiceHeaderTable.Cell().Row(4).Column(4).Text(": إلـــــــــى").Bold().AlignRight();
                             invoiceHeaderTable.Cell().Row(4).Column(1).ColumnSpan(3).Text(xinvoice.DisplayCusName).AlignRight();
                             invoiceHeaderTable.Cell().Row(5).Column(1).ColumnSpan(4).PaddingTop(5).LineHorizontal(1, Unit.Point);
                             invoiceHeaderTable.Cell().Row(6).Column(1).ColumnSpan(4).PaddingTop(5); /// empty line

@@ -22,11 +22,11 @@
 <PageTitle>@Title</PageTitle>
 
 <AdvancedSearchInvoices TRequest="Query" OnFilterCriteriaChanged="FilterCriteriaChanged"></AdvancedSearchInvoices>
-<style>
+@* <style>
     .mud-table-toolbar {
         height: 120px !important;
     }
-</style>
+</style> *@
 
 <MudDataGrid ServerData="@(ServerReload)"
              FixedHeader="true"
@@ -76,12 +76,9 @@
                     </MudMenu>
                 </MudToolBar>
                 <MudStack Row Spacing="1">
-             @*        @if (_canSearch)
-                    { *@
                         <MudTextField T="string" ValueChanged="@(s => OnSearch(s))" Value="@Query.Keyword" Placeholder="@ConstantString.Search" Adornment="Adornment.End"
                         AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Small">
                         </MudTextField>
-                    @* } *@
                 </MudStack>
             </MudStack>
         </MudStack>
@@ -95,6 +92,10 @@
                     <MudMenu Icon="@Icons.Material.Filled.Edit" Variant="Variant.Filled" Size="Size.Small"
                     Dense="true"
                     EndIcon="@Icons.Material.Filled.KeyboardArrowDown" IconColor="Color.Info" AnchorOrigin="Origin.CenterLeft">
+                        @if (_canEdit)
+                        {
+                            <MudMenuItem OnClick="@(() => OnEdit(context.Item))">@ConstantString.Edit</MudMenuItem>
+                        }
                         @if (_canDownload)
                         {
                             <MudMenuItem OnClick="@(() => OnDownLoad(context.Item))">@ConstantString.Download</MudMenuItem>
@@ -111,11 +112,7 @@
                         {
                             <MudMenuItem OnClick="@(() => OnSetPreviousStatus(context.Item))">@L["Set Previous Status"]</MudMenuItem>
                         }
-@* 
-                        @if (_canDelete)
-                        {
-                            <MudMenuItem OnClick="@(()=>OnDelete(context.Item))">@ConstantString.Delete</MudMenuItem>
-                        } *@
+
                     </MudMenu>
                 }
                 else
@@ -135,7 +132,7 @@
         <PropertyColumn Property="x => x.InvoiceDate" Title="@L[_currentDto.GetMemberDescription(x=>x.InvoiceDate)]" />
         <PropertyColumn Property="x => x.DueDate" Title="@L[_currentDto.GetMemberDescription(x=>x.DueDate)]" />
        @*  <PropertyColumn Property="x => x.CustomerId" Title="@L[_currentDto.GetMemberDescription(x=>x.CustomerId)]" /> *@
-        <PropertyColumn Property="x => x.Customer" Title="@L[_currentDto.GetMemberDescription(x => x.Customer)]" />
+        <PropertyColumn Property="x => x.DisplayCusName" Title="@L[_currentDto.GetMemberDescription(x => x.DisplayCusName)]" />
         <PropertyColumn Property="x => x.Description" Title="@L[_currentDto.GetMemberDescription(x=>x.Description)]" />
 @*         <PropertyColumn Property="x => x.TotalAmount" Title="@L[_currentDto.GetMemberDescription(x=>x.TotalAmount)]" />
         <PropertyColumn Property="x => x.Taxes" Title="@L[_currentDto.GetMemberDescription(x=>x.Taxes)]" /> *@
@@ -176,10 +173,8 @@
     [Inject]
     private IBlazorDownloadFileService BlazorDownloadFileService { get; set; } = null!;
 
-    // private bool _canSearch;
     private bool _canCreate;
     private bool _canEdit;
-    // private bool _canDelete;
     private bool _canExport;
 
     private bool _canChangeStatus;
@@ -191,9 +186,7 @@
         Title = L[_currentDto.GetClassDescription()];
         var state = await AuthState;
         _canCreate = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.Create)).Succeeded;
-        // _canSearch = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.Search)).Succeeded;
         _canEdit = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.Edit)).Succeeded;
-        // _canDelete = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.Delete)).Succeeded;
         _canExport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.Export)).Succeeded;
 
         _canChangeStatus = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.ChangeStatus)).Succeeded;
@@ -259,6 +252,26 @@
         return Task.CompletedTask;
     }
 
+    private async Task OnEdit(InvoiceDto dto)
+    {
+        var title = L["Update Invoice"];
+        var command = Mapper.ToUpdateCommand(dto);
+        var parameters = new DialogParameters<InvoiceEditFormDialog>
+            {
+                { x=>x._model,command },
+            };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        var dialog = DialogService.Show<InvoiceEditFormDialog>(title, parameters, options);
+        var state = await dialog.Result;
+
+        if (state != null && !state.Canceled)
+        {
+            await _table.ReloadServerData();
+            _selectedItems.Clear();
+        }
+
+
+    }
 
     private Task OnAddPayment(InvoiceDto dto)
     {

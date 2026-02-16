@@ -3,6 +3,7 @@
 @using System.Globalization
 @using System.Threading.Tasks
 @using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Charts.Caching
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Charts.Commands.Recharge
 @using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Charts.DTOs
 @using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Charts.Queries.GetChart
 @using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Charts.Specifications
@@ -447,17 +448,38 @@
                                     <MudTable Items="@_currentImpulse.Items" Hover="true" Dense="true" FixedHeader="true" Height="300px">
                                         <HeaderContent>
                                             <MudTh>#</MudTh>
-                                            <MudTh>@L["Item"]</MudTh>
+                                            <MudTh>@L["Parent"]</MudTh>
+                                            <MudTh>@L["Child"]</MudTh>
+                                            <MudTh>@L["SNo"]</MudTh>
+                                            <MudTh>@L["SimNo"]</MudTh>
+                                            <MudTh>@L["Status"]</MudTh>
                                             <MudTh>@L["Actions"]</MudTh>
                                         </HeaderContent>
                                         <RowTemplate>
                                             @{
                                                 var index = _currentImpulse.Items.IndexOf(context);
-                                                var itemName = context.ToString();
+                                                // var ParentName = context.ParentName.ToString();
                                             }
                                             <MudTd>@(index + 1)</MudTd>
                                             <MudTd>
-                                                <MudText>@itemName</MudText>
+                                                <MudText>@context.ParentName.ToString()</MudText>
+                                            </MudTd>
+                                            <MudTd>
+                                                <MudText>@context.ChildName.ToString()</MudText>
+                                            </MudTd>
+                                            <MudTd>
+                                                <MudText>@context.SNo.ToString()</MudText>
+                                            </MudTd>
+                                            <MudTd>
+                                                <MudText>@context.SimNo.ToString()</MudText>
+                                            </MudTd>
+                                                   <MudTd>
+                                                <MudText>@context.Status.ToString()</MudText>
+                                            </MudTd>
+                                            <MudTd>
+                                               <MudIconButton Icon="@Icons.Material.Filled.Money" Color="Color.Warning"
+
+                                                               OnClick="() => OnExeAction(context.Id)" Class="ml-2" />
                                             </MudTd>
                                         </RowTemplate>
                                         <PagerContent>
@@ -700,6 +722,73 @@
                 StateHasChanged(); // Ensure UI updates when selection changes
             }
         }
+    }
+
+    // private bool _canExeAction 
+    // {
+    // //     get =>
+    // // {
+    // //         switch (Query.ListView)
+    // //         {
+    // //             case ChartListView.SimCardsExpiryDate:
+    // //                 {
+    // //                     return  true;
+    // //                 }
+    // //             case ChartListView.UnitSubExpiryDate:
+    // //                 {
+    // //                     return false;
+    // //                 }
+    // //         }
+    // //     }
+    // }
+    private async Task OnExeAction(int id)
+    {
+        switch (Query.ListView)
+        {
+            case ChartListView.SimCardsExpiryDate:
+                {
+                    var command = new RechargeSimCardCommand() { Id = id };
+                    var result = await Mediator.Send(command);
+                    if (result.Succeeded)
+                    {
+                        Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+                        await InvokeAsync(async () =>
+                                                       {
+                                                           // await _table.ReloadServerData();
+                                                           // _selectedItems.Clear();
+                                                       });
+                    }
+                    else
+                    {
+                        Snackbar.Add(result.ErrorMessage, MudBlazor.Severity.Error);
+                    }
+                    break;
+                }
+            case ChartListView.UnitSubExpiryDate:
+                {
+                    // var command = new RechargeSimCardCommand() { Id = id };
+                    // var result = await Mediator.Send(command);
+                    // if (result.Succeeded)
+                    // {
+                    //     Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+                    //     await InvokeAsync(async () =>
+                    //                                    {
+                    //                                        // await _table.ReloadServerData();
+                    //                                        // _selectedItems.Clear();
+                    //                                    });
+                    // }
+                    // else
+                    // {
+                    //     Snackbar.Add(result.ErrorMessage, MudBlazor.Severity.Error);
+                    // }
+                    break;
+                }
+        }
+
+
+
+        
+
     }
 
     protected override async Task OnInitializedAsync()

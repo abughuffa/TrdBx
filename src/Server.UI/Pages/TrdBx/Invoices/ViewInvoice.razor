@@ -3,6 +3,7 @@
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.Delete
 @using CleanArchitecture.Blazor.Application.Features.Invoices.DTOs
 @using CleanArchitecture.Blazor.Application.TrdBx.Features.Invoices.DTOs
+@using CleanArchitecture.Blazor.Domain.Enums
 
 @inject IStringLocalizer<Invoices> L
 @attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.Invoices.View)]
@@ -15,15 +16,13 @@
             </MudAvatar>
             <MudCardHeader>
                 <MudText Typo="Typo.h5">@L["Invoice Details"]</MudText>
-                <MudText Typo="Typo.body2" Color="Color.Secondary">
-                    @L["Invoice # "] @model?.InvoiceNo
-                </MudText>
+                <MudText Typo="Typo.body2" Color="Color.Secondary"> @L["Invoice # "] @model?.InvoiceNo </MudText>
             </MudCardHeader>
             <MudCardActions>
                 <MudButtonGroup Variant="Variant.Outlined">
-                    <MudButton OnClick="GoBack" StartIcon="@Icons.Material.Filled.ArrowBack">
-                        Back
-                    </MudButton>
+
+                    <MudButton OnClick="GoBack" StartIcon="@Icons.Material.Filled.ArrowBack">  @ConstantString.GoBack </MudButton>
+
                     @if (_canDelete)
                     {
                         <MudButton Color="Color.Error"
@@ -63,20 +62,15 @@
                     </MudItem>
                     <MudItem xs="12" sm="6" md="4">
                         <MudText Typo="Typo.body2" Color="Color.Secondary">@L["IStatus"]</MudText>
-@*                         <MudChip Color="@GetStatusColor(_invoice.IStatus)" 
-                                Label="@_invoice.IStatus" 
-                                Variant="Variant.Filled" 
-                                Size="Size.Small" /> *@
+                        <MudText Typo="Typo.body1" Color=@GetStatusColor(model.IStatus)>@model.IStatus</MudText>
                     </MudItem>
                     <MudItem xs="12" sm="6" md="4">
                         <MudText Typo="Typo.body2" Color="Color.Secondary">@L["Customer"]</MudText>
-                        <MudText Typo="Typo.body1">@model.Customer</MudText>
+                        <MudText Typo="Typo.body1">@model.DisplayCusName</MudText>
                     </MudItem>
                     <MudItem xs="12" sm="6" md="4">
                         <MudText Typo="Typo.body2" Color="Color.Secondary">@L["GrandTotal"]</MudText>
-                        <MudText Typo="Typo.h6" Color="Color.Primary">
-                            @model.GrandTotal.ToString("N3")
-                        </MudText>
+                        <MudText Typo="Typo.h6" Color="Color.Primary">@model.GrandTotal.ToString("N3")</MudText>
                     </MudItem>
                 </MudGrid>
 
@@ -90,20 +84,14 @@
                           <TitleContent>
                                 <MudGrid>
                                     <MudItem xs="12" sm="6">
-                                        <MudText Typo="Typo.subtitle1">
-                                            @L["Items Group # "]@itemGroup.SerialIndex
-                                        </MudText>
-                                        <MudText Typo="Typo.body2" Color="Color.Secondary">
-                                            @itemGroup.Description
-                                        </MudText>
+                                        <MudText Typo="Typo.subtitle1"> @L["Items Group # "]@itemGroup.SerialIndex</MudText>
+                                        <MudText Typo="Typo.body2" Color="Color.Secondary">@itemGroup.Description</MudText>
                                     </MudItem>
-                                    <MudItem xs="12" sm="6" Class="text-right">
-                                        <MudText Typo="Typo.h6" Color="Color.Primary">
-                                            @L["Subtotal : "] @itemGroup.SubTotal.ToString("N3")
-                                        </MudText>
+                                 
+                                    <MudItem xs="12" sm="6" Class="text-left">
+                                        <MudText Typo="Typo.h6" Color="Color.Primary">@L["Subtotal : "] @itemGroup.SubTotal.ToString("N3")</MudText>
                                     </MudItem>
                                 </MudGrid>
-
                           </TitleContent>
 
                        
@@ -127,39 +115,22 @@
                                     </ToolBarContent>
                                     
                                     <Columns>
-                                        <PropertyColumn Property="x => x.SubSerialIndex" 
-                                                       Title="#" 
-                                                       Sortable="true" />
-                                        
-                                        <PropertyColumn Property="x => x.Description" 
-                                                       Title=@L["Description"] 
-                                                       Sortable="true" />
-                                        
-                                        
-               
-                                        
-                                        <PropertyColumn Property="x => x.Amount" 
-                                                        Title=@L["Amount"]
-                                                       Sortable="true"
-                                                        Format="N3" />
-                                        
+                                        <PropertyColumn Property="x => x.SubSerialIndex" Title="#" Sortable="true" />
+                                        <PropertyColumn Property="x => x.Description"  Title=@L["Description"] Sortable="true" />
+                                        <PropertyColumn Property="x => x.Amount" Title=@L["Amount"] Sortable="true" Format="N3" />  
                                         <TemplateColumn Title="Actions">
                                             <CellTemplate>
                                                 @if (_canDeleteItem)
                                                 {
-                                                    <MudIconButton Icon="@Icons.Material.Filled.Delete"
-                                                                   Size="Size.Small"
-                                                                   Color="Color.Error"
-                                                                   OnClick="@(() => DeleteItem(context.Item))" />
+                                                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Color="Color.Error"OnClick="@(() => DeleteItem(context.Item))" />
                                                 }
-
                                             </CellTemplate>
                                         </TemplateColumn>
                                     </Columns>
                                     
-                                    <PagerContent>
+@*                                     <PagerContent>
                                         <MudTablePager />
-                                    </PagerContent>
+                                    </PagerContent> *@
                                 </MudDataGrid>
                                 
                                 <!-- Group Actions -->
@@ -244,18 +215,14 @@
         _canDeleteGroup = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.DeleteGroup)).Succeeded;
         _canDeleteItem = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.DeleteItem)).Succeeded;
 
-        await LoadInvoice();
+        // await LoadInvoice();
 
-        var dd = model;
-       var  cc = dd;
     }
 
     protected override async Task OnParametersSetAsync()
     {
         await LoadInvoice();
 
-        var dd = model;
-        var cc = dd;
     }
 
 //     private async Task<InvoiceDto> LoadInvoice()
@@ -301,14 +268,15 @@
         _isLoading = false;
     }
     
-    private Color GetStatusColor(string status)
+    private Color GetStatusColor(IStatus status)
     {
-        return status?.ToLower() switch
+        return status switch
         {
-            "draft" => Color.Default,
-            "sent" => Color.Info,
-            "paid" => Color.Success,
-            "cancelled" => Color.Error,
+            IStatus.Draft => Color.Default,
+            IStatus.Billed => Color.Info,
+            IStatus.PartaillyPaid => Color.Primary,
+            IStatus.Paid => Color.Success,
+            IStatus.Canceled => Color.Error,
             _ => Color.Default
         };
     }

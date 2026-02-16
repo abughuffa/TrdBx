@@ -1,5 +1,6 @@
 ﻿
 using CleanArchitecture.Blazor.Application.Features.Identity.Mappers;
+using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Accept;
 using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Reject;
 using CleanArchitecture.Blazor.Application.Features.Tickets.DTOs;
 
@@ -20,7 +21,7 @@ public static partial class Mapper
     [MapperIgnoreSource(nameof(TicketDto.LastModifiedByUser))]
     public static partial Ticket FromDto(TicketDto dto);
 
-    //public static partial AssignTicketCommand ToAssignCommand(TicketDto dto);
+    public static partial AcceptTicketCommand ToAcceptommand(TicketDto dto);
     public static partial RejectTicketCommand ToRejectCommand(TicketDto dto);
     //public static partial Ticket FromEditCommand(AddEditTicketCommand command);
     //public static partial Ticket FromCreateCommand(CreateTicketCommand command);

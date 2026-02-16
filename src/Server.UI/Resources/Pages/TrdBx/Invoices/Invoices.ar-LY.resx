@@ -270,4 +270,10 @@
   <data name="Grand Total" xml:space="preserve">
     <value>الاجمالي الكلي</value>
   </data>
+  <data name="DisplayCusName" xml:space="preserve">
+    <value>الاسم بالفاتورة</value>
+  </data>
+  <data name="Display Name Is Required!" xml:space="preserve">
+    <value>الاسم بالفاتورة مطلوب!</value>
+  </data>
 </root>

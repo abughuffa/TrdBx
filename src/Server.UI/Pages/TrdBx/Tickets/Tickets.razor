@@ -10,6 +10,7 @@
 @using CleanArchitecture.Blazor.Application.Features.Tickets.Specifications
 @using CleanArchitecture.Blazor.Application.Features.Tickets.Mappers
 @using CleanArchitecture.Blazor.Domain.Entities
+@using CleanArchitecture.Blazor.Domain.Enums
 @using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Tickets.Components
 
 
@@ -415,39 +416,123 @@
         }
     }
 
-    // private async Task OnAssign(TicketDto dto)
-    // {
-    //     // var command = Mapper.Map<AssignTicketCommand>(dto);
-    // //     var command = Mapper.ToAssignCommand(dto);
-    // //     return DialogServiceHelper.ShowFormDialogAsync<AssignTicketDialog, AssignTicketCommand>(
-    // //         L["Assign Ticket"],
-    // //          new DialogParameters<AssignTicketDialog>
-    // //        {
-    // //                         { x=>x._model,command}
-    // //        },
-    // //         async () =>
-    // //         {
-    // //             await _table.ReloadServerData();
-    // //             _selectedItems.Clear();
-    // //         });
+    private async Task OnExecute(TicketDto dto)
+    {
+
+        var ts = dto.ServiceTask;
+
+        switch (dto.ServiceTask)
+        {
+            case ServiceTask.Check: 
+                {
+                    // show install unit page by unit Id
+
+                    break;
+                }
+            case ServiceTask.Install:
+            case ServiceTask.ReInstall:
+                {
+                   // show install unit page by unit Id
+
+                   break;
+                }
+            
+            case ServiceTask.Recover:
+                {
+                    // show Recover unit page by unit Id
+
+                    break;
+                }
+            case ServiceTask.Transfer:
+                {
+                    // show Transfer unit page by unit Id
+
+                    break;
+                }
+            case ServiceTask.Replace:
+                {
+                    // show Replace unit page by unit Id
+
+                    break;
+                }
+            case ServiceTask.ActivateUnit: //[int]
+                {
+                    // show ActivateUnit page by unit Id
+
+                    break;
+                }
+            case ServiceTask.ActivateUnitForGprs: //[int]
+                {
+                    // show ActivateUnitForGprs page by unit Id
+
+                    break;
+                }
+            case ServiceTask.ActivateUnitForHosting: //[int]
+                {
+                    // show ActivateUnitForHosting page by unit Id
+
+                    break;
+                }
+
+            case ServiceTask.DeactivateUnit: //[int]
+                {
+                    // show DeactivateUnit page by unit Id
+
+                    break;
+                }
+            case ServiceTask.RenewUnitSub: //[int]
+                {
+                    // show RenewUnitSub page by unit Id
+
+                    break;
+                }
+            case ServiceTask.ReplacSimCard:
+                {
+                    // show ReplacSimCard page by unit Id
+
+                    break;
+                }
+            case ServiceTask.InstallSimCard:
+                {
+                    // show InstallSimCard page by unit Id
+
+                    break;
+                }
+            case ServiceTask.RecoverSimCard: //[int]
+                {
+                    // show RecoverSimCard page by unit Id
+
+                    break;
+                }
+            default:
+                {
+
+                    break;
+                }
 
 
-    //     var title = L["Assign Ticket"];
+
+        }
+
+
+
+        // var command = Mapper.Map<AssignTicketCommand>(dto);
     //     var command = Mapper.ToAssignCommand(dto);
-    //     var parameters = new DialogParameters<AssignTicketDialog>
+    //     return DialogServiceHelper.ShowFormDialogAsync<AssignTicketDialog, AssignTicketCommand>(
+    //         L["Assign Ticket"],
+    //          new DialogParameters<AssignTicketDialog>
+    //        {
+    //                         { x=>x._model,command}
+    //        },
+    //         async () =>
     //         {
-    //             { x=>x._model,command },
-    //         };
-    //     var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
-    //     var dialog = DialogService.Show<AssignTicketDialog>(title, parameters, options);
-    //     var state = await dialog.Result;
+    //             await _table.ReloadServerData();
+    //             _selectedItems.Clear();
+    //         });
 
-    //     if (state != null && !state.Canceled)
-    //     {
-    //         await _table.ReloadServerData();
-    //         _selectedItems.Clear();
-    //     }
-    // }
+
+
+    }
 
 
 

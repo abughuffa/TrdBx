@@ -37,7 +37,14 @@ public class TrackingUnit : BaseAuditableEntity
     public bool IsOnWialon { get; set; } = false;
     public WStatus? WStatus { get; set; }
     public int? WUnitId { get; set; }
-    public int? OldId { get; set; } 
+    public int? OldId { get; set; }
+
+    //public string? WUnitName { get; set; } = string.Empty;
+    //public string? WAccount { get; set; } = string.Empty;
+    //public DateTime? WDeactivation { get; set; } = null;
+    //public string? WSimCardNo { get; set; } = string.Empty;
+    //public WStatus? WStatusOnWialon { get; set; }
+
     public TrackingUnitModel? TrackingUnitModel { get; set; } = null;
     public SimCard? SimCard { get; set; } = null;
     public Customer? Customer { get; set; } = null;
@@ -65,7 +72,6 @@ public class Customer : BaseAuditableEntity
     public string? Email { get; set; } = string.Empty;
     public bool IsAvaliable { get; set; } = true;
     public int? OldId { get; set; } = null;
-
     public Customer? Parent { get; set; } = null;
     public List<Customer>? Childs { get; set; } = null;
     public List<Invoice>? Invoices { get; set; } = null;
@@ -104,13 +110,18 @@ public class SimCard : BaseAuditableEntity
     public int SPackageId { get; set; }
     public SPackage? SPackage { get; set; } = null;
     public SStatus SStatus { get; set; } = SStatus.New;
-    //public DateOnly? JoDate { get; set; } = null;
-    //public DateOnly? BExDate { get; set; } = null;
-    //public DateOnly? DExDate { get; set; } = null;
-    //public DateOnly? DOExDate { get; set; } = null;
     public bool IsOwen { get; set; } = true;
     public DateOnly? ExDate { get; set; } = null;
 
+    //public DateOnly? SPLastUpdate { get; set; } = null;
+    //public decimal? SPBalance { get; set; } = 0.0m;
+    //public SLStatus? SPStatus { get; set; }
+    //public string? SPPackage { get; set; } = string.Empty;
+    //public string? SPDataOffer { get; set; } = string.Empty;
+    //public DateOnly? SPJoDate { get; set; } = null;
+    //public DateOnly? SPBExDate { get; set; } = null;
+    //public DateOnly? SPDExDate { get; set; } = null;
+    //public DateOnly? SPDOExDate { get; set; } = null;
 
     public int? OldId { get; set; } = null;
     public TrackingUnit? TrackingUnits { get; set; } = null;
@@ -229,7 +240,6 @@ public class InvoiceItemGroup : BaseEntity
     public ServiceLog? ServiceLog { get; set; }
     public List<InvoiceItem>? InvoiceItems { get; set; } = null;
 }
-
 public class InvoiceItem : BaseEntity
 {
     public int SubSerialIndex { get; set; }
@@ -242,7 +252,6 @@ public class InvoiceItem : BaseEntity
     public Subscription? Subscription { get; set; }
     public InvoiceItemGroup? InvoiceItemGroup { get; set; }
 }
-
 #endregion
 
 

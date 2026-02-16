@@ -270,4 +270,10 @@
   <data name="Grand Total" xml:space="preserve">
     <value>Grand Total</value>
   </data>
+  <data name="DisplayCusName" xml:space="preserve">
+    <value>Display Name</value>
+  </data>
+  <data name="Display Name Is Required!" xml:space="preserve">
+    <value>Display Name Is Required!</value>
+  </data>
 </root>
