@@ -1,5 +1,5 @@
 ﻿// Infrastructure.Services
-using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.BackupRestore.DTOs;
+using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.RestoreBackup.DTOs;
 using CleanArchitecture.Blazor.Infrastructure.Configurations;
 using Microsoft.AspNetCore.Hosting;
 
@@ -23,7 +23,7 @@ public class BackupRestoreService : IBackupRestoreService
         _logger = logger;
     }
 
-    public async Task<List<BackupFileDto>> GetBackupsAsync()
+    public async Task<List<RestoreBackupFileDto>> GetBackupsAsync()
     {
         try
         {

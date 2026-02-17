@@ -107,7 +107,7 @@ internal static class TrdBxMenu
                         {
                             Title = "Backup & Restore",
                             Roles = new[] { RoleName.Admin },
-                            Href = "/pages/TrdBx/MyData/Local/BackupRestore",
+                            Href = "/pages/TrdBx/MyData/Local/RestoreBackup",
                             PageStatus = PageStatus.Completed
                         }
                     }
