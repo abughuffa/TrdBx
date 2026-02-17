@@ -59,7 +59,7 @@
         </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="RestoreBackups\" />
+      <Folder Include="Backups\" />
       <Folder Include="log\" />
     </ItemGroup>
 
