@@ -1,7 +1,7 @@
 ﻿using CleanArchitecture.Blazor.Application.Common.Interfaces;
 using CleanArchitecture.Blazor.Infrastructure.Configurations;
 using CleanArchitecture.Blazor.Infrastructure.Constants.Database;
-using CleanArchitecture.Blazor.Infrastructure.Services.BackupRestoreStrategies;
+using CleanArchitecture.Blazor.Infrastructure.Services.RestoreBackupStrategies;
 using CleanArchitecture.Blazor.Infrastructure.Services.Wialon;
 using CleanArchitecture.Blazor.Infrastructure.Services.Wialon.Implementation;
 using Microsoft.Extensions.Configuration;
