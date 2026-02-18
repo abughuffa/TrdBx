@@ -1,4 +1,4 @@
-﻿@page "/pages/TrdBx/TrackingUnits/{trackingunitid:int?}/ServiceLogs"
+﻿@page "/pages/TrdBx/TrackingUnits/{trackingunitid:int?}/Serviogs"
 
 @using CleanArchitecture.Blazor.Application.Features.ServiceLogs.Caching
 @using CleanArchitecture.Blazor.Application.Features.ServiceLogs.DTOs
@@ -11,11 +11,20 @@
 @inject NavigationManager Navigation
 @attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.ServiceLogs.View)]
 
-<PageTitle>@Title</PageTitle>
 
-<AdvancedSearchServiceLogs TRequest="Query" OnFilterCriteriaChanged="FilterCriteriaChanged"></AdvancedSearchServiceLogs>
+<MudContainer Class="mt-3">
+  
+    <MudCard>
+@*         <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h6">@Title</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent> *@
+            @* RowClick="@(s=>OnView(s.Item))" *@
 
-   <MudDataGrid ServerData="@(ServerReload)"
+        <MudCardContent>
+            <MudDataGrid ServerData="@(ServerReload)"
                          FixedHeader="true"
                          FixedFooter="false"
                          Virtualize="false"
@@ -111,8 +120,13 @@
                 <PagerContent>
                     <MudDataGridPager PageSizeOptions="@(new int[] { 10, 15, 30, 50, 100 })" />
                 </PagerContent>
-</MudDataGrid>
-
+            </MudDataGrid>
+        </MudCardContent>
+        <MudCardActions >
+            <MudButton Color="Color.Primary" DropShadow="false" OnClick="GoBack">@ConstantString.GoBack</MudButton>
+        </MudCardActions>
+    </MudCard>
+</MudContainer>
 
 
 @code {
