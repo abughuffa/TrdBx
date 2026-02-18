@@ -1,10 +1,12 @@
 ﻿namespace CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.RestoreBackup.DTOs;
 public class RestoreBackupFileDto
 {
-    public required string Name { get; set; }
-    public required string Path { get; set; }
-    public long Size { get; set; }
-    public DateTime Created { get; set; }
+        public required string Name { get; set; }
+        public required string Path { get; set; }
+        public long Size { get; set; }
+        public DateTime Created { get; set; }
+        public bool IsDirectory { get; set; }
+
     public string FormattedSize => FormatSize(Size);
     public string FormattedDate => Created.ToString("yyyy-MM-dd HH:mm:ss");
 
