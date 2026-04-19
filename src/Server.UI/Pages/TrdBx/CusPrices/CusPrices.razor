@@ -249,8 +249,8 @@
                 { x=>x._model,command },
             };
         var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
-        var dialog = DialogService.Show<CusPriceEditFormDialog>(title, parameters, options);
-        var state = await dialog.Result;
+        var dialogRef = await DialogService.ShowAsync<CusPriceEditFormDialog>(title, parameters, options);
+        var state = await dialogRef.Result;
 
         if (state != null && !state.Canceled)
         {
