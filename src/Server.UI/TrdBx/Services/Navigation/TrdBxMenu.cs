@@ -100,7 +100,7 @@ internal static class TrdBxMenu
                         new()
                         {
                             Title = "Impulse Charts",
-                            Href = "/pages/TrdBx/MyData/Local/Charts",
+                            Href = "/pages/TrdBx/MyData/Local/ImpulseCharts",
                             PageStatus = PageStatus.Completed
                         },
                         new()

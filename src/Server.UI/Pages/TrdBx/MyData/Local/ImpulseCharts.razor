@@ -2,6 +2,7 @@
 
 @using System.Globalization
 @using System.Threading.Tasks
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.ImpulseCharts.Queries.Export
 @using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.ImpulseCharts.Caching
 @using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.ImpulseCharts.Commands.Recharge
 @using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.ImpulseCharts.DTOs
@@ -12,6 +13,8 @@
 
 @inject IStringLocalizer<ImpulseCharts> L
 @inject IJSRuntime JSRuntime
+
+
 @inject IDialogService DialogService
 @attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.ImpulseCharts.View)]
 @implements IDisposable
@@ -674,12 +677,17 @@
 </style>
 
 @code {
+
+        [Inject]
+    private IBlazorDownloadFileService BlazorDownloadFileService { get; set; } = null!;
     // Data
     private List<ImpulseChartDto> _originalTable = new();
     private List<ImpulseChartDto> _filteredTable = new();
     private GetImpulseChartsQuery Query { get; set; } = new();
 
     // UI State
+    
+    private bool _exporting = false;
     private bool _loading = false;
     private bool _useLogScale = true;
     private bool _excludeZeroCount = true;
@@ -1231,25 +1239,27 @@
         if (_currentImpulse?.Items?.Any() != true)
             return;
 
-        try
+            _exporting = true;
+        ExportImpulseChartItemsQuery? request = new ExportImpulseChartItemsQuery()
         {
-            var exportContent = string.Join(Environment.NewLine, _currentImpulse.Items);
-            var fileName = $"items-{_currentImpulse.Date:yyyyMMdd}-{DateTime.Now:HHmmss}.txt";
+            ImpulseChart = _currentImpulse,
+        };
+        var result = await Mediator.Send(request);
+        await result.MatchAsync<byte[]>(
+            async data =>
+            {
+                DownloadFileResult? downloadresult = await BlazorDownloadFileService.DownloadFile($"{_currentImpulse.Items.Count.ToString()}-SimCardsExpiersOn-{_currentImpulse.Date:yyyyMMdd}.xlsx", result.Data, contentType: "application/octet-stream");
+                //var downloadresult = await BlazorDownloadFileService.DownloadFile($"{_currentImpulse.Items.Count.ToString()}-SimCardsExpiersOn-{_currentImpulse.Date:yyyyMMdd}.xlsx", result.Data, contentType: "application/octet-stream");
+                Snackbar.Add($"{ConstantString.ExportSuccess}", MudBlazor.Severity.Info);
+                return data;
+            },
+            errors =>
+            {
+                Snackbar.Add($"{errors}", MudBlazor.Severity.Error);
+                return Task.FromResult(Array.Empty<byte>());
+            });
+        _exporting = false;
 
-            // Implement your export logic here
-            // This depends on how you handle file downloads in your app
-
-            await ShowNotification(string.Format(@L["Exporting {0} items..."], _currentImpulse.Items.Count), Severity.Info);
-            // await ShowNotification($"Exporting {_currentImpulse.Items.Count} items...", Severity.Info);
-
-            // Example using JS interop (requires implementation in JS)
-            // await JSRuntime.InvokeVoidAsync("downloadFile", fileName, exportContent);
-            await ShowNotification(@L["Export ready!"], Severity.Success);
-        }
-        catch (Exception ex)
-        {
-            await ShowNotification(string.Format(@L["Export failed: {0}"], ex.Message), Severity.Error);
-        }
     }
     #endregion
 

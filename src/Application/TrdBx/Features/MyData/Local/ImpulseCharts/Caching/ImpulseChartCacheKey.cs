@@ -9,6 +9,12 @@ public static class ImpulseChartCacheKey
     {
         return $"ImpulseChartCacheKey:ImpulseChartQuery,{parameters}";
     }
+
+        public static string GetExportCacheKey(string parameters)
+    {
+        return $"ImpulseChartCacheKey:ExportCacheKey,{parameters}";
+    }
+
     public static IEnumerable<string> Tags => new string[] { "chart" };
     public static void Refresh()
     {
