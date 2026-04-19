@@ -1,17 +1,17 @@
-﻿using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Charts.Caching;
-using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Charts.DTOs;
-using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Charts.Specifications;
+﻿using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.ImpulseCharts.Caching;
+using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.ImpulseCharts.DTOs;
+using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.ImpulseCharts.Specifications;
 
 
-namespace CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Charts.Queries.GetChart;
+namespace CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.ImpulseCharts.Queries.GetImpulseCharts;
 
 
-public class GetChartsQuery : ChartAdvancedFilter, ICacheableRequest<List<ChartDto>>
+public class GetImpulseChartsQuery : ImpulseChartAdvancedFilter, ICacheableRequest<List<ImpulseChartDto>>
 {
 
-    public IEnumerable<string>? Tags => ChartCacheKey.Tags;
-    public ChartAdvancedSpecification Specification => new(this);
-    public string CacheKey => ChartCacheKey.GetPaginationCacheKey($"{this}");
+    public IEnumerable<string>? Tags => ImpulseChartCacheKey.Tags;
+    public ImpulseChartAdvancedSpecification Specification => new(this);
+    public string CacheKey => ImpulseChartCacheKey.GetPaginationCacheKey($"{this}");
     public override string ToString()
     {
         return $"Listview:{ListView}, Customer:{CustomerId} StartDate:{FromDate}, EndDate:{ToDate}";
@@ -19,11 +19,11 @@ public class GetChartsQuery : ChartAdvancedFilter, ICacheableRequest<List<ChartD
 
 }
 
-public class GetChartsQueryHandler : IRequestHandler<GetChartsQuery, List<ChartDto>>
+public class GetImpulseChartsQueryHandler : IRequestHandler<GetImpulseChartsQuery, List<ImpulseChartDto>>
 {
     //private readonly IApplicationDbContextFactory _dbContextFactory;
     //private readonly IMapper _mapper;
-    //public GetChartsQueryHandler(
+    //public GetImpulseChartsQueryHandler(
     //    IApplicationDbContextFactory dbContextFactory,
     //    IMapper mapper
     //)
@@ -33,22 +33,22 @@ public class GetChartsQueryHandler : IRequestHandler<GetChartsQuery, List<ChartD
     //}
 
     private readonly IApplicationDbContext _context;
-    public GetChartsQueryHandler(
+    public GetImpulseChartsQueryHandler(
         IApplicationDbContext context
     )
     {
         _context = context;
     }
 
-    public async Task<List<ChartDto>> Handle(GetChartsQuery request, CancellationToken cancellationToken)
+    public async Task<List<ImpulseChartDto>> Handle(GetImpulseChartsQuery request, CancellationToken cancellationToken)
     {
         //await using var _context = await _dbContextFactory.CreateAsync(cancellationToken);
 
-        var result = new List<ChartDto>();
+        var result = new List<ImpulseChartDto>();
 
         switch (request.ListView)
         {
-            case ChartListView.SimCardsExpiryDate:
+            case ImpulseChartListView.SimCardsExpiryDate:
                 {
                     try
                     {
@@ -76,7 +76,7 @@ public class GetChartsQueryHandler : IRequestHandler<GetChartsQuery, List<ChartD
 
                         if (!dailyData.Any() && !request.FromDate.HasValue && !request.ToDate.HasValue)
                         {
-                            return new List<ChartDto>();
+                            return new List<ImpulseChartDto>();
                         }
 
                         var startDate = request.FromDate ??
@@ -96,7 +96,7 @@ public class GetChartsQueryHandler : IRequestHandler<GetChartsQuery, List<ChartD
         {
             if (dailyData.TryGetValue(date, value: out var data))
             {
-                return new ChartDto
+                return new ImpulseChartDto
                 {
                     Date = date,
                     Items = data.Items
@@ -104,7 +104,7 @@ public class GetChartsQueryHandler : IRequestHandler<GetChartsQuery, List<ChartD
             }
             else
             {
-                return new ChartDto
+                return new ImpulseChartDto
                 {
                     Date = date,
                     Items = new List<ItemDto>()
@@ -135,7 +135,7 @@ public class GetChartsQueryHandler : IRequestHandler<GetChartsQuery, List<ChartD
 
                     //    if (!dailyData.Any() && !request.FromDate.HasValue && !request.ToDate.HasValue)
                     //    {
-                    //        return new List<ChartDto>();
+                    //        return new List<ImpulseChartDto>();
                     //    }
 
                     //    var startDate = request.FromDate ??
@@ -155,7 +155,7 @@ public class GetChartsQueryHandler : IRequestHandler<GetChartsQuery, List<ChartD
                     //        {
                     //            if (dailyData.TryGetValue(date, out var data))
                     //            {
-                    //                return new ChartDto
+                    //                return new ImpulseChartDto
                     //                {
                     //                    Date = date,
                     //                    Items = data.Items
@@ -163,7 +163,7 @@ public class GetChartsQueryHandler : IRequestHandler<GetChartsQuery, List<ChartD
                     //            }
                     //            else
                     //            {
-                    //                return new ChartDto
+                    //                return new ImpulseChartDto
                     //                {
                     //                    Date = date,
                     //                    Items = new List<string>()
@@ -178,7 +178,7 @@ public class GetChartsQueryHandler : IRequestHandler<GetChartsQuery, List<ChartD
                     //    throw new ApplicationException("Error generating expiry date counts", ex);
                     //}
                 }
-            case ChartListView.UnitSubExpiryDate:
+            case ImpulseChartListView.UnitSubExpiryDate:
                 {
 
                     try
@@ -216,7 +216,7 @@ public class GetChartsQueryHandler : IRequestHandler<GetChartsQuery, List<ChartD
                         // Handle empty case
                         if (!dailyData.Any() && !request.FromDate.HasValue && !request.ToDate.HasValue)
                         {
-                            return new List<ChartDto>();
+                            return new List<ImpulseChartDto>();
                         }
 
                         var startDate = request.FromDate ??
@@ -245,7 +245,7 @@ public class GetChartsQueryHandler : IRequestHandler<GetChartsQuery, List<ChartD
         {
             if (dailyData.TryGetValue(date, out var data))
             {
-                return new ChartDto
+                return new ImpulseChartDto
                 {
                     Date = date,
                     Items = data.Items
@@ -253,7 +253,7 @@ public class GetChartsQueryHandler : IRequestHandler<GetChartsQuery, List<ChartD
             }
             else
             {
-                return new ChartDto
+                return new ImpulseChartDto
                 {
                     Date = date,
                     Items = new List<ItemDto>()
@@ -294,7 +294,7 @@ public class GetChartsQueryHandler : IRequestHandler<GetChartsQuery, List<ChartD
                     //    // Handle empty case
                     //    if (!dailyData.Any() && !request.FromDate.HasValue && !request.ToDate.HasValue)
                     //    {
-                    //        return new List<ChartDto>();
+                    //        return new List<ImpulseChartDto>();
                     //    }
 
                     //    var startDate = request.FromDate ??
@@ -323,7 +323,7 @@ public class GetChartsQueryHandler : IRequestHandler<GetChartsQuery, List<ChartD
                     //        {
                     //            if (dailyData.TryGetValue(date, out var data))
                     //            {
-                    //                return new ChartDto
+                    //                return new ImpulseChartDto
                     //                {
                     //                    Date = date,
                     //                    //Count = data.Count,
@@ -332,7 +332,7 @@ public class GetChartsQueryHandler : IRequestHandler<GetChartsQuery, List<ChartD
                     //            }
                     //            else
                     //            {
-                    //                return new ChartDto
+                    //                return new ImpulseChartDto
                     //                {
                     //                    Date = date,
                     //                    //Count = 0.0,

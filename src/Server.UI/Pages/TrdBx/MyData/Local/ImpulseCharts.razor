@@ -1,25 +1,25 @@
-﻿@page "/pages/TrdBx/MyData/Local/Charts"
+﻿@page "/pages/TrdBx/MyData/Local/ImpulseCharts"
 
 @using System.Globalization
 @using System.Threading.Tasks
-@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Charts.Caching
-@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Charts.Commands.Recharge
-@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Charts.DTOs
-@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Charts.Queries.GetChart
-@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Charts.Specifications
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.ImpulseCharts.Caching
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.ImpulseCharts.Commands.Recharge
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.ImpulseCharts.DTOs
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.ImpulseCharts.Queries.GetImpulseCharts
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.ImpulseCharts.Specifications
 @using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.MyData.Local.Components
 @using MudBlazor
 
-@inject IStringLocalizer<Charts> L
+@inject IStringLocalizer<ImpulseCharts> L
 @inject IJSRuntime JSRuntime
 @inject IDialogService DialogService
-@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.Charts.View)]
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.ImpulseCharts.View)]
 @implements IDisposable
 
 <PageTitle>Data Analysis</PageTitle>
 
 <!-- Advanced Search -->
-<AdvancedSearchCharts TRequest="Query" OnFilterCriteriaChanged="FilterCriteriaChanged" />
+<AdvancedSearchImpulseCharts TRequest="Query" OnFilterCriteriaChanged="FilterCriteriaChanged" />
 
 <MudContainer MaxWidth="MaxWidth.ExtraLarge">
     <!-- Main Content -->
@@ -29,7 +29,7 @@
                 <MudStack Row AlignItems="AlignItems.Start">
                     <MudIcon Icon="@Icons.Material.Filled.Window" Size="Size.Large" />
                     <MudStack Spacing="0">
-                        <MudEnumSelect Style="min-width:120px" TEnum="ChartListView" ValueChanged="OnChangedListView" Value="Query.ListView" Dense="true" Label="@ConstantString.ListView">
+                        <MudEnumSelect Style="min-width:120px" TEnum="ImpulseChartListView" ValueChanged="OnChangedListView" Value="Query.ListView" Dense="true" Label="@ConstantString.ListView">
                         </MudEnumSelect>
                     </MudStack>
                 </MudStack>
@@ -112,7 +112,7 @@
             <!-- Data Visualization -->
             @if (FilteredTable?.Any() == true)
             {
-                <!-- Chart Info -->
+                <!-- ImpulseChart Info -->
                 <MudGrid Class="mt-2">
                     <MudItem xs="12">
                         <MudStack Row AlignItems="AlignItems.Center">
@@ -137,11 +137,11 @@
                     </MudItem>
                 </MudGrid>
 
-                <!-- Chart Container -->
+                <!-- ImpulseChart Container -->
                 <MudGrid>
                     <MudItem xs="12">
-                        <div class="chart-container" style="position: relative;">
-                            <!-- Chart Controls -->
+                        <div class="ImpulseChart-container" style="position: relative;">
+                            <!-- ImpulseChart Controls -->
                             <MudStack Row Justify="Justify.FlexEnd" Class="mb-2">
                                 <MudIconButton Icon="@Icons.Material.Filled.ZoomOut"
                                                OnClick="@ZoomOut"
@@ -542,7 +542,7 @@
 </MudContainer>
 
 <style>
-    .chart-container {
+    .ImpulseChart-container {
         border: 1px solid #e0e0e0;
         border-radius: 8px;
         background: white;
@@ -627,7 +627,7 @@
         }
     }
 
-    /* Smooth scrolling for chart container */
+    /* Smooth scrolling for ImpulseChart container */
     .impulse-container::-webkit-scrollbar {
         height: 8px;
     }
@@ -675,9 +675,9 @@
 
 @code {
     // Data
-    private List<ChartDto> _originalTable = new();
-    private List<ChartDto> _filteredTable = new();
-    private GetChartsQuery Query { get; set; } = new();
+    private List<ImpulseChartDto> _originalTable = new();
+    private List<ImpulseChartDto> _filteredTable = new();
+    private GetImpulseChartsQuery Query { get; set; } = new();
 
     // UI State
     private bool _loading = false;
@@ -688,9 +688,9 @@
 
     // Current selection
     private int _currentFilteredIndex = 0;
-    private ChartDto? _currentImpulse = null;
+    private ImpulseChartDto? _currentImpulse = null;
 
-    // Chart settings
+    // ImpulseChart settings
     private double _zoomLevel = 1.0;
     private int _itemSpacing = 60;
     private double _maxCount = 1;
@@ -706,7 +706,7 @@
     private const double ZOOM_STEP = 0.25;
 
     // Computed properties
-    private List<ChartDto> FilteredTable => _filteredTable;
+    private List<ImpulseChartDto> FilteredTable => _filteredTable;
     private bool ShowCurrentDateLine => CurrentDateXPosition > 0;
     private double CurrentDateXPosition { get; set; }
 
@@ -730,11 +730,11 @@
     // // {
     // //         switch (Query.ListView)
     // //         {
-    // //             case ChartListView.SimCardsExpiryDate:
+    // //             case ImpulseChartListView.SimCardsExpiryDate:
     // //                 {
     // //                     return  true;
     // //                 }
-    // //             case ChartListView.UnitSubExpiryDate:
+    // //             case ImpulseChartListView.UnitSubExpiryDate:
     // //                 {
     // //                     return false;
     // //                 }
@@ -745,7 +745,7 @@
     {
         switch (Query.ListView)
         {
-            case ChartListView.SimCardsExpiryDate:
+            case ImpulseChartListView.SimCardsExpiryDate:
                 {
                     var command = new RechargeSimCardCommand() { Id = id };
                     var result = await Mediator.Send(command);
@@ -764,7 +764,7 @@
                     }
                     break;
                 }
-            case ChartListView.UnitSubExpiryDate:
+            case ImpulseChartListView.UnitSubExpiryDate:
                 {
                     // var command = new RechargeSimCardCommand() { Id = id };
                     // var result = await Mediator.Send(command);
@@ -801,7 +801,7 @@
     {
         if (firstRender)
         {
-            InitializeChartSettings();
+            InitializeImpulseChartSettings();
         }
     }
 
@@ -814,7 +814,7 @@
     #region Event Handlers
     private void FilterCriteriaChanged(string condition) => _ = RefreshDataAsync();
 
-    private async Task OnChangedListView(ChartListView listView)
+    private async Task OnChangedListView(ImpulseChartListView listView)
     {
         Query.ListView = listView;
         await LoadDataAsync();
@@ -888,7 +888,7 @@
         StateHasChanged();
     }
 
-    private void SelectItem(ChartDto item)
+    private void SelectItem(ImpulseChartDto item)
     {
         var index = FilteredTable.IndexOf(item);
         if (index >= 0)
@@ -945,7 +945,7 @@
         try
         {
             var result = await Mediator.Send(Query).ConfigureAwait(false);
-            _originalTable = result?.ToList() ?? new List<ChartDto>();
+            _originalTable = result?.ToList() ?? new List<ImpulseChartDto>();
 
             if (_originalTable.Any())
             {
@@ -967,8 +967,8 @@
         {
 
             Console.WriteLine(string.Format(@L["Error loading data: {0}", ex.Message], _originalTable.Count));
-            _originalTable = new List<ChartDto>();
-            _filteredTable = new List<ChartDto>();
+            _originalTable = new List<ImpulseChartDto>();
+            _filteredTable = new List<ImpulseChartDto>();
             _currentImpulse = null;
             await ShowNotification(string.Format(@L["Error loading data: {0}", ex.Message], _originalTable.Count), Severity.Error);
         }
@@ -1010,7 +1010,7 @@
         _refreshCts?.Cancel();
         _refreshCts = new CancellationTokenSource();
 
-        ChartCacheKey.Refresh();
+        ImpulseChartCacheKey.Refresh();
         await LoadDataAsync();
     }
 
@@ -1025,7 +1025,7 @@
     #endregion
 
     #region Visualization Helpers
-    private void InitializeChartSettings()
+    private void InitializeImpulseChartSettings()
     {
         UpdateItemSpacing();
     }
@@ -1141,8 +1141,8 @@
 
         var today = DateOnly.FromDateTime(DateTime.Now);
         var totalWidth = Math.Max(800, FilteredTable.Count * _itemSpacing);
-        var chartStartX = 60;
-        var chartEndX = chartStartX + (FilteredTable.Count * _itemSpacing);
+        var ImpulseChartStartX = 60;
+        var ImpulseChartEndX = ImpulseChartStartX + (FilteredTable.Count * _itemSpacing);
 
         // Find current date in filtered items
         var todayItem = FilteredTable.FirstOrDefault(x => x.Date == today);
@@ -1159,23 +1159,23 @@
 
             if (today < minDate)
             {
-                CurrentDateXPosition = chartStartX - 20;
+                CurrentDateXPosition = ImpulseChartStartX - 20;
             }
             else if (today > maxDate)
             {
-                CurrentDateXPosition = chartEndX + 20;
+                CurrentDateXPosition = ImpulseChartEndX + 20;
             }
             else
             {
                 var totalDays = (maxDate.DayNumber - minDate.DayNumber);
                 var daysFromStart = (today.DayNumber - minDate.DayNumber);
                 var percentage = (double)daysFromStart / totalDays;
-                CurrentDateXPosition = chartStartX + (percentage * (chartEndX - chartStartX));
+                CurrentDateXPosition = ImpulseChartStartX + (percentage * (ImpulseChartEndX - ImpulseChartStartX));
             }
         }
 
         // Ensure within visible bounds
-        CurrentDateXPosition = Math.Max(chartStartX - 50, Math.Min(chartEndX + 50, CurrentDateXPosition));
+        CurrentDateXPosition = Math.Max(ImpulseChartStartX - 50, Math.Min(ImpulseChartEndX + 50, CurrentDateXPosition));
     }
 
     private async Task ScrollToImpulse(int index)
@@ -1187,7 +1187,7 @@
             scrollPosition = Math.Max(0, scrollPosition);
 
             // Use JS interop to scroll the container
-            await JSRuntime.InvokeVoidAsync("scrollChartToPosition", scrollPosition);
+            await JSRuntime.InvokeVoidAsync("scrollImpulseChartToPosition", scrollPosition);
         }
         catch (Exception ex)
         {

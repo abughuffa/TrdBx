@@ -1,6 +1,6 @@
-﻿namespace CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Charts.Specifications;
+﻿namespace CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.ImpulseCharts.Specifications;
 
-public enum ChartListView
+public enum ImpulseChartListView
 {
 
     [Description("Sim Cards ExpiryDate Time line")]
@@ -9,12 +9,12 @@ public enum ChartListView
     UnitSubExpiryDate
 }
 
-public class ChartAdvancedFilter : PaginationFilter
+public class ImpulseChartAdvancedFilter : PaginationFilter
 {
     public int? CustomerId { get; set; } = null; 
     public DateOnly? FromDate { get; set; } = null;
     public DateOnly? ToDate { get; set; } = null;
-    public ChartListView ListView { get; set; } = ChartListView.SimCardsExpiryDate;
+    public ImpulseChartListView ListView { get; set; } = ImpulseChartListView.SimCardsExpiryDate;
 }
 
 

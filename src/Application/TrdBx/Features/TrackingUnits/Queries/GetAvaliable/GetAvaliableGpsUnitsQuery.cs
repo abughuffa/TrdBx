@@ -42,9 +42,9 @@ public class GetAvaliableTrackingUnitsQueryHandler :
         if (cc.BillingPlan == BillingPlan.Advanced)
         {
             var c = await _context.Customers.Where(c => c.Id == cc.ParentId).ToListAsync(cancellationToken);
-            var Ids = c.Select(obj => obj.Id).ToArray();
+            var ids = c.Select(obj => obj.Id).ToArray();
 
-            var data = await _context.TrackingUnits.Include(u=>u.Subscriptions).ThenInclude(s=>s.ServiceLog).ApplySpecification(new AvaliableTrackingUnitsSpecification(Ids))
+            var data = await _context.TrackingUnits.Include(u=>u.Subscriptions).ThenInclude(s=>s.ServiceLog).ApplySpecification(new AvaliableTrackingUnitsSpecification(ids))
                                         .ProjectTo()
                                         .ToListAsync(cancellationToken);
             return data;

@@ -1,8 +1,8 @@
 ﻿
-@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Charts.Queries.GetChart
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.ImpulseCharts.Queries.GetImpulseCharts
 @using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Customers.Components
 
-@inject IStringLocalizer<Charts> L
+@inject IStringLocalizer<ImpulseCharts> L
 
 <MudExpansionPanel @bind-Expanded="_advancedSearchExpanded"
                    Style="border-radius: var(--mud-default-borderradius) !important;"
@@ -35,7 +35,7 @@
      </MudExpansionPanel>
 
 @code {
-        [EditorRequired][Parameter] public GetChartsQuery TRequest { get; set; } = null!;
+        [EditorRequired][Parameter] public GetImpulseChartsQuery TRequest { get; set; } = null!;
     [EditorRequired][Parameter] public EventCallback<string> OnFilterCriteriaChanged { get; set; }
 
     private bool _advancedSearchExpanded;

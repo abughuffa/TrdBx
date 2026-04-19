@@ -1,7 +1,7 @@
 ﻿using CleanArchitecture.Blazor.Application.Features.SimCards.Caching;
 
 
-namespace CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Charts.Commands.Recharge;
+namespace CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.ImpulseCharts.Commands.Recharge;
 
 public class RechargeSimCardCommand : ICacheInvalidatorRequest<Result<int>>
 {

@@ -1,17 +1,17 @@
 ﻿using CleanArchitecture.Blazor.Domain.Enums;
 
-namespace CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Charts.Specifications;
+namespace CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.ImpulseCharts.Specifications;
 #nullable disable warnings
-public class ChartAdvancedSpecification : Specification<TrackingUnit>
+public class ImpulseChartAdvancedSpecification : Specification<TrackingUnit>
 {
 
 
 
-    public ChartAdvancedSpecification(ChartAdvancedFilter filter)
+    public ImpulseChartAdvancedSpecification(ImpulseChartAdvancedFilter filter)
     {
         switch (filter.ListView)
         {
-            case ChartListView.SimCardsExpiryDate:
+            case ImpulseChartListView.SimCardsExpiryDate:
                 {
                     Query
                    .Where(x => x.CustomerId.Equals(filter.CustomerId), filter.CustomerId is not null)
@@ -22,7 +22,7 @@ public class ChartAdvancedSpecification : Specification<TrackingUnit>
                                          || x.UStatus == UStatus.InstalledActive);
                     break;
                 }
-            case ChartListView.UnitSubExpiryDate:
+            case ImpulseChartListView.UnitSubExpiryDate:
                 {
                     Query
                    .Where(x => x.CustomerId.Equals(filter.CustomerId), filter.CustomerId is not null)

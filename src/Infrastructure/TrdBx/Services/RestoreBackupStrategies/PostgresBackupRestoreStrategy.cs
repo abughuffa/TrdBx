@@ -28,19 +28,29 @@ public class PostgresBackupRestoreStrategy : IDatabaseBackupRestoreStrategy
         var version = await GetToolVersion(pgDumpPath);
         Console.WriteLine($"Using pg_dump version: {version} from {pgDumpPath}");
 
-        // Build arguments safely - Use custom format (Fc) which is version-specific
-        var arguments = new StringBuilder();
-        arguments.Append($"-h {EscapeArgument(builder.Host)} ");
-        arguments.Append($"-p {builder.Port} ");
-        arguments.Append($"-U {EscapeArgument(builder.Username)} ");
+        //// Build arguments safely - Use custom format (Fc) which is version-specific
+        //var arguments = new StringBuilder();
+        //arguments.Append($"-h {EscapeArgument(builder.Host)} ");
+        //arguments.Append($"-p {builder.Port} ");
+        //arguments.Append($"-U {EscapeArgument(builder.Username)} ");
         
-        // Use directory format for better compatibility across versions
-        // or stick with custom format but note version compatibility
-        arguments.Append("-F d -j 4 -v "); // Directory format with 4 parallel jobs
-        // Alternative: arguments.Append("-F c -b -v "); // Custom format
+        //// Use directory format for better compatibility across versions
+        //// or stick with custom format but note version compatibility
+        //arguments.Append("-F d -j 4 -v "); // Directory format with 4 parallel jobs
+        //// Alternative: arguments.Append("-F c -b -v "); // Custom format
         
-        arguments.Append($"-f {EscapeArgument(backupFile)} ");
-        arguments.Append(EscapeArgument(builder.Database));
+        // arguments.Append($"-f {EscapeArgument(backupFile)} ");
+        // arguments.Append(EscapeArgument(builder.Database));
+
+        // Build arguments for custom format (single file)
+        
+var arguments = new StringBuilder();
+arguments.Append($"-h {EscapeArgument(builder.Host)} ");
+arguments.Append($"-p {builder.Port} ");
+arguments.Append($"-U {EscapeArgument(builder.Username)} ");
+arguments.Append("-F c -b -v ");   // Custom format, include blobs, verbose
+arguments.Append($"-f {EscapeArgument(backupFile)} ");
+arguments.Append(EscapeArgument(builder.Database));
 
         var startInfo = new ProcessStartInfo
         {

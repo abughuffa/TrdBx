@@ -1,8 +1,8 @@
 ﻿
-namespace CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Charts.DTOs;
+namespace CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.ImpulseCharts.DTOs;
 
-[Description("Chart")]
-public class ChartDto
+[Description("ImpulseChart")]
+public class ImpulseChartDto
 {
     [Description("Date")]
     public DateOnly Date { get; set; }
