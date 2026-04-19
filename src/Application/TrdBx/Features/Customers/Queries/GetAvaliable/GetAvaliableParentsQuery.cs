@@ -8,7 +8,7 @@ namespace CleanArchitecture.Blazor.Application.Features.Customers.Queries.GetAva
 
 public class GetAvaliableParentsQuery : ICacheableRequest<IEnumerable<CustomerDto>>
 {
-    public string CacheKey => CustomerCacheKey.GetAvaliableCustomersCacheKey;
+    public string CacheKey => CustomerCacheKey.GetAvaliableParentsCacheKey;
      public IEnumerable<string> Tags => CustomerCacheKey.Tags;
 }
 

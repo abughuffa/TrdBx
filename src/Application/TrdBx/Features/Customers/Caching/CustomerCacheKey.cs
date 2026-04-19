@@ -8,6 +8,7 @@ public static class CustomerCacheKey
 
     public const string GetAvaliableCustomersCacheKey = "avaliable-Customers";
 
+    public const string GetAvaliableParentsCacheKey = "avaliable-Parents";
     public const string GetAvaliableChildsCacheKey = "avaliable-Childs";
 
     public static string GetExportCacheKey(string parameters)

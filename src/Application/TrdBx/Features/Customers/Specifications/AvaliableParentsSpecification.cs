@@ -8,8 +8,7 @@ public class AvaliableParentsSpecification : Specification<Customer>
     public AvaliableParentsSpecification()
     {
 
-        Query.Where(q => q.ParentId == null)
-             .Where(q => q.IsAvaliable == true);
+        Query.Where(q => q.ParentId == null && q.IsAvaliable == false);
     }
 
 }
