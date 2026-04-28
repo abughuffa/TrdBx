@@ -71,7 +71,15 @@
                                 <MudStack Spacing="1">
                                     <MudText Typo="Typo.caption" Color="Color.Secondary">@L["Highest Group Count"]</MudText>
                                     <MudText Typo="Typo.body2" Color="Color.Error">@(FilteredTable.Max(x => x.Items.Count).ToString("N0"))</MudText>
-                                </MudStack>
+                                 </MudStack>
+                                 <MudStack Spacing="1">
+                                    <MudButton Variant="Variant.Filled"
+                                       Color="Color.Primary"
+                                       OnClick="@OnExportImpulses"
+                                       StartIcon="@Icons.Material.Filled.Explore">
+                                @L["Export Impulses"]
+                            </MudButton>
+                                </MudStack> 
                             </MudStack>
                         </MudPaper>
                     </MudItem>
@@ -372,7 +380,7 @@
                                 (_currentFilteredIndex + 1), 
                                 FilteredTable.Count, 
                                 (_currentImpulse?.Date.ToString("MMM dd, yyyy") ?? @L["No data"]), 
-                                (_currentImpulse?.Items.Count.ToString("N0") ?? "0"), 
+                                (_currentImpulse?.Items?.Count.ToString("N0") ?? "0"), 
                                 (_currentImpulse?.Items?.Count.ToString() ?? "0"))
 @* 
                                 Point @(_currentFilteredIndex + 1) of @FilteredTable.Count • @(_currentImpulse?.Date.ToString("MMM dd, yyyy") ?? @L["No data"]) •  Count: @(_currentImpulse?.Items.Count.ToString("N0") ?? "0") • Objects: @(_currentImpulse?.Items?.Count.ToString() ?? "0")
@@ -411,7 +419,7 @@
                                         <MudItem xs="12" md="4">
                                             <MudTextField Label=@L["Items Count"]
                                                           Variant="Variant.Outlined"
-                                                          Value="@(_currentImpulse.Items.Count.ToString() ?? "0")"
+                                                          Value="@(_currentImpulse?.Items?.Count.ToString() ?? "0")"
                                                           ReadOnly="true" />
                                         </MudItem>
                                     </MudGrid>
@@ -536,6 +544,7 @@
                                        StartIcon="@Icons.Material.Filled.Refresh">
                                 @L["Refresh Data"]
                             </MudButton>
+
                         </MudPaper>
                     </MudItem>
                 </MudGrid>
@@ -1234,7 +1243,40 @@
     #endregion
 
     #region Items Actions
+
+       // OnExportImpulses
+
+           private async Task OnExportImpulses()
+              {
+        if (FilteredTable?.Any() != true)
+            return;
+
+            _exporting = true;
+        ExportImpulseChartsQuery? request = new ExportImpulseChartsQuery()
+        {
+            ImpulseCharts = FilteredTable,
+        };
+        var result = await Mediator.Send(request);
+        await result.MatchAsync<byte[]>(
+            async data =>
+            {
+                DownloadFileResult? downloadresult = await BlazorDownloadFileService.DownloadFile($"Grouped-SimCardsExpiery-{DateTime.Now}.xlsx", result.Data, contentType: "application/octet-stream");
+                //var downloadresult = await BlazorDownloadFileService.DownloadFile($"{_currentImpulse.Items.Count.ToString()}-SimCardsExpiersOn-{_currentImpulse.Date:yyyyMMdd}.xlsx", result.Data, contentType: "application/octet-stream");
+                Snackbar.Add($"{ConstantString.ExportSuccess}", MudBlazor.Severity.Info);
+                return data;
+            },
+            errors =>
+            {
+                Snackbar.Add($"{errors}", MudBlazor.Severity.Error);
+                return Task.FromResult(Array.Empty<byte>());
+            });
+        _exporting = false;
+
+    }
     private async Task ExportItems()
+
+
+
     {
         if (_currentImpulse?.Items?.Any() != true)
             return;
