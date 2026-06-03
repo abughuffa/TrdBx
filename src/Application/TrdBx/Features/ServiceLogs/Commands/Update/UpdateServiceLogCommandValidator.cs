@@ -6,7 +6,7 @@ public class UpdateServiceLogCommandValidator : AbstractValidator<UpdateServiceL
         {
            RuleFor(v => v.Id).NotNull();
              
-    RuleFor(v => v.Desc).MaximumLength(255).NotEmpty();
+    RuleFor(v => v.Description).MaximumLength(255).NotEmpty();
 
           
         }

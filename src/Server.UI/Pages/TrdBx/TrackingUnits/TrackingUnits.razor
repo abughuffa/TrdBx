@@ -6,13 +6,11 @@
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.ActivateTrackingUnitForGprs
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.ActivateTrackingUnitForHosting
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.DeactivateTrackingUnit
-@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Install
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.MarkTrackingUnitAsDamaged
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.MarkTrackingUnitAsUsed
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Renew
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.Delete
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.Import
-@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.Update
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.DTOs
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Queries.Export
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Queries.Pagination
@@ -22,11 +20,7 @@
 @using CleanArchitecture.Blazor.Domain.Enums
 @using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Tickets.Components
 @using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.TrackingUnits.Components
-@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.TrackingUnits.DailyTasks
 @using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.TrackingUnits.DailyTasks.AGHD
-
-
-
 
 @inject IStringLocalizer<TrackingUnits> L
 @attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.TrackingUnits.View)]

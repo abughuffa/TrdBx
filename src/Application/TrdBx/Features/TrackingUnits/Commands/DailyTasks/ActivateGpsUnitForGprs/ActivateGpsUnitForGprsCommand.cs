@@ -75,7 +75,7 @@ public class ActivateTrackingUnitForGprsCommandHandler : SubscriptionSharedLogic
 
         var serviceLog = new ServiceLog()
         {
-            Desc = string.Format("تفعيل الوحدة ({0}) للتمديد .", unit.SNo),
+            Description = string.Format("تفعيل الوحدة ({0}) للتمديد .", unit.SNo),
             ServiceNo = serviceNo,
             ServiceTask = ServiceTask.ActivateUnitForGprs,
             CustomerId = (int)unit.CustomerId,

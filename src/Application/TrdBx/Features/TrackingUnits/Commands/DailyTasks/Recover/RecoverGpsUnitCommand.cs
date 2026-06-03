@@ -74,7 +74,7 @@ public class RecoverTrackingUnitCommandHandler : SubscriptionSharedLogic, IReque
 
         var serviceLog = new ServiceLog()
         {
-            Desc = string.Format("استرجاع الوحدة ({0}) من الأصل ({1}).", unit.SNo, asset.TrackedAssetNo),
+            Description = string.Format("استرجاع الوحدة ({0}) من الأصل ({1}).", unit.SNo, asset.TrackedAssetNo),
             ServiceNo = serviceNo,
             ServiceTask = ServiceTask.Recover,
             CustomerId = (int)unit.CustomerId,

@@ -33,3 +33,7 @@ cd D:\TrdBx\src\Migrators\Migrators.PostgreSQL
 Create Initial Migration
 
 dotnet ef --startup-project D:/TrdBx/src/Server.UI/ migrations add DatabaseUpdate-001 --context ApplicationDbContext -o D:\TrdBx\src\Migrators\Migrators.PostgreSQL\Migrations
+
+
+
+mohammed@MyThinkBook:~/Projects/TrdBx/src/Migrators/Migrators.PostgreSQL$ dotnet ef migrations add DescUpdated   --project /home/mohammed/Projects/TrdBx/src/Migrators/Migrators.PostgreSQL   --startup-project /home/mohammed/Projects/TrdBx/src/Server.UI   --context ApplicationDbContext   --output-dir Migrations

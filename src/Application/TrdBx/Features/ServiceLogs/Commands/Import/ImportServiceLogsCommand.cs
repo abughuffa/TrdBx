@@ -46,7 +46,7 @@ public class ImportServiceLogsCommandHandler :
     private readonly IApplicationDbContext _context;
     private readonly IStringLocalizer<ImportServiceLogsCommandHandler> _localizer;
     private readonly IExcelService _excelService;
-    private readonly ServiceLogDto _dto = new() { Desc = string.Empty};
+    private readonly ServiceLogDto _dto = new() { Description = string.Empty};
     public ImportServiceLogsCommandHandler(
         IApplicationDbContext context,
         IExcelService excelService,
@@ -80,7 +80,7 @@ public class ImportServiceLogsCommandHandler :
                     { _localizer[_dto.GetMemberDescription(x=>x.ServiceTask)], (row, item) => item.ServiceTask = (ServiceTask)Convert.ToInt32(row[_localizer[_dto.GetMemberDescription(x=>x.ServiceTask)]].ToString()) },
                     { _localizer[_dto.GetMemberDescription(x=>x.CustomerId)], (row, item) => item.CustomerId = int.Parse(row[_localizer[_dto.GetMemberDescription(x=>x.CustomerId)]].ToString()) },
                     //{ _localizer[_dto.GetMemberDescription(x=>x.InstallerId)], (row, item) => item.InstallerId = row[_localizer[_dto.GetMemberDescription(x=>x.InstallerId)]].ToString() },
-                    { _localizer[_dto.GetMemberDescription(x=>x.Desc)], (row, item) => item.Desc = row[_localizer[_dto.GetMemberDescription(x=>x.Desc)]].ToString() },
+                    { _localizer[_dto.GetMemberDescription(x=>x.Description)], (row, item) => item.Description = row[_localizer[_dto.GetMemberDescription(x=>x.Description)]].ToString() },
                     { _localizer[_dto.GetMemberDescription(x=>x.SerDate)], (row, item) => item.SerDate = DateOnly.FromDateTime(DateTime.Parse(row[_localizer[_dto.GetMemberDescription(x=>x.SerDate)]].ToString()))},
                     { _localizer[_dto.GetMemberDescription(x=>x.IsDeserved)], (row, item) => item.IsDeserved =Convert.ToBoolean(row[_localizer[_dto.GetMemberDescription(x=>x.IsDeserved)]]) },
                     { _localizer[_dto.GetMemberDescription(x=>x.IsBilled)], (row, item) => item.IsBilled =Convert.ToBoolean(row[_localizer[_dto.GetMemberDescription(x=>x.IsBilled)]]) },
@@ -117,7 +117,7 @@ public class ImportServiceLogsCommandHandler :
                                     _localizer[_dto.GetMemberDescription(x=>x.ServiceTask)],
                                     _localizer[_dto.GetMemberDescription(x=>x.CustomerId)],
                                     //_localizer[_dto.GetMemberDescription(x=>x.InstallerId)],
-                                    _localizer[_dto.GetMemberDescription(x=>x.Desc)],
+                                    _localizer[_dto.GetMemberDescription(x=>x.Description)],
                                     _localizer[_dto.GetMemberDescription(x=>x.SerDate)],
                                     _localizer[_dto.GetMemberDescription(x=>x.IsDeserved)],
                                     _localizer[_dto.GetMemberDescription(x=>x.IsBilled)],

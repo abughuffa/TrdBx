@@ -112,7 +112,7 @@ public class InstallTrackingUnitCommandHandler : SubscriptionSharedLogic, IReque
             case UStatus.Used:
                 {
                     serviceLog.ServiceTask = ServiceTask.ReInstall;
-                    serviceLog.Desc = string.Format("إعادة تركيب الوحدة المستعملة ({0}) في الأصل ({1}).", unit.SNo, asset.TrackedAssetNo);
+                    serviceLog.Description = string.Format("إعادة تركيب الوحدة المستعملة ({0}) في الأصل ({1}).", unit.SNo, asset.TrackedAssetNo);
                     serviceLog.IsDeserved = request.CreateDeservedServices;
                     serviceLog.Amount = await GetSPrice(_context, ServiceTask.ReInstall);
 
@@ -130,7 +130,7 @@ public class InstallTrackingUnitCommandHandler : SubscriptionSharedLogic, IReque
             case UStatus.Reserved:
                 {
                     serviceLog.ServiceTask = ServiceTask.Install;
-                    serviceLog.Desc = string.Format("تركيب الوحدة الجديدة ({0}) في الأصل ({1}).", unit.SNo, asset.TrackedAssetNo);
+                    serviceLog.Description = string.Format("تركيب الوحدة الجديدة ({0}) في الأصل ({1}).", unit.SNo, asset.TrackedAssetNo);
                     serviceLog.IsDeserved = true;
 
                     serviceLog.Amount = price.Price;

@@ -102,7 +102,7 @@ public class RenewTrackingUnitSubscriptionCommandHandler : PriceSharedLogic, IRe
             {
                 var serviceLog = new ServiceLog()
                 {
-                    Desc = $"تجديد اشتراك الوحدة ({item.SNo}) بالمركبة ({item.UnitName}).",
+                    Description = $"تجديد اشتراك الوحدة ({item.SNo}) بالمركبة ({item.UnitName}).",
                     //Desc = string.Format("تجديد اشتراك الوحدة ({0}).", item.SNo),
                     ServiceNo = xserviceNo,
                     ServiceTask = ServiceTask.RenewUnitSub,

@@ -14,8 +14,8 @@ public class UpdateServiceLogCommand : ICacheInvalidatorRequest<Result<int>>
     public int CustomerId { get; set; }
     [Description("InstallerId")]
     public int InstallerId { get; set; }
-    [Description("Desc")]
-    public string Desc { get; set; } = string.Empty;
+    [Description("Description")]
+    public string Description { get; set; } = string.Empty;
 
     [Description("IsDeserved")]
     public bool IsDeserved { get; set; } = true;

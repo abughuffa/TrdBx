@@ -75,7 +75,7 @@ public class ActivateTrackingUnitCommandHandler : SubscriptionSharedLogic, IRequ
 
         var serviceLog = new ServiceLog()
         {
-            Desc = string.Format("تفعيل الوحدة ({0}) بشكل كامل .", unit.SNo),
+            Description = string.Format("تفعيل الوحدة ({0}) بشكل كامل .", unit.SNo),
             ServiceNo = serviceNo,
             ServiceTask = ServiceTask.ActivateUnit,
             CustomerId = (int)unit.CustomerId,

@@ -120,6 +120,12 @@ internal static class TrdBxMenu
                     IsParent = true,
                     MenuItems = new List<MenuSectionSubItemModel>
                     {
+                     new()
+                        {
+                            Title = "Wialon Server api Test",
+                            Href = "/wialon/session-manager",
+                            PageStatus = PageStatus.Completed
+                        },
                         new()
                         {
                             Title = "Wialon Units",

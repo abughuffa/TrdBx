@@ -138,7 +138,7 @@ public class ReplaceTrackingUnitCommandHandler : SubscriptionSharedLogic, IReque
         {
             case UStatus.Used:
                 {
-                    serviceLog.Desc = string.Format("استبدال الوحدة ({0}) بالوحدة المستعملة ({1}) للأصل ({2})", runit.SNo, sunit.SNo, asset.TrackedAssetNo);
+                    serviceLog.Description = string.Format("استبدال الوحدة ({0}) بالوحدة المستعملة ({1}) للأصل ({2})", runit.SNo, sunit.SNo, asset.TrackedAssetNo);
                     serviceLog.Amount = await GetSPrice(_context, ServiceTask.Replace);
 
                     sunit.WryDate = Sw ? request.TsDate : sunit.WryDate;
@@ -155,7 +155,7 @@ public class ReplaceTrackingUnitCommandHandler : SubscriptionSharedLogic, IReque
             case UStatus.Reserved:
             case UStatus.New:
                 {
-                    serviceLog.Desc = string.Format("استبدال الوحدة ({0}) بالوحدة الجديدة ({1}) للأصل ({2})", runit.SNo, sunit.SNo, asset.TrackedAssetNo);
+                    serviceLog.Description = string.Format("استبدال الوحدة ({0}) بالوحدة الجديدة ({1}) للأصل ({2})", runit.SNo, sunit.SNo, asset.TrackedAssetNo);
                     sunit.WryDate = Sw ? request.TsDate : request.TsDate.AddDays(365);
 
                     serviceLog.Amount = sprice.Price;

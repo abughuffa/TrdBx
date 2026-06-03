@@ -1211,11 +1211,11 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("customer_id");
 
-                    b.Property<string>("Desc")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
-                        .HasColumnName("desc");
+                        .HasColumnName("description");
 
                     b.Property<int?>("InvoiceItemId")
                         .HasColumnType("integer")

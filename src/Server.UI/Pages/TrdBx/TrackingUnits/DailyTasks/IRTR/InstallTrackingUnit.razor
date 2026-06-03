@@ -8,12 +8,11 @@
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Queries.GetById
 @using CleanArchitecture.Blazor.Application.Features.SimCards.DTOs
 @using CleanArchitecture.Blazor.Application.Features.SimCards.Queries.GetAvaliableSimCards
-
 @using CleanArchitecture.Blazor.Domain.Enums
-@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Customers.Components
-@* @using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Installers *@
+
 
 @inherits MudComponentBase
+@implements IDisposable
 @inject IValidationService Validator
 @inject IStringLocalizer<TrackingUnits> L
 @attribute [Authorize(Policy = Permissions.TrackingUnits.Install)]
@@ -295,6 +294,19 @@ return -1;
     {
         Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits");
 
+    }
+
+        public void Dispose()
+    {
+@*         SimCards.();
+        TrackedAssets.Dispose();
+        Customers.Dispose(); *@
+@*             private IEnumerable<SimCardDto> SimCards = new List<SimCardDto>();
+    private IEnumerable<TrackedAssetDto> TrackedAssets = new List<TrackedAssetDto>();
+   Customers.Dispose();
+        autoRefreshCts?.Cancel();
+        autoRefreshCts?.Dispose();
+        autoRefreshTimer?.Dispose(); *@
     }
 
 }

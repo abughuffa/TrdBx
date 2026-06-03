@@ -38,7 +38,7 @@ public class InvoiceLogic
         {
             SerialIndex = serialIndex, // Position in invoice
             ServiceLogId = serviceLog.Id, // Link to original service log 
-            Description = serviceLog.Desc, // Copy description
+            Description = serviceLog.Description, // Copy description
             Amount = serviceLog.Amount,
             SubTotal = 0.0m,
             InvoiceItems = new()

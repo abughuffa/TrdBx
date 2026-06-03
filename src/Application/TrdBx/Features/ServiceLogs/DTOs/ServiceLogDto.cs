@@ -16,8 +16,8 @@ public class ServiceLogDto
     public int CustomerId { get; set; }
     //[Description("InstallerId")]
     //public  string InstallerId { get; set; } = string.Empty;
-    [Description("Desc")]
-    public string Desc { get; set; } = string.Empty;
+    [Description("Description")]
+    public string Description { get; set; } = string.Empty;
     [Description("SerDate")]
     public DateOnly SerDate { get; set; }
     [Description("IsDeserved")]

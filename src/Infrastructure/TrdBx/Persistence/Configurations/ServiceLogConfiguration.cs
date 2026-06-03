@@ -12,7 +12,7 @@ public class ServiceLogConfiguration : IEntityTypeConfiguration<ServiceLog>
     public void Configure(EntityTypeBuilder<ServiceLog> builder)
     {
         builder.HasIndex(t => t.ServiceNo).IsUnique(true);
-        builder.Property(t => t.Desc).HasMaxLength(256).IsRequired();
+        builder.Property(t => t.Description).HasMaxLength(256).IsRequired();
         builder.Ignore(e => e.DomainEvents);
         builder.HasOne(x => x.CreatedByUser)
     .WithMany()

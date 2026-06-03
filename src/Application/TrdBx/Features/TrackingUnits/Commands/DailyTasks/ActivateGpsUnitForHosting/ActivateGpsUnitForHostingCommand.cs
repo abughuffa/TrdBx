@@ -74,7 +74,7 @@ public class ActivateTrackingUnitForHostingCommandHandler : SubscriptionSharedLo
 
         var serviceLog = new ServiceLog()
         {
-            Desc = string.Format("تفعيل الوحدة ({0}) للإستضافة .", unit.SNo, request.TsDate),
+            Description = string.Format("تفعيل الوحدة ({0}) للإستضافة .", unit.SNo, request.TsDate),
             ServiceNo = serviceNo,
             ServiceTask = ServiceTask.ActivateUnitForHosting,
             CustomerId = (int)unit.CustomerId,

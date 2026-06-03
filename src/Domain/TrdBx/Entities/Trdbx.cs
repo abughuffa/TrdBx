@@ -150,7 +150,7 @@ public class ServiceLog : BaseAuditableEntity
     public ServiceTask ServiceTask { get; set; }
     public int CustomerId { get; set; }
     //public required string InstallerId { get; set; }
-    public string Desc { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
     public DateOnly SerDate { get; set; }
     public bool IsDeserved { get; set; } = true;
     public bool IsBilled { get; set; } = false;

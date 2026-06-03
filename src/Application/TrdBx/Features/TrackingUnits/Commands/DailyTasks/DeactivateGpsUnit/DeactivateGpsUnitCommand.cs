@@ -75,7 +75,7 @@ public class DeactivateTrackingUnitCommandHandler : SubscriptionSharedLogic, IRe
         //{
             var serviceLog = new ServiceLog()
             {
-                Desc = string.Format("إلغاء تفعيل الوحدة ({0}).", unit.SNo),
+                Description = string.Format("إلغاء تفعيل الوحدة ({0}).", unit.SNo),
                 ServiceNo = serviceNo,
                 ServiceTask = ServiceTask.DeactivateUnit,
                 CustomerId = (int)unit.CustomerId,
@@ -104,6 +104,8 @@ public class DeactivateTrackingUnitCommandHandler : SubscriptionSharedLogic, IRe
             {
                 if (request.ApplyChangesOnWialon)
                 {
+                  //  (int itemId, string active);
+                  ///  await  _wialonService.ActivateUnit((int)unit.WUnitId, "false");
                     //ExcuteRegistredTasks Here
                 }
                 return await Result.SuccessAsync();

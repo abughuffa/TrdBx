@@ -114,7 +114,7 @@ public class TransferTrackingUnitCommandHandler : SubscriptionSharedLogic, IRequ
 
         oasset.AddDomainEvent(new TrackedAssetUpdatedEvent(oasset));
 
-        serviceLog.Desc = string.Format("نقل الوحدة ({0}) من الاصل ({1}) إلى الاصل ({2}).", unit.SNo, oasset.TrackedAssetNo, asset.TrackedAssetNo);
+        serviceLog.Description = string.Format("نقل الوحدة ({0}) من الاصل ({1}) إلى الاصل ({2}).", unit.SNo, oasset.TrackedAssetNo, asset.TrackedAssetNo);
         serviceLog.IsDeserved = request.CreateDeservedServices;
 
 

@@ -402,7 +402,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
             {
                 var stringBuilder = new StringBuilder();
 
-                stringBuilder.AppendLine(string.Format("العملية - {0} - كود الحالة {1}", servcieLog.Desc, caseProfile.CaseCode.ToString()));
+                stringBuilder.AppendLine(string.Format("العملية - {0} - كود الحالة {1}", servcieLog.Description, caseProfile.CaseCode.ToString()));
 
                 if (unit.IsOnWialon == false)
                 {
@@ -865,7 +865,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
             {
                 var stringBuilder = new StringBuilder();
 
-                stringBuilder.AppendLine(string.Format("العملية - {0} - كود الحالة {1}", servcieLog.Desc, caseProfile.CaseCode.ToString()));
+                stringBuilder.AppendLine(string.Format("العملية - {0} - كود الحالة {1}", servcieLog.Description, caseProfile.CaseCode.ToString()));
 
                 if (unit.IsOnWialon == false)
                 {
@@ -1326,7 +1326,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
             {
                 var stringBuilder = new StringBuilder();
 
-                stringBuilder.AppendLine(string.Format("العملية - {0} - كود الحالة {1}", servcieLog.Desc, caseProfile.CaseCode.ToString()));
+                stringBuilder.AppendLine(string.Format("العملية - {0} - كود الحالة {1}", servcieLog.Description, caseProfile.CaseCode.ToString()));
 
                 if (unit.IsOnWialon == false)
                 {
@@ -1639,7 +1639,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
             {
                 var stringBuilder = new StringBuilder();
 
-                stringBuilder.AppendLine(string.Format("العملية - {0} - كود الحالة {1}", servcieLog.Desc, caseProfile.CaseCode.ToString()));
+                stringBuilder.AppendLine(string.Format("العملية - {0} - كود الحالة {1}", servcieLog.Description, caseProfile.CaseCode.ToString()));
 
                 switch (caseProfile.CaseCode)
                 {
