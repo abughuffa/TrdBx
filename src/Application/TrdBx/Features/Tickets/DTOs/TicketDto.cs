@@ -14,8 +14,8 @@ public class TicketDto
     public string TicketNo { get; set; } = string.Empty;
     [Description("ServiceTask")]
     public ServiceTask ServiceTask { get; set; }
-    [Description("Desc")]
-    public string Desc { get; set; } = string.Empty;
+    [Description("Description")]
+    public string Description { get; set; } = string.Empty;
     [Description("TicketStatus")]
     public TicketStatus TicketStatus { get; set; }
     [Description("TrackingUnitId")]

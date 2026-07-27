@@ -18,8 +18,8 @@ public class SubscriptionDto
     [Description("LastPaidFees")]
     public SubPackageFees LastPaidFees { get; set; }
 
-    [Description("Desc")]
-    public string Desc { get; set; } = string.Empty;
+    [Description("Description")]
+    public string Description { get; set; } = string.Empty;
 
     [Description("SsDate")]
     public DateOnly SsDate { get; set; }

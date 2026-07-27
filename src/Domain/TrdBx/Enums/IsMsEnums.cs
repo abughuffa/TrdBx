@@ -98,29 +98,32 @@ public enum TicketTask
 public enum ServiceTask
 {
     //[Description("All")] All = 0,
-    [Description("Check")] Check = 1,//
-    [Description("Install New unit")] Install = 2,//
-    [Description("ReInstall Used unit")] ReInstall = 3,//
-    [Description("Recover Installed unit")] Recover = 4,//
-    [Description("Transfer Installed unit")] Transfer = 5,//
-    [Description("Replace Installed unit")] Replace = 6,//
+    [Description("Check")] Check = 1,
+    [Description("Install New unit")] Install = 2,
+    [Description("ReInstall Used unit")] ReInstall = 3,
+    [Description("Recover Installed unit")] Recover = 4,
+    [Description("Transfer Installed unit")] Transfer = 5,
+    [Description("Replace Installed unit")] Replace = 6,
     [Description("Install SimCard card")] InstallSimCard = 7,
     [Description("Recover SimCard card")] RecoverSimCard = 8,
     [Description("Replace SimCard card")] ReplacSimCard = 9,
-    [Description("Activate unit's Subscription")] ActivateUnit = 10,//
-    [Description("Activate unit's Subscription for GPRS")] ActivateUnitForGprs = 11,//
-    [Description("Activate unit's Subscription FOR Hosting")] ActivateUnitForHosting = 12,//
-    [Description("Deactivate unit's Subscription")] DeactivateUnit = 13,//
+    [Description("Activate unit's Subscription")] ActivateUnit = 10,
+    [Description("Activate unit's Subscription for GPRS")] ActivateUnitForGprs = 11,
+    [Description("Activate unit's Subscription FOR Hosting")] ActivateUnitForHosting = 12,
+    [Description("Deactivate unit's Subscription")] DeactivateUnit = 13,
     [Description("Renew unit's Subscription")] RenewUnitSub = 14,
-    [Description("UploadedData from TrdBx")] TrdbxDataUpload = 15
+    [Description("UploadedData from TrdBx")] TrdbxDataUpload = 15,
+    [Description("Status Update")] StatusUpdate = 16
 }
 public enum APITask
 {
+    [Description("Check on Wialon")] CheckOnWialon = 0,
     [Description("Add To Wialon")] AddToWialon = 1,
     [Description("Update On Wialon")] UpdateOnWialon = 2,
     [Description("Activate On Wialon")] ActivateOnWialon = 3,
     [Description("Deactivate On Wialon")] DeactivateOnWialon = 4,
-    [Description("Remove From Wialon")] RemoveFromWialon = 5
+    [Description("Remove From Wialon")] RemoveFromWialon = 5,
+   
     //[Description("Deactivate On Wialon Defered")] DeactivateOnWialonDefered,
     //[Description("Remove From Wialon Defered")] RemoveFromWialonDefered,
     //[Description("Invoice Of Subscription Fees")] InvoiceOfSubscriptionFees,

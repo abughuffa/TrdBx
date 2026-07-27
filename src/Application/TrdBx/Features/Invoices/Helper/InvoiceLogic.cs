@@ -68,7 +68,7 @@ public class InvoiceLogic
         {
             SubSerialIndex = subSerialIndex, // Position in item group
             SubscriptionId = subscription.Id, // Link to original Sub
-            Description = subscription.Desc, // Copy description
+            Description = subscription.Description, // Copy description
             Amount = (decimal)subscription.Amount, // Convert amount to decimal
         };
     }

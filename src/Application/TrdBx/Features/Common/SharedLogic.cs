@@ -1,4 +1,4 @@
-﻿using System.Text;
+﻿/* using System.Text;
 using System.Text.RegularExpressions;
 using Azure.Identity;
 using CleanArchitecture.Blazor.Domain.Entities;
@@ -160,7 +160,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                     {
                         TrackingUnitId = unit.Id,
                         APITask = APITask.AddToWialon,
-                        Desc = string.Format("اضف الوحدة ({0}) الى منصة ويلون.", unit.SNo),
+                        Description = string.Format("اضف الوحدة ({0}) الى منصة ويلون.", unit.SNo),
                         ExcDate = caseProfile.TsDt,
                         IsExecuted = false,
                     });
@@ -185,7 +185,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
 
                             currentSubscription.LastPaidFees = (SubPackageFees)oLF;
                             currentSubscription.CaseCode = caseProfile.CaseCode;
-                            currentSubscription.Desc = string.Format(SubscriptionDescs.Desc20, startDate, endDate);
+                            currentSubscription.Description = string.Format(SubscriptionDescs.Desc20, startDate, endDate);
                             //currentSubscription.SsDate -- Not Affected here
                             currentSubscription.SeDate = endDate;
                             currentSubscription.DailyFees = dailyFees;
@@ -202,7 +202,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
 
                             currentSubscription.LastPaidFees = (SubPackageFees)oLF;
                             currentSubscription.CaseCode = caseProfile.CaseCode;
-                            currentSubscription.Desc = string.Format(SubscriptionDescs.Desc16, startDate, endDate);
+                            currentSubscription.Description = string.Format(SubscriptionDescs.Desc16, startDate, endDate);
                             //currentSubscription.SsDate -- Not Affected here
                             currentSubscription.SeDate = endDate;
                             currentSubscription.DailyFees = dailyFees;
@@ -222,7 +222,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                             {
                                 LastPaidFees = (SubPackageFees)oLF,
                                 CaseCode = caseProfile.CaseCode,
-                                Desc = string.Format(SubscriptionDescs.Desc18, startDate, endDate),
+                                Description = string.Format(SubscriptionDescs.Desc18, startDate, endDate),
                                 TrackingUnitId = unit.Id,
                                 SsDate = startDate,
                                 SeDate = endDate,
@@ -243,7 +243,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                             {
                                 LastPaidFees = (SubPackageFees)oLF,
                                 CaseCode = caseProfile.CaseCode,
-                                Desc = string.Format(SubscriptionDescs.Desc13, startDate, endDate),
+                                Description = string.Format(SubscriptionDescs.Desc13, startDate, endDate),
                                 TrackingUnitId = unit.Id,
                                 SsDate = startDate,
                                 SeDate = endDate,
@@ -266,7 +266,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                             {
                                 LastPaidFees = (SubPackageFees)oLF,
                                 CaseCode = caseProfile.CaseCode,
-                                Desc = string.Format(SubscriptionDescs.Desc04, startDate, endDate),
+                                Description = string.Format(SubscriptionDescs.Desc04, startDate, endDate),
                                 TrackingUnitId = unit.Id,
                                 SsDate = startDate,
                                 SeDate = endDate,
@@ -291,7 +291,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                             {
                                 LastPaidFees = (SubPackageFees)oLF,
                                 CaseCode = caseProfile.CaseCode,
-                                Desc = string.Format(SubscriptionDescs.Desc06, startDate, endDate),
+                                Description = string.Format(SubscriptionDescs.Desc06, startDate, endDate),
                                 TrackingUnitId = unit.Id,
                                 SsDate = startDate,
                                 SeDate = endDate,
@@ -324,7 +324,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                             {
                                 LastPaidFees = (SubPackageFees)rLF,
                                 CaseCode = caseProfile.CaseCode,
-                                Desc = string.Format(SubscriptionDescs.Desc01, startDate, endDate),
+                                Description = string.Format(SubscriptionDescs.Desc01, startDate, endDate),
                                 TrackingUnitId = unit.Id,
                                 SsDate = startDate,
                                 SeDate = endDate,
@@ -344,7 +344,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                             {
                                 LastPaidFees = (SubPackageFees)rLF,
                                 CaseCode = caseProfile.CaseCode,
-                                Desc = string.Format(SubscriptionDescs.Desc08, startDate, endDate),
+                                Description = string.Format(SubscriptionDescs.Desc08, startDate, endDate),
                                 TrackingUnitId = unit.Id,
                                 SsDate = startDate,
                                 SeDate = endDate,
@@ -365,7 +365,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                             {
                                 LastPaidFees = (SubPackageFees)rLF,
                                 CaseCode = caseProfile.CaseCode,
-                                Desc = string.Format(SubscriptionDescs.Desc09, startDate, endDate),
+                                Description = string.Format(SubscriptionDescs.Desc09, startDate, endDate),
                                 TrackingUnitId = unit.Id,
                                 SsDate = startDate,
                                 SeDate = endDate,
@@ -383,7 +383,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                     {
                         TrackingUnitId = unit.Id,
                         APITask = APITask.ActivateOnWialon,
-                        Desc = string.Format("فعل الوحدة ({0}) على منصة ويلون.", unit.SNo),
+                        Description = string.Format("فعل الوحدة ({0}) على منصة ويلون.", unit.SNo),
                         ExcDate = caseProfile.TsDt,
                         IsExecuted = false,
                     });
@@ -611,7 +611,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                     {
                         TrackingUnitId = unit.Id,
                         APITask = APITask.AddToWialon,
-                        Desc = string.Format("اضف الوحدة ({0}) الى منصة ويلون.", unit.SNo),
+                        Description = string.Format("اضف الوحدة ({0}) الى منصة ويلون.", unit.SNo),
                         ExcDate = caseProfile.TsDt,
                         IsExecuted = false,
                     });
@@ -636,7 +636,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
 
                             currentSubscription.LastPaidFees = (SubPackageFees)oLF;
                             currentSubscription.CaseCode = caseProfile.CaseCode;
-                            currentSubscription.Desc = string.Format(SubscriptionDescs.Desc21, startDate, endDate);
+                            currentSubscription.Description = string.Format(SubscriptionDescs.Desc21, startDate, endDate);
                             currentSubscription.SeDate = endDate;
                             currentSubscription.DailyFees = dailyFees;
                             currentSubscription.AddDomainEvent(new SubscriptionUpdatedEvent(currentSubscription));
@@ -652,7 +652,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
 
                             currentSubscription.LastPaidFees = (SubPackageFees)oLF;
                             currentSubscription.CaseCode = caseProfile.CaseCode;
-                            currentSubscription.Desc = string.Format(SubscriptionDescs.Desc17, startDate, endDate);
+                            currentSubscription.Description = string.Format(SubscriptionDescs.Desc17, startDate, endDate);
                             currentSubscription.SeDate = endDate;
                             currentSubscription.DailyFees = dailyFees;
                             currentSubscription.AddDomainEvent(new SubscriptionUpdatedEvent(currentSubscription));
@@ -668,7 +668,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
 
                             currentSubscription.LastPaidFees = (SubPackageFees)oLF;
                             currentSubscription.CaseCode = caseProfile.CaseCode;
-                            currentSubscription.Desc = string.Format(SubscriptionDescs.Desc25, startDate, endDate);
+                            currentSubscription.Description = string.Format(SubscriptionDescs.Desc25, startDate, endDate);
                             currentSubscription.SeDate = endDate;
                             currentSubscription.DailyFees = dailyFees;
                             currentSubscription.AddDomainEvent(new SubscriptionUpdatedEvent(currentSubscription));
@@ -686,7 +686,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                             {
                                 LastPaidFees = (SubPackageFees)oLF,
                                 CaseCode = caseProfile.CaseCode,
-                                Desc = string.Format(SubscriptionDescs.Desc19, startDate, endDate),
+                                Description = string.Format(SubscriptionDescs.Desc19, startDate, endDate),
                                 TrackingUnitId = unit.Id,
                                 SsDate = startDate,
                                 SeDate = endDate,
@@ -706,7 +706,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                             {
                                 LastPaidFees = (SubPackageFees)oLF,
                                 CaseCode = caseProfile.CaseCode,
-                                Desc = string.Format(SubscriptionDescs.Desc24, startDate, endDate),
+                                Description = string.Format(SubscriptionDescs.Desc24, startDate, endDate),
                                 TrackingUnitId = unit.Id,
                                 SsDate = startDate,
                                 SeDate = endDate,
@@ -726,7 +726,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                             {
                                 LastPaidFees = (SubPackageFees)oLF,
                                 CaseCode = caseProfile.CaseCode,
-                                Desc = string.Format(SubscriptionDescs.Desc07, startDate, endDate),
+                                Description = string.Format(SubscriptionDescs.Desc07, startDate, endDate),
                                 TrackingUnitId = unit.Id,
                                 SsDate = startDate,
                                 SeDate = endDate,
@@ -756,7 +756,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                             {
                                 LastPaidFees = (SubPackageFees)rLF,
                                 CaseCode = caseProfile.CaseCode,
-                                Desc = string.Format(SubscriptionDescs.Desc02, startDate, endDate),
+                                Description = string.Format(SubscriptionDescs.Desc02, startDate, endDate),
                                 TrackingUnitId = unit.Id,
                                 SsDate = startDate,
                                 SeDate = endDate,
@@ -776,7 +776,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                                 LastPaidFees = (SubPackageFees)rLF,
                                 CaseCode = caseProfile.CaseCode,
 
-                                Desc = string.Format(SubscriptionDescs.Desc10, startDate, endDate),
+                                Description = string.Format(SubscriptionDescs.Desc10, startDate, endDate),
                                 TrackingUnitId = unit.Id,
                                 SsDate = startDate,
                                 SeDate = endDate,
@@ -796,7 +796,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                                 LastPaidFees = (SubPackageFees)rLF,
                                 CaseCode = caseProfile.CaseCode,
 
-                                Desc = string.Format(SubscriptionDescs.Desc11, startDate, endDate),
+                                Description = string.Format(SubscriptionDescs.Desc11, startDate, endDate),
                                 TrackingUnitId = unit.Id,
                                 SsDate = startDate,
                                 SeDate = endDate,
@@ -820,7 +820,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                                 {
                                     TrackingUnitId = unit.Id,
                                     APITask = APITask.DeactivateOnWialon,
-                                    Desc = string.Format("إلغاء تفعيل الوحدة ({0}) على منصة ويلون.", unit.SNo),
+                                    Description = string.Format("إلغاء تفعيل الوحدة ({0}) على منصة ويلون.", unit.SNo),
                                     ExcDate = caseProfile.TsDt,
                                     IsExecuted = false,
                                 });
@@ -839,7 +839,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                                 {
                                     TrackingUnitId = unit.Id,
                                     APITask = APITask.DeactivateOnWialon,
-                                    Desc = string.Format("مهمة مؤجلة - إلغاء تفعيل الوحدة ({0}) على منصة ويلون.", unit.SNo),
+                                    Description = string.Format("مهمة مؤجلة - إلغاء تفعيل الوحدة ({0}) على منصة ويلون.", unit.SNo),
                                     ExcDate = (DateOnly)caseProfile.SeDt,
                                     IsExecuted = false,
                                 });
@@ -1098,7 +1098,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                     {
                         TrackingUnitId = unit.Id,
                         APITask = APITask.AddToWialon,
-                        Desc = string.Format("اضف الوحدة ({0}) الى منصة ويلون.", unit.SNo),
+                        Description = string.Format("اضف الوحدة ({0}) الى منصة ويلون.", unit.SNo),
                         ExcDate = caseProfile.TsDt,
                         IsExecuted = false,
                     });
@@ -1124,7 +1124,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                             {
                                 LastPaidFees = (SubPackageFees)oLF,
                                 CaseCode = caseProfile.CaseCode,
-                                Desc = string.Format(SubscriptionDescs.Desc05, startDate, endDate),
+                                Description = string.Format(SubscriptionDescs.Desc05, startDate, endDate),
                                 TrackingUnitId = unit.Id,
                                 SsDate = startDate,
                                 SeDate = endDate,
@@ -1143,7 +1143,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
 
                             currentSubscription.LastPaidFees = (SubPackageFees)oLF;
                             currentSubscription.CaseCode = caseProfile.CaseCode;
-                            currentSubscription.Desc = string.Format(SubscriptionDescs.Desc21, startDate, endDate);
+                            currentSubscription.Description = string.Format(SubscriptionDescs.Desc21, startDate, endDate);
                             currentSubscription.SeDate = endDate;
                             currentSubscription.DailyFees = dailyFees;
                             currentSubscription.AddDomainEvent(new SubscriptionUpdatedEvent(currentSubscription));
@@ -1162,7 +1162,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                             {
                                 LastPaidFees = (SubPackageFees)oLF,
                                 CaseCode = caseProfile.CaseCode,
-                                Desc = string.Format(SubscriptionDescs.Desc15, startDate, endDate),
+                                Description = string.Format(SubscriptionDescs.Desc15, startDate, endDate),
                                 TrackingUnitId = unit.Id,
                                 SsDate = startDate,
                                 SeDate = endDate,
@@ -1180,7 +1180,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
 
                             currentSubscription.LastPaidFees = (SubPackageFees)oLF;
                             currentSubscription.CaseCode = caseProfile.CaseCode;
-                            currentSubscription.Desc = string.Format(SubscriptionDescs.Desc17, startDate, endDate);
+                            currentSubscription.Description = string.Format(SubscriptionDescs.Desc17, startDate, endDate);
                             currentSubscription.SeDate = endDate;
                             currentSubscription.DailyFees = dailyFees;
                             currentSubscription.AddDomainEvent(new SubscriptionUpdatedEvent(currentSubscription));
@@ -1198,7 +1198,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                             {
                                 LastPaidFees = (SubPackageFees)oLF,
                                 CaseCode = caseProfile.CaseCode,
-                                Desc = string.Format(SubscriptionDescs.Desc24, startDate, endDate),
+                                Description = string.Format(SubscriptionDescs.Desc24, startDate, endDate),
                                 TrackingUnitId = unit.Id,
                                 SsDate = startDate,
                                 SeDate = endDate,
@@ -1215,7 +1215,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
 
                             currentSubscription.LastPaidFees = (SubPackageFees)oLF;
                             currentSubscription.CaseCode = caseProfile.CaseCode;
-                            currentSubscription.Desc = string.Format(SubscriptionDescs.Desc25, startDate, endDate);
+                            currentSubscription.Description = string.Format(SubscriptionDescs.Desc25, startDate, endDate);
                             currentSubscription.SeDate = endDate;
                             currentSubscription.DailyFees = dailyFees;
                             currentSubscription.AddDomainEvent(new SubscriptionUpdatedEvent(currentSubscription));
@@ -1243,7 +1243,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                             {
                                 LastPaidFees = (SubPackageFees)rLF,
                                 CaseCode = caseProfile.CaseCode,
-                                Desc = string.Format(SubscriptionDescs.Desc03, startDate, endDate),
+                                Description = string.Format(SubscriptionDescs.Desc03, startDate, endDate),
                                 TrackingUnitId = unit.Id,
                                 SsDate = startDate,
                                 SeDate = endDate,
@@ -1265,7 +1265,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                             {
                                 LastPaidFees = (SubPackageFees)rLF,
                                 CaseCode = caseProfile.CaseCode,
-                                Desc = string.Format(SubscriptionDescs.Desc12, startDate, endDate),
+                                Description = string.Format(SubscriptionDescs.Desc12, startDate, endDate),
                                 TrackingUnitId = unit.Id,
                                 SsDate = startDate,
                                 SeDate = endDate,
@@ -1287,7 +1287,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                                 LastPaidFees = (SubPackageFees)rLF,
                                 CaseCode = caseProfile.CaseCode,
                                 //Desc = "دورة اشتراك للاستضافة من تاريخ تفعيل الاستضافة حتى تاريخ نهاية الدورة السابقة الغير مسددة",
-                                Desc = string.Format(SubscriptionDescs.Desc11, startDate, endDate),
+                                Description = string.Format(SubscriptionDescs.Desc11, startDate, endDate),
                                 //Desc = string.Format("{2} للفترة من {0} حتى {1}.", startDate, endDate, "دورة اشتراك للاستضافة من تاريخ تفعيل الاستضافة حتى تاريخ نهاية الدورة السابقة الغير مسددة"),
                                 TrackingUnitId = unit.Id,
                                 SsDate = startDate,
@@ -1307,7 +1307,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                     {
                         TrackingUnitId = unit.Id,
                         APITask = APITask.ActivateOnWialon,
-                        Desc = string.Format("فعل الوحدة ({0}) على منصة ويلون.", unit.SNo),
+                        Description = string.Format("فعل الوحدة ({0}) على منصة ويلون.", unit.SNo),
                         ExcDate = caseProfile.TsDt,
                         IsExecuted = false,
                     });
@@ -1536,7 +1536,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                             {
                                 LastPaidFees = (SubPackageFees)oLF,
                                 CaseCode = caseProfile.CaseCode,
-                                Desc = string.Format(SubscriptionDescs.Desc23, startDate, endDate),
+                                Description = string.Format(SubscriptionDescs.Desc23, startDate, endDate),
                                 TrackingUnitId = unit.Id,
                                 SsDate = startDate,
                                 SeDate = endDate,
@@ -1555,7 +1555,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                             {
                                 LastPaidFees = (SubPackageFees)oLF,
                                 CaseCode = caseProfile.CaseCode,
-                                Desc = string.Format(SubscriptionDescs.Desc14, startDate, endDate),
+                                Description = string.Format(SubscriptionDescs.Desc14, startDate, endDate),
                                 TrackingUnitId = unit.Id,
                                 SsDate = startDate,
                                 SeDate = endDate,
@@ -1577,7 +1577,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                             {
                                 LastPaidFees = (SubPackageFees)oLF,
                                 CaseCode = caseProfile.CaseCode,
-                                Desc = string.Format(SubscriptionDescs.Desc26, startDate, endDate),
+                                Description = string.Format(SubscriptionDescs.Desc26, startDate, endDate),
                                 TrackingUnitId = unit.Id,
                                 SsDate = startDate,
                                 SeDate = endDate,
@@ -1598,7 +1598,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                                 {
                                     TrackingUnitId = unit.Id,
                                     APITask = APITask.RemoveFromWialon,
-                                    Desc = string.Format("حذف الوحدة ({0}) من منصة ويلون.", unit.SNo),
+                                    Description = string.Format("حذف الوحدة ({0}) من منصة ويلون.", unit.SNo),
                                     ExcDate = caseProfile.TsDt,
                                     IsExecuted = false,
                                 });
@@ -1617,7 +1617,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                                 {
                                     TrackingUnitId = unit.Id,
                                     APITask = APITask.RemoveFromWialon,
-                                    Desc = string.Format("مهمة مؤجلة - احذف الوحدة ({0}) من منصة ويلون.", unit.SNo),
+                                    Description = string.Format("مهمة مؤجلة - احذف الوحدة ({0}) من منصة ويلون.", unit.SNo),
                                     ExcDate = (DateOnly)caseProfile.SeDt,
                                     IsExecuted = false,
                                 });
@@ -1814,3 +1814,4 @@ public class SerialForSharedLogic
 
 
 }
+ */

@@ -220,7 +220,7 @@ public class CreateTicketCommandHandler : SerialForSharedLogic, IRequestHandler<
             var ticket = new Ticket()
             {
                 TrackingUnitId = item.Id,
-                Desc = string.Format(desc, item.SNo),
+                Description = string.Format(desc, item.SNo),
                 TicketNo = ticketNo,
                 ServiceTask = request.ServiceTask,
                 TicketStatus = TicketStatus.Opened,

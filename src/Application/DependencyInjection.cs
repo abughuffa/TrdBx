@@ -6,10 +6,10 @@ using CleanArchitecture.Blazor.Application.Pipeline;
 using CleanArchitecture.Blazor.Application.Pipeline.PreProcessors;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
+using CleanArchitecture.Blazor.Application.TrdBx.Services;
 namespace CleanArchitecture.Blazor.Application;
 
-public static class DependencyInjection
+public static partial class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
@@ -26,6 +26,7 @@ public static class DependencyInjection
 
         });
         services.AddScoped<UserProfileStateService>();
+        services.AddScoped<IDropdownDataService, DropdownDataService>();
         return services;
     }
     public static void InitializeCacheFactory(this IHost host)

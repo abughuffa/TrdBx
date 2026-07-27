@@ -12,7 +12,7 @@ public class SubscriptionConfiguration : IEntityTypeConfiguration<Subscription>
     public void Configure(EntityTypeBuilder<Subscription> builder)
     {
         builder.Property(t => t.TrackingUnitId).IsRequired();
-        builder.Property(t => t.Desc).HasMaxLength(256).IsRequired();
+        builder.Property(t => t.Description).HasMaxLength(256).IsRequired();
         builder.Property(t => t.SsDate).IsRequired();
         builder.Property(t => t.SeDate).IsRequired();
         builder.Property(t => t.DailyFees).IsRequired();

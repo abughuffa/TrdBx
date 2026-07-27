@@ -11,7 +11,7 @@ public class WialonTaskAdvancedSpecification : Specification<WialonTask>
     {
 
 
-        Query.Where(q => q.Desc != null)
+        Query.Where(q => q.Description != null)
              .Where(filter.Keyword, !string.IsNullOrEmpty(filter.Keyword))
              .Where(q => q.ServiceLogId == filter.ServiceLogId, !(filter.ServiceLogId.Equals(0) || filter.ServiceLogId.Equals(null)))
              .Where(q => q.TrackingUnitId == filter.TrackingUnitId, !(filter.TrackingUnitId.Equals(0) || filter.TrackingUnitId.Equals(null)));

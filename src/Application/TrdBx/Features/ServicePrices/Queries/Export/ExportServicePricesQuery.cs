@@ -73,7 +73,7 @@ public class ExportServicePricesQueryHandler :
             {
                    {_localizer[_dto.GetMemberDescription(x=>x.Id)],item => item.Id},
 {_localizer[_dto.GetMemberDescription(x=>x.ServiceTask)],item => item.ServiceTask},
-{_localizer[_dto.GetMemberDescription(x=>x.Desc)],item => item.Desc},
+{_localizer[_dto.GetMemberDescription(x=>x.Description)],item => item.Description},
 {_localizer[_dto.GetMemberDescription(x=>x.Price)],item => item.Price}
 
             }

@@ -9,8 +9,8 @@ public class UpdateServicePriceCommand : ICacheInvalidatorRequest<Result<int>>
 {
     [Description("Id")]
     public int Id { get; set; }
-    [Description("Desc")]
-    public string? Desc { get; set; }
+    [Description("Description")]
+    public string? Description { get; set; }
     [Description("Price")]
     public decimal Price { get; set; }
 

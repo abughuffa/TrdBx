@@ -166,7 +166,7 @@ public class ServiceLog : BaseAuditableEntity
 public class ServicePrice : BaseAuditableEntity
 {
     public ServiceTask ServiceTask { get; set; }
-    public string Desc { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
     public decimal Price { get; set; } = 0.0m;
 }
 public class Subscription : BaseEntity
@@ -175,7 +175,7 @@ public class Subscription : BaseEntity
     public int TrackingUnitId { get; set; }
     public int CaseCode { get; set; }
     public SubPackageFees LastPaidFees { get; set; }
-    public string Desc { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
     public DateOnly SsDate { get; set; }
     public DateOnly SeDate { get; set; }
     public int Days { get; set; }
@@ -191,7 +191,7 @@ public class WialonTask : BaseEntity
 {
     public int ServiceLogId { get; set; }
     public int TrackingUnitId { get; set; }
-    public string Desc { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
     public APITask? APITask { get; set; }
     public DateOnly ExcDate { get; set; }
     public bool IsExecuted { get; set; } = false;
@@ -273,7 +273,7 @@ public class Ticket : BaseAuditableEntity
 {
     public string TicketNo { get; set; } = string.Empty;
     public ServiceTask ServiceTask { get; set; }
-    public string Desc { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
     public TicketStatus TicketStatus { get; set; }
     public int TrackingUnitId { get; set; }
     public DateOnly TcDate { get; set; }

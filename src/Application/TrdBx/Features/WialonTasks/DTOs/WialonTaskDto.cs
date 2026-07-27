@@ -9,7 +9,7 @@ public class WialonTaskDto
     [Description("Id")] public int Id { get; set; }
     [Description("ServiceLogId")] public int ServiceLogId { get; set; }
     [Description("TrackingUnitId")]  public int TrackingUnitId { get; set; }
-    [Description("Desc")] public string Desc { get; set; } = string.Empty;
+    [Description("Description")] public string Description { get; set; } = string.Empty;
     [Description("APITask")] public APITask APITask { get; set; }
     [Description("ExcDate")] public DateOnly? ExcDate { get; set; }
     [Description("IsExecuted")] public bool IsExecuted { get; set; }

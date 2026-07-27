@@ -5,7 +5,7 @@ using CleanArchitecture.Blazor.Application.Features.Customers.Caching;
 using CleanArchitecture.Blazor.Application.Features.Customers.DTOs;
 using CleanArchitecture.Blazor.Application.Features.Customers.Mappers;
 using CleanArchitecture.Blazor.Application.Features.Customers.Specifications;
-
+using CleanArchitecture.Blazor.Domain.Enums;
 
 namespace CleanArchitecture.Blazor.Application.Features.Customers.Queries.GetAvaliable;
 
@@ -13,7 +13,7 @@ public class GetAvaliableChildsByParentIdQuery : ICacheableRequest<IEnumerable<C
 {
     public int? Id { get; set; }
     public string CacheKey => CustomerCacheKey.GetAvaliableChildsByParentId($"{Id}");
-     public IEnumerable<string> Tags => CustomerCacheKey.Tags;
+    public IEnumerable<string> Tags => CustomerCacheKey.Tags;
 }
 
 public class GetAvaliableChildsByParentIdQueryHandler :
@@ -40,43 +40,60 @@ public class GetAvaliableChildsByParentIdQueryHandler :
 
     public async Task<IEnumerable<CustomerDto>> Handle(GetAvaliableChildsByParentIdQuery request, CancellationToken cancellationToken)
     {
-        
-
-        //await using var db = await _dbContextFactory.CreateAsync(cancellationToken);
-        //var customer = await _context.Customers.Where(c => c.Id == request.Id).FirstOrDefaultAsync();
-
-        //if (customer is null)
-        //{
-        //    var data = await _context.Customers.ApplySpecification(new AvaliableChildsByParentIdSpecification(null))
-        //                                   .ProjectTo<CustomerDto>(_mapper.ConfigurationProvider)
-        //                                   .ToListAsync(cancellationToken);
-        //    return data;
-        //}
-        //else
-        //{
-        //    var data = await _context.Customers.ApplySpecification(new AvaliableChildsByParentIdSpecification(customer.ParentId))
-        //                                  .ProjectTo<CustomerDto>(_mapper.ConfigurationProvider)
-        //                                  .ToListAsync(cancellationToken);
-        //    return data;
-        //}
-
-
-        var customer = await _context.Customers.Where(c => c.Id == request.Id).FirstOrDefaultAsync();
+    // Case 1: Id has value
+    if (request.Id.HasValue)
+    {
+        var customer = await _context.Customers
+            .Where(c => c.Id == request.Id.Value)
+            .Select(c => new { c.BillingPlan, c.ParentId, c.IsAvaliable })
+            .FirstOrDefaultAsync(cancellationToken);
 
         if (customer is null)
+        
+        throw new NotFoundException($"Customer with id: [{request.Id}] not found.");
+
+        // Case 1a: Basic plan - return just this customer (regardless of IsAvailable)
+        if (customer.BillingPlan == BillingPlan.Basic)
         {
-            var data = await _context.Customers.Include(c => c.Parent).ApplySpecification(new AvaliableChildsByParentIdSpecification(null))
-                                              .ProjectTo()
-                                              .ToListAsync(cancellationToken);
-            return data;
+            var dataX = await _context.Customers
+                .Where(c => c.Id == request.Id.Value)
+                .ProjectTo()
+                .ToListAsync(cancellationToken);
+            
+            return dataX;
         }
-        else
-        {
-            var data = await _context.Customers.ApplySpecification(new AvaliableChildsByParentIdSpecification(customer.ParentId))
-                                               .ProjectTo()
-                                               .ToListAsync(cancellationToken);
-            return data;
-        }
+
+        // Case 1b: Advanced plan - return available customers from same parent
+        // Include the original customer even if IsAvailable = false
+        int parentId = customer.ParentId ?? 0;
+        int customerId = request.Id.Value;
+        
+        var data = await _context.Customers
+            .Include(c => c.Parent)
+            .Where(c => (c.ParentId == parentId && c.BillingPlan == BillingPlan.Advanced && c.IsAvaliable)
+                        || c.Id == customerId) // Always include the original customer
+            .ProjectTo()
+            .ToListAsync(cancellationToken);
+        
+        return data;
+    }
+
+    // Case 2: Id is null - return all available customers
+    // Including the customer record even if IsAvailable = false doesn't apply here
+    // because we don't have a specific customer to include
+    var allData = await _context.Customers
+        .Include(c => c.Parent)
+        .Where(c => c.IsAvaliable 
+                    && ((c.ParentId == null && c.BillingPlan == BillingPlan.Basic)
+                        || (c.ParentId != null && c.BillingPlan == BillingPlan.Advanced)))
+        .ProjectTo()
+        .ToListAsync(cancellationToken);
+    
+    return allData;
+
+
+
+
 
         
     }

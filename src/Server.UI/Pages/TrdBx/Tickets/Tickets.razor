@@ -15,6 +15,7 @@
 
 
 
+
 @inject IStringLocalizer<Tickets> L
 @attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.Tickets.View)]
 
@@ -156,7 +157,7 @@
         <PropertyColumn Property="x => x.TicketNo" Title="@L[_currentDto.GetMemberDescription(x=>x.TicketNo)]" />
         <PropertyColumn Property="x => x.CreatedByUser.DisplayName" Title="@L[_currentDto.GetMemberDescription(x => x.CreatedByUser)]" />
         <PropertyColumn Property="x => x.ServiceTask" Title="@L[_currentDto.GetMemberDescription(x => x.ServiceTask)]" />
-        <PropertyColumn Property="x => x.Desc" Title="@L[_currentDto.GetMemberDescription(x=>x.Desc)]" />
+        <PropertyColumn Property="x => x.Description" Title="@L[_currentDto.GetMemberDescription(x=>x.Description)]" />
         <PropertyColumn Property="x => x.TicketStatus" Title="@L[_currentDto.GetMemberDescription(x=>x.TicketStatus)]" />
         <PropertyColumn Property="x => x.TcDate" Title="@L[_currentDto.GetMemberDescription(x=>x.TcDate)]" />
         @* <PropertyColumn Property="x => x.TrackingUnitId" Title="@L[_currentDto.GetMemberDescription(x=>x.TrackingUnitId)]" /> *@
@@ -190,6 +191,8 @@
     private MudDataGrid<TicketDto> _table = default!;
     private TicketDto _currentDto = new();
     // private TicketsAccessRights _accessRights = new();
+
+    private MudList<TicketDto> _list = default!;
     private int _defaultPageSize = 15;
     private bool _loading;
     private bool _uploading;
@@ -277,6 +280,8 @@
     {
         Query.ListView = listview;
         await _table.ReloadServerData();
+
+        
     }
 
     private async Task OnRefresh()
@@ -383,21 +388,7 @@
 
     private async Task OnReject(TicketDto dto)
     {
-        // var command = Mapper.Map<RejectTicketCommand>(dto);
 
-        // var command = Mapper.ToRejectCommand(dto);
-
-        // return DialogServiceHelper.ShowFormDialogAsync<RejectTicketDialog, RejectTicketCommand>(
-        //     L["Assign Ticket"],
-        //     new DialogParameters<RejectTicketDialog>
-        //    {
-        //                     { x=>x._model,command}
-        //    },
-        //     async () =>
-        //     {
-        //         await _table.ReloadServerData();
-        //         _selectedItems.Clear();
-        //     });
 
         var title = L["Reject Ticket"];
         var command = Mapper.ToRejectCommand(dto);
@@ -434,25 +425,29 @@
                 {
                    // show install unit page by unit Id
 
+                    Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits/Install/{dto.TrackingUnitId}");
+                    //return Task.CompletedTask;
                    break;
                 }
             
             case ServiceTask.Recover:
                 {
                     // show Recover unit page by unit Id
+                    Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits/Recover/{dto.TrackingUnitId}");
 
                     break;
                 }
             case ServiceTask.Transfer:
                 {
                     // show Transfer unit page by unit Id
+                    Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits/Transfer/{dto.TrackingUnitId}");
 
                     break;
                 }
             case ServiceTask.Replace:
                 {
                     // show Replace unit page by unit Id
-
+                    Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits/Replace/{dto.TrackingUnitId}");
                     break;
                 }
             case ServiceTask.ActivateUnit: //[int]

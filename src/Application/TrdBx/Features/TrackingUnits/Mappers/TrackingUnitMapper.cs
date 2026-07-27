@@ -12,6 +12,9 @@ using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.Daily
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Replace;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Reserve;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Transfer;
+using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.InstallOrReplaceSim;
+using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.RecoverSim;
+using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.MarkTrackingUnitAsLost;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.Update;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.DTOs;
 using CleanArchitecture.Blazor.Application.Features.WialonTasks.DTOs;
@@ -39,6 +42,11 @@ public static partial class Mapper
     public static partial void ApplyChangesFrom(UpdateTrackingUnitCommand source, TrackingUnit target);
     public static partial IQueryable<TrackingUnitDto> ProjectTo(this IQueryable<TrackingUnit> q);
 
+    [MapperIgnoreSource(nameof(TrackingUnitDto.Customer))]
+    [MapperIgnoreSource(nameof(TrackingUnitDto.SimCard))]
+    [MapperIgnoreSource(nameof(TrackingUnitDto.TrackedAsset))]
+    [MapperIgnoreSource(nameof(TrackingUnitDto.TrackingUnitModel))]
+    public static partial MarkTrackingUnitAsLostCommand ToMarkAsLostCommand(TrackingUnitDto dto);
 
     [MapperIgnoreSource(nameof(TrackingUnitDto.Customer))]
     [MapperIgnoreSource(nameof(TrackingUnitDto.SimCard))]
@@ -95,8 +103,18 @@ public static partial class Mapper
     [MapperIgnoreSource(nameof(TrackingUnitDto.TrackedAsset))]
     [MapperIgnoreSource(nameof(TrackingUnitDto.TrackingUnitModel))]
     public static partial ReassignTrackingUnitOwnerCommand ToReassignOwnerCommand(TrackingUnitDto dto);
+
+    [MapperIgnoreSource(nameof(TrackingUnitDto.Customer))]
+    [MapperIgnoreSource(nameof(TrackingUnitDto.SimCard))]
+    [MapperIgnoreSource(nameof(TrackingUnitDto.TrackedAsset))]
+    [MapperIgnoreSource(nameof(TrackingUnitDto.TrackingUnitModel))]
+    public static partial InstallOrReplaceSimCommand ToInstallOrReplaceSimCommand(TrackingUnitDto dto);
+
+    [MapperIgnoreSource(nameof(TrackingUnitDto.Customer))]
+    [MapperIgnoreSource(nameof(TrackingUnitDto.SimCard))]
+    [MapperIgnoreSource(nameof(TrackingUnitDto.TrackedAsset))]
+    [MapperIgnoreSource(nameof(TrackingUnitDto.TrackingUnitModel))]
+    public static partial RecoverSimCommand ToRecoverSimCommand(TrackingUnitDto dto);
     
-
-
 }
 

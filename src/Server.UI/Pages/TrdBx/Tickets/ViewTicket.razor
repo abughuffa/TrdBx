@@ -6,6 +6,7 @@
 @using CleanArchitecture.Blazor.Application.Features.Tickets.DTOs
 @using CleanArchitecture.Blazor.Application.Features.Tickets.Queries.GetById
 @using CleanArchitecture.Blazor.Domain.Entities
+@using CleanArchitecture.Blazor.Domain.Enums
 
 @inherits MudComponentBase
 @inject IStringLocalizer<Tickets> L
@@ -37,7 +38,7 @@
                         <ReadOnlyFieldX6 Label="@L[model.GetMemberDescription(x => x.TrackingUnit)]" Value="model.TrackingUnit"></ReadOnlyFieldX6>
                     </MudItem>
                     <MudItem md="12">
-                        <ReadOnlyFieldX12 Label="@L[model.GetMemberDescription(x=>x.Desc)]" Value="model.Desc"></ReadOnlyFieldX12>
+                        <ReadOnlyFieldX12 Label="@L[model.GetMemberDescription(x=>x.Description)]" Value="model.Description"></ReadOnlyFieldX12>
                     </MudItem>
                     <MudItem md="12">
                         <ReadOnlyFieldX12 Label="@L[model.GetMemberDescription(x=>x.Note)]" Value="model.Note"></ReadOnlyFieldX12>
@@ -46,6 +47,8 @@
                 </MudGrid>
             </MudCardContent>
             <MudCardActions>
+                
+                <MudLoadingButton Loading=_starting Disabled=CanExecute Color="Color.Primary" DropShadow="false" OnClick="OnExecute">Execute</MudLoadingButton>
                 <MudLoadingButton Loading=_starting Disabled=CanStart Color="Color.Primary" DropShadow="false" OnClick="OnStart">Start</MudLoadingButton>
                 <MudLoadingButton Loading=_stoping Disabled=CanStop Color="Color.Primary" DropShadow="false" OnClick="OnStop">Stop</MudLoadingButton>
                 <MudLoadingButton Loading=_closeing Disabled=CanClose Color="Color.Primary" DropShadow="false" OnClick="OnClose">Complete</MudLoadingButton>
@@ -71,6 +74,7 @@
 
     bool _submitting;
 
+    bool CanExecute = false;
     bool CanStart = false;
     bool CanStop = false;
     bool CanClose = false;
@@ -107,6 +111,7 @@
 
     void AssignCommands()
     {
+        CanExecute = !(model.TicketStatus == TicketStatus.Accepted);
         CanStart = !(model.TicketStatus == TicketStatus.Accepted);
         CanStop = !(model.TicketStatus == TicketStatus.OnProcess);
         CanClose = !(model.TicketStatus == TicketStatus.OnProcess);
@@ -124,6 +129,134 @@
     //     Navigation.NavigateTo($"/pages/TrdBx/Tickets/{Id}/Release?returnUrl=/pages/TrdBx/Tickets");
     //     return Task.CompletedTask;
     // }
+
+    private async Task OnExecute()
+    {
+
+        try
+        {
+            _starting = true;
+
+        switch (model.ServiceTask)
+        {
+            case ServiceTask.Check:
+                {
+
+                    //Execute
+                    //create servicelog with wailoncheck checkonwialon
+                    //set ticket status as closed on seccuss
+
+                    break;
+                }
+            case ServiceTask.Install:
+                {
+                    //Execute
+                    //open install dailog then 
+                    //set ticket status as closed on seccuss
+                    break;
+                }
+            case ServiceTask.ReInstall:
+                {
+
+                    //Execute
+                    //open install dailog then 
+                    //set ticket status as closed on seccuss
+                    break;
+                }
+
+            case ServiceTask.Transfer:
+                {
+
+                    //Execute
+                    //open Transfer dailog then 
+                    //set ticket status as closed on seccuss
+                    break;
+                }
+
+            case ServiceTask.Replace:
+                {
+
+                    //Execute
+                    //open Replace dailog then 
+                    //set ticket status as closed on seccuss
+                    break;
+                }
+
+            case ServiceTask.Recover:
+                {
+
+                    //Execute
+                    //open Recover dailog then 
+                    //set ticket status as closed on seccuss
+                    break;
+                }
+
+            case ServiceTask.ActivateUnit:
+                {
+                    //Execute
+                    //open ActivateUnit dailog then 
+                    //set ticket status as closed on seccuss
+
+                    break;
+                }
+
+            case ServiceTask.ActivateUnitForGprs:
+                {
+
+                    //Execute
+                    break;
+                }
+
+            case ServiceTask.ActivateUnitForHosting:
+                {
+
+                    //Execute
+                    break;
+                }
+
+            case ServiceTask.DeactivateUnit:
+                {
+
+                    //Execute
+                    break;
+                }
+
+            case ServiceTask.RenewUnitSub:
+                {
+
+                    //Execute
+                    break;
+                }
+
+            case ServiceTask.ReplacSimCard:
+                {
+
+                    //Execute
+                    break;
+                }
+
+            case ServiceTask.InstallSimCard:
+                {
+
+                    //Execute
+                    break;
+                }
+
+            case ServiceTask.RecoverSimCard:
+                {
+
+                    //Execute
+                    break;
+                }
+        }
+
+
+        }
+        finally
+        {
+            _starting = false;
+        }
+    }
 
     private async Task OnStart()
     {

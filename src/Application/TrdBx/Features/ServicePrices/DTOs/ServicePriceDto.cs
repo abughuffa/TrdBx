@@ -13,8 +13,8 @@ public class ServicePriceDto
 
     [Description("ServiceTask")]
     public ServiceTask ServiceTask { get; set; }
-    [Description("Desc")]
-    public string Desc { get; set; } = string.Empty;
+    [Description("Description")]
+    public string Description { get; set; } = string.Empty;
     [Description("Price")]
     public decimal Price { get; set; } = 0.0m;
 

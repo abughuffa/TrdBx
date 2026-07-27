@@ -5,7 +5,7 @@ public class UpdateServicePriceCommandValidator : AbstractValidator<UpdateServic
         public UpdateServicePriceCommandValidator()
         {
            RuleFor(v => v.Id).NotNull();
-    RuleFor(v => v.Desc).MaximumLength(255).NotEmpty();
+    RuleFor(v => v.Description).MaximumLength(255).NotEmpty();
 
           
         }

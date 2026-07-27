@@ -12,8 +12,8 @@ public class AddEditSubscriptionCommand : ICacheInvalidatorRequest<Result<int>>
     public int TrackingUnitId { get; set; }
     [Description("LastPaidFees")]
     public SubPackageFees LastPaidFees { get; set; }
-    [Description("Desc")]
-    public required string Desc { get; set; }
+    [Description("Description")]
+    public required string Description { get; set; }
     [Description("SubPackageFees")]
     public SubPackageFees SubPackageFees { get; set; }
     [Description("SsDate")]

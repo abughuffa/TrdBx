@@ -67,7 +67,7 @@ public class ExportTicketsQueryHandler :
                 {
                     {_localizer[_dto.GetMemberDescription(x=>x.TicketNo)],item => item.TicketNo},
                     {_localizer[_dto.GetMemberDescription(x=>x.ServiceTask)],item => item.ServiceTask},
-                    {_localizer[_dto.GetMemberDescription(x=>x.Desc)],item => item.Desc},
+                    {_localizer[_dto.GetMemberDescription(x=>x.Description)],item => item.Description},
                     {_localizer[_dto.GetMemberDescription(x=>x.TicketStatus)],item => item.TicketStatus},
                     {_localizer[_dto.GetMemberDescription(x=>x.TrackingUnitId)],item => item.TrackingUnitId},
                     {_localizer[_dto.GetMemberDescription(x=>x.TcDate)],item => item.TcDate},

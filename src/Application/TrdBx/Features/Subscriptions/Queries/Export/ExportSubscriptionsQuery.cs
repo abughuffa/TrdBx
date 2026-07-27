@@ -77,7 +77,7 @@ public class ExportSubscriptionsQueryHandler :
 {_localizer[_dto.GetMemberDescription(x=>x.LastPaidFees)],item => item.LastPaidFees},
 {_localizer[_dto.GetMemberDescription(x=>x.SsDate)],item => item.SsDate},
 {_localizer[_dto.GetMemberDescription(x=>x.SeDate)],item => item.SeDate},
-{_localizer[_dto.GetMemberDescription(x=>x.Desc)],item => item.Desc},
+{_localizer[_dto.GetMemberDescription(x=>x.Description)],item => item.Description},
 {_localizer[_dto.GetMemberDescription(x=>x.DailyFees)],item => item.DailyFees},
 {_localizer[_dto.GetMemberDescription(x=>x.Days)],item => item.Days},
 {_localizer[_dto.GetMemberDescription(x=>x.Amount)],item => item.Amount}

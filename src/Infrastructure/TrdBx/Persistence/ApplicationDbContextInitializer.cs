@@ -35,14 +35,14 @@ public partial class ApplicationDbContextInitializer
         _logger.LogInformation("Seeding Service Price...");
         var servicePrice = new[]
             {
-                new ServicePrice {ServiceTask = ServiceTask.Check, Desc = "Defualt system service price", Price = 10.0m },
-                new ServicePrice {ServiceTask = ServiceTask.ReInstall, Desc = "Defualt system service price", Price = 100.0m },
-                new ServicePrice {ServiceTask = ServiceTask.Recover, Desc = "Defualt system service price", Price = 25.0m },
-                new ServicePrice {ServiceTask = ServiceTask.Replace, Desc = "Defualt system service price", Price = 125.0m },
-                new ServicePrice {ServiceTask = ServiceTask.InstallSimCard, Desc = "Defualt system service price", Price = 50.0m },
-                new ServicePrice {ServiceTask = ServiceTask.ReplacSimCard, Desc = "Defualt system service price", Price = 50.0m },
-                new ServicePrice {ServiceTask = ServiceTask.TrdbxDataUpload, Desc = "Defualt system service price", Price = 0.0m },
-                
+                new ServicePrice {ServiceTask = ServiceTask.Check, Description = "Defualt system service price", Price = 10.0m },
+                new ServicePrice {ServiceTask = ServiceTask.ReInstall, Description = "Defualt system service price", Price = 100.0m },
+                new ServicePrice {ServiceTask = ServiceTask.Recover, Description = "Defualt system service price", Price = 25.0m },
+                new ServicePrice {ServiceTask = ServiceTask.Replace, Description = "Defualt system service price", Price = 125.0m },
+                new ServicePrice {ServiceTask = ServiceTask.InstallSimCard, Description = "Defualt system service price", Price = 50.0m },
+                new ServicePrice {ServiceTask = ServiceTask.ReplacSimCard, Description = "Defualt system service price", Price = 50.0m },
+                new ServicePrice {ServiceTask = ServiceTask.TrdbxDataUpload, Description = "Defualt system service price", Price = 0.0m },
+                new ServicePrice {ServiceTask = ServiceTask.Transfer, Description = "Defualt system service price", Price = 125.0m },
             };
 
         await _context.ServicePrices.AddRangeAsync(servicePrice);

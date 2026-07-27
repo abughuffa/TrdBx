@@ -67,7 +67,7 @@ public class ImportWialonTasksCommandHandler :
                { _localizer[_dto.GetMemberDescription(x=>x.Id)], (row, item) => item.Id = int.Parse(row[_localizer[_dto.GetMemberDescription(x=>x.Id)]].ToString()) },
                { _localizer[_dto.GetMemberDescription(x=>x.ServiceLogId)], (row, item) => item.ServiceLogId = int.Parse(row[_localizer[_dto.GetMemberDescription(x=>x.ServiceLogId)]].ToString())},
                { _localizer[_dto.GetMemberDescription(x=>x.TrackingUnitId)], (row, item) => item.TrackingUnitId = int.Parse(row[_localizer[_dto.GetMemberDescription(x=>x.TrackingUnitId)]].ToString())},
-               { _localizer[_dto.GetMemberDescription(x=>x.Desc)], (row, item) => item.Desc = row[_localizer[_dto.GetMemberDescription(x=>x.Desc)]].ToString() },
+               { _localizer[_dto.GetMemberDescription(x=>x.Description)], (row, item) => item.Description = row[_localizer[_dto.GetMemberDescription(x=>x.Description)]].ToString() },
                //{ _localizer[_dto.GetMemberDescription(x=>x.ExcDate)], (row, item) => item.ExcDate = row[_localizer[_dto.GetMemberDescription(x=>x.ExcDate)]].ToString().IsNullOrEmpty() ? null : DateOnly.FromDateTime(DateTime.Parse(row[_localizer[_dto.GetMemberDescription(x=>x.ExcDate)]].ToString()))},
                { _localizer[_dto.GetMemberDescription(x=>x.ExcDate)], (row, item) => item.ExcDate = DateOnly.FromDateTime(DateTime.Parse(row[_localizer[_dto.GetMemberDescription(x=>x.ExcDate)]].ToString()))},
                { _localizer[_dto.GetMemberDescription(x=>x.APITask)], (row, item) => item.APITask = (APITask)Convert.ToInt32(row[_localizer[_dto.GetMemberDescription(x=>x.APITask)]].ToString()) },
@@ -104,13 +104,13 @@ public class ImportWialonTasksCommandHandler :
         // TODO: Implement ImportWialonTasksCommandHandler method 
         var fields = new string[] {
                    // TODO: Define the fields that should be generate in the template, for example:
-                   _localizer[_dto.GetMemberDescription(x=>x.Id)],
-                   _localizer[_dto.GetMemberDescription(x=>x.ServiceLogId)],
-_localizer[_dto.GetMemberDescription(x=>x.TrackingUnitId)],
-_localizer[_dto.GetMemberDescription(x=>x.Desc)],
-_localizer[_dto.GetMemberDescription(x=>x.APITask)],
-_localizer[_dto.GetMemberDescription(x=>x.ExcDate)],
-_localizer[_dto.GetMemberDescription(x=>x.IsExecuted)]
+                    _localizer[_dto.GetMemberDescription(x=>x.Id)],
+                    _localizer[_dto.GetMemberDescription(x=>x.ServiceLogId)],
+                    _localizer[_dto.GetMemberDescription(x=>x.TrackingUnitId)],
+                    _localizer[_dto.GetMemberDescription(x=>x.Description)],
+                    _localizer[_dto.GetMemberDescription(x=>x.APITask)],
+                    _localizer[_dto.GetMemberDescription(x=>x.ExcDate)],
+                    _localizer[_dto.GetMemberDescription(x=>x.IsExecuted)]
                 };
         var result = await _excelService.CreateTemplateAsync(fields, _localizer[_dto.GetClassDescription()]);
         return await Result<byte[]>.SuccessAsync(result);

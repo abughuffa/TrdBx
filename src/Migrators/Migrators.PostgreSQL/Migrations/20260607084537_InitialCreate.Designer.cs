@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260603123332_InitialCreate")]
+    [Migration("20260607084537_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -1292,11 +1292,11 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasColumnType("character varying(450)")
                         .HasColumnName("created_by");
 
-                    b.Property<string>("Desc")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(450)
                         .HasColumnType("character varying(450)")
-                        .HasColumnName("desc");
+                        .HasColumnName("description");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp without time zone")
@@ -1498,11 +1498,11 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasColumnName("days")
                         .HasComputedColumnSql("\"se_date\" - \"ss_date\"", true);
 
-                    b.Property<string>("Desc")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
-                        .HasColumnName("desc");
+                        .HasColumnName("description");
 
                     b.Property<int>("LastPaidFees")
                         .HasColumnType("integer")
@@ -1577,11 +1577,11 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasColumnType("character varying(450)")
                         .HasColumnName("created_by");
 
-                    b.Property<string>("Desc")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(450)
                         .HasColumnType("character varying(450)")
-                        .HasColumnName("desc");
+                        .HasColumnName("description");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp without time zone")
@@ -2011,11 +2011,11 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("api_task");
 
-                    b.Property<string>("Desc")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
-                        .HasColumnName("desc");
+                        .HasColumnName("description");
 
                     b.Property<DateOnly>("ExcDate")
                         .HasColumnType("date")

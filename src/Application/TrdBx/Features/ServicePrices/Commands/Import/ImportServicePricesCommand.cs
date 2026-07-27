@@ -66,7 +66,7 @@ public class ImportServicePricesCommandHandler :
             {
                { _localizer[_dto.GetMemberDescription(x=>x.Id)], (row, item) => item.Id = int.Parse(row[_localizer[_dto.GetMemberDescription(x=>x.Id)]].ToString()) },
 
-{ _localizer[_dto.GetMemberDescription(x=>x.Desc)], (row, item) => item.Desc = row[_localizer[_dto.GetMemberDescription(x=>x.Desc)]].ToString() },
+{ _localizer[_dto.GetMemberDescription(x=>x.Description)], (row, item) => item.Description = row[_localizer[_dto.GetMemberDescription(x=>x.Description)]].ToString() },
 { _localizer[_dto.GetMemberDescription(x=>x.ServiceTask)], (row, item) => item.ServiceTask = (ServiceTask)Convert.ToInt32(row[_localizer[_dto.GetMemberDescription(x=>x.ServiceTask)]].ToString()) },
   { _localizer[_dto.GetMemberDescription(x=>x.Price)], (row, item) => item.Price = decimal.Parse(row[_localizer[_dto.GetMemberDescription(x=>x.Price)]].ToString())},
 
@@ -100,7 +100,7 @@ public class ImportServicePricesCommandHandler :
         var fields = new string[] {
                                     _localizer[_dto.GetMemberDescription(x=>x.Id)],
 _localizer[_dto.GetMemberDescription(x=>x.ServiceTask)],
-_localizer[_dto.GetMemberDescription(x=>x.Desc)],
+_localizer[_dto.GetMemberDescription(x=>x.Description)],
 _localizer[_dto.GetMemberDescription(x=>x.Price)]
 
                 };

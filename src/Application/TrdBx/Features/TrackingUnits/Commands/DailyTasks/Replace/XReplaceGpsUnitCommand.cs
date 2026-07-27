@@ -1,4 +1,4 @@
-﻿using CleanArchitecture.Blazor.Application.Features.Common;
+﻿/* using CleanArchitecture.Blazor.Application.Features.Common;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Caching;
 using CleanArchitecture.Blazor.Domain.Enums;
 
@@ -149,7 +149,7 @@ public class XReplaceGpsUnitCommandHandler : SubscriptionSharedLogic, IRequestHa
                 {
                     TrackingUnitId = runit.Id,
                     APITask = APITask.RemoveFromWialon,
-                    Desc = string.Format("حذف الوحدة ({0}) من منصة ويلون.", runit.SNo),
+                    Description = string.Format("حذف الوحدة ({0}) من منصة ويلون.", runit.SNo),
                     ExcDate = request.TsDate,
                     IsExecuted = false,
                 });
@@ -218,3 +218,4 @@ public class XReplaceGpsUnitCommandHandler : SubscriptionSharedLogic, IRequestHa
     }
 }
 
+ */

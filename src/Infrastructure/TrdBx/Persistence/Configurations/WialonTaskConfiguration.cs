@@ -11,7 +11,7 @@ public class WialonTaskConfiguration : IEntityTypeConfiguration<WialonTask>
     public void Configure(EntityTypeBuilder<WialonTask> builder)
     {
         builder.Property(t => t.TrackingUnitId).IsRequired();
-        builder.Property(t => t.Desc).HasMaxLength(256).IsRequired();
+        builder.Property(t => t.Description).HasMaxLength(256).IsRequired();
         builder.Ignore(e => e.DomainEvents);
     }
 }

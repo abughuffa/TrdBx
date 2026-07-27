@@ -8,7 +8,12 @@
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.DeactivateTrackingUnit
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.MarkTrackingUnitAsDamaged
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.MarkTrackingUnitAsUsed
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.MarkTrackingUnitAsLost
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Renew
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Install
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Transfer
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Replace
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Recover
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.Delete
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.Import
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.DTOs
@@ -21,6 +26,8 @@
 @using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Tickets.Components
 @using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.TrackingUnits.Components
 @using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.TrackingUnits.DailyTasks.AGHD
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.TrackingUnits.DailyTasks.IRTR
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.TrackingUnits.DailyTasks.MarkAs
 
 @inject IStringLocalizer<TrackingUnits> L
 @attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.TrackingUnits.View)]
@@ -185,6 +192,45 @@
                             <MudMenuItem OnClick="@(()=>OnMarkAsDamaged(context.Item))"
                                          Disabled="(!((context.Item.UStatus == UStatus.Recovered) || (context.Item.UStatus == UStatus.Used)))">
                                 @L["Mark as damaged"]
+                            </MudMenuItem>
+                        }
+                        @if (_canMarkAsLost)
+                        {
+                            <MudMenuItem OnClick="@(()=>OnMarkAsLost(context.Item))"
+                                         Disabled="(((context.Item.UStatus == UStatus.New) || (context.Item.UStatus == UStatus.Reserved)))">
+                                @L["Mark as lost"]
+                            </MudMenuItem>
+                        }
+                    </MudMenu>
+                    <!-- Sim Menu -->
+                    <MudMenu Icon="@Icons.Material.Filled.SimCard"
+                             Variant="Variant.Filled"
+                             Size="Size.Small"
+                             Dense="true"
+                             EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
+                             IconColor="Color.Info"
+                             AnchorOrigin="Origin.BottomLeft">
+                        @if (_canInstallSim)
+                        {
+                            <MudMenuItem OnClick="@(()=>OnInstallSim(context.Item))"
+                                         Disabled="(!((context.Item.UStatus == UStatus.InstalledActive) || (context.Item.UStatus == UStatus.InstalledActiveGprs) || (context.Item.UStatus == UStatus.InstalledActiveHosting) || (context.Item.UStatus == UStatus.InstalledInactive)))">
+                                @L["Install Sim"]
+                            </MudMenuItem>
+                        }
+                        @if (_canReplace)
+                        {
+                            <MudMenuItem OnClick="@(()=>OnReplaceSim(context.Item))"
+                                         Disabled="(!((context.Item.UStatus == UStatus.InstalledActive) || (context.Item.UStatus == UStatus.InstalledActiveGprs) || (context.Item.UStatus == UStatus.InstalledActiveHosting) || (context.Item.UStatus == UStatus.InstalledInactive)))">
+
+                                @L["Replace Sim"]
+                            </MudMenuItem>
+                        }
+                        @if (_canRecover)
+                        {
+                            <MudMenuItem OnClick="@(()=>OnRecoverSim(context.Item))"
+                                         Disabled="(!((context.Item.UStatus != UStatus.InstalledActive) && (context.Item.UStatus != UStatus.InstalledActiveGprs) && (context.Item.UStatus != UStatus.InstalledActiveHosting)))">
+
+                                @L["Recover Sim"]
                             </MudMenuItem>
                         }
                     </MudMenu>
@@ -438,11 +484,17 @@
     private bool _canDeactivate ;
     private bool _canMarkAsDamaged ;
     private bool _canMarkAsUsed ;
+    private bool _canMarkAsLost ;
+    
     private bool _canReassignOwner ;
     private bool _canRenewSubscription ;
     private bool _canAssignDailyTaskToOtherUser ;
 
     private bool _canCreateTicket ;
+
+    private bool _canInstallSim ;
+    private bool _canRecoverSim ;
+    private bool _canReplaceSim ;
 
     protected override async Task OnInitializedAsync()
     {
@@ -467,12 +519,16 @@
    _canDeactivate = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.Deactivate)).Succeeded;
    _canMarkAsDamaged = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.MarkAsDamaged)).Succeeded;
    _canMarkAsUsed = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.MarkAsUsed)).Succeeded;
+   _canMarkAsLost = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.MarkAsUsed)).Succeeded;
    _canReassignOwner = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.ReassignOwner)).Succeeded;
    _canRenewSubscription = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.RenewSubscription)).Succeeded;
    _canAssignDailyTaskToOtherUser = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.AssignDailyTaskToOtherUser)).Succeeded;
 
    _canCreateTicket = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.CreateTicket)).Succeeded;
 
+   _canInstallSim = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.Install)).Succeeded;
+   _canRecoverSim = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.Recover)).Succeeded;
+   _canReplaceSim = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.Replace)).Succeeded;
 
 
 
@@ -739,7 +795,7 @@
     private Task OnDeactivate(TrackingUnitDto dto)
     {
         // var command = Mapper.Map<DeactivateTrackingUnitCommand>(dto);
-        var command = Mapper.ToDeactivateCommand(dto);
+        DeactivateTrackingUnitCommand? command = Mapper.ToDeactivateCommand(dto);
         // command.InstallerId = UserProfile.UserId;
         return DialogServiceHelper.ShowFormDialogWithContentTextAsync<DeactivateDialog, DeactivateTrackingUnitCommand>(
             string.Format(L["Deactivate TrackingUnit {0}"], dto.SNo),
@@ -855,32 +911,91 @@
     }
 
 
+    private Task OnMarkAsLost(TrackingUnitDto dto)
+    {
+
+        var model = Mapper.ToMarkAsLostCommand(dto);
+        return DialogServiceHelper.ShowFormDialogWithContentTextAsync<MarkAsLostDailog, MarkTrackingUnitAsLostCommand>(
+            string.Format(L["Mark TrackingUnit {0} As Lost"], dto.SNo),
+            L["Fill the form."],
+            model,
+            async () =>
+            {
+                await _table.ReloadServerData();
+                _selectedItems.Clear();
+            }); 
+    }
+
 
 
     private Task OnInstall(TrackingUnitDto dto)
     {
-            Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits/Install/{dto.Id}");
-            return Task.CompletedTask;
+
+        var model = Mapper.ToInstallCommand(dto);
+        return DialogServiceHelper.ShowFormDialogWithContentTextAsync<InstallTrackingUnitDailog, InstallTrackingUnitCommand>(
+            string.Format(L["Install TrackingUnit {0}"], dto.SNo),
+            L["Fill the form."],
+            model,
+            async () =>
+            {
+                await _table.ReloadServerData();
+                _selectedItems.Clear();
+            }); 
+
+        //Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits/Install/{dto.Id}");
+        //return Task.CompletedTask;
     }
 
 
     private Task OnTransfer(TrackingUnitDto dto)
     {
-        Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits/Transfer/{dto.Id}");
-        return Task.CompletedTask;
+         var model = Mapper.ToTransferCommand(dto);
+        return DialogServiceHelper.ShowFormDialogWithContentTextAsync<TransferTrackingUnitDailog, TransferTrackingUnitCommand>(
+            string.Format(L["Transfer TrackingUnit {0}"], dto.SNo),
+            L["Fill the form."],
+            model,
+            async () =>
+            {
+                await _table.ReloadServerData();
+                _selectedItems.Clear();
+            }); 
+
+       // Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits/Transfer/{dto.Id}");
+        //return Task.CompletedTask;
     }
 
 
     private Task OnReplace(TrackingUnitDto dto)
     {
-        Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits/Replace/{dto.Id}");
-        return Task.CompletedTask;
+        var model = Mapper.ToReplaceCommand(dto);
+        return DialogServiceHelper.ShowFormDialogWithContentTextAsync<ReplaceTrackingUnitDailog, ReplaceTrackingUnitCommand>(
+            string.Format(L["Replace TrackingUnit {0}"], dto.SNo),
+            L["Fill the form."],
+            model,
+            async () =>
+            {
+                await _table.ReloadServerData();
+                _selectedItems.Clear();
+            }); 
+        //Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits/Replace/{dto.Id}");
+        //return Task.CompletedTask;
     }
 
     private Task OnRecover(TrackingUnitDto dto)
     {
-        Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits/Recover/{dto.Id}");
-        return Task.CompletedTask;
+        var model = Mapper.ToRecoverCommand(dto);
+        return DialogServiceHelper.ShowFormDialogWithContentTextAsync<RecoverTrackingUnitDailog, RecoverTrackingUnitCommand>(
+            string.Format(L["Recover TrackingUnit {0}"], dto.SNo),
+            L["Fill the form."],
+            model,
+            async () =>
+            {
+                await _table.ReloadServerData();
+                _selectedItems.Clear();
+            }); 
+
+        //Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits/Recover/{dto.Id}");
+        //return Task.CompletedTask;
     }
 
     private Task OnReserve(TrackingUnitDto dto)
@@ -895,6 +1010,23 @@
         return Task.CompletedTask;
     }
 
+    private Task OnInstallSim(TrackingUnitDto dto)
+    {
+        Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits/InstallOrReplaceSim/{dto.Id}");
+        return Task.CompletedTask;
+    }
+
+        private Task OnReplaceSim(TrackingUnitDto dto)
+    {
+        Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits/InstallOrReplaceSim/{dto.Id}");
+        return Task.CompletedTask;
+    }
+
+    private Task OnRecoverSim(TrackingUnitDto dto)
+    {
+        Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits/RecoverSim/{dto.Id}");
+        return Task.CompletedTask;
+    }
     // private Task OnDelete(TrackingUnitDto dto)
     // {
     //     var contentText = string.Format(ConstantString.DeleteConfirmation, dto.Id);

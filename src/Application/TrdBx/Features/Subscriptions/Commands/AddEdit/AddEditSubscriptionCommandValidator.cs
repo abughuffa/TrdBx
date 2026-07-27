@@ -9,7 +9,7 @@ public class AddEditSubscriptionCommandValidator : AbstractValidator<AddEditSubs
         RuleFor(v => v.SsDate).NotNull();
         RuleFor(v => v.SeDate).NotNull();
         RuleFor(v => v.LastPaidFees).NotNull();
-        RuleFor(v => v.Desc).MaximumLength(255).NotEmpty();
+        RuleFor(v => v.Description).MaximumLength(255).NotEmpty();
 
 
 

@@ -13,7 +13,6 @@ public class ReplaceTrackingUnitCommand : ICacheInvalidatorRequest<Result<int>>
     [Description("SUnitId")] public int SUnitId { get; set; }
     [Description("SimCardId")] public int SimCardId { get; set; } = 0;
     [Description("CustomerId")] public int CustomerId { get; set; }
-    //[Description("InstallerId")] public string InstallerId { get; set; } = string.Empty;
     [Description("SubPackage")] public SubPackage SubPackage { get; set; } = SubPackage.Active;
     [Description("InsMode")] public InsMode InsMode { get; set; }
     [Description("CreateDeservedServices")] public bool CreateDeservedServices { get; set; }
@@ -23,43 +22,12 @@ public class ReplaceTrackingUnitCommand : ICacheInvalidatorRequest<Result<int>>
     public string CacheKey => TrackingUnitCacheKey.GetAllCacheKey;
     public IEnumerable<string> Tags => TrackingUnitCacheKey.Tags;
 
-    //private class Mapping : Profile
-    //{
-    //    public Mapping()
-    //    {
-    //        CreateMap<TrackingUnitDto, ReplaceTrackingUnitCommand>(MemberList.None)
-    //            //.ForMember(dest => dest.Id, opt => opt.Ignore())
-    //            .ForMember(dest => dest.TsDate, opt => opt.Ignore())
-    //            .ForMember(dest => dest.SUnitId, opt => opt.Ignore())
-    //            //.ForMember(dest => dest.SimCardId, opt => opt.Ignore())
-    //            //.ForMember(dest => dest.CustomerId, opt => opt.Ignore())
-    //            .ForMember(dest => dest.InstallerId, opt => opt.Ignore())
-    //            .ForMember(dest => dest.SubPackage, opt => opt.Ignore())
-    //            //.ForMember(dest => dest.InsMode, opt => opt.Ignore())
-    //            .ForMember(dest => dest.CreateDeservedServices, opt => opt.Ignore())
-    //            .ForMember(dest => dest.IsTampred, opt => opt.Ignore())
-    //            .ForMember(dest => dest.ApplyChangesOnWialon, opt => opt.Ignore());
-    //    }
-    //}
+    
 
 }
 
 public class ReplaceTrackingUnitCommandHandler : SubscriptionSharedLogic, IRequestHandler<ReplaceTrackingUnitCommand, Result<int>>
 {
-
-
-    //private readonly IApplicationDbContextFactory _dbContextFactory;
-    //private readonly IStringLocalizer<ReplaceTrackingUnitCommandHandler> _localizer;
-    //private readonly IWialonService _wialonService;
-    //public ReplaceTrackingUnitCommandHandler(IApplicationDbContextFactory dbContextFactory,
-    //                                     IStringLocalizer<ReplaceTrackingUnitCommandHandler> localizer,
-    //                                     IWialonService wialonService)
-    //{
-    //    _dbContextFactory = dbContextFactory;
-    //    _localizer = localizer;
-    //    _wialonService = wialonService;
-    //}
-
     private readonly IApplicationDbContext _context;
     private readonly IStringLocalizer<ReplaceTrackingUnitCommandHandler> _localizer;
     private readonly IWialonService _wialonService;
@@ -76,8 +44,6 @@ public class ReplaceTrackingUnitCommandHandler : SubscriptionSharedLogic, IReque
 
     public async Task<Result<int>> Handle(ReplaceTrackingUnitCommand request, CancellationToken cancellationToken)
     {
-        //await using var _context = await _dbContextFactory.CreateAsync(cancellationToken);
-
         var runit = await _context.TrackingUnits.Where(x => x.Id == request.Id).Include(u => u.Subscriptions).ThenInclude(s => s.ServiceLog).FirstAsync() ?? throw new NotFoundException($"TrackingUnit with id: [{request.Id}] not found.");
 
         if (!(runit.UStatus == UStatus.InstalledActive || runit.UStatus == UStatus.InstalledActiveHosting || runit.UStatus == UStatus.InstalledActiveGprs || runit.UStatus == UStatus.InstalledInactive))
@@ -101,15 +67,13 @@ public class ReplaceTrackingUnitCommandHandler : SubscriptionSharedLogic, IReque
 
         var sim = await _context.SimCards.FindAsync(new object[] { request.SimCardId }, cancellationToken) ?? throw new NotFoundException($"SimCard with id: [{request.SimCardId}] not found.");
 
-#pragma warning disable CS8601 // Possible null reference assignment.
         var asset = await _context.TrackedAssets.FindAsync(new object[] { runit.TrackedAssetId }, cancellationToken) ?? throw new NotFoundException($"TrackedAsset with id: [{runit.TrackedAssetId}] not found.");
-#pragma warning restore CS8601 // Possible null reference assignment.
 
-#pragma warning disable CS8629 // Nullable value type may be null.
         var rprice = await GetCPrice(_context,  (int)runit.CustomerId, runit.TrackingUnitModelId);
-#pragma warning restore CS8629 // Nullable value type may be null.
 
         var sprice = await GetCPrice(_context,  (int)sunit.CustomerId, sunit.TrackingUnitModelId);
+
+        List<CPrice> prices = new() { rprice, sprice };
 
         var T = request.IsTampred;  //IsTampred
         var R = runit.WryDate < request.TsDate; //Replaced Unit Warrenty
@@ -163,73 +127,60 @@ public class ReplaceTrackingUnitCommandHandler : SubscriptionSharedLogic, IReque
                 }
         }
 
+
+
+
+       
+       
+        switch (request.SubPackage)
+        {
+            case SubPackage.Active:
+                {
+                    MixSubscriptions(runit,sunit, serviceLog, request.TsDate, prices,384, true);
+                    sunit.UStatus = UStatus.InstalledActive;
+                    break;
+                }
+            case SubPackage.ActiveHosting:
+                {
+                    MixSubscriptions(runit,sunit, serviceLog, request.TsDate, prices,256, true);
+                    sunit.UStatus = UStatus.InstalledActiveHosting;
+                    break;
+                }
+            case SubPackage.ActiveGprs:
+                {
+                    MixSubscriptions(runit,sunit, serviceLog, request.TsDate, prices,128, true);
+                    sunit.UStatus = UStatus.InstalledActiveGprs;
+                    break;
+                }
+        }
+
         if (runit.SimCardId != null && sim.Id == runit.SimCardId)
         {
             runit.SimCardId = null;
         }
 
-        {
-            if (runit.UStatus == UStatus.InstalledActive || runit.UStatus == UStatus.InstalledActiveHosting || runit.UStatus == UStatus.InstalledActiveGprs)
-            {
-                Deactivate(runit, serviceLog, request.TsDate, rprice, true);
-            }
-            else if (runit.UStatus == UStatus.InstalledInactive && runit.IsOnWialon)
-            {
-                serviceLog.WialonTasks.Add(new WialonTask()
-                {
-                    TrackingUnitId = runit.Id,
-                    APITask = APITask.RemoveFromWialon,
-                    Desc = string.Format("حذف الوحدة ({0}) من منصة ويلون.", runit.SNo),
-                    ExcDate = request.TsDate,
-                    IsExecuted = false,
-                });
-            }
-
-            runit.UnitName = null;
-            runit.UStatus = UStatus.Recovered;
-            runit.TrackedAssetId = null;
-            runit.InsMode = InsMode.Null;
-            runit.WryDate = Rw ? request.TsDate : runit.WryDate;
-
-        }
-
+        runit.UnitName = null;
+        runit.UStatus = UStatus.Recovered;
+        runit.TrackedAssetId = null;
+        runit.InsMode = InsMode.Null;
+        runit.WryDate = Rw ? request.TsDate : runit.WryDate;
         runit.AddDomainEvent(new TrackingUnitUpdatedEvent(runit));
 
         sim.SStatus = SStatus.Installed;
         sim.AddDomainEvent(new SimCardUpdatedEvent(sim));
 
-        sunit.UStatus = UStatus.InstalledInactive;
         sunit.UnitName = asset.TrackedAssetCode;
         sunit.TrackedAssetId = asset.Id;
         sunit.SimCardId = request.SimCardId;
         sunit.InsMode = request.InsMode;
-
-        switch (request.SubPackage)
-        {
-            case SubPackage.Active:
-                {
-                  Activate(sunit, serviceLog, request.TsDate, sprice, true);
-                    break;
-                }
-            case SubPackage.ActiveHosting:
-                {
-                    ActivateForHosting(sunit, serviceLog, request.TsDate, sprice, true);
-                    break;
-                }
-            case SubPackage.ActiveGprs:
-                {
-                    ActivateForGprs(sunit, serviceLog, request.TsDate, sprice,true);
-                    break;
-                }
-        }
+        sunit.AddDomainEvent(new TrackingUnitUpdatedEvent(sunit));
 
         serviceLog.Amount = serviceLog.Amount + 0.0m;
-
         serviceLog.AddDomainEvent(new ServiceLogCreatedEvent(serviceLog));
 
         _context.ServiceLogs.Add(serviceLog);
 
-        sunit.AddDomainEvent(new TrackingUnitUpdatedEvent(sunit));
+        
 
         var result = await _context.SaveChangesAsync(cancellationToken);
         if (result > 0)

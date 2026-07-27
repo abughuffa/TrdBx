@@ -1,0 +1,142 @@
+﻿@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Mappers
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Recover
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Queries.GetById
+
+@inherits MudComponentBase
+@inject IValidationService Validator
+@inject IStringLocalizer<TrackingUnits> L
+@attribute [Authorize(Policy = Permissions.TrackingUnits.Recover)]
+
+<MudDialog>
+    <DialogContent>
+       
+            <MudForm Model="@_model" @ref="@_form" Validation="@(Validator.ValidateValue(_model))">
+                <MudGrid Spacing="2">
+                    <MudItem md="12">
+                        <MudText>@_contentText</MudText>
+                    </MudItem>
+
+                    <MudItem md="6">
+                        <MudCheckBox 
+                            Label="@L["Create Deserved Services?"]"
+                            For="@(() => _model.CreateDeservedServices)"
+                            @bind-Value="_model.CreateDeservedServices">
+                        </MudCheckBox>
+                    </MudItem>
+
+                    <MudItem md="6">
+                        <MudDatePicker 
+                            Class="pa-4"
+                            PickerVariant="PickerVariant.Dialog"
+                            Editable 
+                            @bind-Date="_date"
+                            For="@(() => _date)"
+                            Required="true"
+                            RequiredError="@L["TaskDate Is Required!"]"/>
+                    </MudItem>
+                </MudGrid>
+            </MudForm>
+        
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" DropShadow="false" OnClick="Cancel">@ConstantString.Cancel</MudButton>
+        <MudLoadingButton 
+            Color="Color.Primary" 
+            DropShadow="false" 
+            Loading="@_submitting" 
+            OnClick="Submit">
+            @ConstantString.Submit
+        </MudLoadingButton>
+    </DialogActions>
+</MudDialog>
+
+
+@code {
+
+    [CascadingParameter] private UserProfile? UserProfile { get; set; }
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;  
+    [EditorRequired][Parameter] public RecoverTrackingUnitCommand _model { get; set; } = default!;
+    [Parameter] public string? _contentText { get; set; } = default!;
+    
+    private MudForm? _form;
+    private bool _submitting = false;
+
+    private DateTime? _date
+    {
+        get => _model.TsDate.ToDateTime(TimeOnly.MinValue);
+        set
+        {
+            if (value is not null)
+                _model.TsDate = DateOnly.FromDateTime(value.Value);
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+
+    async Task Submit()
+    {
+        try
+        {
+            _submitting = true;
+            StateHasChanged();
+
+            if (_form == null)
+            {
+                Snackbar.Add("Form is not initialized", Severity.Error);
+                return;
+            }
+
+            await _form.Validate();
+            if (!_form.IsValid)
+            {
+                Snackbar.Add("Please correct all validation errors", Severity.Warning);
+                return;
+            }
+
+       //     await ValidateModelAsync();
+
+            var result = await Mediator.Send(_model);
+            
+            if (result.Succeeded)
+            {
+                Snackbar.Add(ConstantString.SaveSuccess, Severity.Success);
+                MudDialog.Close(DialogResult.Ok(true));
+            }
+            else
+            {
+                var errorMessage = string.IsNullOrEmpty(result.ErrorMessage) 
+                    ? "Failed to recover tracking unit" 
+                    : result.ErrorMessage;
+                Snackbar.Add(errorMessage, Severity.Error);
+            }
+        }
+        catch (ValidationException ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Warning);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"An unexpected error occurred: {ex.Message}", Severity.Error);
+        }
+        finally
+        {
+            _submitting = false;
+            StateHasChanged();
+        }
+    }
+
+    void Cancel()
+    {
+        if (!_submitting)
+        {
+            MudDialog.Cancel();
+        }
+    }
+
+
+
+}

@@ -12,7 +12,7 @@ public class InvItem
 {
     public int Serial { get; set; }
     public int SubSerial { get; set; }
-    public string? Desc { get; set; }
+    public string? Description { get; set; }
     public decimal SubTotal { get; set; } = 0.0m;
     public decimal ItemTotal { get; set; } = 0.0m;
 

@@ -123,7 +123,7 @@ public class RenewTrackingUnitSubscriptionCommandHandler : PriceSharedLogic, IRe
                             serviceLog.Subscriptions = [ new() {
                                     CaseCode = caseCode,
                                     LastPaidFees = OLF,
-                                    Desc = string.Format($"دورة اشتراك تمديد جديدة من التاريخ {startDate} حتى التاريخ {endDate}."),
+                                    Description = string.Format($"دورة اشتراك تمديد جديدة من التاريخ {startDate} حتى التاريخ {endDate}."),
                                     TrackingUnitId = item.Id,
                                     SsDate = startDate,
                                     SeDate = endDate,
@@ -141,7 +141,7 @@ public class RenewTrackingUnitSubscriptionCommandHandler : PriceSharedLogic, IRe
                             serviceLog.Subscriptions = [ new() {
                                     LastPaidFees = OLF,
                                     //SubPackageFees = SubPackageFees.GprsFees,
-                                    Desc = string.Format($"دورة اشتراك استضافة جديدة من التاريخ {startDate} حتى التاريخ {endDate}."),
+                                    Description = string.Format($"دورة اشتراك استضافة جديدة من التاريخ {startDate} حتى التاريخ {endDate}."),
                                     TrackingUnitId = item.Id,
                                     SsDate = startDate,
                                     SeDate = endDate,
@@ -159,7 +159,7 @@ public class RenewTrackingUnitSubscriptionCommandHandler : PriceSharedLogic, IRe
                             serviceLog.Subscriptions = [ new() {
                                     LastPaidFees = OLF,
                                     //SubPackageFees = SubPackageFees.GprsFees,
-                                    Desc = string.Format($"دورة اشتراك كامل جديدة من التاريخ {startDate} حتى التاريخ {endDate}."),
+                                    Description = string.Format($"دورة اشتراك كامل جديدة من التاريخ {startDate} حتى التاريخ {endDate}."),
                                     TrackingUnitId = item.Id,
                                     SsDate = startDate,
                                     SeDate = endDate,
@@ -176,7 +176,7 @@ public class RenewTrackingUnitSubscriptionCommandHandler : PriceSharedLogic, IRe
                             dailyFees = 0.0m;
                             serviceLog.Subscriptions = [ new() {
                                     LastPaidFees = SubPackageFees.ZeroFees,
-                                    Desc = string.Format($"دورة اشتراك صفرية"),
+                                    Description = string.Format($"دورة اشتراك صفرية"),
                                     TrackingUnitId = item.Id,
                                     SsDate = startDate,
                                     SeDate = startDate,

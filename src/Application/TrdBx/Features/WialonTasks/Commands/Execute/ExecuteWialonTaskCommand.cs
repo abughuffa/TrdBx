@@ -68,6 +68,14 @@ public class ExecuteWialonTaskCommandHandler :
 
         switch (item.APITask)
             {
+                case APITask.CheckOnWialon:
+                    {
+                    if (request.ApplyChangesToWialon)
+                        {
+                            APIExecuationSuccessed = true;
+                        }
+                        break;
+                    }
                 case APITask.AddToWialon:
                     {
                     var unit = _context.TrackingUnits.Include(u => u.Customer.Parent)
