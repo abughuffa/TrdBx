@@ -1,4 +1,4 @@
-﻿@using CleanArchitecture.Blazor.Application.Features.Vehicles.Commands.AddEdit
+﻿@* @using CleanArchitecture.Blazor.Application.Features.Vehicles.Commands.AddEdit
 @using CleanArchitecture.Blazor.Server.UI.Pages.Delivery.VehicleTypes
 
 @inherits MudComponentBase
@@ -20,10 +20,7 @@
                         <MudTextField Label="@L[model.GetMemberDescription(x => x.VehicleNo)]" @bind-Value="model.VehicleNo" For="@(() => model.VehicleNo)" Required="true" RequiredError="@L["VehicleNo is required!"]"></MudTextField>
                 </MudItem> 
  
-                    <MudItem xs="12" md="12">
-                        @* <DriversSelector @bind-UserId="model.DriverId"></DriversSelector> *@
-@*                         <MudTextField Label="@L[model.GetMemberDescription(x => x.DriverId)]" For="@(() => model.DriverId)" @bind-Value="model.DriverId"></MudTextField> *@
-                    </MudItem>
+
 
             </MudGrid>
         </MudForm>
@@ -99,4 +96,4 @@
         }
     }
     void Cancel() => MudDialog.Cancel();
-}
+} *@

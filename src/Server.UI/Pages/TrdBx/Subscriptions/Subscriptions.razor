@@ -2,10 +2,6 @@
 @using CleanArchitecture.Blazor.Application.Features.Subscriptions.Caching
 @using CleanArchitecture.Blazor.Application.Features.Subscriptions.DTOs
 @using CleanArchitecture.Blazor.Application.Features.Subscriptions.Queries.Pagination
-
-
-
-
 @inject IStringLocalizer<Subscriptions> L
 @attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.Subscriptions.View)]
 @inject NavigationManager Navigation

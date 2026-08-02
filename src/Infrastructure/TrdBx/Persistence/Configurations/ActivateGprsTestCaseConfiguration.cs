@@ -2,17 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-namespace CleanArchitecture.Blazor.Infrastructure.Persistence.Configurations;
+// using Microsoft.EntityFrameworkCore.Metadata.Builders;
+// namespace CleanArchitecture.Blazor.Infrastructure.Persistence.Configurations;
 
-#nullable disable
-public class ActivateGprsTestCaseConfiguration : IEntityTypeConfiguration<ActivateGprsTestCase>
-{
-    public void Configure(EntityTypeBuilder<ActivateGprsTestCase> builder)
-    {
-        builder.Property(t => t.SNo).HasMaxLength(50).IsRequired();
-        builder.Ignore(e => e.DomainEvents);
-    }
-}
+// #nullable disable
+// public class ActivateGprsTestCaseConfiguration : IEntityTypeConfiguration<ActivateGprsTestCase>
+// {
+//     public void Configure(EntityTypeBuilder<ActivateGprsTestCase> builder)
+//     {
+//         builder.Property(t => t.SNo).HasMaxLength(50).IsRequired();
+//         builder.Ignore(e => e.DomainEvents);
+//     }
+// }
 
 

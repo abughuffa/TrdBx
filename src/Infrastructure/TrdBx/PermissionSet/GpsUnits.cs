@@ -18,9 +18,21 @@ public static partial class Permissions
 
         [Description("Allows deleting TrackingUnit records.")]
         public const string Delete = "Permissions.TrackingUnits.Delete";
+                [Description("Allows Reserve TrackingUnit.")]
+        public const string Reserve = "Permissions.TrackingUnits.Reserve";
 
-        [Description("Allows searching for TrackingUnit records.")]
-        public const string Search = "Permissions.TrackingUnits.Search";
+        [Description("Allows MarkAsDamaged TrackingUnit.")]
+        public const string MarkAsDamaged = "Permissions.TrackingUnits.MarkAsDamaged";
+
+
+        [Description("Allows MarkAsUsed TrackingUnit.")]
+        public const string MarkAsUsed = "Permissions.TrackingUnits.MarkAsUsed";
+
+        [Description("Allows MarkAsLost TrackingUnit.")]
+        public const string MarkAsLost = "Permissions.TrackingUnits.MarkAsLost";
+
+        [Description("Allows ReassignOwner TrackingUnit.")]
+        public const string ReassignOwner = "Permissions.TrackingUnits.ReassignOwner";
 
         [Description("Allows exporting TrackingUnit records.")]
         public const string Export = "Permissions.TrackingUnits.Export";
@@ -28,8 +40,13 @@ public static partial class Permissions
         [Description("Allows importing TrackingUnit records.")]
         public const string Import = "Permissions.TrackingUnits.Import";
 
+                [Description("Allows SyncUnitNames of TrackingUnit records.")]
+        public const string SyncUnitNames = "Permissions.TrackingUnits.SyncUnitNames";
 
-        [Description("Allows Install TrackingUnit.")]
+        
+
+
+/*         [Description("Allows Install TrackingUnit.")]
         public const string Install = "Permissions.TrackingUnits.Install";
 
         [Description("Allows Transfer TrackingUnit.")]
@@ -56,15 +73,7 @@ public static partial class Permissions
         [Description("Allows Deactivate TrackingUnit.")]
         public const string Deactivate = "Permissions.TrackingUnits.Deactivate";
 
-        [Description("Allows MarkAsDamaged TrackingUnit.")]
-        public const string MarkAsDamaged = "Permissions.TrackingUnits.MarkAsDamaged";
 
-
-        [Description("Allows MarkAsUsed TrackingUnit.")]
-        public const string MarkAsUsed = "Permissions.TrackingUnits.MarkAsUsed";
-
-        [Description("Allows ReassignOwner TrackingUnit.")]
-        public const string ReassignOwner = "Permissions.TrackingUnits.ReassignOwner";
 
         [Description("Allows Renew Subscription of TrackingUnit.")]
         public const string RenewSubscription = "Permissions.TrackingUnits.RenewSubscription";
@@ -73,7 +82,7 @@ public static partial class Permissions
         public const string AssignDailyTaskToOtherUser = "Permissions.TrackingUnits.AssignDailyTaskToOtherUser";
 
         [Description("Allows Create TrackingUnits Tickets.")]
-        public const string CreateTicket = "Permissions.TrackingUnits.CreateTicket";
+        public const string CreateTicket = "Permissions.TrackingUnits.CreateTicket"; */
         
 
 
@@ -90,7 +99,7 @@ public class TrackingUnitsAccessRights
     public bool Export { get; set; }
     public bool Import { get; set; }
 
-    public bool Install { get; set; }
+/*     public bool Install { get; set; }
     public bool Transfer { get; set; }
     public bool Replace { get; set; }
     public bool Recover { get; set; }
@@ -106,7 +115,7 @@ public class TrackingUnitsAccessRights
     public bool RenewSubscription { get; set; }
     public bool AssignDailyTaskToOtherUser { get; set; }
 
-    public bool CreateTicket { get; set; }
+    public bool CreateTicket { get; set; } */
     
 
 

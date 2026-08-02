@@ -1,7 +1,7 @@
 ﻿
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Renew
 @inject IStringLocalizer<TrackingUnits> L
-@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.TrackingUnits.RenewSubscription)]
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.DailyTasks.RenewUnitSubscription)]
 
 <MudDialog>
     <DialogContent>

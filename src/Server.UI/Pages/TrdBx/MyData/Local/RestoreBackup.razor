@@ -27,7 +27,7 @@
                                       Variant="Variant.Filled" 
                                       Color="Color.Primary" 
                                       OnClick="OnCreateBackup"
-                                      Disabled="@((backupName is null) && !_canCreate)" 
+                                      Disabled="@((backupName is null) && !_canBackup)" 
                                       StartIcon="@Icons.Material.Filled.Backup">
                         @L["Create Backup"]
                     </MudLoadingButton>
@@ -123,7 +123,7 @@
     [Inject]
     private IBlazorDownloadFileService BlazorDownloadFileService { get; set; } = null!;
 
-    private bool _canCreate;
+    private bool _canBackup;
     private bool _canRestore;
     private bool _canDelete;
 
@@ -132,7 +132,7 @@
     {
         Title = L["Backup & Restore"];
         var state = await AuthState;
-        _canCreate = (await AuthService.AuthorizeAsync(state.User, Permissions.RestoreBackup.Create)).Succeeded;
+        _canBackup = (await AuthService.AuthorizeAsync(state.User, Permissions.RestoreBackup.Backup)).Succeeded;
         _canRestore = (await AuthService.AuthorizeAsync(state.User, Permissions.RestoreBackup.Restore)).Succeeded;
         _canDelete = (await AuthService.AuthorizeAsync(state.User, Permissions.RestoreBackup.Delete)).Succeeded;
 

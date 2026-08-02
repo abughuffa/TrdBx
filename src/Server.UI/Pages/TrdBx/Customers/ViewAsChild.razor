@@ -1,6 +1,5 @@
 ﻿@page "/pages/TrdBx/Customers/{id:int}/ViewAsChild"
 
-@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Customers
 @using CleanArchitecture.Blazor.Application.Features.Customers.DTOs
 @using CleanArchitecture.Blazor.Application.Features.Customers.Queries.GetById
 
@@ -78,16 +77,7 @@
         });
 
 
-    //     var result = await Mediator.Send(new GetCustomerByIdQuery() { Id = Id });
 
-    //     result.Map(data =>
-    // {
-    //     model = data;
-    //     return model;
-    // }).Match(data => { }, errors =>
-    // {
-    //     Snackbar.Add(errors, MudBlazor.Severity.Error);
-    // });
     }
 
     void OnGoBack()

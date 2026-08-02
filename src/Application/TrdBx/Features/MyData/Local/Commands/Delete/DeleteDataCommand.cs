@@ -80,49 +80,49 @@ public class DeleteDataCommandHandler : IRequestHandler<DeleteDataCommand, Resul
                 }
             }
 
-            var ActivateTestCases = _context.ActivateTestCases.ToList();
-            if (ActivateTestCases.Any())
-            {
-                foreach (var item in ActivateTestCases)
-                {
-                    // raise a delete domain event
-                    item.AddDomainEvent(new ActivateTestCaseDeletedEvent(item));
-                    _context.ActivateTestCases.Remove(item);
-                }
-            }
+            // var ActivateTestCases = _context.ActivateTestCases.ToList();
+            // if (ActivateTestCases.Any())
+            // {
+            //     foreach (var item in ActivateTestCases)
+            //     {
+            //         // raise a delete domain event
+            //         item.AddDomainEvent(new ActivateTestCaseDeletedEvent(item));
+            //         _context.ActivateTestCases.Remove(item);
+            //     }
+            // }
 
-            var ActivateGprsTestCases = _context.ActivateGprsTestCases.ToList();
-            if (ActivateGprsTestCases.Any())
-            {
-                foreach (var item in ActivateGprsTestCases)
-                {
-                    // raise a delete domain event
-                    item.AddDomainEvent(new ActivateGprsTestCaseDeletedEvent(item));
-                    _context.ActivateGprsTestCases.Remove(item);
-                }
-            }
+            // var ActivateGprsTestCases = _context.ActivateGprsTestCases.ToList();
+            // if (ActivateGprsTestCases.Any())
+            // {
+            //     foreach (var item in ActivateGprsTestCases)
+            //     {
+            //         // raise a delete domain event
+            //         item.AddDomainEvent(new ActivateGprsTestCaseDeletedEvent(item));
+            //         _context.ActivateGprsTestCases.Remove(item);
+            //     }
+            // }
 
-            var ActivateHostingTestCases = _context.ActivateHostingTestCases.ToList();
-            if (ActivateHostingTestCases.Any())
-            {
-                foreach (var item in ActivateHostingTestCases)
-                {
-                    // raise a delete domain event
-                    item.AddDomainEvent(new ActivateHostingTestCaseDeletedEvent(item));
-                    _context.ActivateHostingTestCases.Remove(item);
-                }
-            }
+            // var ActivateHostingTestCases = _context.ActivateHostingTestCases.ToList();
+            // if (ActivateHostingTestCases.Any())
+            // {
+            //     foreach (var item in ActivateHostingTestCases)
+            //     {
+            //         // raise a delete domain event
+            //         item.AddDomainEvent(new ActivateHostingTestCaseDeletedEvent(item));
+            //         _context.ActivateHostingTestCases.Remove(item);
+            //     }
+            // }
 
-            var DeactivateTestCases = _context.DeactivateTestCases.ToList();
-            if (DeactivateTestCases.Any())
-            {
-                foreach (var item in DeactivateTestCases)
-                {
-                    // raise a delete domain event
-                    item.AddDomainEvent(new DeactivateTestCaseDeletedEvent(item));
-                    _context.DeactivateTestCases.Remove(item);
-                }
-            }
+            // var DeactivateTestCases = _context.DeactivateTestCases.ToList();
+            // if (DeactivateTestCases.Any())
+            // {
+            //     foreach (var item in DeactivateTestCases)
+            //     {
+            //         // raise a delete domain event
+            //         item.AddDomainEvent(new DeactivateTestCaseDeletedEvent(item));
+            //         _context.DeactivateTestCases.Remove(item);
+            //     }
+            // }
 
             var Subscriptions = _context.Subscriptions.ToList();
             if (Subscriptions.Any())

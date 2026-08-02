@@ -1,4 +1,4 @@
-﻿@using CleanArchitecture.Blazor.Application.Features.POIs.Commands.AddEdit
+﻿@* @using CleanArchitecture.Blazor.Application.Features.POIs.Commands.AddEdit
 
 @inherits MudComponentBase
 @inject IValidationService Validator
@@ -8,7 +8,7 @@
     <DialogContent>
         <MudForm Model="@model" @ref="@_form" Validation="@(Validator.ValidateValue(model))">
             <MudGrid>
-                @*TODO: define mudform that should be edit fields, for example:*@
+                @*TODO: define mudform that should be edit fields, for example:
                 <MudItem xs="12" md="12">
                     <MudTextField Label="@L[model.GetMemberDescription(x => x.Name)]" @bind-Value="model.Name" For="@(() => model.Name)" Required="true" RequiredError="@L["Name is required!"]"></MudTextField>
                 </MudItem>
@@ -20,15 +20,7 @@
                     <MudItem xs="12" md="4">
                         <MudTextField Label="@L[model.GetMemberDescription(x => x.Longitude)]" @bind-Value="model.Longitude" />
                     </MudItem>
-                    @*                             <MudItem xs="12" md="4">
-                                <MudButton Variant="Variant.Outlined"
-                                           Color="Color.Primary"
-                                           StartIcon="Icons.Material.Filled.Map"
-                                           OnClick="OpenMapDialog"
-                                           Class="mt-4">
-                                    Select from Map
-                                </MudButton>
-                            </MudItem> *@
+                  
                 </MudGrid>
 
 
@@ -102,4 +94,4 @@
         }
     }
     void Cancel() => MudDialog.Cancel();
-}
+} *@

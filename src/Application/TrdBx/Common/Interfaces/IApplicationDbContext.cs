@@ -19,10 +19,10 @@ public partial interface IApplicationDbContext
     DbSet<Subscription> Subscriptions { get; set; }
     DbSet<WialonTask> WialonTasks { get; set; }
     DbSet<ServicePrice> ServicePrices { get; set; }
-    DbSet<DeactivateTestCase> DeactivateTestCases { get; set; }
-    DbSet<ActivateTestCase> ActivateTestCases { get; set; }
-    DbSet<ActivateGprsTestCase> ActivateGprsTestCases { get; set; }
-    DbSet<ActivateHostingTestCase> ActivateHostingTestCases { get; set; }
+    // DbSet<DeactivateTestCase> DeactivateTestCases { get; set; }
+    // DbSet<ActivateTestCase> ActivateTestCases { get; set; }
+    // DbSet<ActivateGprsTestCase> ActivateGprsTestCases { get; set; }
+    // DbSet<ActivateHostingTestCase> ActivateHostingTestCases { get; set; }
     DbSet<Ticket> Tickets { get; set; }
     DbSet<LibyanaSimCard> LibyanaSimCards { get; set; }
     DbSet<WialonUnit> WialonUnits { get; set; }

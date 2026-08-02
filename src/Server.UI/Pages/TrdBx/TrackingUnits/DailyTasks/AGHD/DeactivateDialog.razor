@@ -3,7 +3,7 @@
 @inherits MudComponentBase
 @inject IValidationService Validator
 @inject IStringLocalizer<TrackingUnits> L
-@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.TrackingUnits.Deactivate)]
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.DailyTasks.DeactivateUnit)]
 
 <MudDialog>
     <DialogContent>

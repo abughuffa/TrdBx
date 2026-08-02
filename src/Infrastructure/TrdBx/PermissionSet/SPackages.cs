@@ -7,8 +7,7 @@ public static partial class Permissions
     [Description("Set permissions for SPackage operations.")]
     public static class SPackages
     {
-        [Description("Allows viewing SPackage details.")]
-        public const string View = "Permissions.SPackages.View";
+
 
         [Description("Allows creating new SPackage records.")]
         public const string Create = "Permissions.SPackages.Create";
@@ -19,8 +18,8 @@ public static partial class Permissions
         [Description("Allows deleting SPackage records.")]
         public const string Delete = "Permissions.SPackages.Delete";
 
-        [Description("Allows searching for SPackage records.")]
-        public const string Search = "Permissions.SPackages.Search";
+        // [Description("Allows searching for SPackage records.")]
+        // public const string Search = "Permissions.SPackages.Search";
 
         [Description("Allows exporting SPackage records.")]
         public const string Export = "Permissions.SPackages.Export";
@@ -31,11 +30,11 @@ public static partial class Permissions
 }
 public class SPackagesAccessRights
 {
-    public bool View { get; set; }
+    // public bool View { get; set; }
     public bool Create { get; set; }
     public bool Edit { get; set; }
     public bool Delete { get; set; }
-    public bool Search { get; set; }
+    //public bool Search { get; set; }
     public bool Export { get; set; }
     public bool Import { get; set; }
 }

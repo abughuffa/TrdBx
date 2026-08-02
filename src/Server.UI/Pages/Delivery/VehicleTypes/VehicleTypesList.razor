@@ -1,11 +1,11 @@
-﻿@using CleanArchitecture.Blazor.Application.Features.VehicleTypes.DTOs
+﻿@* @using CleanArchitecture.Blazor.Application.Features.VehicleTypes.DTOs
 @using CleanArchitecture.Blazor.Application.Features.VehicleTypes.Queries.GetAll
 @inherits MudComponentBase
 @inject IStringLocalizer<VehicleTypes> L
 @attribute [Authorize(Policy = Permissions.VehicleTypes.View)]
 
 <MudGrid>
-    <!-- Selected Vehicle Types -->
+
     <MudItem md="5">
         <MudText Typo="Typo.h6" Class="mb-2">@L["Selected Vehicle Types"]</MudText>
         <MudPaper Elevation="2" Class="vehicle-list-container">
@@ -320,4 +320,4 @@
     // }
 }
 
-
+ *@

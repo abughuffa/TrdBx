@@ -13,26 +13,23 @@ public static partial class Permissions
         [Description("Allows creating new Ticket records.")]
         public const string Create = "Permissions.Tickets.Create";
 
-        [Description("Allows modifying existing Ticket details.")]
-        public const string Edit = "Permissions.Tickets.Edit";
+
 
         [Description("Allows deleting Ticket records.")]
         public const string Delete = "Permissions.Tickets.Delete";
 
-        [Description("Allows searching for Ticket records.")]
-        public const string Search = "Permissions.Tickets.Search";
+
 
         [Description("Allows exporting Ticket records.")]
         public const string Export = "Permissions.Tickets.Export";
 
+
+
+
         [Description("Allows Approve Ticket record.")]
         public const string Approve = "Permissions.Tickets.Approve";
 
-        [Description("Allows Assign Ticket record.")]
-        public const string Assign = "Permissions.Tickets.Assign";
 
-        [Description("Allows Release Ticket record.")]
-        public const string Release = "Permissions.Tickets.Release";
 
         [Description("Allows Reject Ticket record.")]
         public const string Reject = "Permissions.Tickets.Reject";
@@ -43,14 +40,6 @@ public static partial class Permissions
         [Description("Allows Execute Ticket record.")]
         public const string Execute = "Permissions.Tickets.Execute";
 
-        [Description("Allows Complete Ticket record.")]
-        public const string Complete = "Permissions.Tickets.Complete";
-
-        [Description("Allows Strat Ticket record.")]
-        public const string Strat = "Permissions.Tickets.Strat";
-
-        [Description("Allows Stop Ticket record.")]
-        public const string Stop = "Permissions.Tickets.Stop";
 
     }
 }

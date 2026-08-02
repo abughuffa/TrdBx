@@ -24,10 +24,10 @@ public partial class ApplicationDbContext
     //public DbSet<Invoice> Invoices { get; set; }
     //public DbSet<InvoiceItem> InvoiceItems { get; set; }
     public DbSet<Ticket> Tickets { get; set; }
-    public DbSet<DeactivateTestCase> DeactivateTestCases { get; set; }
-    public DbSet<ActivateTestCase> ActivateTestCases { get; set; }
-    public DbSet<ActivateGprsTestCase> ActivateGprsTestCases { get; set; }
-    public DbSet<ActivateHostingTestCase> ActivateHostingTestCases { get; set; }
+    // public DbSet<DeactivateTestCase> DeactivateTestCases { get; set; }
+    // public DbSet<ActivateTestCase> ActivateTestCases { get; set; }
+    // public DbSet<ActivateGprsTestCase> ActivateGprsTestCases { get; set; }
+    // public DbSet<ActivateHostingTestCase> ActivateHostingTestCases { get; set; }
     public DbSet<LibyanaSimCard> LibyanaSimCards { get; set; }
     public DbSet<WialonUnit> WialonUnits { get; set; }
     #endregion

@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+﻿/* using System.ComponentModel;
 namespace CleanArchitecture.Blazor.Infrastructure.PermissionSet;
 
 public static partial class Permissions
@@ -32,3 +32,4 @@ public class DeactivateTestCasesAccessRights
     public bool Import { get; set; }
 }
 
+ */

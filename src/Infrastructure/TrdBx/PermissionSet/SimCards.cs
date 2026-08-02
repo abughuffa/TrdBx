@@ -19,14 +19,16 @@ public static partial class Permissions
         [Description("Allows deleting SimCard records.")]
         public const string Delete = "Permissions.SimCards.Delete";
 
-        [Description("Allows searching for SimCard records.")]
-        public const string Search = "Permissions.SimCards.Search";
+
 
         [Description("Allows exporting SimCard records.")]
         public const string Export = "Permissions.SimCards.Export";
 
         [Description("Allows importing SimCard records.")]
         public const string Import = "Permissions.SimCards.Import";
+
+                [Description("Allows SyncExpiryDate of SimCard records.")]
+        public const string SyncExpiryDate = "Permissions.SimCards.SyncExpiryDate";
     }
 }
 public class SimCardsAccessRights

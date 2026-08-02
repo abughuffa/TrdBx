@@ -1,13 +1,13 @@
-﻿namespace CleanArchitecture.Blazor.Application.Features.TestCases.ActivateGprsTestCases.Commands.Import;
+﻿// namespace CleanArchitecture.Blazor.Application.Features.TestCases.ActivateGprsTestCases.Commands.Import;
 
-public class ImportActivateGprsTestCasesCommandValidator : AbstractValidator<ImportActivateGprsTestCasesCommand>
-{
-    public ImportActivateGprsTestCasesCommandValidator()
-    {
+// public class ImportActivateGprsTestCasesCommandValidator : AbstractValidator<ImportActivateGprsTestCasesCommand>
+// {
+//     public ImportActivateGprsTestCasesCommandValidator()
+//     {
 
-        RuleFor(v => v.Data)
-             .NotNull()
-             .NotEmpty();
-    }
-}
+//         RuleFor(v => v.Data)
+//              .NotNull()
+//              .NotEmpty();
+//     }
+// }
 

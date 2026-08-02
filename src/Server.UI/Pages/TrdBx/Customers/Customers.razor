@@ -1,7 +1,5 @@
 ﻿@page "/pages/TrdBx/Customers"
 
-
-@using CleanArchitecture.Blazor.Application.Features.Customers.Commands.Update
 @using CleanArchitecture.Blazor.Application.Features.CusPrices.Commands.Create
 @using CleanArchitecture.Blazor.Application.Features.Customers.Caching
 @using CleanArchitecture.Blazor.Application.Features.Customers.Commands.Create
@@ -175,7 +173,11 @@
 
     [Inject]
     private IBlazorDownloadFileService BlazorDownloadFileService { get; set; } = null!;
-    // private bool _canSearch;
+    /// <summary>
+    /// Gets or sets a value indicating whether the user can create customer prices.
+    /// </summary>
+    private bool _canCreateCusPrice;
+    private bool _canViewCusPrice;
     private bool _canCreate;
     private bool _canEdit;
     private bool _canDelete;
@@ -186,8 +188,10 @@
     {
         Title = L[_currentDto.GetClassDescription()];
         var state = await AuthState;
+        
+        _canCreateCusPrice  = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.CusPrices.Create)).Succeeded;
+        _canViewCusPrice = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.CusPrices.View)).Succeeded;
         _canCreate = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Customers.Create)).Succeeded;
-        // _canSearch = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Customers.Search)).Succeeded;
         _canEdit = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Customers.Edit)).Succeeded;
         _canDelete = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Customers.Delete)).Succeeded;
         _canImport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Customers.Import)).Succeeded;
@@ -241,9 +245,9 @@
         await _table.ReloadServerData();
     }
 
-    private bool IsCusPriceCreateDisabled(CustomerDto dto) => (dto.BillingPlan == BillingPlan.Unkown) || (dto.ParentId is not null) && (dto.BillingPlan == BillingPlan.Advanced);
+    private bool IsCusPriceCreateDisabled(CustomerDto dto) => (dto.BillingPlan == BillingPlan.Unkown) || (dto.ParentId is not null) && (dto.BillingPlan == BillingPlan.Advanced) && _canCreateCusPrice;
 
-    private bool IsCusPriceViewDisabled(CustomerDto dto) => (dto.ParentId is not null) && (dto.BillingPlan == BillingPlan.Advanced);
+    private bool IsCusPriceViewDisabled(CustomerDto dto) => (dto.ParentId is not null) && (dto.BillingPlan == BillingPlan.Advanced) && _canViewCusPrice;
 
     private Task OnView(CustomerDto dto)
     {

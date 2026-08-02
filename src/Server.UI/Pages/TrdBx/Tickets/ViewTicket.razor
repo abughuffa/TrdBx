@@ -1,8 +1,5 @@
 ﻿@page "/pages/TrdBx/Tickets/{id:int}/view"
 
-@using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Close
-@using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Start
-@using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Stop
 @using CleanArchitecture.Blazor.Application.Features.Tickets.DTOs
 @using CleanArchitecture.Blazor.Application.Features.Tickets.Queries.GetById
 @using CleanArchitecture.Blazor.Domain.Entities
@@ -48,11 +45,6 @@
             </MudCardContent>
             <MudCardActions>
                 
-                <MudLoadingButton Loading=_starting Disabled=CanExecute Color="Color.Primary" DropShadow="false" OnClick="OnExecute">Execute</MudLoadingButton>
-                <MudLoadingButton Loading=_starting Disabled=CanStart Color="Color.Primary" DropShadow="false" OnClick="OnStart">Start</MudLoadingButton>
-                <MudLoadingButton Loading=_stoping Disabled=CanStop Color="Color.Primary" DropShadow="false" OnClick="OnStop">Stop</MudLoadingButton>
-                <MudLoadingButton Loading=_closeing Disabled=CanClose Color="Color.Primary" DropShadow="false" OnClick="OnClose">Complete</MudLoadingButton>
-@*                 <MudButton Disabled=CanRelease Color="Color.Primary" DropShadow="false" OnClick="OnRelease">Release</MudButton> *@
                 <MudButton Color="Color.Primary" DropShadow="false" OnClick="OnGoBack">@ConstantString.GoBack</MudButton>
             </MudCardActions>
         </MudCard>
@@ -106,17 +98,9 @@
     return null!;
 });
 
-        AssignCommands();
     }
 
-    void AssignCommands()
-    {
-        CanExecute = !(model.TicketStatus == TicketStatus.Accepted);
-        CanStart = !(model.TicketStatus == TicketStatus.Accepted);
-        CanStop = !(model.TicketStatus == TicketStatus.OnProcess);
-        CanClose = !(model.TicketStatus == TicketStatus.OnProcess);
-        // CanRelease = !(model.TicketStatus == TicketStatus.Assigned || model.TicketStatus == TicketStatus.OnProcess);
-    }
+
 
     private Task OnGoBack()
     {
@@ -258,73 +242,7 @@
         }
     }
 
-    private async Task OnStart()
-    {
 
-        try
-        {
-            _starting = true;
-            var command = new StartTicketCommand() { Id = Id };
-            var result = await Mediator.Send(command);
-            if (result.Succeeded)
-            {
-                Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
-                OnGoBack();
-            }
-            else
-            {
-                Snackbar.Add(result.ErrorMessage, MudBlazor.Severity.Error);
-            }
-        }
-        finally
-        {
-            _starting = false;
-        }
-    }
-    private async Task OnStop()
-    {
-        try
-        {
-            _stoping = true;
-            var command = new StopTicketCommand() { Id = Id };
-            var result = await Mediator.Send(command);
-            if (result.Succeeded)
-            {
-                Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
-                OnGoBack();
-            }
-            else
-            {
-                Snackbar.Add(result.ErrorMessage, MudBlazor.Severity.Error);
-            }
-        }
-        finally
-        {
-            _stoping = false;
-        }
-    }
-    private async Task OnClose()
-    {
-        try
-        {
-            _closeing = true;
-            var command = new CloseTicketCommand() { Id = Id };
-            var result = await Mediator.Send(command);
-            if (result.Succeeded)
-            {
-                Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
-                OnGoBack();
-            }
-            else
-            {
-                Snackbar.Add(result.ErrorMessage, MudBlazor.Severity.Error);
-            }
-        }
-        finally
-        {
-            _closeing = false;
-        }
-    }
 
 
 

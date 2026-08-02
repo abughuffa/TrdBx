@@ -165,7 +165,7 @@
     [Inject]
     private IBlazorDownloadFileService BlazorDownloadFileService { get; set; } = null!;
     // private bool _canSearch;
-    private bool _canCreate;
+
     private bool _canEdit;
     private bool _canDelete;
     private bool _canImport;
@@ -175,20 +175,13 @@
     {
         Title = L[_currentDto.GetClassDescription()];
         var state = await AuthState;
-        _canCreate = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.CusPrices.Create)).Succeeded;
-        // _canSearch = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.CusPrices.Search)).Succeeded;
         _canEdit = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.CusPrices.Edit)).Succeeded;
         _canDelete = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.CusPrices.Delete)).Succeeded;
         _canImport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.CusPrices.Import)).Succeeded;
         _canExport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.CusPrices.Export)).Succeeded;
     }
 
-    // protected override async Task OnInitializedAsync()
-    // {
 
-    //     Title = L[_currentDto.GetClassDescription()];
-    //     _accessRights = await PermissionService.GetAccessRightsAsync<CusPricesAccessRights>();
-    // }
     private async Task<GridData<CusPriceDto>> ServerReload(GridState<CusPriceDto> state)
     {
         try
@@ -261,33 +254,9 @@
 
     }
 
-    // private async Task OnDelete(CusPriceDto dto)
-    // {
-    //     var contentText = string.Format(ConstantString.DeleteConfirmation, dto.Id);
-    //     var command = new DeleteCusPriceCommand(new int[] { dto.Id });
-    //     await DialogServiceHelper.ShowDeleteConfirmationDialogAsync(command, ConstantString.DeleteConfirmationTitle, contentText, async () =>
-    //     {
-    //         await InvokeAsync(async () =>
-    //         {
-    //             await _table.ReloadServerData();
-    //             _selectedItems.Clear();
-    //         });
-    //     });
-    // }
 
-    // private async Task OnDeleteChecked()
-    // {
-    //     var contentText = string.Format(ConstantString.DeleteConfirmWithSelected, _selectedItems.Count);
-    //     var command = new DeleteCusPriceCommand(_selectedItems.Select(x => x.Id).ToArray());
-    //     await DialogServiceHelper.ShowDeleteConfirmationDialogAsync(command, ConstantString.DeleteConfirmationTitle, contentText, async () =>
-    //     {
-    //         await InvokeAsync(async () =>
-    //         {
-    //             await _table.ReloadServerData();
-    //             _selectedItems.Clear();
-    //         });
-    //     });
-    // }
+
+
 
 
         private async Task OnDelete(CusPriceDto dto)
@@ -344,91 +313,8 @@
             });
         _exporting = false;
     }
-    // private Task OnEdit(CusPriceDto dto)
-    // {
-    //     // var command = new UpdateCusPriceCommand() { Id = dto.Id};
-    //     var command = Mapper.ToUpdateCommand(dto);
-    //     return DialogServiceHelper.ShowFormDialogAsync<CusPriceEditFormDialog, UpdateCusPriceCommand>(
-    //        L["Update CusPrice"],
-    //        new DialogParameters<CusPriceEditFormDialog>
-    //        {
-    //                         { x=>x._model,command}
-    //        },
-    //        async () =>
-    //        {
-    //            await _table.ReloadServerData();
-    //            _selectedItems.Clear();
-    //        });
-
-    // }
+    
 
 
-
-    // private Task OnDelete(CusPriceDto dto)
-    // {
-    //     var contentText = string.Format(ConstantString.DeleteConfirmation, dto.Id);
-    //     var command = new DeleteCusPriceCommand(new int[] { dto.Id });
-    //     return DeleteInternal(command, contentText);
-    // }
-
-    // private Task OnDeleteChecked()
-    // {
-    //     var contentText = string.Format(ConstantString.DeleteConfirmWithSelected, _selectedItems.Count);
-    //     var command = new DeleteCusPriceCommand(_selectedItems.Select(x => x.Id).ToArray());
-    //     return DeleteInternal(command, contentText);
-
-    // }
-
-    // private Task DeleteInternal(DeleteCusPriceCommand command, string contentText)
-    // {
-    //     return DialogServiceHelper.ShowDeleteConfirmationDialogAsync(
-    //         command,
-    //         ConstantString.DeleteConfirmationTitle,
-    //     contentText,
-    //         async () =>
-    //         {
-    //             await _table.ReloadServerData();
-    //             _selectedItems.Clear();
-    //         });
-    // }
-
-    // private async Task OnExport()
-    // {
-    //     _exporting = true;
-    //     var request = new ExportCusPricesQuery()
-    //         {
-    //             Keyword = Query.Keyword,
-    //             ListView = Query.ListView,
-    //             OrderBy = _table.SortDefinitions.Values.FirstOrDefault()?.SortBy ?? "Id",
-    //             SortDirection = _table.SortDefinitions.Values.FirstOrDefault()?.Descending ?? false
-    //                                     ? SortDirection.Descending.ToString()
-    //                                     : SortDirection.Ascending.ToString()
-
-
-    //         };
-
-    //     var result = await Mediator.Send(request);
-    //     await result.MatchAsync(
-    //         async data =>
-    //         {
-    //             if (result.Data != null)
-    //             {
-    //                 await BlazorDownloadFileService.DownloadFileAsync($"{_currentDto.GetClassDescription()}.xlsx", result.Data, contentType: "application/octet-stream");
-    //                 Snackbar.Add($"{ConstantString.ExportSuccess}", MudBlazor.Severity.Info);
-    //             }
-    //             else
-    //             {
-    //                 Snackbar.Add($"{ConstantString.ExecuteFail}", MudBlazor.Severity.Error);
-    //             }
-    //         },
-    //         errors =>
-    //         {
-    //             Snackbar.Add($"{errors}", MudBlazor.Severity.Error);
-    //             return Task.CompletedTask;
-    //         });
-    //     _exporting = false;
-
-
-    // }
-
+    
 }

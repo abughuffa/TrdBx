@@ -6,14 +6,11 @@
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.Create
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.Delete
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.SetAsCanceled
-@using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.SetNextStatus
-@using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.SetPreviousStatus
 @using CleanArchitecture.Blazor.Application.Features.Invoices.DTOs
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Queries.Export
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Queries.Pagination
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Mappers
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Specifications
-@using CleanArchitecture.Blazor.Domain.Enums
 @using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Invoices.Components
 
 @inject IStringLocalizer<Invoices> L
@@ -310,19 +307,6 @@
     }
 
 
-    // private async Task OnDelete(InvoiceDto dto)
-    // {
-    //     var contentText = string.Format(ConstantString.DeleteConfirmation, dto.InvoiceNo);
-    //     var command = new DeleteInvoiceCommand(dto.Id);
-    //     await DialogServiceHelper.ShowDeleteConfirmationDialogAsync(command, ConstantString.DeleteConfirmationTitle, contentText, async () =>
-    //     {
-    //         await InvokeAsync(async () =>
-    //         {
-    //             await _table.ReloadServerData();
-    //             _selectedItems.Clear();
-    //         });
-    //     });
-    // }
 
 
 
@@ -387,20 +371,7 @@
     }
 
 
-    private Task OnSetAsCanceled(InvoiceDto dto)
-    {
-        var contentText = string.Format(ConstantString.ExecuteConfirmation, " Cancel Invoice", dto.InvoiceNo);
-        var command = new SetAsCanceledInvoiceCommand(dto.Id);
 
-        return DialogServiceHelper.ShowExecuteConfirmationDialogAsync(command, ConstantString.ExecuteConfirmationTitle, contentText, async () =>
-        {
-            await InvokeAsync(async () =>
-            {
-                await _table.ReloadServerData();
-                _selectedItems.Clear();
-            });
-        });
-    }
 
 
     private async Task OnDownLoad(InvoiceDto dto)

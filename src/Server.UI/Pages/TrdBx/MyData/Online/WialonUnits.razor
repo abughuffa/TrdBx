@@ -191,7 +191,7 @@
         _canImport = (await AuthService.AuthorizeAsync(state.User, Permissions.WialonUnits.Import)).Succeeded;
         _canExport = (await AuthService.AuthorizeAsync(state.User, Permissions.WialonUnits.Export)).Succeeded;
 
-        _canSyncData = (await AuthService.AuthorizeAsync(state.User, Permissions.WialonUnits.SyncData)).Succeeded;
+        _canSyncData = (await AuthService.AuthorizeAsync(state.User, Permissions.TrackingUnits.SyncUnitNames)).Succeeded;
 
     }
 

@@ -1,13 +1,13 @@
-﻿namespace CleanArchitecture.Blazor.Application.Features.TestCases.ActivateHostingTestCases.Commands.Import;
+﻿// namespace CleanArchitecture.Blazor.Application.Features.TestCases.ActivateHostingTestCases.Commands.Import;
 
-public class ImportActivateHostingTestCasesCommandValidator : AbstractValidator<ImportActivateHostingTestCasesCommand>
-{
-    public ImportActivateHostingTestCasesCommandValidator()
-    {
+// public class ImportActivateHostingTestCasesCommandValidator : AbstractValidator<ImportActivateHostingTestCasesCommand>
+// {
+//     public ImportActivateHostingTestCasesCommandValidator()
+//     {
 
-        RuleFor(v => v.Data)
-             .NotNull()
-             .NotEmpty();
-    }
-}
+//         RuleFor(v => v.Data)
+//              .NotNull()
+//              .NotEmpty();
+//     }
+// }
 

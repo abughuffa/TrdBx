@@ -20,8 +20,8 @@ public static partial class Permissions
         [Description("Allows deleting Customer records.")]
         public const string Delete = "Permissions.Customers.Delete";
 
-        [Description("Allows searching for Customer records.")]
-        public const string Search = "Permissions.Customers.Search";
+        // [Description("Allows searching for Customer records.")]
+        // public const string Search = "Permissions.Customers.Search";
 
         [Description("Allows exporting Customer records.")]
         public const string Export = "Permissions.Customers.Export";
@@ -36,7 +36,7 @@ public class CustomersAccessRights
     public bool Create { get; set; }
     public bool Edit { get; set; }
     public bool Delete { get; set; }
-    public bool Search { get; set; }
+    // public bool Search { get; set; }
     public bool Export { get; set; }
     public bool Import { get; set; }
 }

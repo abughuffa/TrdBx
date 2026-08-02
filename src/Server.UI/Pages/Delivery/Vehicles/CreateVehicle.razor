@@ -1,4 +1,4 @@
-﻿@page "/pages/Vehicles/create"
+﻿@* @page "/pages/Vehicles/create"
 @using CleanArchitecture.Blazor.Application.Features.Vehicles.Commands.Create
 @using CleanArchitecture.Blazor.Server.UI.Pages.Delivery.Drivers.Components
 @using CleanArchitecture.Blazor.Server.UI.Pages.Delivery.VehicleTypes
@@ -32,9 +32,7 @@
                 </MudItem> 
  
                     <DriversSelector @bind-UserId="model.DriverId"></DriversSelector>
-                @*     <MudItem xs="12" md="12">
-                        <MudTextField Label="@L[model.GetMemberDescription(x => x.DriverId)]" For="@(() => model.DriverId)" @bind-Value="model.DriverId"></MudTextField>
-                    </MudItem> *@
+
 
             </MudGrid>
         </MudForm>
@@ -91,4 +89,4 @@
             _saving = false;
         }
     }
-}
+} *@

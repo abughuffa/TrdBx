@@ -1,4 +1,4 @@
-﻿@using CleanArchitecture.Blazor.Application.Common.Interfaces.Identity
+﻿@* @using CleanArchitecture.Blazor.Application.Common.Interfaces.Identity
 @using CleanArchitecture.Blazor.Application.Features.Identity.DTOs
 @inject IUsersStateContainer UsersStateContainer
 @inject IStringLocalizer<Drivers> L
@@ -65,4 +65,4 @@ else
         if (OnSendVerify is not null && Item is not null)
             OnSendVerify.Invoke(Item);
     }
-}
+} *@

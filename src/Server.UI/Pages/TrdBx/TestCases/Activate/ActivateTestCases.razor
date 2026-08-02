@@ -1,4 +1,4 @@
-﻿@page "/pages/TrdBx/ActivateTestCases"
+﻿@* @page "/pages/TrdBx/ActivateTestCases"
 
 
 @using CleanArchitecture.Blazor.Application.Features.ActivateTestCases.Commands.Delete
@@ -93,7 +93,7 @@
                     EndIcon="@Icons.Material.Filled.KeyboardArrowDown" IconColor="Color.Info" AnchorOrigin="Origin.CenterLeft">
                         @if (_canExecute)
                         {
-                            @* <MudMenuItem OnClick="@(()=>OnExcute(context.Item))">@ConstantString.Edit</MudMenuItem> *@
+                           
                         }
                         @if (_canDelete)
                         {
@@ -285,4 +285,4 @@
     }
 
 
-}
+} *@

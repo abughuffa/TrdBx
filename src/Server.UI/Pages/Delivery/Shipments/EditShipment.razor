@@ -1,4 +1,4 @@
-﻿@page "/pages/Shipments/edit/{id:int}"
+﻿@* @page "/pages/Shipments/edit/{id:int}"
 @using CleanArchitecture.Blazor.Application.Features.Shipments.Commands.Update
 @using CleanArchitecture.Blazor.Application.Features.Shipments.Mappers
 @using CleanArchitecture.Blazor.Application.Features.Shipments.Queries.GetById
@@ -28,12 +28,7 @@
                             <MudTextField Label="@L[model.GetMemberDescription(x => x.ShipmentNo)]" @bind-Value="model.ShipmentNo" For="@(() => model.ShipmentNo)" Required="true" RequiredError="@L["ShipmentNo is required!"]"></MudTextField>
                         </MudItem>
 
-          @*               <MudItem xs="12" md="6">
-                            <MudTextField Label="@L[model.GetMemberDescription(x => x.StartLocation)]" @bind-Value="model.StartLocation" For="@(() => model.StartLocation)" Required="true" RequiredError="@L["StartLocation is required!"]"></MudTextField>
-                        </MudItem>
-                        <MudItem xs="12" md="6">
-                            <MudTextField Label="@L[model.GetMemberDescription(x => x.EndLocation)]" @bind-Value="model.EndLocation" For="@(() => model.EndLocation)" Required="true" RequiredError="@L["EndLocation is required!"]"></MudTextField>
-                        </MudItem> *@
+    
 
                         <MudItem xs="12" md="6">
                             <MudTextField Label="@L[model.GetMemberDescription(x => x.Price)]" @bind-Value="model.Price" For="@(() => model.Price)" Required="true" RequiredError="@L["Price is required!"]"></MudTextField>
@@ -90,8 +85,7 @@
 
         result.Map(data =>
         {
-            // The data should now have the proper RecVehicleType populated
-            //Console.WriteLine($"Vehicle types count: {data.RecVehicleType?.Length ?? 0}");
+
 
             model = data.ToUpdateCommand();
             return data;
@@ -106,25 +100,7 @@
         });
     }
 
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     Title = L["Edit Shipment"];
-    //     var result = await Mediator.Send(new GetShipmentByIdQuery() { Id = Id });
-    //     result.Map(data =>
-    //     {
-    //         model = ShipmentMapper.ToUpdateCommand(data);
-    //         return data;
-    //     }).Match(data =>
-    //     {
-    //         _breadcrumbItems.Add(new BreadcrumbItem(data.ShipmentNo, href: $"/pages/Shipments/edit/{Id}"));
-    //         return data;
-    //     }, errors =>
-    //     {
-    //         Snackbar.Add($"{errors}", Severity.Error);
-    //         return null!;
-    //     });
 
-    // }
     async Task Submit()
     {
         try
@@ -151,4 +127,4 @@
             _saving = false;
         }
     }
-}
+} *@

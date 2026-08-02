@@ -10,8 +10,6 @@ public static partial class Permissions
         [Description("Allows viewing Subscription details.")]
         public const string View = "Permissions.Subscriptions.View";
 
-        [Description("Allows creating new Subscription records.")]
-        public const string Create = "Permissions.Subscriptions.Create";
 
         [Description("Allows modifying existing Subscription details.")]
         public const string Edit = "Permissions.Subscriptions.Edit";
@@ -19,8 +17,6 @@ public static partial class Permissions
         [Description("Allows deleting Subscription records.")]
         public const string Delete = "Permissions.Subscriptions.Delete";
 
-        [Description("Allows searching for Subscription records.")]
-        public const string Search = "Permissions.Subscriptions.Search";
 
         [Description("Allows exporting Subscription records.")]
         public const string Export = "Permissions.Subscriptions.Export";

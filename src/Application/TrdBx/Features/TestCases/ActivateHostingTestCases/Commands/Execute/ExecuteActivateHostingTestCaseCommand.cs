@@ -1,81 +1,81 @@
-﻿using CleanArchitecture.Blazor.Application.Features.TestCases.ActivateHostingTestCases.Caching;
-using CleanArchitecture.Blazor.Application.Features.TestCases.ActivateHostingTestCases.Mappers;
+﻿// using CleanArchitecture.Blazor.Application.Features.TestCases.ActivateHostingTestCases.Caching;
+// using CleanArchitecture.Blazor.Application.Features.TestCases.ActivateHostingTestCases.Mappers;
 
 
 
-namespace CleanArchitecture.Blazor.Application.Features.TestCases.ActivateHostingTestCases.Commands.Execute;
+// namespace CleanArchitecture.Blazor.Application.Features.TestCases.ActivateHostingTestCases.Commands.Execute;
 
-public class ExecuteActivateHostingTestCaseCommand : ICacheInvalidatorRequest<Result<int>>
-{
-    public int[] Id { get; }
+// public class ExecuteActivateHostingTestCaseCommand : ICacheInvalidatorRequest<Result<int>>
+// {
+//     public int[] Id { get; }
 
-    internal IMediator Mediator;
-     public IEnumerable<string> Tags => ActivateHostingTestCaseCacheKey.Tags;
-    public ExecuteActivateHostingTestCaseCommand(int[] id, IMediator mediator)
-    {
-        Id = id;
-        Mediator = mediator;
-    }
-
-
+//     internal IMediator Mediator;
+//      public IEnumerable<string> Tags => ActivateHostingTestCaseCacheKey.Tags;
+//     public ExecuteActivateHostingTestCaseCommand(int[] id, IMediator mediator)
+//     {
+//         Id = id;
+//         Mediator = mediator;
+//     }
 
 
-}
 
-public class ExecuteActivateHostingTestCaseCommandHandler :
-             IRequestHandler<ExecuteActivateHostingTestCaseCommand, Result<int>>
 
-{
-    //private readonly IApplicationDbContextFactory _dbContextFactory;
-    //private readonly IMapper _mapper;
-    //public ExecuteActivateHostingTestCaseCommandHandler(
-    //    IApplicationDbContextFactory dbContextFactory,
-    //    IMapper mapper
-    //)
-    //{
-    //    _dbContextFactory = dbContextFactory;
-    //    _mapper = mapper;
-    //}
+// }
 
-    private readonly IApplicationDbContext _context;
-    public ExecuteActivateHostingTestCaseCommandHandler(
-        IApplicationDbContext context
-    )
-    {
-        _context = context;
-    }
-    public async Task<Result<int>> Handle(ExecuteActivateHostingTestCaseCommand request, CancellationToken cancellationToken)
-    {
-        //await using var _context = await _dbContextFactory.CreateAsync(cancellationToken);
+// public class ExecuteActivateHostingTestCaseCommandHandler :
+//              IRequestHandler<ExecuteActivateHostingTestCaseCommand, Result<int>>
 
-        var items = await _context.ActivateHostingTestCases.Where(x => request.Id.Contains(x.Id))
-            .ToListAsync(cancellationToken);
-        if (items.Any(i => i.IsSucssed == true))
-        {
-            return await Result<int>.FailureAsync("Some of selected Test cases already executed!");
-        }
+// {
+//     //private readonly IApplicationDbContextFactory _dbContextFactory;
+//     //private readonly IMapper _mapper;
+//     //public ExecuteActivateHostingTestCaseCommandHandler(
+//     //    IApplicationDbContextFactory dbContextFactory,
+//     //    IMapper mapper
+//     //)
+//     //{
+//     //    _dbContextFactory = dbContextFactory;
+//     //    _mapper = mapper;
+//     //}
 
-        foreach (var item in items)
-        {
+//     private readonly IApplicationDbContext _context;
+//     public ExecuteActivateHostingTestCaseCommandHandler(
+//         IApplicationDbContext context
+//     )
+//     {
+//         _context = context;
+//     }
+//     public async Task<Result<int>> Handle(ExecuteActivateHostingTestCaseCommand request, CancellationToken cancellationToken)
+//     {
+//         //await using var _context = await _dbContextFactory.CreateAsync(cancellationToken);
 
-            //var cmd = _mapper.Map<ActivateTrackingUnitForHostingCommand>(item);
+//         var items = await _context.ActivateHostingTestCases.Where(x => request.Id.Contains(x.Id))
+//             .ToListAsync(cancellationToken);
+//         if (items.Any(i => i.IsSucssed == true))
+//         {
+//             return await Result<int>.FailureAsync("Some of selected Test cases already executed!");
+//         }
 
-            var cmd = Mapper.ToExecuteCommand(item);
+//         foreach (var item in items)
+//         {
 
-            var r = await request.Mediator.Send(cmd);
+//             //var cmd = _mapper.Map<ActivateTrackingUnitForHostingCommand>(item);
 
-            item.IsSucssed = r.Succeeded;
+//             var cmd = Mapper.ToExecuteCommand(item);
 
-            item.Message = r.ErrorMessage;
+//             var r = await request.Mediator.Send(cmd);
 
-            item.AddDomainEvent(new ActivateHostingTestCaseUpdatedEvent(item));
+//             item.IsSucssed = r.Succeeded;
 
-        }
+//             item.Message = r.ErrorMessage;
 
-        var result = await _context.SaveChangesAsync(cancellationToken);
-        return await Result<int>.SuccessAsync(result);
+//             item.AddDomainEvent(new ActivateHostingTestCaseUpdatedEvent(item));
 
-    }
+//         }
 
-}
+//         var result = await _context.SaveChangesAsync(cancellationToken);
+//         return await Result<int>.SuccessAsync(result);
+
+//     }
+
+// }
 
