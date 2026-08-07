@@ -38,34 +38,43 @@
         </MudIconButton>
     </MudItem>
 
-    <MudItem md="1">
-        <MudIconButton Variant="Variant.Outlined"
-                       OnClick="@(()=>OnEdit(SelectedSPackage))"
-                       Disabled="isDisabled"
-                       Icon="@Icons.Material.Filled.Edit"
-                       Size="Size.Small"
-                       Color="Color.Primary">
-        </MudIconButton>
-    </MudItem>
+    @if (_canEdit)
+    {
+        <MudItem md="1">
+            <MudIconButton Variant="Variant.Outlined"
+                           OnClick="@(()=>OnEdit(SelectedSPackage))"
+                           Disabled="isDisabled"
+                           Icon="@Icons.Material.Filled.Edit"
+                           Size="Size.Small"
+                           Color="Color.Primary">
+            </MudIconButton>
+        </MudItem>
+    }
 
-    <MudItem md="1">
-        <MudIconButton Variant="Variant.Outlined"
-                       OnClick="@(()=>OnCreate())"
-                       Icon="@Icons.Material.Filled.Add"
-                       Size="Size.Small"
-                       Color="Color.Primary">
-        </MudIconButton>
-    </MudItem>
+    @if (_canCreate)
+    {
+        <MudItem md="1">
+            <MudIconButton Variant="Variant.Outlined"
+                           OnClick="@(()=>OnCreate())"
+                           Icon="@Icons.Material.Filled.Add"
+                           Size="Size.Small"
+                           Color="Color.Primary">
+            </MudIconButton>
+        </MudItem>
+    }
 
-    <MudItem md="1">
-        <MudIconButton Variant="Variant.Outlined"
-                       OnClick="@(()=>OnDelete(SelectedSPackage))"
-                       Disabled="isDisabled"
-                       Icon="@Icons.Material.Filled.Delete"
-                       Size="Size.Small"
-                       Color="Color.Primary">
-        </MudIconButton>
-    </MudItem>
+    @if (_canDelete)
+    {
+        <MudItem md="1">
+            <MudIconButton Variant="Variant.Outlined"
+                           OnClick="@(()=>OnDelete(SelectedSPackage))"
+                           Disabled="isDisabled"
+                           Icon="@Icons.Material.Filled.Delete"
+                           Size="Size.Small"
+                           Color="Color.Primary">
+            </MudIconButton>
+        </MudItem>
+    }
 
 
 
@@ -92,8 +101,12 @@
     }
 
 
+    [CascadingParameter] private Task<AuthenticationState> AuthState { get; set; } = default!;
     private IEnumerable<SPackageDto> spackages = default!;
     private GetAllSPackagesQuery GetAllSPackagesQuery { get; set; } = new();
+    private bool _canCreate;
+    private bool _canEdit;
+    private bool _canDelete;
 
     public SPackageDto SelectedSPackage { get; set; } = null!;
     private void OnSPackageChanged(int id)
@@ -106,6 +119,11 @@
 
     protected override async Task OnInitializedAsync()
     {
+        var state = await AuthState;
+        _canCreate = (await AuthService.AuthorizeAsync(state.User, Permissions.SPackages.Create)).Succeeded;
+        _canEdit = (await AuthService.AuthorizeAsync(state.User, Permissions.SPackages.Edit)).Succeeded;
+        _canDelete = (await AuthService.AuthorizeAsync(state.User, Permissions.SPackages.Delete)).Succeeded;
+
         spackages = await LoadSPackages();
     }
 

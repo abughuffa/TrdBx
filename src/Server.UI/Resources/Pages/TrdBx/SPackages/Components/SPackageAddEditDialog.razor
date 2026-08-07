@@ -5,8 +5,6 @@
 @inherits MudComponentBase
 @inject IValidationService Validator
 @inject IStringLocalizer<SPackages> L
-@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.SPackages.Create)]
-@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.SPackages.Edit)]
 
 @* <PageTitle>@Title</PageTitle> *@
 
@@ -35,9 +33,22 @@
     private bool _saveing = false;
     [CascadingParameter]
     IMudDialogInstance MudDialog { get; set; } = default!;
+    [CascadingParameter] private Task<AuthenticationState> AuthState { get; set; } = default!;
     AddEditSPackageCommandValidator _modelValidator = new();
     [EditorRequired][Parameter] public AddEditSPackageCommand model { get; set; } = null!;
 
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        var state = await AuthState;
+        var permission = model.Id > 0 ? Permissions.SPackages.Edit : Permissions.SPackages.Create;
+        if (!(await AuthService.AuthorizeAsync(state.User, permission)).Succeeded)
+        {
+            Snackbar.Add("You are not authorized to perform this action.", Severity.Error);
+            MudDialog.Cancel();
+        }
+    }
 
     async Task OnSave()
     {
