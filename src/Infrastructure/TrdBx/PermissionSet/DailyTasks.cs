@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-using System.ComponentModel;
-=======
 ﻿using System.ComponentModel;
->>>>>>> agents/vscode-light-theme-setup
 namespace CleanArchitecture.Blazor.Infrastructure.PermissionSet;
 
 public static partial class Permissions
@@ -11,6 +7,8 @@ public static partial class Permissions
     [Description("Set permissions for DailyTask operations.")]
     public static class DailyTasks
     {
+        [Description("Allows Check TrackingUnit.")]
+        public const string CheckUnit = "Permissions.DailyTasks.CheckUnit";
 
         [Description("Allows Install TrackingUnit.")]
         public const string InstallUnit = "Permissions.DailyTasks.InstallUnit";

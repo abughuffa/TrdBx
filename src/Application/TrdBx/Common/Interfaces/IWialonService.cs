@@ -90,7 +90,7 @@ public interface IWialonService
     /// Attempts to retrieve a new token by submitting credentials to the remote CMS login endpoint.
     /// Returns the access_token string when successful, or null when it could not be retrieved.
     /// </summary>
-    Task<string?> RetrieveTokenAsync(string username, string password, CancellationToken cancellationToken = default);
+   // Task<string?> RetrieveTokenAsync(string username, string password, CancellationToken cancellationToken = default);
     
     // ========== RESOURCE MANAGEMENT ==========
     

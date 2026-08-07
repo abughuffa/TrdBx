@@ -9,8 +9,6 @@ public static partial class Permissions
     {
         [Description("Allows viewing Subscription details.")]
         public const string View = "Permissions.Subscriptions.View";
-<<<<<<< HEAD
-=======
 
 
         [Description("Allows modifying existing Subscription details.")]
@@ -25,7 +23,6 @@ public static partial class Permissions
 
         [Description("Allows importing Subscription records.")]
         public const string Import = "Permissions.Subscriptions.Import";
->>>>>>> agents/vscode-light-theme-setup
     }
 }
 public class SubscriptionsAccessRights
