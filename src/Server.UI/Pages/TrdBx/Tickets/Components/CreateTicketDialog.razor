@@ -49,8 +49,11 @@
         try
         {
             _saveing = true;
-            await _form!.Validate().ConfigureAwait(false);
-            if (!_form!.IsValid) return;
+
+            await _form.Validate().ConfigureAwait(false);
+
+            if (!_form.IsValid) return;
+
             var result = await Mediator.Send(_model);
 
             result.Match(
@@ -65,21 +68,13 @@
        Snackbar.Add(errors, MudBlazor.Severity.Error);
        return -1;
    });
-            // if (result.Succeeded)
-            // {
-            //     MudDialog.Close(DialogResult.Ok(true));
-            //     Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
 
-            // }
-            // else
-            // {
-            //     Snackbar.Add(result.ErrorMessage, MudBlazor.Severity.Error);
-            // }
         }
         finally
         {
             _saveing = false;
         }
+
     }
 
     void Cancel() => MudDialog.Cancel();

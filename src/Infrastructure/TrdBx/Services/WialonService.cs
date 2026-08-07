@@ -2,6 +2,9 @@
 using System.Text;
 using System.Text.Json;
 using CleanArchitecture.Blazor.Domain;
+using System.Net;
+using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace CleanArchitecture.Blazor.Infrastructure.Services;
 
@@ -66,6 +69,7 @@ public class WialonService : IWialonService, IDisposable
     }
 
     // ========== SESSION MANAGEMENT ==========
+
     
     /// <summary>
     /// Logs into Wialon using the configured token
@@ -290,6 +294,87 @@ public class WialonService : IWialonService, IDisposable
         {
             _logger.LogError(ex, "Error during logout");
             return false;
+        }
+    }
+
+    /// <summary>
+    /// Attempts to retrieve a new API token by submitting credentials to the CMS login endpoint.
+    /// The CMS login endpoint issues an access_token as a query parameter on redirect when login succeeds.
+    /// This method performs a POST with form data (password) and inspects the Location header for access_token.
+    /// </summary>
+    public async Task<string?> RetrieveTokenAsync(string username, string password, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            return null;
+
+        try
+        {
+            var loginPath = $"/login.html?client_id=TrdBx&access_type=-1&activation_time=0&duration=2592000&flags=1&user={Uri.EscapeDataString(username)}";
+
+            using var handler = new HttpClientHandler { AllowAutoRedirect = false };
+            using var client = new HttpClient(handler)
+            {
+                BaseAddress = new Uri(_config.BaseUrl),
+                Timeout = TimeSpan.FromSeconds(30)
+            };
+
+            var form = new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("password", password)
+            });
+
+            var response = await client.PostAsync(loginPath, form, cancellationToken);
+
+            if (response.Headers.Location != null)
+            {
+                var location = response.Headers.Location;
+                var query = location.Query;
+                var parsed = QueryHelpers.ParseQuery(query);
+
+                if (parsed.TryGetValue("access_token", out var tokenValues))
+                {
+                    var token = tokenValues.FirstOrDefault();
+                    if (!string.IsNullOrWhiteSpace(token))
+                        return token;
+                }
+
+                var abs = location.IsAbsoluteUri
+                    ? location.AbsoluteUri
+                    : new Uri(client.BaseAddress!, location.ToString()).AbsoluteUri;
+
+                var fragIndex = abs.IndexOf('#');
+                if (fragIndex >= 0)
+                {
+                    var frag = abs[(fragIndex + 1)..];
+                    var fragParsed = QueryHelpers.ParseQuery("?" + frag);
+                    if (fragParsed.TryGetValue("access_token", out var fragToken))
+                        return fragToken.FirstOrDefault();
+                }
+            }
+
+            var body = await response.Content.ReadAsStringAsync(cancellationToken);
+            if (!string.IsNullOrEmpty(body))
+            {
+                var m = Regex.Match(body, "access_token=([^&\"']+)", RegexOptions.IgnoreCase);
+                if (m.Success)
+                {
+                    return Uri.UnescapeDataString(m.Groups[1].Value);
+                }
+
+                m = Regex.Match(body, "\"access_token\"\\s*:\\s*\"(?<tok>[^\"]+)\"",
+                    RegexOptions.IgnoreCase);
+                if (m.Success)
+                {
+                    return m.Groups["tok"].Value;
+                }
+            }
+
+            return null;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error retrieving token from CMS login endpoint");
+            return null;
         }
     }
 

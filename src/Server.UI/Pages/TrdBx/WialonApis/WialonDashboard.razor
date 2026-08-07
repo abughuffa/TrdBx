@@ -1,598 +1,566 @@
 ﻿@page "/wialon/session-manager"
-@using CleanArchitecture.Blazor.Domain
-@using CleanArchitecture.Blazor.Application.Features.WialonApis.Commands
-@* @inject ISnackbar Snackbar
-@inject IMediator Mediator  *@
-@inject IWialonService WialonService 
 
-@* @inject IDialogService DialogService *@
+@using CleanArchitecture.Blazor.Application.Common.Interfaces
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Online.WialonUnits.Caching
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Online.WialonUnits.Commands.Delete
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Online.WialonUnits.Commands.Import
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Online.WialonUnits.Commands.Syncs
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Online.WialonUnits.DTOs
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Online.WialonUnits.Queries.Export
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Online.WialonUnits.Queries.Pagination
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Online.WialonUnits.Specifications
+
+@using CleanArchitecture.Blazor.Application.Features.WialonApis.Commands.Login
+@using CleanArchitecture.Blazor.Application.Features.WialonApis.Commands.Logout
+@using CleanArchitecture.Blazor.Application.Features.WialonApis.Commands.CheckSession
+@using CleanArchitecture.Blazor.Application.Features.WialonApis.Commands.RetrieveToken
+@using MediatR
+
+@inject ISnackbar Snackbar
 @implements IDisposable
 
-<PageTitle>Wialon Session Manager</PageTitle>
+<PageTitle>Wialon Session Management</PageTitle>
 
-<MudContainer MaxWidth="MaxWidth.Large">
-    <MudText Typo="Typo.h3" GutterBottom="true">
-        <MudIcon Icon="@Icons.Material.Filled.SatelliteAlt" Size="Size.Large" Class="mr-2" />
-        Wialon Session Manager
-    </MudText>
+<MudContainer MaxWidth="MaxWidth.Large" Class="mt-4"> <MudText Typo="Typo.h3" GutterBottom="true"> <MudIcon Icon="@Icons.Material.Filled.SatelliteAlt" Class="mr-2" /> Wialon Session Management </MudText>
 
-    <!-- Health Status Cards -->
-    <MudGrid>
-        <MudItem xs="12" sm="6" md="3">
-            <MudPaper Elevation="3" Class="pa-4">
-                <MudText Typo="Typo.h6" Align="Align.Center" GutterBottom="true">Session Status</MudText>
-                <MudText Typo="Typo.h4" Align="Align.Center" Class="my-4">
-                    <MudIcon Icon="@(healthStatus?.IsSessionActive == true ? Icons.Material.Filled.CheckCircle : Icons.Material.Filled.Cancel)" 
-                             Color="@(healthStatus?.IsSessionActive == true ? Color.Success : Color.Error)" 
-                             Size="Size.Large" />
-                </MudText>
-                <MudText Typo="Typo.body2" Align="Align.Center">
-                    @(healthStatus?.IsSessionActive == true ? "Active" : "Inactive")
-                </MudText>
-            </MudPaper>
-        </MudItem>
-
-        <MudItem xs="12" sm="6" md="3">
-            <MudPaper Elevation="3" Class="pa-4">
-                <MudText Typo="Typo.h6" Align="Align.Center" GutterBottom="true">Health Status</MudText>
-                <MudText Typo="Typo.h4" Align="Align.Center" Class="my-4">
-                    <MudIcon Icon="@(healthStatus?.IsHealthy == true ? Icons.Material.Filled.Favorite : Icons.Material.Filled.HeartBroken)" 
-                             Color="@(healthStatus?.IsHealthy == true ? Color.Success : Color.Error)" 
-                             Size="Size.Large" />
-                </MudText>
-                <MudText Typo="Typo.body2" Align="Align.Center">
-                    @(healthStatus?.IsHealthy == true ? "Healthy" : "Unhealthy")
-                </MudText>
-            </MudPaper>
-        </MudItem>
-
-        <MudItem xs="12" sm="6" md="3">
-            <MudPaper Elevation="3" Class="pa-4">
-                <MudText Typo="Typo.h6" Align="Align.Center" GutterBottom="true">Total API Calls</MudText>
-                <MudText Typo="Typo.h4" Align="Align.Center" Class="my-4">
-                    @(healthStatus?.TotalApiCalls ?? 0)
-                </MudText>
-                <MudText Typo="Typo.body2" Align="Align.Center" Color="Color.Error">
-                    @(healthStatus?.FailedApiCalls ?? 0) failed
-                </MudText>
-            </MudPaper>
-        </MudItem>
-
-        <MudItem xs="12" sm="6" md="3">
-            <MudPaper Elevation="3" Class="pa-4">
-                <MudText Typo="Typo.h6" Align="Align.Center" GutterBottom="true">Success Rate</MudText>
-                <MudProgressCircular Color="Color.Primary" 
-                                   Value="@(healthStatus?.SuccessRate ?? 0)" 
-                                   Size="Size.Large" 
-                                   Class="my-4 mx-auto" />
-                <MudText Typo="Typo.body2" Align="Align.Center" Color="Color.Primary">
-                    @($"{healthStatus?.SuccessRate ?? 0:F1}%")
-                </MudText>
-            </MudPaper>
-        </MudItem>
-    </MudGrid>
-
-    <!-- Session Configuration -->
-    <MudPaper Elevation="3" Class="mt-4 pa-4">
-        <MudText Typo="Typo.h5" GutterBottom="true">
-            <MudIcon Icon="@Icons.Material.Filled.Settings" Class="mr-2" />
-            Session Configuration
-        </MudText>
-        <MudGrid>
-            <MudItem xs="12" md="6">
-                <MudTextField @bind-Value="config.BaseUrl" 
-                             Label="Base URL" 
-                             Variant="Variant.Outlined"
-                             Disabled="true"
-                             ReadOnly="true"
-                             Immediate="true" />
-            </MudItem>
-            <MudItem xs="12" md="6">
-                <MudTextField @bind-Value="config.Token" 
-                             Label="Current Token" 
-                             Variant="Variant.Outlined"
-                             Disabled="true"
-                             ReadOnly="true"
-                             Immediate="true" />
-            </MudItem>
-            <MudItem xs="12" md="4">
-                <MudTextField @bind-Value="config.KeepAliveIntervalMinutes" 
-                             Label="Keep Alive Interval (min)" 
-                             Variant="Variant.Outlined"
-                             Disabled="true"
-                             ReadOnly="true"
-                             Immediate="true" />
-            </MudItem>
-            <MudItem xs="12" md="4">
-                <MudTextField @bind-Value="config.SessionTimeoutMinutes" 
-                             Label="Session Timeout (min)" 
-                             Variant="Variant.Outlined"
-                             Disabled="true"
-                             ReadOnly="true"
-                             Immediate="true" />
-            </MudItem>
-            <MudItem xs="12" md="4">
-                <MudTextField @bind-Value="config.MaxRetryAttempts" 
-                             Label="Max Retry Attempts" 
-                             Variant="Variant.Outlined"
-                             Disabled="true"
-                             ReadOnly="true"
-                             Immediate="true" />
-            </MudItem>
-            <MudItem xs="12" md="4">
-                <MudTextField @bind-Value="config.HealthCheckIntervalSeconds" 
-                             Label="Health Check Interval (sec)" 
-                             Variant="Variant.Outlined"
-                             Disabled="true"
-                             ReadOnly="true"
-                             Immediate="true" />
-            </MudItem>
-            <MudItem xs="12" md="4">
-                <MudTextField @bind-Value="config.TokenExpiryBufferMinutes" 
-                             Label="Token Expiry Buffer (min)" 
-                             Variant="Variant.Outlined"
-                             Disabled="true"
-                             ReadOnly="true"
-                             Immediate="true" />
-            </MudItem>
-            <MudItem xs="12" md="4">
-                <MudSwitch T="bool" @bind-Checked="config.AutoReconnect" 
-                          Label="Auto Reconnect" 
-                          Disabled="true" 
-                          Color="Color.Primary" />
-            </MudItem>
-        </MudGrid>
-    </MudPaper>
-
-    <!-- Token Management -->
-    <MudPaper Elevation="3" Class="mt-4 pa-4">
-        <MudText Typo="Typo.h5" GutterBottom="true">
-            <MudIcon Icon="@Icons.Material.Filled.VpnKey" Class="mr-2" />
-            Token Management
-        </MudText>
-        <MudGrid>
-            <MudItem xs="12" md="8">
-                <MudTextField @bind-Value="newToken" 
-                             Label="New API Token" 
-                             Variant="Variant.Outlined"
-                             Adornment="Adornment.End"
-                             AdornmentIcon="@Icons.Material.Filled.Visibility"
-                             OnAdornmentClick="ToggleTokenVisibility"
-                             InputType="@(tokenVisible ? InputType.Text : InputType.Password)"
-                             Immediate="true" />
-            </MudItem>
-            <MudItem xs="12" md="4">
-                <MudButton Variant="Variant.Filled" 
-                          Color="Color.Primary" 
-                          StartIcon="@Icons.Material.Filled.Save" 
-                          OnClick="UpdateToken"
-                          Disabled="isUpdatingToken || string.IsNullOrWhiteSpace(newToken)"
-                          FullWidth="true">
-                    Update Token
-                </MudButton>
-            </MudItem>
-        </MudGrid>
-    </MudPaper>
-
-    <!-- Session Actions -->
-    <MudPaper Elevation="3" Class="mt-4 pa-4">
-        <MudText Typo="Typo.h5" GutterBottom="true">
-            <MudIcon Icon="@Icons.Material.Filled.PlayCircle" Class="mr-2" />
-            Session Actions
-        </MudText>
-        <MudStack Row="true" Spacing="3" Justify="Justify.SpaceBetween">
-            <MudButton Variant="Variant.Filled" 
-                      Color="Color.Success" 
-                      StartIcon="@Icons.Material.Filled.Login" 
-                      OnClick="LoginSession"
-                      Disabled="healthStatus?.IsSessionActive == true || isLoggingIn">
-                @(isLoggingIn ? "Logging in..." : "Login")
-            </MudButton>
-            <MudButton Variant="Variant.Filled" 
-                      Color="Color.Error" 
-                      StartIcon="@Icons.Material.Filled.Logout" 
-                      OnClick="LogoutSession"
-                      Disabled="healthStatus?.IsSessionActive != true || isLoggingOut">
-                @(isLoggingOut ? "Logging out..." : "Logout")
-            </MudButton>
-            <MudButton Variant="Variant.Outlined" 
-                      Color="Color.Warning" 
-                      StartIcon="@Icons.Material.Filled.VerifiedUser" 
-                      OnClick="ValidateToken"
-                      Disabled="isValidatingToken">
-                @(isValidatingToken ? "Validating..." : "Validate Token")
-            </MudButton>
-            <MudButton Variant="Variant.Outlined" 
-                      Color="Color.Info" 
-                      StartIcon="@Icons.Material.Filled.Healing" 
-                      OnClick="EnsureSession"
-                      Disabled="isEnsuringSession">
-                @(isEnsuringSession ? "Ensuring..." : "Ensure Session")
-            </MudButton>
-            <MudButton Variant="Variant.Outlined" 
-                      Color="Color.Secondary" 
-                      StartIcon="@Icons.Material.Filled.Refresh" 
-                      OnClick="RefreshHealthStatus"
-                      Disabled="isRefreshing">
-                @(isRefreshing ? "Refreshing..." : "Refresh Status")
-            </MudButton>
-        </MudStack>
-    </MudPaper>
-
-    <!-- Session Information -->
-    @if (healthStatus != null)
-    {
-        <MudPaper Elevation="3" Class="mt-4 pa-4">
-            <MudText Typo="Typo.h5" GutterBottom="true">
+<!-- Session Status Card -->
+<MudCard Elevation="3" Class="mb-4">
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h5">
                 <MudIcon Icon="@Icons.Material.Filled.Info" Class="mr-2" />
-                Session Information
+                Session Status
             </MudText>
-            <MudGrid>
-                <MudItem xs="12" md="6">
-                    <MudText Typo="Typo.body1">
-                        <strong>Session ID:</strong> 
-                        <MudChip T="string" Color="Color.Primary" Size="Size.Small" Class="ml-2">
-                            @(healthStatus.SessionId ?? "N/A")
-                        </MudChip>
-                        
-                    </MudText>
-                </MudItem>
-                <MudItem xs="12" md="6">
-                    <MudText Typo="Typo.body1">
-                        <strong>Last Activity:</strong> @healthStatus.LastActivity.ToString("yyyy-MM-dd HH:mm:ss UTC")
-                    </MudText>
-                </MudItem>
-                <MudItem xs="12" md="6">
-                    <MudText Typo="Typo.body1">
-                        <strong>Last Health Check:</strong> @healthStatus.LastHealthCheck.ToString("yyyy-MM-dd HH:mm:ss UTC")
-                    </MudText>
-                </MudItem>
-                <MudItem xs="12" md="6">
-                    <MudText Typo="Typo.body1" Color="@(string.IsNullOrEmpty(healthStatus.LastErrorMessage) ? Color.Default : Color.Error)">
-                        <strong>Last Error:</strong> @(healthStatus.LastErrorMessage ?? "None")
-                    </MudText>
-                </MudItem>
-            </MudGrid>
-        </MudPaper>
-    }
+        </CardHeaderContent>
+        <CardHeaderActions>
+            <MudChip T="string" Color="sessionStatusColor" 
+                     Size="Size.Small" 
+                     Variant="Variant.Filled"
+                     Icon="@sessionStatusIcon">
+                @sessionStatusText
+            </MudChip>
+        </CardHeaderActions>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudGrid>
+            <MudItem xs="12" sm="6" md="3">
+                <MudText Typo="Typo.body2" Color="Color.Secondary">Session ID</MudText>
+                <MudText Typo="Typo.body1" Class="font-monospace">@sessionId</MudText>
+            </MudItem>
+            <MudItem xs="12" sm="6" md="3">
+                <MudText Typo="Typo.body2" Color="Color.Secondary">Status</MudText>
+                <MudText Typo="Typo.body1">
+                    <MudBadge Color="sessionStatusColor" 
+                              Dot="true" 
+                              Origin="Origin.CenterLeft">
+                        <span class="ml-4">@sessionStatusText</span>
+                    </MudBadge>
+                </MudText>
+            </MudItem>
+            <MudItem xs="12" sm="6" md="3">
+                <MudText Typo="Typo.body2" Color="Color.Secondary">Last Activity</MudText>
+                <MudText Typo="Typo.body1">
+                    <MudIcon Icon="@Icons.Material.Filled.AccessTime" 
+                             Size="Size.Small" 
+                             Class="mr-1" />
+                    @lastActivity
+                </MudText>
+            </MudItem>
+            <MudItem xs="12" sm="6" md="3">
+                <MudText Typo="Typo.body2" Color="Color.Secondary">Auto-Reconnect</MudText>
+                <MudSwitch T="bool" @bind-Checked="autoReconnect" 
+                           Disabled="true" 
+                           Color="Color.Success" />
+            </MudItem>
+        </MudGrid>
+    </MudCardContent>
+</MudCard>
 
-    <!-- Recent API Calls -->
-    @if (healthStatus?.RecentApiCalls != null && healthStatus.RecentApiCalls.Any())
-    {
-        <MudPaper Elevation="3" Class="mt-4 pa-4">
-            <MudText Typo="Typo.h5" GutterBottom="true">
+<!-- Session Controls -->
+<MudCard Elevation="3" Class="mb-4">
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h5">
+                <MudIcon Icon="@Icons.Material.Filled.Settings" Class="mr-2" />
+                Session Controls
+            </MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudStack Row="true" Spacing="2" Justify="Justify.FlexStart">
+            <MudLoadingButton Variant="Variant.Filled" 
+                       Color="Color.Primary"
+                       StartIcon="@Icons.Material.Filled.Login"
+                       OnClick="LoginAsync"
+                       Disabled="@isLoading"
+                       Loading="@isLoggingIn">
+                Login
+            </MudLoadingButton>
+            
+            <MudLoadingButton Variant="Variant.Filled" 
+                       Color="Color.Error"
+                       StartIcon="@Icons.Material.Filled.Logout"
+                       OnClick="LogoutAsync"
+                       Loading="@isLoading"
+                       Disabled="@(isLoading || !isSessionActive)">
+                Logout
+            </MudLoadingButton>
+            
+            <MudLoadingButton Variant="Variant.Outlined" 
+                       Color="Color.Info"
+                       StartIcon="@Icons.Material.Filled.CheckCircle"
+                       OnClick="CheckSessionAsync"
+                       Disabled="@isLoading"
+                       Loading="@isLoading">
+                Check Session
+            </MudLoadingButton>
+
+            <MudLoadingButton Variant="Variant.Filled" 
+                       Color="Color.Tertiary"
+                       StartIcon="@Icons.Material.Filled.Refresh"
+                       OnClick="ReconnectAsync"
+                       Disabled="@isLoading"
+                       Loading="@isLoading">
+                Reconnect
+            </MudLoadingButton>
+
+            <MudLoadingButton Variant="Variant.Outlined" 
+                       Color="Color.Primary"
+                       StartIcon="@Icons.Material.Filled.VpnKey"
+                       OnClick="() => showRetrieveDialog = true"
+                       Disabled="@isLoading"
+                       Loading="@isLoading">
+                Retrieve Token
+            </MudLoadingButton>
+        </MudStack>
+    </MudCardContent>
+</MudCard>
+
+<!-- API Operations -->
+<MudCard Elevation="3" Class="mb-4">
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h5">
+                <MudIcon Icon="@Icons.Material.Filled.Api" Class="mr-2" />
+                API Operations
+            </MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
+    <MudCardContent>
+
+    </MudCardContent>
+</MudCard>
+
+<!-- Event Log -->
+<MudCard Elevation="3" Class="mb-4">
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h5">
                 <MudIcon Icon="@Icons.Material.Filled.History" Class="mr-2" />
-                Recent API Calls (Last @healthStatus.RecentApiCalls.Count)
+                Event Log
             </MudText>
-            <MudTable Items="healthStatus.RecentApiCalls.OrderByDescending(x => x.Timestamp)" 
-                     Hover="true" 
-                     Striped="true" 
-                     Dense="true"
-                     Elevation="0">
-                <HeaderContent>
-                    <MudTh>Timestamp</MudTh>
-                    <MudTh>Service</MudTh>
-                    <MudTh>Status</MudTh>
-                    <MudTh>Duration (ms)</MudTh>
-                    <MudTh>Error Code</MudTh>
-                </HeaderContent>
-                <RowTemplate>
-                    <MudTd DataLabel="Timestamp">@context.Timestamp.ToString("HH:mm:ss")</MudTd>
-                    <MudTd DataLabel="Service">@context.ServiceName</MudTd>
-                    <MudTd DataLabel="Status">
-                        <MudChip T="string" Color="@(context.IsSuccess ? Color.Success : Color.Error)" 
-                                Size="Size.Small"
-                                Variant="Variant.Outlined">
-                            @(context.IsSuccess ? "Success" : "Failed")
-                        </MudChip>
-                    </MudTd>
-                    <MudTd DataLabel="Duration">@context.DurationMs</MudTd>
-                    <MudTd DataLabel="Error Code">@(context.ErrorCode?.ToString() ?? "-")</MudTd>
-                </RowTemplate>
-                <PagerContent>
-                    <MudTablePager PageSizeOptions="new int[] { 10, 25, 50 }" />
-                </PagerContent>
-            </MudTable>
+        </CardHeaderContent>
+        <CardHeaderActions>
+            <MudIconButton Icon="@Icons.Material.Filled.DeleteSweep" 
+                           OnClick="ClearLog"
+                           Disabled="@(!eventLog.Any())" />
+        </CardHeaderActions>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudPaper Height="300px" Class="overflow-y-auto pa-3" Elevation="0">
+            @if (eventLog.Any())
+            {
+         @*        <MudList>
+                    @foreach (var logEntry in eventLog.TakeLast(50))
+                    {
+                        <MudListItem Icon="@GetLogIcon(logEntry.Type)"
+                                     Text="@logEntry.Message"
+                                     SecondaryText="@logEntry.Timestamp.ToString(\"HH:mm:ss\")"
+                                     Disabled="true">
+                            <ChildContent>
+                                <MudChip Size="Size.Small" 
+                                         Color="@GetLogChipColor(logEntry.Type)"
+                                         Variant="Variant.Text"
+                                         Class="ml-2">
+                                    @logEntry.Type
+                                </MudChip>
+                            </ChildContent>
+                        </MudListItem>
+                    }
+                </MudList> *@
+            }
+            else
+            {
+                <MudText Typo="Typo.body2" 
+                         Color="Color.Default" 
+                         Align="Align.Center" 
+                         Class="mt-8">
+                    <MudIcon Icon="@Icons.Material.Filled.Inbox" Size="Size.Large" Class="mb-2" />
+                    <br />
+                    No events logged yet
+                </MudText>
+            }
         </MudPaper>
-    }
+    </MudCardContent>
+</MudCard>
 
-    <!-- Loading Overlay -->
-    <MudOverlay Visible="isRefreshing" DarkBackground="true" LightBackground="false">
-        <MudPaper Class="pa-8" Style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-            <MudStack AlignItems="AlignItems.Center" Spacing="3">
-                <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
-                <MudText Typo="Typo.h6">Refreshing health status...</MudText>
-            </MudStack>
-        </MudPaper>
-    </MudOverlay>
+<!-- Connection Details Dialog -->
+<MudDialog @bind-Visible="showDetailsDialog">
+    <DialogContent>
+        <MudDialogTitle>
+            <MudText Typo="Typo.h6">Connection Details</MudText>
+        </MudDialogTitle>
+        <MudText>
+            <strong>Base URL:</strong> @config.BaseUrl<br />
+            <strong>Keep-Alive Interval:</strong> @config.KeepAliveIntervalMinutes minutes<br />
+            <strong>Session Timeout:</strong> @config.SessionTimeoutMinutes minutes<br />
+            <strong>Auto-Reconnect:</strong> @(config.AutoReconnect ? "Enabled" : "Disabled")<br />
+            <strong>Max Retries:</strong> @config.MaxRetryAttempts attempts
+        </MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="() => showDetailsDialog = false">Close</MudButton>
+    </DialogActions>
+</MudDialog>
+
+<!-- Retrieve Token Dialog -->
+<MudDialog @bind-Visible="showRetrieveDialog">
+    <DialogContent>
+        <MudDialogTitle>
+            <MudText Typo="Typo.h6">Retrieve Wialon Token</MudText>
+        </MudDialogTitle>
+
+        <MudTextField @bind-Value="retrieveUsername" Label="Username" Variant="Variant.Outlined" />
+        <MudTextField @bind-Value="retrievePassword" Label="Password" InputType="InputType.Password" Variant="Variant.Outlined" />
+
+        <MudText Typo="Typo.caption" Color="Color.Secondary" Class="mt-2">
+            The password will be submitted to the CMS login endpoint to retrieve an access token. Only provide credentials you trust.
+        </MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="() => showRetrieveDialog = false">Cancel</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="RetrieveTokenAsync" Disabled="@isRetrievingToken" Loading="@isRetrievingToken">Retrieve</MudButton>
+    </DialogActions>
+</MudDialog>
+
 </MudContainer>
 
 @code {
-    @* [Inject] ISnackbar Snackbar; *@
-    @* [Inject] IDialogService DialogService; *@
-    @* [Inject] IMediator Mediator; *@
-    @* [Inject] IWialonService WialonService; *@
+// Session state
+private string sessionStatusText = "Disconnected";
+private string sessionId = "N/A";
+private string lastActivity = "N/A";
+private bool isSessionActive;
+private bool autoReconnect = true;
 
-    private WialonHealthStatus? healthStatus;
-    private WialonSessionConfig config = new();
-    private string newToken = string.Empty;
-    private bool isRefreshing;
-    private bool isUpdatingToken;
-    private bool isValidatingToken;
-    private bool isEnsuringSession;
-    private bool isLoggingIn;
-    private bool isLoggingOut;
-    private bool tokenVisible;
-    private PeriodicTimer? autoRefreshTimer;
-    private CancellationTokenSource? autoRefreshCts;
+// Loading states
+private bool isLoading;
+private bool isLoggingIn;
 
-    protected override async Task OnInitializedAsync()
+// Dialogs
+private bool showDetailsDialog;
+
+// Retrieve token dialog
+private bool showRetrieveDialog;
+private string retrieveUsername = "WialonTest";
+private string retrievePassword = string.Empty;
+private bool isRetrievingToken;
+
+// Event log
+private List<LogEntry> eventLog = new();
+
+// Config (injected)
+[Inject] private IConfiguration Configuration { get; set; }
+[Inject] private IWialonService SessionService { get; set; } = default!;
+private WialonSessionConfig config = new();
+
+// Computed properties for UI
+private Color sessionStatusColor => isSessionActive ? Color.Success : Color.Error;
+private string sessionStatusIcon => isSessionActive ? 
+    Icons.Material.Filled.CheckCircle : 
+    Icons.Material.Filled.Error;
+
+protected override async Task OnInitializedAsync()
+{
+    // Load config
+    Configuration.GetSection("Wialon").Bind(config);
+    
+    // Subscribe to session events
+    SessionService.SessionStatusChanged += HandleSessionStatusChanged;
+    SessionService.SessionExpired += HandleSessionExpired;
+    SessionService.TokenExpiring += HandleTokenExpiring;
+    
+    await CheckSessionAsync();
+}
+
+private async Task LoginAsync()
+{
+    isLoggingIn = true;
+    isLoading = true;
+    
+    try
     {
-        await RefreshHealthStatus();
-        StartAutoRefresh();
-    }
-
-    private void StartAutoRefresh()
-    {
-        autoRefreshCts = new CancellationTokenSource();
-        autoRefreshTimer = new PeriodicTimer(TimeSpan.FromSeconds(30));
+        AddLogEntry("info", "Attempting to login to Wialon...");
         
-        // Fire and forget the auto-refresh loop
-        _ = Task.Run(async () =>
-        {
-            try
-            {
-                while (await autoRefreshTimer.WaitForNextTickAsync(autoRefreshCts.Token))
-                {
-                    if (!isRefreshing)
-                    {
-                        await InvokeAsync(async () =>
-                        {
-                            await RefreshHealthStatus();
-                            StateHasChanged();
-                        });
-                    }
-                }
-            }
-            catch (OperationCanceledException)
-            {
-                // Timer was cancelled, normal shutdown
-            }
-            catch (Exception ex)
-            {
-                await InvokeAsync(() =>
-                {
-                    Snackbar.Add($"Auto-refresh error: {ex.Message}", Severity.Error);
-                    StateHasChanged();
-                });
-            }
-        });
-    }
+        var loginResult = await Mediator.Send(new LoginAsyncCommand());
 
-    private async Task RefreshHealthStatus()
+        if (loginResult != null && loginResult.Success)
+        {
+            Snackbar.Add($"Login successful! Session: {loginResult.SessionId?[..8]}...", Severity.Success);
+            AddLogEntry("success", $"Login successful. User: {loginResult.User?.Name ?? "Unknown"}");
+            UpdateSessionInfo(loginResult.SessionId);
+            isSessionActive = true;
+        }
+        else
+        {
+            var err = loginResult?.ErrorMessage ?? "Login failed";
+            Snackbar.Add($"Login failed: {err}", Severity.Error);
+            AddLogEntry("error", $"Login failed: {err}");
+        }
+    }
+    catch (Exception ex)
     {
-        try
-        {
-            isRefreshing = true;
-            StateHasChanged();
-
-            healthStatus = await WialonService.GetHealthStatusAsync();
-            
-            //healthStatus = await Mediator.Send(new GetWialonHealthStatusQuery());
-
-
-            // Load configuration from appsettings
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .Build();
-            
-            config = configuration.GetSection("Wialon").Get<WialonSessionConfig>() ?? new WialonSessionConfig();
-            
-            // Mask token for display
-            if (!string.IsNullOrEmpty(config.Token) && config.Token.Length > 8)
-            {
-                config.Token = config.Token.Substring(0, 4) + "****" + config.Token.Substring(config.Token.Length - 4);
-            }
-        }
-        catch (Exception ex)
-        {
-            Snackbar.Add($"Error refreshing health status: {ex.Message}", Severity.Error);
-        }
-        finally
-        {
-            isRefreshing = false;
-            StateHasChanged();
-        }
+        Snackbar.Add($"Login error: {ex.Message}", Severity.Error);
+        AddLogEntry("error", $"Login error: {ex.Message}");
     }
-
-    private async Task UpdateToken()
+    finally
     {
-        if (string.IsNullOrWhiteSpace(newToken))
-        {
-            Snackbar.Add("Please enter a valid token", Severity.Warning);
-            return;
-        }
-
-        var dialog = await DialogService.ShowMessageBox(
-            "Confirm Token Update",
-            "Are you sure you want to update the API token? This will terminate the current session.",
-            yesText: "Update", 
-            cancelText: "Cancel");
-
-        if (dialog != true) return;
-
-        try
-        {
-            isUpdatingToken = true;
-            StateHasChanged();
-
-            var result = await Mediator.Send(new UpdateTokenCommand { NewToken = newToken });
-
-            if (result.Succeeded)
-            {
-                Snackbar.Add("Token updated successfully! Session re-established.", Severity.Success);
-                newToken = string.Empty;
-                await RefreshHealthStatus();
-            }
-            else
-            {
-                Snackbar.Add($"Failed to update token: {result.ErrorMessage}", Severity.Error);
-            }
-        }
-        catch (Exception ex)
-        {
-            Snackbar.Add($"Error updating token: {ex.Message}", Severity.Error);
-        }
-        finally
-        {
-            isUpdatingToken = false;
-            StateHasChanged();
-        }
+        isLoggingIn = false;
+        isLoading = false;
     }
+}
 
-    private async Task LoginSession()
+private async Task LogoutAsync()
+{
+    isLoading = true;
+    
+    try
     {
-        try
+        AddLogEntry("info", "Logging out from Wialon...");
+        
+        var success = await Mediator.Send(new LogoutAsyncCommand());
+        
+        if (success)
         {
-            isLoggingIn = true;
-            StateHasChanged();
-
-            var result = await WialonService.LoginAsync();
-
-            //var result = await Mediator.Send(new LoginCommand());
-            
-            if (result.Success)
-            {
-                Snackbar.Add($"Login successful! Session: {result.SessionId}", Severity.Success);
-                await RefreshHealthStatus();
-            }
-            else
-            {
-                Snackbar.Add($"Login failed: {result.ErrorMessage}", Severity.Error);
-            }
+            Snackbar.Add("Logged out successfully", Severity.Info);
+            AddLogEntry("success", "Logged out successfully");
+            ClearSessionInfo();
         }
-        catch (Exception ex)
+        else
         {
-            Snackbar.Add($"Error during login: {ex.Message}", Severity.Error);
-        }
-        finally
-        {
-            isLoggingIn = false;
-            StateHasChanged();
+            Snackbar.Add("Logout failed", Severity.Error);
+            AddLogEntry("error", "Logout failed");
         }
     }
-
-    private async Task LogoutSession()
+    catch (Exception ex)
     {
-        var dialog = await DialogService.ShowMessageBox(
-            "Confirm Logout",
-            "Are you sure you want to logout from Wialon?",
-            yesText: "Logout", 
-            cancelText: "Cancel");
-
-        if (dialog != true) return;
-
-        try
-        {
-            isLoggingOut = true;
-            StateHasChanged();
-
-            var result = await WialonService.LogoutAsync();
-
-            //var result = await Mediator.Send(new LogoutCommand());
-            
-            if (result)
-            {
-                Snackbar.Add("Logged out successfully!", Severity.Success);
-                await RefreshHealthStatus();
-            }
-            else
-            {
-                Snackbar.Add("Logout failed", Severity.Error);
-            }
-        }
-        catch (Exception ex)
-        {
-            Snackbar.Add($"Error during logout: {ex.Message}", Severity.Error);
-        }
-        finally
-        {
-            isLoggingOut = false;
-            StateHasChanged();
-        }
+        Snackbar.Add($"Logout error: {ex.Message}", Severity.Error);
+        AddLogEntry("error", $"Logout error: {ex.Message}");
     }
-
-    private async Task ValidateToken()
+    finally
     {
-        try
-        {
-            isValidatingToken = true;
-            StateHasChanged();
-
-            var isValid = await WialonService.ValidateCurrentTokenAsync();
-
-            //var isValid = await Mediator.Send(new ValidateCurrentTokenCommand());
-            
-            if (isValid)
-            {
-                Snackbar.Add("Token is valid and working!", Severity.Success);
-            }
-            else
-            {
-                Snackbar.Add("Token is invalid or expired! Please update your token.", Severity.Error);
-            }
-        }
-        catch (Exception ex)
-        {
-            Snackbar.Add($"Error validating token: {ex.Message}", Severity.Error);
-        }
-        finally
-        {
-            isValidatingToken = false;
-            StateHasChanged();
-        }
+        isLoading = false;
     }
+}
 
-    private async Task EnsureSession()
+private async Task CheckSessionAsync()
+{
+    isLoading = true;
+    
+    try
     {
-        try
+        var isValid = await SessionService.IsSessionValidAsync();
+        isSessionActive = isValid;
+        sessionStatusText = isValid ? "Active" : "Inactive";
+        
+        if (isValid)
         {
-            isEnsuringSession = true;
-            StateHasChanged();
-
-            var result = await WialonService.EnsureSessionAsync();
-            
-            if (result)
-            {
-                Snackbar.Add("Session is active and valid!", Severity.Success);
-                await RefreshHealthStatus();
-            }
-            else
-            {
-                Snackbar.Add("Failed to establish or validate session", Severity.Error);
-            }
+            var sid = await SessionService.GetSessionIdAsync();
+            UpdateSessionInfo(sid);
+            AddLogEntry("info", "Session is valid");
         }
-        catch (Exception ex)
+        else
         {
-            Snackbar.Add($"Error ensuring session: {ex.Message}", Severity.Error);
-        }
-        finally
-        {
-            isEnsuringSession = false;
-            StateHasChanged();
+            AddLogEntry("warning", "Session is inactive or expired");
         }
     }
-
-    private void ToggleTokenVisibility()
+    catch (Exception ex)
     {
-        tokenVisible = !tokenVisible;
+        AddLogEntry("error", $"Session check failed: {ex.Message}");
     }
-
-    public void Dispose()
+    finally
     {
-        autoRefreshCts?.Cancel();
-        autoRefreshCts?.Dispose();
-        autoRefreshTimer?.Dispose();
+        isLoading = false;
     }
+}
+
+private async Task ReconnectAsync()
+{
+    isLoading = true;
+    
+    try
+    {
+        AddLogEntry("info", "Attempting to reconnect...");
+        
+        var success = await SessionService.EnsureSessionAsync();
+        
+        if (success)
+        {
+            Snackbar.Add("Reconnected successfully", Severity.Success);
+            AddLogEntry("success", "Reconnection successful");
+            await CheckSessionAsync();
+        }
+        else
+        {
+            Snackbar.Add("Reconnection failed", Severity.Error);
+            AddLogEntry("error", "Reconnection failed");
+        }
+    }
+    catch (Exception ex)
+    {
+        Snackbar.Add($"Reconnection error: {ex.Message}", Severity.Error);
+        AddLogEntry("error", $"Reconnection error: {ex.Message}");
+    }
+    finally
+    {
+        isLoading = false;
+    }
+}
+
+private async Task RetrieveTokenAsync()
+{
+    showRetrieveDialog = false;
+    isRetrievingToken = true;
+    isLoading = true;
+
+    try
+    {
+        AddLogEntry("info", "Retrieving token from CMS login endpoint...");
+        var result = await Mediator.Send(new RetrieveTokenCommand { Username = retrieveUsername, Password = retrievePassword });
+
+        if (result != null && result.Succeeded)
+        {
+            Snackbar.Add("Token retrieved and updated successfully", Severity.Success);
+            AddLogEntry("success", "Token retrieved and updated successfully");
+            await CheckSessionAsync();
+        }
+        else
+        {
+            var err = result?.ErrorMessage ?? "Token retrieval failed";
+            Snackbar.Add($"Token retrieval failed: {err}", Severity.Error);
+            AddLogEntry("error", $"Token retrieval failed: {err}");
+        }
+    }
+    catch (Exception ex)
+    {
+        Snackbar.Add($"Token retrieval error: {ex.Message}", Severity.Error);
+        AddLogEntry("error", $"Token retrieval error: {ex.Message}");
+    }
+    finally
+    {
+        isRetrievingToken = false;
+        isLoading = false;
+        // Clear password for safety
+        retrievePassword = string.Empty;
+    }
+}
+
+private void HandleSessionStatusChanged(object? sender, WialonSessionEventArgs e)
+{
+    InvokeAsync(() =>
+    {
+        isSessionActive = e.IsActive;
+        sessionStatusText = e.IsActive ? "Active" : "Inactive";
+        UpdateSessionInfo(e.SessionId);
+        
+        AddLogEntry(e.IsActive ? "success" : "warning", 
+            $"Session status changed: {e.Message}");
+    });
+}
+
+private void HandleSessionExpired(object? sender, WialonSessionEventArgs e)
+{
+    InvokeAsync(() =>
+    {
+        Snackbar.Add($"Session expired: {e.Message}", Severity.Warning, 
+            config => { config.Action = "Reconnect"; });
+        
+        AddLogEntry("warning", $"Session expired: {e.Message}");
+        ClearSessionInfo();
+    });
+}
+
+private void HandleTokenExpiring(object? sender, WialonSessionEventArgs e)
+{
+    InvokeAsync(() =>
+    {
+        Snackbar.Add($"Token expiring: {e.Message}", Severity.Warning);
+        AddLogEntry("warning", $"Token expiring: {e.Message}");
+    });
+}
+
+private void UpdateSessionInfo(string? sid)
+{
+    sessionId = sid ?? "N/A";
+    lastActivity = DateTime.Now.ToString("HH:mm:ss");
+    StateHasChanged();
+}
+
+private void ClearSessionInfo()
+{
+    isSessionActive = false;
+    sessionStatusText = "Disconnected";
+    sessionId = "N/A";
+    lastActivity = "N/A";
+    StateHasChanged();
+}
+
+private void AddLogEntry(string type, string message)
+{
+    eventLog.Add(new LogEntry
+    {
+        Type = type,
+        Message = message,
+        Timestamp = DateTime.Now
+    });
+    StateHasChanged();
+}
+
+private void ClearLog()
+{
+    eventLog.Clear();
+    StateHasChanged();
+}
+
+private string GetLogIcon(string type) => type switch
+{
+    "success" => Icons.Material.Filled.CheckCircle,
+    "error" => Icons.Material.Filled.Error,
+    "warning" => Icons.Material.Filled.Warning,
+    "info" => Icons.Material.Filled.Info,
+    _ => Icons.Material.Filled.Circle
+};
+
+private Color GetLogChipColor(string type) => type switch
+{
+    "success" => Color.Success,
+    "error" => Color.Error,
+    "warning" => Color.Warning,
+    "info" => Color.Info,
+    _ => Color.Default
+};
+
+public void Dispose()
+{
+    SessionService.SessionStatusChanged -= HandleSessionStatusChanged;
+    SessionService.SessionExpired -= HandleSessionExpired;
+    SessionService.TokenExpiring -= HandleTokenExpiring;
+}
+
+private class LogEntry
+{
+    public string Type { get; set; } = "info";
+    public string Message { get; set; } = string.Empty;
+    public DateTime Timestamp { get; set; } = DateTime.Now;
+}
 }
