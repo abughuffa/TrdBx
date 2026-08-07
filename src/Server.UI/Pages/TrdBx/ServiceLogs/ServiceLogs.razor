@@ -1,12 +1,8 @@
 ﻿@page "/pages/TrdBx/TrackingUnits/{trackingunitid:int?}/ServiceLogs"
-
 @using CleanArchitecture.Blazor.Application.Features.ServiceLogs.Caching
 @using CleanArchitecture.Blazor.Application.Features.ServiceLogs.DTOs
 @using CleanArchitecture.Blazor.Application.Features.ServiceLogs.Queries.Pagination
-@using CleanArchitecture.Blazor.Application.Features.ServiceLogs.Mappers
 @using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.ServiceLogs.Components
-
-
 @inject IStringLocalizer<ServiceLogs> L
 @inject NavigationManager Navigation
 @attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.ServiceLogs.View)]
@@ -45,29 +41,13 @@
                                            StartIcon="@Icons.Material.Outlined.Refresh">
                                     @ConstantString.Refresh
                                 </MudButton>
-
-
-
-
-
                             </MudToolBar>
-
-
                         </MudStack>
-
                     </MudStack>
-
-
                 </ToolBarContent>
-
-            
-
                 <Columns>
-
-
                     <TemplateColumn Title=@ConstantString.Actions HeaderStyle="width:80px" Sortable="false">
                         <CellTemplate>
-
                             <MudStack Spacing="2" Row="true" Justify="Justify.FlexStart">
                                 <MudMenu Icon="@Icons.Material.Filled.AvTimer"
                                          Variant="Variant.Filled"
@@ -76,27 +56,17 @@
                                          EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
                                          IconColor="Color.Info"
                                          AnchorOrigin="Origin.CenterLeft">
-
                                     <MudMenuItem OnClick="@(()=>OnViewWialonTasks(context.Item))">View Wialon tasks</MudMenuItem>
-
                                     <MudMenuItem OnClick="@(()=>OnViewSubscriptions(context.Item))">View Subscription periods</MudMenuItem>
-
                                 </MudMenu>
                             </MudStack>
 
                         </CellTemplate>
                     </TemplateColumn>
-
-
-
-
-
                     <PropertyColumn Property="x => x.ServiceNo" Title="@L[_currentDto.GetMemberDescription(x=>x.ServiceNo)]" />
                     <PropertyColumn Property="x => x.CreatedByUser.DisplayName" Title="@L[_currentDto.GetMemberDescription(x => x.CreatedByUser)]" />
                     <PropertyColumn Property="x => x.Customer" Title="@L[_currentDto.GetMemberDescription(x => x.Customer)]" />
-                   @*  <PropertyColumn Property="x => x.InstallerId" Title="@L[_currentDto.GetMemberDescription(x => x.InstallerId)]" /> *@
-                    @* <PropertyColumn Property="x => x.Installer" Title="@L[_currentDto.GetMemberDescription(x => x.Installer)]" /> *@
-                       <PropertyColumn Property="x => x.Description" Title="@L[_currentDto.GetMemberDescription(x=>x.Description)]" />
+                    <PropertyColumn Property="x => x.Description" Title="@L[_currentDto.GetMemberDescription(x=>x.Description)]" />
                     <PropertyColumn Property="x => x.SerDate" Title="@L[_currentDto.GetMemberDescription(x=>x.SerDate)]" />
                     <PropertyColumn Property="x => x.IsDeserved" Title="@L[_currentDto.GetMemberDescription(x=>x.IsDeserved)]" />
                     <PropertyColumn Property="x => x.IsBilled" Title="@L[_currentDto.GetMemberDescription(x=>x.IsBilled)]" />
@@ -113,19 +83,14 @@
                 </PagerContent>
 </MudDataGrid>
 
-
-
 @code {
-    [CascadingParameter]
-    private Task<AuthenticationState> AuthState { get; set; } = default!;
-    [CascadingParameter]
-    private UserProfile? UserProfile { get; set; }
+    [CascadingParameter] private Task<AuthenticationState> AuthState { get; set; } = default!;
+    [CascadingParameter] private UserProfile? UserProfile { get; set; }
     [Parameter] public int TrackingUnitId { get; set; } = 0;
     public string? Title { get; private set; }
     private HashSet<ServiceLogDto> _selectedItems = new();
     private MudDataGrid<ServiceLogDto> _table = default!;
     private ServiceLogDto _currentDto = new();
-    // private ServiceLogsAccessRights _accessRights = new();
     private int _defaultPageSize = 10;
     private bool _loading;
     private bool filterDisabled;
@@ -138,40 +103,19 @@
 
     [Inject]
     private IBlazorDownloadFileService BlazorDownloadFileService { get; set; } = null!;
-    // private bool _canSearch;
-    // private bool _canCreate;
-    // private bool _canEdit;
-    // private bool _canDelete;
-    // private bool _canImport;
+
     private bool _canExport;
 
     protected override async Task OnInitializedAsync()
     {
         Title = L[_currentDto.GetClassDescription()];
         var state = await AuthState;
-        // _canCreate = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.ServiceLogs.Create)).Succeeded;
-        // _canSearch = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.ServiceLogs.Search)).Succeeded;
-        // _canEdit = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.ServiceLogs.Edit)).Succeeded;
-        // _canDelete = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.ServiceLogs.Delete)).Succeeded;
-        // _canImport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.ServiceLogs.Import)).Succeeded;
         _canExport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.ServiceLogs.Export)).Succeeded;
     }
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     Title = L[_currentDto.GetClassDescription()];
-    //     _accessRights = await PermissionService.GetAccessRightsAsync<ServiceLogsAccessRights>();
-
-    //     filterDisabled = TrackingUnitId == 0 ? false : true;
-    // }
-
-
     private void FilterCriteriaChanged(string s)
     {
         InvokeAsync(_table.ReloadServerData);
     }
-
-
-
     private async Task<GridData<ServiceLogDto>> ServerReload(GridState<ServiceLogDto> state)
     {
 

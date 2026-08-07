@@ -1,5 +1,5 @@
 ﻿using CleanArchitecture.Blazor.Application.Features.Tickets.Caching;
-using CleanArchitecture.Blazor.Application.Features.Tickets.DTOs;
+using CleanArchitecture.Blazor.Domain.Enums;
 
 
 

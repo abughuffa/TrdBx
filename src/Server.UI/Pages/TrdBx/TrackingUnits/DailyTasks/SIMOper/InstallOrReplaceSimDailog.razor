@@ -1,15 +1,15 @@
-﻿@using CleanArchitecture.Blazor.Domain.Enums
+﻿@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Mappers
 @using CleanArchitecture.Blazor.Application.Features.SimCards.DTOs
-@using CleanArchitecture.Blazor.Application.Features.Customers.DTOs
-@using CleanArchitecture.Blazor.Application.Features.TrackedAssets.DTOs
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.InstallOrReplaceSim
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Queries.GetById
-@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Install
+@using CleanArchitecture.Blazor.Application.Features.SimCards.Queries.GetAvaliableSimCards
+
 
 @inherits MudComponentBase
 @inject IValidationService Validator
 @inject IStringLocalizer<TrackingUnits> L
 @inject IDropdownDataService DropdownDataService
-@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.TrackingUnits.Install)]
+@attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.SimCards.Create)]
 
 <MudDialog>
     <DialogContent>
@@ -51,61 +51,9 @@
                         </MudSelect>
                     </MudItem>
 
-                    <MudItem md="6">
-                        <MudSelect 
-                            For="@(() => _model.TrackedAssetId)"
-                            Label="@L["TrackedAsset"]"
-                            Required="true"
-                            RequiredError="@L["TrackedAsset Is Required!"]"
-                            @bind-Value="_model.TrackedAssetId"
-                            Disabled="@_isDataLoading">
-                            <MudSelectItem T="int" Value="0">@L["Select TrackedAsset"]</MudSelectItem>
-                            @foreach (var asset in TrackedAssets)
-                            {
-                                <MudSelectItem Value="@asset.Id">@asset.TrackedAssetNo</MudSelectItem>
-                            }
-                        </MudSelect>
-                    </MudItem>
 
-                    <MudItem md="6">
-                        <MudEnumSelect 
-                            Style="min-width:120px" 
-                            TEnum="InsMode" 
-                            ValueChanged="OnChangedInsMode" 
-                            Value="_model.InsMode" 
-                            Dense="true" 
-                            Label="@L["InsMode"]"
-                            Disabled="@_isDataLoading">
-                        </MudEnumSelect>
-                    </MudItem>
 
-                    <MudItem md="6">
-                        <MudEnumSelect 
-                            Style="min-width:120px" 
-                            TEnum="SubPackage" 
-                            ValueChanged="OnChangedSubPackage" 
-                            Value="_model.SubPackage" 
-                            Dense="true" 
-                            Label="@L["Subscription"]"
-                            Disabled="@_isDataLoading">
-                        </MudEnumSelect>
-                    </MudItem>
 
-                    <MudItem md="12">
-                        <MudSelect 
-                            For="@(() => _model.CustomerId)"
-                            Label="@L["Customer"]"
-                            Required="true"
-                            RequiredError="@L["Customer Is Required!"]"
-                            @bind-Value="_model.CustomerId"
-                            Disabled="@_isDataLoading">
-                            <MudSelectItem T="int" Value="0">@L["Select Customer"]</MudSelectItem>
-                            @foreach (var customer in Customers)
-                            {
-                                <MudSelectItem Value="@customer.Id">@customer.ParentChild</MudSelectItem>
-                            }
-                        </MudSelect>
-                    </MudItem>
 
                     <MudItem md="6">
                         <MudCheckBox 
@@ -147,7 +95,7 @@
 @code {
     [CascadingParameter] private UserProfile? UserProfile { get; set; }
     [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;  
-    [EditorRequired][Parameter] public InstallTrackingUnitCommand _model { get; set; } = default!;
+    [EditorRequired][Parameter] public InstallOrReplaceSimCommand _model { get; set; } = default!;
     [Parameter] public string? _contentText { get; set; } = default!;
     
     private MudForm? _form;
@@ -157,11 +105,8 @@
     private string? _errorMessage;
 
     private int[]? SimCardIds;
-    private int? CustomerId;
 
     private IEnumerable<SimCardDto> SimCards = Enumerable.Empty<SimCardDto>();
-    private IEnumerable<TrackedAssetDto> TrackedAssets = Enumerable.Empty<TrackedAssetDto>();
-    private IEnumerable<CustomerDto> Customers = Enumerable.Empty<CustomerDto>();
 
     private DateTime? _date
     {
@@ -189,30 +134,10 @@
 
             // catch SimCardIds and CustomerIds
             SimCardIds = new[] { _model.SimCardId } ;
-            CustomerId = _model.CustomerId;
-
-            // Get existing data if this is an edit
-            //var result = await Mediator.Send(new GetTrackingUnitByIdQuery() { Id = _model.Id });
 
 
-            //if (result.Succeeded && result.Data != null)
-            //{
-                // Load dropdown data using the service - leverages caching automatically
-                //var loadTasks = new List<Task>
-               // {
                    await LoadSimCardsAsync(_model.SimCardId > 0 ? SimCardIds : null);
-                   await LoadTrackedAssetsAsync();
-                   await LoadCustomersAsync(_model.CustomerId > 0 ? CustomerId : null);
-               // };
 
-               // await Task.WhenAll(loadTasks);
-            //}
-            //else
-            //{
-                // If no existing data, load all dropdowns
-                //_errorMessage = $"Tracking unit not found.";
-                //Snackbar.Add(_errorMessage, Severity.Error);
-            //}
         }
         catch (Exception ex)
         {
@@ -244,80 +169,6 @@
         }
     }
 
-    private async Task LoadTrackedAssetsAsync()
-    {
-        try
-        {
-            _isDataLoading = true;
-            TrackedAssets = await DropdownDataService.GetAvailableTrackedAssetsAsync(null);
-        }
-        catch (Exception ex)
-        {
-            Snackbar.Add($"Failed to load tracked assets: {ex.Message}", Severity.Warning);
-        }
-        finally
-        {
-            _isDataLoading = false;
-        }
-    }
-
-    private async Task LoadCustomersAsync(int? parentId = null)
-    {
-        try
-        {
-            _isDataLoading = true;
-            Customers = await DropdownDataService.GetAvailableCustomersAsync(parentId);
-        }
-        catch (Exception ex)
-        {
-            Snackbar.Add($"Failed to load customers: {ex.Message}", Severity.Warning);
-        }
-        finally
-        {
-            _isDataLoading = false;
-        }
-    }
-
-    private void OnChangedInsMode(InsMode insMode)
-    {
-        _model.InsMode = insMode;
-        StateHasChanged();
-    }
-
-    private void OnChangedSubPackage(SubPackage gpsSubscriptionStatus)
-    {
-        _model.SubPackage = gpsSubscriptionStatus;
-        StateHasChanged();
-    }
-
-   // private async Task ValidateModelAsync()
-   // {
-       // var validationErrors = new List<string>();
-
-      //  if (_model.SimCardId <= 0)
-     //       validationErrors.Add("Please select a valid SIM card");
-
-     //   if (_model.TrackedAssetId <= 0)
-     //       validationErrors.Add("Please select a valid tracked asset");
-
-      //  if (_model.CustomerId <= 0)
-      //      validationErrors.Add("Please select a valid customer");
-
-      //  if (_model.TsDate == default)
-       //     validationErrors.Add("Please select a valid date");
-
-        // Check if InsMode has a valid value (assuming InsMode has a default/unknown value)
-     //   if (_model.InsMode == default)
-     //       validationErrors.Add("Please select a valid installation mode");
-
-     //   if (validationErrors.Any())
-      ////  {
-    //        foreach (var error in validationErrors)
-      //          Snackbar.Add(error, Severity.Warning);
-            
-       //     throw new ValidationException(string.Join("; ", validationErrors));
-     //   }
-   // }
 
     async Task Submit()
     {
@@ -347,8 +198,6 @@
             {
                 // Clear relevant cache after successful operation
                 await DropdownDataService.ClearSimCardsCacheAsync();
-                await DropdownDataService.ClearTrackedAssetsCacheAsync();
-                await DropdownDataService.ClearCustomersCacheAsync();
                 
                 Snackbar.Add(ConstantString.SaveSuccess, Severity.Success);
                 MudDialog.Close(DialogResult.Ok(true));
@@ -356,7 +205,7 @@
             else
             {
                 var errorMessage = string.IsNullOrEmpty(result.ErrorMessage) 
-                    ? "Failed to install tracking unit" 
+                    ? "Failed to install / Replace Sim card" 
                     : result.ErrorMessage;
                 Snackbar.Add(errorMessage, Severity.Error);
             }
@@ -385,3 +234,4 @@
         }
     }
 }
+

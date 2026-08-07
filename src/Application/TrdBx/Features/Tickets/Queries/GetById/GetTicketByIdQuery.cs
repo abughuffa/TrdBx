@@ -41,7 +41,7 @@ public class GetTicketByIdQueryHandler :
         //                                        .FirstAsync(cancellationToken) ?? throw new NotFoundException($"Ticket with id: [{request.Id}] not found.");
         //return await Result<TicketDto>.SuccessAsync(data);
 
-        var data = await _context.Tickets.ApplySpecification(new TicketByIdSpecification(request.Id))
+        var data = await _context.Tickets.Include(t => t.TrackingUnit).ApplySpecification(new TicketByIdSpecification(request.Id))
                               .ProjectTo()
                               .FirstAsync(cancellationToken) ?? throw new NotFoundException($"Ticket with id: [{request.Id}] not found.");
         return await Result<TicketDto>.SuccessAsync(data);

@@ -21,14 +21,8 @@ public static partial class Permissions
         [Description("Allows deleting CusPrice records.")]
         public const string Delete = "Permissions.CusPrices.Delete";
 
-        [Description("Allows searching for CusPrice records.")]
-        public const string Search = "Permissions.CusPrices.Search";
-
         [Description("Allows exporting CusPrice records.")]
         public const string Export = "Permissions.CusPrices.Export";
-
-        [Description("Allows importing CusPrice records.")]
-        public const string Import = "Permissions.CusPrices.Import";
     }
 }
 public class CusPricesAccessRights
@@ -37,8 +31,6 @@ public class CusPricesAccessRights
     public bool Create { get; set; }
     public bool Edit { get; set; }
     public bool Delete { get; set; }
-    public bool Search { get; set; }
     public bool Export { get; set; }
-    public bool Import { get; set; }
 }
 

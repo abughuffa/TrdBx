@@ -11,8 +11,6 @@ public enum InsMode
 }
 public enum WStatus
 {
-    //[Description("Null")] Null = 0,
-    //[Description("All")] All = 0,
     [Description("Active")] Active = 1,
     [Description("Inactive")] Inactive = 2,
     
@@ -29,8 +27,7 @@ public enum UStatus
     [Description("Used")] Used = 7,
     [Description("Damaged")] Damaged = 8,
     [Description("Lost")] Lost = 9,
-    //[Description("Null")] Null = 99,
-    //[Description("All")] All = 999,
+
 
 }
 public enum SubPackageFees
@@ -62,16 +59,19 @@ public enum SLStatus
     [Description("Two-Way Block")] TwoWayBlock = 2,
     [Description("Frozen Block")] Frozen = 3,
     [Description("Inactive")] Inactive = 4,
-    
-    //[Description("Null")] Null = 99,
-    //[Description("All")] All = 999
 
 }
-
+public enum TicketStatus
+{
+    //All = 0,
+    [Description("Opened")] Opened = 2,
+    [Description("Accepted")] Accepted = 3,
+    [Description("Rejected")] Rejected = 5,
+    [Description("Closed")] Closed = 7
+}
 
 public enum TicketTask
 {
-    //[Description("All")] All = 0, //just created invoice
     [Description("Check")] Check = 10, //just created invoice
 
     [Description("Support")] Support_Recover = 20, //invoice in tax process
@@ -97,7 +97,6 @@ public enum TicketTask
 
 public enum ServiceTask
 {
-    //[Description("All")] All = 0,
     [Description("Check")] Check = 1,
     [Description("Install New unit")] Install = 2,
     [Description("ReInstall Used unit")] ReInstall = 3,
@@ -123,18 +122,8 @@ public enum APITask
     [Description("Activate On Wialon")] ActivateOnWialon = 3,
     [Description("Deactivate On Wialon")] DeactivateOnWialon = 4,
     [Description("Remove From Wialon")] RemoveFromWialon = 5,
-   
-    //[Description("Deactivate On Wialon Defered")] DeactivateOnWialonDefered,
-    //[Description("Remove From Wialon Defered")] RemoveFromWialonDefered,
-    //[Description("Invoice Of Subscription Fees")] InvoiceOfSubscriptionFees,
-    //[Description("Invoice Of Partial Subscription Fees")] InvoiceOfPartialSubscriptionFees,
 }
-//public enum AssignedTo
-//{
-//    [Description("Null")] Null = 0,
-//    [Description("Client")] Client = 1,
-//    [Description("Customer")] Customer = 2
-//}
+
 public enum BillingPlan
 {
     
@@ -144,7 +133,6 @@ public enum BillingPlan
 }
 public enum IStatus
 {
-    //[Description("All")] All = 0, //just created invoice
     [Description("Draft")] Draft = 1, //just created invoice
     [Description("SentToTax")] SentToTax = 2, //invoice in tax process
     [Description("Ready")] Ready = 3, //invoice retrived from taxes
@@ -155,7 +143,6 @@ public enum IStatus
 }
 public enum InvoiceType
 {
-    //[Description("All")] All = 0, //just created invoice
     [Description("Check")] Check = 1, //just created invoice
     [Description("Support")] Support = 2, //invoice in tax process
     [Description("Install")] Install = 3, //invoice retrived from taxes

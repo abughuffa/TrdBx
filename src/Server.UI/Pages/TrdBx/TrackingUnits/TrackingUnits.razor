@@ -471,29 +471,27 @@
     private bool _canImport;
     private bool _canExport;
 
+    private bool _canReserve ;
+    private bool _canMarkAsDamaged ;
+    private bool _canMarkAsUsed ;
+    private bool _canMarkAsLost ;
+    private bool _canReassignOwner ;
+    private bool _canRecoverSim ;
+
 
     private bool _canInstall ;
     private bool _canTransfer ;
     private bool _canReplace ;
     private bool _canRecover ;
-    private bool _canReserve ;
+    
     private bool _canActivate ;
     private bool _canActivateForHosting ;
-
     private bool _canActivateForGprs ;
     private bool _canDeactivate ;
-    private bool _canMarkAsDamaged ;
-    private bool _canMarkAsUsed ;
-    private bool _canMarkAsLost ;
-    
-    private bool _canReassignOwner ;
     private bool _canRenewSubscription ;
     private bool _canAssignDailyTaskToOtherUser ;
-
     private bool _canCreateTicket ;
-
     private bool _canInstallSim ;
-    private bool _canRecoverSim ;
     private bool _canReplaceSim ;
 
     protected override async Task OnInitializedAsync()
@@ -501,36 +499,32 @@
         Title = L[_currentDto.GetClassDescription()];
         var state = await AuthState;
         _canCreate = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.Create)).Succeeded;
-        // _canSearch = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.Search)).Succeeded;
         _canEdit = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.Edit)).Succeeded;
         _canDelete = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.Delete)).Succeeded;
         _canImport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.Import)).Succeeded;
         _canExport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.Export)).Succeeded;
 
-   _canInstall = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.Install)).Succeeded;
-   _canTransfer = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.Transfer)).Succeeded;
-   _canReplace = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.Replace)).Succeeded;
-   _canRecover = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.Recover)).Succeeded;
-   _canReserve = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.Reserve)).Succeeded;
-   _canActivate = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.Activate)).Succeeded;
-   _canActivateForHosting = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.ActivateForHosting)).Succeeded;
+        _canReserve = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.Reserve)).Succeeded;
+        _canMarkAsDamaged = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.MarkAsDamaged)).Succeeded;
+        _canMarkAsUsed = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.MarkAsUsed)).Succeeded;
+        _canMarkAsLost = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.MarkAsUsed)).Succeeded;
+        _canReassignOwner = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.ReassignOwner)).Succeeded;
+        _canRecoverSim = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.RecoverSim)).Succeeded;
 
-   _canActivateForGprs = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.ActivateForGprs)).Succeeded;
-   _canDeactivate = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.Deactivate)).Succeeded;
-   _canMarkAsDamaged = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.MarkAsDamaged)).Succeeded;
-   _canMarkAsUsed = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.MarkAsUsed)).Succeeded;
-   _canMarkAsLost = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.MarkAsUsed)).Succeeded;
-   _canReassignOwner = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.ReassignOwner)).Succeeded;
-   _canRenewSubscription = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.RenewSubscription)).Succeeded;
-   _canAssignDailyTaskToOtherUser = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.AssignDailyTaskToOtherUser)).Succeeded;
+        _canCreateTicket = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.CreateTicket)).Succeeded;
 
-   _canCreateTicket = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.CreateTicket)).Succeeded;
-
-   _canInstallSim = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.Install)).Succeeded;
-   _canRecoverSim = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.Recover)).Succeeded;
-   _canReplaceSim = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.Replace)).Succeeded;
-
-
+        _canInstall = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.Install)).Succeeded;
+        _canTransfer = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.Transfer)).Succeeded;
+        _canReplace = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.Replace)).Succeeded;
+        _canRecover = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.Recover)).Succeeded;
+        _canActivate = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.Activate)).Succeeded;
+        _canActivateForHosting = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.ActivateForHosting)).Succeeded;
+        _canActivateForGprs = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.ActivateForGprs)).Succeeded;
+        _canDeactivate = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.Deactivate)).Succeeded;
+        _canRenewSubscription = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.RenewSubscription)).Succeeded;
+        _canAssignDailyTaskToOtherUser = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.AssignDailyTaskToOtherUser)).Succeeded;
+        _canInstallSim = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.ins)).Succeeded;
+        _canReplaceSim = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.Replace)).Succeeded;
 
     }
 
@@ -540,12 +534,6 @@
         InvokeAsync(_table.ReloadServerData);
     }
 
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     Title = L[_currentDto.GetClassDescription()];
-    //     _accessRights = await PermissionService.GetAccessRightsAsync<TrackingUnitsAccessRights>();
-
-    // }
     private async Task<GridData<TrackingUnitDto>> ServerReload(GridState<TrackingUnitDto> state)
     {
         try
@@ -709,38 +697,6 @@
     }
 #endregion
 
-
-    // private Task OnCreate()
-    // {
-    //     var command = new CreateTrackingUnitCommand();
-    //     return DialogServiceHelper.ShowFormDialogAsync<CreateTrackingUnitDailog, CreateTrackingUnitCommand>(
-    //         L["Create TrackingUnit"],
-    //         new DialogParameters<CreateTrackingUnitDailog>
-    //        {
-    //                         { x=>x._model,command}
-    //        },
-    //         async () =>
-    //         {
-    //             await _table.ReloadServerData();
-    //             _selectedItems.Clear();
-    //         });
-    // }
-
-    // private Task OnEdit(TrackingUnitDto dto)
-    // {
-    //     var command = Mapper.Map<UpdateTrackingUnitCommand>(dto);
-    //     return DialogServiceHelper.ShowFormDialogAsync<EditTrackingUnitDailog, UpdateTrackingUnitCommand>(
-    //         L["Update TrackingUnit"],
-    //          new DialogParameters<EditTrackingUnitDailog>
-    //        {
-    //                         { x=>x._model,command}
-    //        },
-    //         async () =>
-    //         {
-    //             await _table.ReloadServerData();
-    //             _selectedItems.Clear();
-    //         });
-    // }
 
     private Task OnActivate(TrackingUnitDto dto)
     {

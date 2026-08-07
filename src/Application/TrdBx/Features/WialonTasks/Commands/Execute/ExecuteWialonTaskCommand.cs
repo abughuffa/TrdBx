@@ -70,6 +70,7 @@ public class ExecuteWialonTaskCommandHandler :
             {
                 case APITask.CheckOnWialon:
                     {
+                         APIExecuationSuccessed = true;
                     if (request.ApplyChangesToWialon)
                         {
                             APIExecuationSuccessed = true;

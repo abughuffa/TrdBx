@@ -8,7 +8,7 @@
 @attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.SPackages.Create)]
 @attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.SPackages.Edit)]
 
-@* <PageTitle>@Title</PageTitle> *@
+
 
 <MudDialog>
     <DialogContent>
@@ -61,15 +61,7 @@
        return -1;
    });
 
-    //         result.Match(
-    // data =>
-    // {
-    // Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
-    // },
-    // errors =>
-    // {
-    // Snackbar.Add(errors, MudBlazor.Severity.Error);
-    // });
+
         }
         finally
         {

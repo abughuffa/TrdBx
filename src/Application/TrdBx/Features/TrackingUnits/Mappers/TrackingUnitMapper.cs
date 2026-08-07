@@ -1,11 +1,9 @@
-﻿
-
-using CleanArchitecture.Blazor.Application.Features.Tickets.DTOs;
-using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.Create;
+﻿using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.Create;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.ActivateTrackingUnit;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.ActivateTrackingUnitForGprs;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.ActivateTrackingUnitForHosting;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.DeactivateTrackingUnit;
+using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.RenewSubscription;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Install;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.ReassignOwner;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Recover;
@@ -14,10 +12,10 @@ using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.Daily
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Transfer;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.InstallOrReplaceSim;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.RecoverSim;
+using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Check;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.MarkTrackingUnitAsLost;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.Update;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.DTOs;
-using CleanArchitecture.Blazor.Application.Features.WialonTasks.DTOs;
 
 namespace CleanArchitecture.Blazor.Application.Features.TrackingUnits.Mappers;
 
@@ -76,6 +74,7 @@ public static partial class Mapper
     [MapperIgnoreSource(nameof(TrackingUnitDto.TrackedAsset))]
     [MapperIgnoreSource(nameof(TrackingUnitDto.TrackingUnitModel))]
     public static partial InstallTrackingUnitCommand ToInstallCommand(TrackingUnitDto dto);
+    
     [MapperIgnoreSource(nameof(TrackingUnitDto.Customer))]
     [MapperIgnoreSource(nameof(TrackingUnitDto.SimCard))]
     [MapperIgnoreSource(nameof(TrackingUnitDto.TrackedAsset))]
@@ -102,6 +101,12 @@ public static partial class Mapper
     [MapperIgnoreSource(nameof(TrackingUnitDto.SimCard))]
     [MapperIgnoreSource(nameof(TrackingUnitDto.TrackedAsset))]
     [MapperIgnoreSource(nameof(TrackingUnitDto.TrackingUnitModel))]
+    public static partial RenewSubscriptionCommand ToRenewSubscriptionCommand(TrackingUnitDto dto);
+
+    [MapperIgnoreSource(nameof(TrackingUnitDto.Customer))]
+    [MapperIgnoreSource(nameof(TrackingUnitDto.SimCard))]
+    [MapperIgnoreSource(nameof(TrackingUnitDto.TrackedAsset))]
+    [MapperIgnoreSource(nameof(TrackingUnitDto.TrackingUnitModel))]
     public static partial ReassignTrackingUnitOwnerCommand ToReassignOwnerCommand(TrackingUnitDto dto);
 
     [MapperIgnoreSource(nameof(TrackingUnitDto.Customer))]
@@ -115,6 +120,12 @@ public static partial class Mapper
     [MapperIgnoreSource(nameof(TrackingUnitDto.TrackedAsset))]
     [MapperIgnoreSource(nameof(TrackingUnitDto.TrackingUnitModel))]
     public static partial RecoverSimCommand ToRecoverSimCommand(TrackingUnitDto dto);
+
+    [MapperIgnoreSource(nameof(TrackingUnitDto.Customer))]
+    [MapperIgnoreSource(nameof(TrackingUnitDto.SimCard))]
+    [MapperIgnoreSource(nameof(TrackingUnitDto.TrackedAsset))]
+    [MapperIgnoreSource(nameof(TrackingUnitDto.TrackingUnitModel))]
+    public static partial CheckTrackingUnitCommand ToCheckTrackingUnitCommand(TrackingUnitDto dto);
     
 }
 

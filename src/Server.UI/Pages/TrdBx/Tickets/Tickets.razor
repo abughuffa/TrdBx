@@ -73,12 +73,12 @@
                     </MudMenu>
                 </MudToolBar>
                 <MudStack Row Spacing="1">
-                  @*   @if (_canSearch)
-                    { *@
+
+        
                         <MudTextField T="string" ValueChanged="@(s => OnSearch(s))" Value="@Query.Keyword" Placeholder="@ConstantString.Search" Adornment="Adornment.End"
                                       AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Small">
                         </MudTextField>
-                    @* } *@
+
                 </MudStack>
             </MudStack>
         </MudStack>
@@ -130,10 +130,6 @@
                         {
                             <MudMenuItem Disabled="!(context.Item.TicketStatus == TicketStatus.Opened)" OnClick="@(() => OnReject(context.Item))">"@L["Reject"]"</MudMenuItem>
                         }
-@*                         @if (_canAssign)
-                        {
-                            <MudMenuItem Disabled="!(context.Item.TicketStatus == TicketStatus.Approved || context.Item.TicketStatus == TicketStatus.Released)" OnClick="@(() => OnAssign(context.Item))">"@L["Assign"]"</MudMenuItem>
-                        } *@
                         @if (_canUnReject)
                         {
                             <MudMenuItem Disabled="!(context.Item.TicketStatus == TicketStatus.Rejected)" OnClick="@(() => OnUnReject(context.Item))">"@L["UnReject"]"</MudMenuItem>
@@ -209,13 +205,11 @@
     private IBlazorDownloadFileService BlazorDownloadFileService { get; set; } = null!;
     // private bool _canSearch;
     private bool _canCreate;
-    // private bool _canEdit;
     private bool _canDelete;
     private bool _canExport;
 
     private bool _canAccept;
     private bool _canReject;
-    // private bool _canAssign;
     private bool _canUnReject;
 
     protected override async Task OnInitializedAsync()
@@ -223,25 +217,14 @@
         Title = L[_currentDto.GetClassDescription()];
         var state = await AuthState;
         _canCreate = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Tickets.Create)).Succeeded;
-        // _canSearch = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Tickets.Search)).Succeeded;
-        // _canEdit = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Tickets.Edit)).Succeeded;
         _canDelete = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Tickets.Delete)).Succeeded;
         _canExport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Tickets.Export)).Succeeded;
 
         _canAccept = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Tickets.Approve)).Succeeded;
         _canReject = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Tickets.Reject)).Succeeded;
-        // _canAccept = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Tickets.Assign)).Succeeded;
         _canUnReject = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Tickets.UnReject)).Succeeded;
     }
 
-
-
-
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     Title = L[_currentDto.GetClassDescription()];
-    //     _accessRights = await PermissionService.GetAccessRightsAsync<TicketsAccessRights>();
-    // }
     private async Task<GridData<TicketDto>> ServerReload(GridState<TicketDto> state)
     {
         try
@@ -350,33 +333,7 @@
         _exporting = false;
     }
     #endregion
-    // private Task OnDelete(TicketDto dto)
-    // {
-    //     var contentText = string.Format(ConstantString.DeleteConfirmation, dto.Id);
-    //     var command = new DeleteTicketCommand(new int[] { dto.Id });
-    //     return DeleteInternal(command, contentText);
-    // }
 
-    // private Task OnDeleteChecked()
-    // {
-    //     var contentText = string.Format(ConstantString.DeleteConfirmWithSelected, _selectedItems.Count);
-    //     var command = new DeleteTicketCommand(_selectedItems.Select(x => x.Id).ToArray());
-    //     return DeleteInternal(command, contentText);
-
-    // }
-
-    // private Task DeleteInternal(DeleteTicketCommand command, string contentText)
-    // {
-    //     return DialogServiceHelper.ShowDeleteConfirmationDialogAsync(
-    //         command,
-    //         ConstantString.DeleteConfirmationTitle,
-    //         contentText,
-    //         async () =>
-    //         {
-    //             await _table.ReloadServerData();
-    //             _selectedItems.Clear();
-    //         });
-    // }
 
 
 
@@ -385,150 +342,6 @@
         Navigation.NavigateTo($"/pages/TrdBx/Tickets/{dto.Id}/view");
         return Task.CompletedTask;
     }
-
-    private async Task OnReject(TicketDto dto)
-    {
-
-
-        var title = L["Reject Ticket"];
-        var command = Mapper.ToRejectCommand(dto);
-        var parameters = new DialogParameters<RejectTicketDialog>
-            {
-                { x=>x._model,command },
-            };
-        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
-        var dialog = DialogService.Show<RejectTicketDialog>(title, parameters, options);
-        var state = await dialog.Result;
-
-        if (state != null && !state.Canceled)
-        {
-            await _table.ReloadServerData();
-            _selectedItems.Clear();
-        }
-    }
-
-    private async Task OnExecute(TicketDto dto)
-    {
-
-        var ts = dto.ServiceTask;
-
-        switch (dto.ServiceTask)
-        {
-            case ServiceTask.Check: 
-                {
-                    // show install unit page by unit Id
-
-                    break;
-                }
-            case ServiceTask.Install:
-            case ServiceTask.ReInstall:
-                {
-                   // show install unit page by unit Id
-
-                    Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits/Install/{dto.TrackingUnitId}");
-                    //return Task.CompletedTask;
-                   break;
-                }
-            
-            case ServiceTask.Recover:
-                {
-                    // show Recover unit page by unit Id
-                    Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits/Recover/{dto.TrackingUnitId}");
-
-                    break;
-                }
-            case ServiceTask.Transfer:
-                {
-                    // show Transfer unit page by unit Id
-                    Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits/Transfer/{dto.TrackingUnitId}");
-
-                    break;
-                }
-            case ServiceTask.Replace:
-                {
-                    // show Replace unit page by unit Id
-                    Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits/Replace/{dto.TrackingUnitId}");
-                    break;
-                }
-            case ServiceTask.ActivateUnit: //[int]
-                {
-                    // show ActivateUnit page by unit Id
-
-                    break;
-                }
-            case ServiceTask.ActivateUnitForGprs: //[int]
-                {
-                    // show ActivateUnitForGprs page by unit Id
-
-                    break;
-                }
-            case ServiceTask.ActivateUnitForHosting: //[int]
-                {
-                    // show ActivateUnitForHosting page by unit Id
-
-                    break;
-                }
-
-            case ServiceTask.DeactivateUnit: //[int]
-                {
-                    // show DeactivateUnit page by unit Id
-
-                    break;
-                }
-            case ServiceTask.RenewUnitSub: //[int]
-                {
-                    // show RenewUnitSub page by unit Id
-
-                    break;
-                }
-            case ServiceTask.ReplacSimCard:
-                {
-                    // show ReplacSimCard page by unit Id
-
-                    break;
-                }
-            case ServiceTask.InstallSimCard:
-                {
-                    // show InstallSimCard page by unit Id
-
-                    break;
-                }
-            case ServiceTask.RecoverSimCard: //[int]
-                {
-                    // show RecoverSimCard page by unit Id
-
-                    break;
-                }
-            default:
-                {
-
-                    break;
-                }
-
-
-
-        }
-
-
-
-        // var command = Mapper.Map<AssignTicketCommand>(dto);
-    //     var command = Mapper.ToAssignCommand(dto);
-    //     return DialogServiceHelper.ShowFormDialogAsync<AssignTicketDialog, AssignTicketCommand>(
-    //         L["Assign Ticket"],
-    //          new DialogParameters<AssignTicketDialog>
-    //        {
-    //                         { x=>x._model,command}
-    //        },
-    //         async () =>
-    //         {
-    //             await _table.ReloadServerData();
-    //             _selectedItems.Clear();
-    //         });
-
-
-
-    }
-
 
 
 
@@ -560,7 +373,26 @@
             _accepting = false;
         }
     }
+    private async Task OnReject(TicketDto dto)
+    {
 
+
+        var title = L["Reject Ticket"];
+        var command = Mapper.ToRejectCommand(dto);
+        var parameters = new DialogParameters<RejectTicketDialog>
+            {
+                { x=>x._model,command },
+            };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        var dialog = DialogService.Show<RejectTicketDialog>(title, parameters, options);
+        var state = await dialog.Result;
+
+        if (state != null && !state.Canceled)
+        {
+            await _table.ReloadServerData();
+            _selectedItems.Clear();
+        }
+    }
     private async Task OnUnReject(TicketDto dto)
     {
        
@@ -591,45 +423,6 @@
         }
     }
 
-    // private async Task OnExport()
-    // {
-    //     _exporting = true;
-    //     var request = new ExportTicketsQuery()
-    //     {
-    //         Keyword = Query.Keyword,
-    //         ListView = Query.ListView,
-    //         ServiceTask = Query.ServiceTask,
-    //         TicketStatus = Query.TicketStatus,
-    //         OrderBy = _table.SortDefinitions.Values.FirstOrDefault()?.SortBy ?? "Id",
-    //         SortDirection = _table.SortDefinitions.Values.FirstOrDefault()?.Descending ?? false
-    //                                 ? SortDirection.Descending.ToString()
-    //                                 : SortDirection.Ascending.ToString(),
-    //         CurrentUser = UserProfile,
-
-    //     };
-    //     var result = await Mediator.Send(request);
-    //     await result.MatchAsync(
-    //         async data =>
-    //         {
-    //             if (result.Data != null)
-    //             {
-    //                 await BlazorDownloadFileService.DownloadFileAsync($"{L[_currentDto.GetClassDescription()]}.xlsx", result.Data, contentType: "application/octet-stream");
-    //                 Snackbar.Add($"{ConstantString.ExportSuccess}", MudBlazor.Severity.Info);
-    //             }
-    //             else
-    //             {
-    //                 Snackbar.Add($"{ConstantString.ExecuteFail}", MudBlazor.Severity.Error);
-    //             }
-    //         },
-    //         errors =>
-    //         {
-    //             Snackbar.Add($"{errors}", MudBlazor.Severity.Error);
-    //             return Task.CompletedTask;
-    //         });
-    //     _exporting = false;
-
-    // }
-
-
+  
 
 }

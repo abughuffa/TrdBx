@@ -1,7 +1,6 @@
 ﻿@page "/pages/TrdBx/ServicePrices"
 
 @using CleanArchitecture.Blazor.Application.Features.ServicePrices.Caching
-@using CleanArchitecture.Blazor.Application.Features.ServicePrices.Commands.Update
 @using CleanArchitecture.Blazor.Application.Features.ServicePrices.DTOs
 @using CleanArchitecture.Blazor.Application.Features.ServicePrices.Queries.Export
 @using CleanArchitecture.Blazor.Application.Features.ServicePrices.Queries.Pagination
@@ -10,7 +9,6 @@
 
 @inject IStringLocalizer<ServicePrices> L
 @attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.ServicePrices.View)]
-@* @inject BlazorDownloadFileService BlazorDownloadFileService *@
 
 <PageTitle>@Title</PageTitle>
 
@@ -107,7 +105,6 @@
     private HashSet<ServicePriceDto> _selectedItems = new();
     private MudDataGrid<ServicePriceDto> _table = default!;
     private ServicePriceDto _currentDto = new();
-    // private ServicePricesAccessRights _accessRights = new();
     private int _defaultPageSize = 15;
     private bool _loading;
     private bool _exporting;
@@ -117,38 +114,23 @@
 
     [Inject]
     private IBlazorDownloadFileService BlazorDownloadFileService { get; set; } = null!;
-    // private bool _canSearch;
-    // private bool _canCreate;
+
     private bool _canEdit;
-    // private bool _canDelete;
-    // private bool _canImport;
     private bool _canExport;
 
     protected override async Task OnInitializedAsync()
     {
         Title = L[_currentDto.GetClassDescription()];
         var state = await AuthState;
-        // _canCreate = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.ServicePrices.Create)).Succeeded;
-        // _canSearch = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.ServicePrices.Search)).Succeeded;
         _canEdit = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.ServicePrices.Edit)).Succeeded;
-        // _canDelete = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.ServicePrices.Delete)).Succeeded;
-        // _canImport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.ServicePrices.Import)).Succeeded;
         _canExport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.ServicePrices.Export)).Succeeded;
     }
-
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     Title = L[_currentDto.GetClassDescription()];
-    //     _accessRights = await PermissionService.GetAccessRightsAsync<ServicePricesAccessRights>();
-
-    // }
 
     private async Task<GridData<ServicePriceDto>> ServerReload(GridState<ServicePriceDto> state)
     {
         try
         {
              _loading = true;
-            // Query.CurrentUser = UserProfile;
             Query.OrderBy = state.SortDefinitions.FirstOrDefault()?.SortBy ?? "Id";
             Query.SortDirection = state.SortDefinitions.FirstOrDefault()?.Descending ?? true
                                               ? SortDirection.Descending.ToString()
@@ -177,18 +159,7 @@
 
     private async Task OnEdit(ServicePriceDto dto)
     {
-        // var command = Mapper.Map<UpdateServicePriceCommand>(dto);
-        // return DialogServiceHelper.ShowFormDialogAsync<ServicePriceEditFormDialog, UpdateServicePriceCommand>(
-        //     L["Update Service Price"],
-        //    new DialogParameters<ServicePriceEditFormDialog>
-        //    {
-        //                     { x=>x._model,command}
-        //    },
-        //    async () =>
-        //    {
-        //        await _table.ReloadServerData();
-        //        _selectedItems.Clear();
-        //    });
+
 
         var title = L["Update Service Price"];
         var command = Mapper.ToUpdateCommand(dto);
@@ -207,43 +178,6 @@
         }
     }
 
-    // private async Task OnExport()
-    // {
-    //     _exporting = true;
-
-    //     var request = new ExportServicePricesQuery()
-    //         {
-    //             Keyword = Query.Keyword,
-    //             // ListView = Query.ListView,
-    //             OrderBy = _table.SortDefinitions.Values.FirstOrDefault()?.SortBy ?? "Id",
-    //             SortDirection = _table.SortDefinitions.Values.FirstOrDefault()?.Descending ?? false
-    //                                 ? SortDirection.Descending.ToString()
-    //                                 : SortDirection.Ascending.ToString(),
-    //             // CurrentUser = UserProfile,
-    //         };
-
-    //     var result = await Mediator.Send(request);
-    //     await result.MatchAsync(
-    //         async data =>
-    //         {
-    //             if (result.Data != null)
-    //             {
-    //                 await BlazorDownloadFileService.DownloadFileAsync($"{L[_currentDto.GetClassDescription()]}.xlsx", result.Data, contentType: "application/octet-stream");
-    //                 Snackbar.Add($"{ConstantString.ExportSuccess}", MudBlazor.Severity.Info);
-    //             }
-    //             else
-    //             {
-    //                 Snackbar.Add($"{ConstantString.ExecuteFail}", MudBlazor.Severity.Error);
-    //             }
-    //         },
-    //         errors =>
-    //         {
-    //             Snackbar.Add($"{errors}", MudBlazor.Severity.Error);
-    //             return Task.CompletedTask;
-    //         });
-    //     _exporting = false;
-
-    // }
 
 
     private async Task OnExport()
@@ -252,8 +186,7 @@
         var request = new ExportServicePricesQuery()
         {
             Keyword = Query.Keyword,
-            // CurrentUser = UserProfile,
-            // ListView = Query.ListView,
+
             OrderBy = _table.SortDefinitions.Values.FirstOrDefault()?.SortBy ?? "Id",
             SortDirection = (_table.SortDefinitions.Values.FirstOrDefault()?.Descending ?? true) ? SortDirection.Descending.ToString() : SortDirection.Ascending.ToString()
         };

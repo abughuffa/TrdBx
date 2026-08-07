@@ -4031,6 +4031,7 @@ public class SerialForSharedLogic
                             sequenceNumber = lastSequence + 1;
                         }
                     }
+                    
                     serialNo = $"{prefix}{sequenceNumber:D3}";
                     break;
                 }

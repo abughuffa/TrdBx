@@ -13,7 +13,15 @@
                     <MudText>@_contentText</MudText>
                 </MudItem>
 
-                <MudItem md="12">
+                <MudItem md="6">
+                    <MudDatePicker Class="pa-4"
+                                   Editable @bind-Date="_date"
+                                   For="@(() => _date)"
+                                   Required="true"
+                                   RequiredError="@L["Date Is Required!"]" />
+                </MudItem>
+
+                <MudItem md="6">
                     <MudEnumSelect Style="min-width:120px" TEnum="ServiceTask" ValueChanged="OnChangedServiceTask" Value="_model.ServiceTask" Dense="true" Label="@L["Service Task"]">
                     </MudEnumSelect>
                 </MudItem>
@@ -36,6 +44,17 @@
     [EditorRequired][Parameter] public CreateTicketCommand _model { get; set; } = default!;
     [Parameter] public string? _contentText { get; set; } = default!;
 
+    private DateTime? _date
+    {
+        get => _model.TcDate.ToDateTime(TimeOnly.MinValue);
+        set
+        {
+            if (value is not null)
+            {
+                _model.TcDate = DateOnly.FromDateTime((DateTime)value);
+            }
+        }
+    }
     private Task OnChangedServiceTask(ServiceTask serviceTask)
     {
         _model.ServiceTask = serviceTask;
@@ -65,16 +84,6 @@
        Snackbar.Add(errors, MudBlazor.Severity.Error);
        return -1;
    });
-            // if (result.Succeeded)
-            // {
-            //     MudDialog.Close(DialogResult.Ok(true));
-            //     Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
-
-            // }
-            // else
-            // {
-            //     Snackbar.Add(result.ErrorMessage, MudBlazor.Severity.Error);
-            // }
         }
         finally
         {

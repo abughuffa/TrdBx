@@ -22,17 +22,12 @@
     </DialogActions>
 </MudDialog>
 
-
-
 @code {
     MudForm _contactForm = new();
     private bool _saving = false;
-    // private bool _savingnew = false;
     [CascadingParameter]
     IMudDialogInstance MudDialog { get; set; } = default!;
     [EditorRequired][Parameter] public UpdateInvoiceCommand _model { get; set; } = null!;
-
-
     async Task OnSave()
     {
         try
@@ -44,31 +39,22 @@
             var result = await Mediator.Send(_model);
 
             result.Match(
-   data =>
-   {
-       Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
-       MudDialog.Close(DialogResult.Ok(true));
-       return data;
-   },
-   errors =>
-   {
-       Snackbar.Add(errors, MudBlazor.Severity.Error);
-       return -1;
-   });
-            // result.Match(data =>
-            // {
-            //     MudDialog.Close(DialogResult.Ok(true));
-            //     Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
-            // }, errors =>
-            // {
-            //     Snackbar.Add(errors, MudBlazor.Severity.Error);
-            // });
-        }
-        finally
-        {
-            _saving = false;
-        }
+                    data =>
+                    {
+                        Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
+                        MudDialog.Close(DialogResult.Ok(true));
+                        return data;
+                    },
+                    errors =>
+                    {
+                        Snackbar.Add(errors, MudBlazor.Severity.Error);
+                        return -1;
+                    });
+                            }
+                            finally
+                            {
+                                _saving = false;
+                            }
     }
-
     void Cancel() => MudDialog.Cancel();
 }

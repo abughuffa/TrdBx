@@ -9,7 +9,7 @@ namespace CleanArchitecture.Blazor.Application.Features.TrackingUnits.Queries.Ge
 public class GetAvaliableTrackingUnitsQuery : ICacheableRequest<IEnumerable<TrackingUnitDto>>
 {
     public int? Id { get; set; }
-    public string CacheKey => TrackingUnitCacheKey.GetAvaliableCacheKey;
+    public string CacheKey => TrackingUnitCacheKey.GetAvaliableTrackingUnitsWithIdCacheKey($"{Id}");
    public IEnumerable<string> Tags => TrackingUnitCacheKey.Tags;
 }
 

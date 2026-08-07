@@ -1,6 +1,4 @@
 ﻿@page "/pages/TrdBx/ServiceLogs/{id:int}/view"
-
-@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.ServiceLogs
 @using CleanArchitecture.Blazor.Application.Features.ServiceLogs.DTOs
 @using CleanArchitecture.Blazor.Application.Features.ServiceLogs.Queries.GetById
 
@@ -55,9 +53,7 @@
     public string? Title { get; private set; }
     [Parameter]
     public int Id { get; set; }
-
     private ServiceLogDto? model;
-
 
     [Parameter]
     [SupplyParameterFromQuery]

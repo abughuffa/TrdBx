@@ -1,5 +1,6 @@
 ﻿using CleanArchitecture.Blazor.Application.Features.Tickets.Caching;
 using CleanArchitecture.Blazor.Application.Features.Tickets.DTOs;
+using CleanArchitecture.Blazor.Domain.Enums;
 
 
 
@@ -43,9 +44,9 @@ public class RejectTicketCommandHandler : IRequestHandler<RejectTicketCommand, R
 
         var ticket = await _context.Tickets.Where(x => x.Id == request.Id).FirstAsync() ?? throw new NotFoundException($"Ticket with id: [{request.Id}] not found.");
 
-        if (!(ticket.TicketStatus == TicketStatus.Opened))
+        if (!(ticket.TicketStatus == TicketStatus.Opened || ticket.TicketStatus == TicketStatus.Accepted))
         {
-            return await Result<int>.FailureAsync("Ticket Status should be Released or JustCreated to Reject it.");
+            return await Result<int>.FailureAsync("Ticket Status should be Opened or Accepted to Reject it.");
         }
 
         ticket.TicketStatus = TicketStatus.Rejected;

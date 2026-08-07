@@ -209,14 +209,14 @@
             //if (result.Succeeded && result.Data != null)
             //{
                 // Load dropdown data using the service - leverages caching automatically
-                var loadTasks = new List<Task>
-                {
-                    LoadSimCardsAsync(_model.SimCardId > 0 ? SimCardIds : null),
-                    LoadTrackingUnitsAsync(_model.CustomerId > 0 ? CustomerId : null),
-                    LoadCustomersAsync(_model.CustomerId > 0 ? CustomerId : null)
-                };
+                //var loadTasks = new List<Task>
+                //{
+               await     LoadSimCardsAsync(_model.SimCardId > 0 ? SimCardIds : null);
+               await     LoadTrackingUnitsAsync(_model.CustomerId > 0 ? CustomerId : null);
+               await     LoadCustomersAsync(_model.CustomerId > 0 ? CustomerId : null);
+                //};
 
-                await Task.WhenAll(loadTasks);
+                //await Task.WhenAll(loadTasks);
             //}
             //else
             //{
@@ -362,6 +362,8 @@
     {
         if (!_submitting)
         {
+             
+
             MudDialog.Cancel();
         }
     }

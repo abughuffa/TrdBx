@@ -1,6 +1,4 @@
-﻿@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Customers
-@using CleanArchitecture.Blazor.Application.Features.Customers.Commands.Create
-@using CleanArchitecture.Blazor.Application.Features.Customers.DTOs
+﻿@using CleanArchitecture.Blazor.Application.Features.Customers.DTOs
 @using CleanArchitecture.Blazor.Application.Features.Customers.Queries.GetAvaliable
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.Create
 @using CleanArchitecture.Blazor.Domain.Enums
@@ -134,14 +132,6 @@ errors =>
 Snackbar.Add(errors, MudBlazor.Severity.Error);
 return -1;
 });
-            // result.Match(data =>
-            // {
-            //     MudDialog.Close(DialogResult.Ok(true));
-            //     Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
-            // }, errors =>
-            // {
-            //     Snackbar.Add(errors, MudBlazor.Severity.Error);
-            // });
         }
         finally
         {

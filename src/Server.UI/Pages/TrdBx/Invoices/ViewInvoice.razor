@@ -109,7 +109,6 @@
                                         <MudText Typo="Typo.subtitle2"> @L["Items"]</MudText>
                                         <MudSpacer />
                                         <MudText Typo="Typo.body2">
-                                          @*   @L["Group's Items"] *@
                                             @itemGroup.InvoiceItems.Count items
                                         </MudText>
                                     </ToolBarContent>
@@ -127,10 +126,6 @@
                                             </CellTemplate>
                                         </TemplateColumn>
                                     </Columns>
-                                    
-@*                                     <PagerContent>
-                                        <MudTablePager />
-                                    </PagerContent> *@
                                 </MudDataGrid>
                                 
                                 <!-- Group Actions -->
@@ -214,41 +209,14 @@
         _canDelete = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.Delete)).Succeeded;
         _canDeleteGroup = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.DeleteGroup)).Succeeded;
         _canDeleteItem = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Invoices.DeleteItem)).Succeeded;
-
-        // await LoadInvoice();
-
     }
 
     protected override async Task OnParametersSetAsync()
     {
         await LoadInvoice();
-
     }
-
-//     private async Task<InvoiceDto> LoadInvoice()
-//     {
-//         // Title = L["SimCard"];
-//         var result = await Mediator.Send(new GetDetailedInvoiceByIdQuery() { Id = InvoiceId });
-//         result.Map(data =>
-// {
-//     // _invoice = data;
-//     return data;
-// }).Match(data =>
-// {
-//     return data;
-
-// }, errors =>
-// {
-//     Snackbar.Add($"Error loading invoice: {errors}", Severity.Error);
-//     return null!;
-// });
-//     }
-
-
     private async Task LoadInvoice()
     {
-        // Title = L["SimCard"];
-
         _isLoading = true;
 
         var result = await Mediator.Send(new GetDetailedInvoiceByIdQuery() { Id = InvoiceId });

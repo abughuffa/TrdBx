@@ -1,6 +1,4 @@
-﻿
-@using CleanArchitecture.Blazor.Application.Features.CusPrices.Commands.Update
-@using CleanArchitecture.Blazor.Application.Features.CusPrices.Queries.GetById
+﻿@using CleanArchitecture.Blazor.Application.Features.CusPrices.Commands.Update
 
 @inherits MudComponentBase
 @inject IValidationService Validator
@@ -33,10 +31,8 @@
                                   Required="true"
                                   RequiredError="@L["Unit Price is required!"]"
                                   Placeholder="@L["Enter Unit Price"]">
-
                     </MudTextField>
                 </MudItem>
-
             </MudGrid>
         </MudForm>
     </DialogContent>
@@ -49,11 +45,8 @@
 @code {
     MudForm _contactForm = new();
     private bool _saveing = false;
-    [CascadingParameter]
-    IMudDialogInstance MudDialog { get; set; } = default!;
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; } = default!;
     [EditorRequired][Parameter] public UpdateCusPriceCommand _model { get; set; } = null!;
-
-
 
     async Task OnSave()
     {
@@ -77,14 +70,6 @@
                    Snackbar.Add(errors, MudBlazor.Severity.Error);
                    return -1;
                });
-            // result.Match(data =>
-            // {
-            //     MudDialog.Close(DialogResult.Ok(true));
-            //     Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
-            // }, errors =>
-            // {
-            //     Snackbar.Add(errors, MudBlazor.Severity.Error);
-            // });
         }
         finally
         {

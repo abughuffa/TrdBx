@@ -9,7 +9,7 @@ namespace CleanArchitecture.Blazor.Application.Common.Interfaces;
     public interface IDropdownDataService
     {
         Task<IEnumerable<SimCardDto>> GetAvailableSimCardsAsync(int[]? ids = null);
-        Task<IEnumerable<TrackedAssetDto>> GetAvailableTrackedAssetsAsync();
+        Task<IEnumerable<TrackedAssetDto>> GetAvailableTrackedAssetsAsync(int? id = null);
         Task<IEnumerable<CustomerDto>> GetAvailableCustomersAsync(int? customerId = null);
         Task<IEnumerable<TrackingUnitDto>> GetAvailableTrackingUnitsAsync(int? customerId = null);
 

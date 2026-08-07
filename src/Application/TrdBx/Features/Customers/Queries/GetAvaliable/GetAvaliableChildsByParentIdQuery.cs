@@ -57,15 +57,13 @@ public class GetAvaliableChildsByParentIdQueryHandler :
         {
             var dataX = await _context.Customers
                 .Where(c => c.Id == request.Id.Value)
-                .ProjectTo()
-                .ToListAsync(cancellationToken);
-            
+                .ProjectTo().ToListAsync(cancellationToken);        
             return dataX;
         }
 
         // Case 1b: Advanced plan - return available customers from same parent
         // Include the original customer even if IsAvailable = false
-        int parentId = customer.ParentId ?? 0;
+        int parentId = customer.ParentId ?? -1;
         int customerId = request.Id.Value;
         
         var data = await _context.Customers

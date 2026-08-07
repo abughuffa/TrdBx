@@ -1,4 +1,6 @@
-﻿using CleanArchitecture.Blazor.Application.Features.Tickets.Caching;
+﻿using CleanArchitecture.Blazor.Domain.Enums;
+using CleanArchitecture.Blazor.Application.Features.Tickets.Caching;
+
 
 
 
@@ -49,7 +51,6 @@ public class AcceptTicketCommandHandler : IRequestHandler<AcceptTicketCommand, R
 
         ticket.TicketStatus = TicketStatus.Accepted;
         ticket.Note = string.Empty;
-
 
         ticket.AddDomainEvent(new TicketUpdatedEvent(ticket));
 

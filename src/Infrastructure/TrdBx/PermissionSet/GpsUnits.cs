@@ -28,6 +28,19 @@ public static partial class Permissions
         [Description("Allows importing TrackingUnit records.")]
         public const string Import = "Permissions.TrackingUnits.Import";
 
+        //-----------------------------------------//
+
+        [Description("Allows MarkAsDamaged TrackingUnit.")]
+        public const string MarkAsDamaged = "Permissions.TrackingUnits.MarkAsDamaged";
+
+        [Description("Allows MarkAsUsed TrackingUnit.")]
+        public const string MarkAsUsed = "Permissions.TrackingUnits.MarkAsUsed";
+
+        [Description("Allows ReassignOwner TrackingUnit.")]
+        public const string ReassignOwner = "Permissions.TrackingUnits.ReassignOwner";
+
+        //-----------------------------------------//
+
 
         [Description("Allows Install TrackingUnit.")]
         public const string Install = "Permissions.TrackingUnits.Install";
@@ -44,7 +57,6 @@ public static partial class Permissions
         [Description("Allows Reserve TrackingUnit.")]
         public const string Reserve = "Permissions.TrackingUnits.Reserve";
 
-        
         [Description("Allows Activate TrackingUnit.")]
         public const string Activate = "Permissions.TrackingUnits.Activate";
         [Description("Allows ActivateForGprs TrackingUnit.")]
@@ -56,16 +68,6 @@ public static partial class Permissions
         [Description("Allows Deactivate TrackingUnit.")]
         public const string Deactivate = "Permissions.TrackingUnits.Deactivate";
 
-        [Description("Allows MarkAsDamaged TrackingUnit.")]
-        public const string MarkAsDamaged = "Permissions.TrackingUnits.MarkAsDamaged";
-
-
-        [Description("Allows MarkAsUsed TrackingUnit.")]
-        public const string MarkAsUsed = "Permissions.TrackingUnits.MarkAsUsed";
-
-        [Description("Allows ReassignOwner TrackingUnit.")]
-        public const string ReassignOwner = "Permissions.TrackingUnits.ReassignOwner";
-
         [Description("Allows Renew Subscription of TrackingUnit.")]
         public const string RenewSubscription = "Permissions.TrackingUnits.RenewSubscription";
 
@@ -74,8 +76,6 @@ public static partial class Permissions
 
         [Description("Allows Create TrackingUnits Tickets.")]
         public const string CreateTicket = "Permissions.TrackingUnits.CreateTicket";
-        
-
 
     }
 }

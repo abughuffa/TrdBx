@@ -1,7 +1,5 @@
 ﻿@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Customers
 @using CleanArchitecture.Blazor.Application.Features.Customers.Commands.Create
-@using CleanArchitecture.Blazor.Application.Features.Customers.DTOs
-@using CleanArchitecture.Blazor.Application.Features.Customers.Queries.GetAvaliable
 @using CleanArchitecture.Blazor.Domain.Enums
 
 @inherits MudComponentBase
@@ -35,7 +33,7 @@
                         Dense="true" 
                         Label="@L["BillingPlan"]"></MudEnumSelect>
                 </MudItem>
-                @*            @bind-Value="_model.BillingPlan"           *@
+
 
                 <MudItem md="6">
                     <MudCheckBox Label="@L[_model.GetMemberDescription(x => x.IsTaxable)]" @bind-Value="_model.IsTaxable" For="@(() => _model.IsTaxable)" />
@@ -93,16 +91,6 @@
                     Snackbar.Add(errors, MudBlazor.Severity.Error);
                     return -1;
                 });
-
-
-            // result.Match(data =>
-            // {
-            //     MudDialog.Close(DialogResult.Ok(true));
-            //     Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
-            // }, errors =>
-            // {
-            //     Snackbar.Add(errors, MudBlazor.Severity.Error);
-            // });
         }
         finally
         {
@@ -137,16 +125,6 @@
                       Snackbar.Add(errors, MudBlazor.Severity.Error);
                       return null;
                   });
-            // await result.MatchAsync(async data =>
-            // {
-            //     Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
-            //     await Task.Delay(300);
-            //     _model = new CreateParentCommand() { };
-            // }, errors =>
-            // {
-            //     Snackbar.Add(errors, MudBlazor.Severity.Error);
-            //     return Task.CompletedTask;
-            // });
         }
         finally
         {

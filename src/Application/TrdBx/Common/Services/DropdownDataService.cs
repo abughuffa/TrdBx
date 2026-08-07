@@ -41,11 +41,11 @@ namespace CleanArchitecture.Blazor.Application.TrdBx.Services
             }
         }
 
-        public async Task<IEnumerable<TrackedAssetDto>> GetAvailableTrackedAssetsAsync()
+        public async Task<IEnumerable<TrackedAssetDto>> GetAvailableTrackedAssetsAsync(int? id = null)
         {
             try
             {
-                return await _mediator.Send(new GetAvaliableTrackedAssetsQuery());
+                return await _mediator.Send(new GetAvaliableTrackedAssetsQuery(){ Id = id });
             }
             catch //(Exception ex)
             {

@@ -5,7 +5,7 @@
 @inject IStringLocalizer<SPackages> L
 @attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.SPackages.View)]
 
-@* <PageTitle>@Title</PageTitle> *@
+
 
 <MudDialog>
     <DialogContent>
@@ -25,12 +25,10 @@
     </DialogActions>
 </MudDialog>
     @code {
-    // public string? Title { get; private set; }
     [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;
     [Parameter] public SPackageDto model { get; set; } = null!;
     protected override Task OnInitializedAsync()
     {
-        // Title = L["View SPackage"];
         return Task.CompletedTask;
 
     }

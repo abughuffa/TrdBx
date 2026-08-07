@@ -23,6 +23,11 @@ public static class TrackingUnitCacheKey
         return $"TrackingUnitCacheKey:GetByIdCacheKey,{parameters}";
     }
 
+    public static string GetAvaliableTrackingUnitsWithIdCacheKey(string parameters)
+    {
+        return $"TrackingUnitCacheKey:GetAvaliableTrackingUnitsWithIdCacheKey,{parameters}";
+    }
+
     public static IEnumerable<string> Tags => new string[] { "gpsunit" };
 
 

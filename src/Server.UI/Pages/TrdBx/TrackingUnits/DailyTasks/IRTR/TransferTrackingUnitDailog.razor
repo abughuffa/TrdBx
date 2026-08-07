@@ -198,14 +198,14 @@
             //if (result.Succeeded && result.Data != null)
             //{
                 // Load dropdown data using the service - leverages caching automatically
-                var loadTasks = new List<Task>
-                {
-                    LoadSimCardsAsync(_model.SimCardId > 0 ? SimCardIds : null),
-                    LoadTrackedAssetsAsync(),
-                    LoadCustomersAsync(_model.CustomerId > 0 ? CustomerId : null)
-                };
+                //var loadTasks = new List<Task>
+                //{
+               await     LoadSimCardsAsync(_model.SimCardId > 0 ? SimCardIds : null);
+                await    LoadTrackedAssetsAsync(_model.TrackedAssetId > 0 ? _model.TrackedAssetId : null);
+                await    LoadCustomersAsync(_model.CustomerId > 0 ? CustomerId : null);
+                //};
 
-                await Task.WhenAll(loadTasks);
+                //await Task.WhenAll(loadTasks);
             //}
             //else
            // {
@@ -244,12 +244,12 @@
         }
     }
 
-    private async Task LoadTrackedAssetsAsync()
+    private async Task LoadTrackedAssetsAsync(int? id)
     {
         try
         {
             _isDataLoading = true;
-            TrackedAssets = await DropdownDataService.GetAvailableTrackedAssetsAsync();
+            TrackedAssets = await DropdownDataService.GetAvailableTrackedAssetsAsync(id);
         }
         catch (Exception ex)
         {

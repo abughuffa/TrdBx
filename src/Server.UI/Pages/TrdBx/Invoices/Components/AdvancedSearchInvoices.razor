@@ -1,9 +1,6 @@
-﻿@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Customers
-@using CleanArchitecture.Blazor.Application.Features.Invoices.Queries.Pagination
+﻿@using CleanArchitecture.Blazor.Application.Features.Invoices.Queries.Pagination
 @using CleanArchitecture.Blazor.Domain.Enums
 @using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Customers.Components
-
-
 @inject IStringLocalizer<Invoices> L
 
 <MudExpansionPanel @bind-Expanded="_advancedSearchExpanded"
@@ -47,7 +44,6 @@
     [EditorRequired][Parameter] public EventCallback<string> OnFilterCriteriaChanged { get; set; }
 
     private bool _advancedSearchExpanded;
-
     private async Task FilterChanged(string str)
     {
         if (_advancedSearchExpanded)
@@ -55,14 +51,11 @@
             await OnFilterCriteriaChanged.InvokeAsync(str);
         }
     }
-
-
     private async Task OnIStatusChanged(IStatus? IStatus)
     {
         TRequest.IStatus = IStatus;
         await FilterChanged(IStatus?.ToString());
     }
-
     private async Task OnInvoiceTypeChanged(InvoiceType? InvoiceType)
     {
         TRequest.InvoiceType = InvoiceType;

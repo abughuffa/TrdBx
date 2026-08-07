@@ -1,5 +1,4 @@
 ﻿@using CleanArchitecture.Blazor.Application.Features.SProviders.Mappers
-@using CleanArchitecture.Blazor.Application.Features.SProviders.Commands.AddEdit
 @using CleanArchitecture.Blazor.Application.Features.SProviders.Commands.Delete
 @using CleanArchitecture.Blazor.Application.Features.SProviders.DTOs
 @using CleanArchitecture.Blazor.Application.Features.SProviders.Queries.GetAll
@@ -11,7 +10,7 @@
 
 
 <MudGrid>
-  @*   Label="@L["SProvider"]" *@
+
     <MudItem md="8">
         <MudSelect T="int"
                    
@@ -180,7 +179,6 @@
     private async Task OnView(SProviderDto dto)
     {
         var title = L["View SProvider"];
-        // var command = Mapper.ToEditCommand(dto);
         var parameters = new DialogParameters<SProviderViewDialog>
             {
                 { x=>x.model,dto },
@@ -189,88 +187,16 @@
         var dialog = DialogService.Show<SProviderViewDialog>(title, parameters, options);
         var state = await dialog.Result;
 
-        // if (state != null && !state.Canceled)
-        // {
-        //     items = await LoadSProviderModels();
-
-        //     SelectedItem = null;
-        // }
     }
 
     #endregion
 
-    // private async Task OnView(SProviderDto dto)
-    // {
-    //     await ShowViewFormDialog("SProvider", dto);
-    //     SelectedSProvider = dto;
-    // }
-
-    // private async Task OnCreate()
-    // {
-
-    //     // var command = Mapper.Map<AddEditSProviderCommand>(new SProviderDto());
-    //     var command = Mapper.CloneFromDto(new SProviderDto());
-    //     // var command = new AddEditSProviderCommand();
-    //     await ShowAddEditFormDialog(string.Format(ConstantString.CreateAnItem, L["SProvider"]), command);
-    // }
-
-    // private async Task OnEdit(SProviderDto dto)
-    // {
-    //     // var command = Mapper.Map<AddEditSProviderCommand>(dto);
-    //     var command = Mapper.CloneFromDto(dto);
-    //     // var command = new AddEditSProviderCommand() { Id = dto.Id, Name = dto.Name};
-    //     await ShowAddEditFormDialog(string.Format(ConstantString.EditTheItem, L["SProvider"]), command);
-    // }
-
-    // private async Task OnDelete(SProviderDto dto)
-    // {
-    //     var contentText = string.Format(ConstantString.DeleteConfirmation, dto.Name);
-    //     var command = new DeleteSProviderCommand(new int[] { dto.Id });
-
-    //     await DialogServiceHelper.ShowDeleteConfirmationDialogAsync(command, ConstantString.DeleteConfirmationTitle, contentText, async () =>
-    //   {
-    //       await InvokeAsync(async () =>
-    //       {
-    //           gpsUnitModels = await LoadSProviders();
-
-    //           SelectedSProvider = null;
-    //       });
-    //   });
 
 
-    // }
 
 
-    // private async Task ShowAddEditFormDialog(string title, AddEditSProviderCommand command)
-    // {
-    //     var parameters = new DialogParameters<SProviderAddEditDialog>
-    //         {
-    //             { x=>x.model,command },
-    //         };
-    //     var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
-    //     var dialog = DialogService.Show<SProviderAddEditDialog>(title, parameters, options);
-    //     var state = await dialog.Result;
 
-    //     if (state != null && !state.Canceled)
-    //     {
-    //         gpsUnitModels = await LoadSProviders();
-    //     }
-    // }
 
-    // private async Task ShowViewFormDialog(string title, SProviderDto dto)
-    // {
-    //     var parameters = new DialogParameters<SProviderViewDialog>
-    //         {
-    //             { x=>x.model,dto},
-    //         };
-    //     var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
-    //     var dialog = DialogService.Show<SProviderViewDialog>(title, parameters, options);
-    //     var state = await dialog.Result;
 
-    //     if (state != null && !state.Canceled)
-    //     {
-    //         gpsUnitModels = await LoadSProviders();
-    //         SelectedSProvider = dto;
-    //     }
-    // }
+  
 }

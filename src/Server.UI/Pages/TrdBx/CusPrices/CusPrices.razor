@@ -1,17 +1,13 @@
 ﻿@page "/pages/TrdBx/Customers/{customerid:int}/CusPrices"
-@using CleanArchitecture.Blazor.Application.Features.CusPrices.Commands.Delete
-@using CleanArchitecture.Blazor.Application.Features.CusPrices.Commands.Update
 @using CleanArchitecture.Blazor.Application.Features.CusPrices.DTOs
 @using CleanArchitecture.Blazor.Application.Features.CusPrices.Mappers
-@using CleanArchitecture.Blazor.Application.Features.CusPrices.Specifications
 @using CleanArchitecture.Blazor.Application.Features.CusPrices.Caching
+@using CleanArchitecture.Blazor.Application.Features.CusPrices.Specifications
+@using CleanArchitecture.Blazor.Application.Features.CusPrices.Commands.Delete
 @using CleanArchitecture.Blazor.Application.Features.CusPrices.Queries.Export
 @using CleanArchitecture.Blazor.Application.Features.CusPrices.Queries.Pagination
-@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.CusPrices
-
 @inject IStringLocalizer<CusPrices> L
 @attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.CusPrices.View)]
-
 
 <PageTitle>@Title</PageTitle>
 
@@ -50,24 +46,22 @@
                              AnchorOrigin="Origin.BottomRight"
                              EndIcon="@Icons.Material.Filled.MoreVert"
                              Label="@ConstantString.More">
-                        @if (_canDelete)
-                        {
-                            <MudMenuItem Disabled="@(!(_selectedItems.Count > 0))"
-                                         OnClick="OnDeleteChecked">
-                                @ConstantString.Delete
-                            </MudMenuItem>
-                        }
-                        @if (_canExport)
-                        {
-                            <MudMenuItem Disabled="@_exporting" OnClick="OnExport">
-                                @ConstantString.Export
-                            </MudMenuItem>
-                        }
+                            @if (_canDelete)
+                            {
+                                <MudMenuItem Disabled="@(!(_selectedItems.Count > 0))"
+                                            OnClick="OnDeleteChecked">
+                                    @ConstantString.Delete
+                                </MudMenuItem>
+                            }
+                            @if (_canExport)
+                            {
+                                <MudMenuItem Disabled="@_exporting" OnClick="OnExport">
+                                    @ConstantString.Export
+                                </MudMenuItem>
+                            }
                     </MudMenu>
                 </MudToolBar>
                 <MudStack Row Spacing="1">
-               @*      @if (_canSearch)
-                    { *@
                         <MudTextField T="string"
                                       ValueChanged="@(s => OnSearch(s))"
                                       Value="@Query.Keyword"
@@ -76,7 +70,6 @@
                                       AdornmentIcon="@Icons.Material.Filled.Search"
                                       IconSize="Size.Small">
                         </MudTextField>
-                    @* } *@
                 </MudStack>
             </MudStack>
         </MudStack>
@@ -122,7 +115,6 @@
             </CellTemplate>
         </TemplateColumn>
         <PropertyColumn Property="x => x.TrackingUnitModel" Title="@L[_currentDto.GetMemberDescription(x => x.TrackingUnitModel)]" />
-      @*   <PropertyColumn Property="x => x.TrackingUnitModelId" Title="@L[_currentDto.GetMemberDescription(x => x.TrackingUnitModelId)]" /> *@
         <PropertyColumn Property="x => x.Gprs" Title="@L[_currentDto.GetMemberDescription(x => x.Gprs)]" />
         <PropertyColumn Property="x => x.Host" Title="@L[_currentDto.GetMemberDescription(x => x.Host)]" />
         <PropertyColumn Property="x => x.Price" Title="@L[_currentDto.GetMemberDescription(x => x.Price)]" />
@@ -150,10 +142,9 @@
     private HashSet<CusPriceDto> _selectedItems = new();
     private MudDataGrid<CusPriceDto> _table = default!;
     private CusPriceDto _currentDto = new();
-    // private CusPricesAccessRights _accessRights = new();
     private int _defaultPageSize = 15;
     private bool _loading;
-    private bool _uploading;
+    //private bool _uploading;
     private bool _exporting;
 
     private CusPricesWithPaginationQuery Query { get; set; } = new();
@@ -164,38 +155,27 @@
 
     [Inject]
     private IBlazorDownloadFileService BlazorDownloadFileService { get; set; } = null!;
-    // private bool _canSearch;
     private bool _canCreate;
     private bool _canEdit;
     private bool _canDelete;
-    private bool _canImport;
+    //private bool _canImport;
     private bool _canExport;
-
     protected override async Task OnInitializedAsync()
     {
         Title = L[_currentDto.GetClassDescription()];
         var state = await AuthState;
         _canCreate = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.CusPrices.Create)).Succeeded;
-        // _canSearch = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.CusPrices.Search)).Succeeded;
         _canEdit = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.CusPrices.Edit)).Succeeded;
         _canDelete = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.CusPrices.Delete)).Succeeded;
-        _canImport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.CusPrices.Import)).Succeeded;
+        //_canImport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.CusPrices.Import)).Succeeded;
         _canExport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.CusPrices.Export)).Succeeded;
     }
-
-    // protected override async Task OnInitializedAsync()
-    // {
-
-    //     Title = L[_currentDto.GetClassDescription()];
-    //     _accessRights = await PermissionService.GetAccessRightsAsync<CusPricesAccessRights>();
-    // }
     private async Task<GridData<CusPriceDto>> ServerReload(GridState<CusPriceDto> state)
     {
         try
         {
             _loading = true;
             Query.CustomerId = CustomerId;
-            // Query.CurrentUser = UserProfile;
             Query.OrderBy = state.SortDefinitions.FirstOrDefault()?.SortBy ?? "Id";
             Query.SortDirection = state.SortDefinitions.FirstOrDefault()?.Descending ?? true
                                               ? SortDirection.Descending.ToString()
@@ -229,7 +209,6 @@
         Query.Keyword = string.Empty;
         await _table.ReloadServerData();
     }
-
     private Task OnGoBack()
     {
         var target = !string.IsNullOrWhiteSpace(ReturnUrl)
@@ -238,8 +217,6 @@
         Navigation.NavigateTo(target);
         return Task.CompletedTask;
     }
-
-
     private async Task OnEdit(CusPriceDto dto)
     {
         var title = L["Update CusPrice"];
@@ -260,37 +237,7 @@
 
 
     }
-
-    // private async Task OnDelete(CusPriceDto dto)
-    // {
-    //     var contentText = string.Format(ConstantString.DeleteConfirmation, dto.Id);
-    //     var command = new DeleteCusPriceCommand(new int[] { dto.Id });
-    //     await DialogServiceHelper.ShowDeleteConfirmationDialogAsync(command, ConstantString.DeleteConfirmationTitle, contentText, async () =>
-    //     {
-    //         await InvokeAsync(async () =>
-    //         {
-    //             await _table.ReloadServerData();
-    //             _selectedItems.Clear();
-    //         });
-    //     });
-    // }
-
-    // private async Task OnDeleteChecked()
-    // {
-    //     var contentText = string.Format(ConstantString.DeleteConfirmWithSelected, _selectedItems.Count);
-    //     var command = new DeleteCusPriceCommand(_selectedItems.Select(x => x.Id).ToArray());
-    //     await DialogServiceHelper.ShowDeleteConfirmationDialogAsync(command, ConstantString.DeleteConfirmationTitle, contentText, async () =>
-    //     {
-    //         await InvokeAsync(async () =>
-    //         {
-    //             await _table.ReloadServerData();
-    //             _selectedItems.Clear();
-    //         });
-    //     });
-    // }
-
-
-        private async Task OnDelete(CusPriceDto dto)
+    private async Task OnDelete(CusPriceDto dto)
     {
         var contentText = string.Format(ConstantString.DeleteConfirmation, dto.Id);
         var command = new DeleteCusPriceCommand(new int[] { dto.Id });
@@ -303,7 +250,6 @@
             });
         });
     }
-
     private async Task OnDeleteChecked()
     {
         var contentText = string.Format(ConstantString.DeleteConfirmWithSelected, _selectedItems.Count);
@@ -317,7 +263,6 @@
             });
         });
     }
-
     private async Task OnExport()
     {
         _exporting = true;
@@ -344,91 +289,4 @@
             });
         _exporting = false;
     }
-    // private Task OnEdit(CusPriceDto dto)
-    // {
-    //     // var command = new UpdateCusPriceCommand() { Id = dto.Id};
-    //     var command = Mapper.ToUpdateCommand(dto);
-    //     return DialogServiceHelper.ShowFormDialogAsync<CusPriceEditFormDialog, UpdateCusPriceCommand>(
-    //        L["Update CusPrice"],
-    //        new DialogParameters<CusPriceEditFormDialog>
-    //        {
-    //                         { x=>x._model,command}
-    //        },
-    //        async () =>
-    //        {
-    //            await _table.ReloadServerData();
-    //            _selectedItems.Clear();
-    //        });
-
-    // }
-
-
-
-    // private Task OnDelete(CusPriceDto dto)
-    // {
-    //     var contentText = string.Format(ConstantString.DeleteConfirmation, dto.Id);
-    //     var command = new DeleteCusPriceCommand(new int[] { dto.Id });
-    //     return DeleteInternal(command, contentText);
-    // }
-
-    // private Task OnDeleteChecked()
-    // {
-    //     var contentText = string.Format(ConstantString.DeleteConfirmWithSelected, _selectedItems.Count);
-    //     var command = new DeleteCusPriceCommand(_selectedItems.Select(x => x.Id).ToArray());
-    //     return DeleteInternal(command, contentText);
-
-    // }
-
-    // private Task DeleteInternal(DeleteCusPriceCommand command, string contentText)
-    // {
-    //     return DialogServiceHelper.ShowDeleteConfirmationDialogAsync(
-    //         command,
-    //         ConstantString.DeleteConfirmationTitle,
-    //     contentText,
-    //         async () =>
-    //         {
-    //             await _table.ReloadServerData();
-    //             _selectedItems.Clear();
-    //         });
-    // }
-
-    // private async Task OnExport()
-    // {
-    //     _exporting = true;
-    //     var request = new ExportCusPricesQuery()
-    //         {
-    //             Keyword = Query.Keyword,
-    //             ListView = Query.ListView,
-    //             OrderBy = _table.SortDefinitions.Values.FirstOrDefault()?.SortBy ?? "Id",
-    //             SortDirection = _table.SortDefinitions.Values.FirstOrDefault()?.Descending ?? false
-    //                                     ? SortDirection.Descending.ToString()
-    //                                     : SortDirection.Ascending.ToString()
-
-
-    //         };
-
-    //     var result = await Mediator.Send(request);
-    //     await result.MatchAsync(
-    //         async data =>
-    //         {
-    //             if (result.Data != null)
-    //             {
-    //                 await BlazorDownloadFileService.DownloadFileAsync($"{_currentDto.GetClassDescription()}.xlsx", result.Data, contentType: "application/octet-stream");
-    //                 Snackbar.Add($"{ConstantString.ExportSuccess}", MudBlazor.Severity.Info);
-    //             }
-    //             else
-    //             {
-    //                 Snackbar.Add($"{ConstantString.ExecuteFail}", MudBlazor.Severity.Error);
-    //             }
-    //         },
-    //         errors =>
-    //         {
-    //             Snackbar.Add($"{errors}", MudBlazor.Severity.Error);
-    //             return Task.CompletedTask;
-    //         });
-    //     _exporting = false;
-
-
-    // }
-
 }

@@ -8,7 +8,9 @@ namespace CleanArchitecture.Blazor.Application.Features.TrackedAssets.Queries.Ge
 public class GetAvaliableTrackedAssetsQuery : ICacheableRequest<IEnumerable<TrackedAssetDto>>
 {
 
-   public string CacheKey => TrackedAssetCacheKey.GetAvaliableCacheKey;
+   public int? Id { get; set; }
+   public string CacheKey => TrackedAssetCacheKey.GetAvaliableTrackedAssetsWithIdCacheKey($"{Id}");
+
    public IEnumerable<string> Tags => TrackedAssetCacheKey.Tags;
 }
 
@@ -40,14 +42,14 @@ public class GetAvaliableTrackedAssetsQueryHandler :
 
     public async Task<IEnumerable<TrackedAssetDto>> Handle(GetAvaliableTrackedAssetsQuery request, CancellationToken cancellationToken)
     {
-        //await using var db = await _dbContextFactory.CreateAsync(cancellationToken);
-        //var data = await db.TrackedAssets.ApplySpecification(new AvaliableTrackedAssetsSpecification())
-        //    .ProjectTo<TrackedAssetDto>(_mapper.ConfigurationProvider)
-        //    .ToListAsync(cancellationToken);
-        //return data;
-        var data = await _context.TrackedAssets.ApplySpecification(new AvaliableTrackedAssetsSpecification())
-            .ProjectTo()
-            .ToListAsync(cancellationToken);
+        //await using var _context = await _dbContextFactory.CreateAsync(cancellationToken);
+
+         int? id = request.Id is null ? -1 : request.Id;
+
+         var data = await _context.TrackedAssets
+            .Where(q => q.IsAvaliable || q.Id == id)
+            .ProjectTo().ToListAsync(cancellationToken);
+            
         return data;
 
     }

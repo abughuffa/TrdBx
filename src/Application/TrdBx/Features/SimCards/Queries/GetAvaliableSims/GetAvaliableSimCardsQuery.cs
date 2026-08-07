@@ -1,6 +1,6 @@
 ﻿using CleanArchitecture.Blazor.Application.Features.SimCards.Caching;
 using CleanArchitecture.Blazor.Application.Features.SimCards.DTOs;
-using CleanArchitecture.Blazor.Application.Features.SimCards.Specifications;
+using CleanArchitecture.Blazor.Domain.Enums;
 using CleanArchitecture.Blazor.Application.Features.SimCards.Mappers;
 namespace CleanArchitecture.Blazor.Application.Features.SimCards.Queries.GetAvaliableSimCards;
 public class GetAvaliableSimCardsQuery : ICacheableRequest<IEnumerable<SimCardDto>>
@@ -19,9 +19,14 @@ public class GetAvaliableSimCardsQueryHandler : IRequestHandler<GetAvaliableSimC
     }
     public async Task<IEnumerable<SimCardDto>> Handle(GetAvaliableSimCardsQuery request, CancellationToken cancellationToken)
     {
-        var data = await _context.SimCards.ApplySpecification(new AvaliableSimCardSpecification(request.Ids))
-                                     .ProjectTo()
-                                     .ToListAsync(cancellationToken);
-        return data;
-    }
+
+         int[] ids = request.Ids is null ? [-1] : request.Ids;
+
+         var dataX = await _context.SimCards
+            .Where(q => q.SStatus == SStatus.New || q.SStatus == SStatus.Used || ids.Contains(q.Id))
+                .ProjectTo()
+                .ToListAsync(cancellationToken);
+            
+            return dataX;
+}
 }

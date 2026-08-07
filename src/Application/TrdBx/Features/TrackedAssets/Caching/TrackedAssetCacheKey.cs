@@ -19,6 +19,11 @@ public static class TrackedAssetCacheKey
     public static string GetByIdCacheKey(string parameters) {
         return $"TrackedAssetCacheKey:GetByIdCacheKey,{parameters}";
     }
+
+        public static string GetAvaliableTrackedAssetsWithIdCacheKey(string parameters)
+    {
+        return $"TrackedAssetCacheKey:GetAvaliableTrackedAssetsWithIdCacheKey,{parameters}";
+    }
     public static IEnumerable<string> Tags => new string[] { "trackedasset" };
     public static void Refresh()
     {

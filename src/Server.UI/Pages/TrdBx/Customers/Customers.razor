@@ -1,20 +1,16 @@
 ﻿@page "/pages/TrdBx/Customers"
-
-
-@using CleanArchitecture.Blazor.Application.Features.Customers.Commands.Update
-@using CleanArchitecture.Blazor.Application.Features.CusPrices.Commands.Create
+@using CleanArchitecture.Blazor.Application.Features.Customers.DTOs
 @using CleanArchitecture.Blazor.Application.Features.Customers.Caching
+@using CleanArchitecture.Blazor.Application.Features.Customers.Mappers
+@using CleanArchitecture.Blazor.Application.Features.Customers.Specifications
+@using CleanArchitecture.Blazor.Application.Features.CusPrices.Commands.Create
 @using CleanArchitecture.Blazor.Application.Features.Customers.Commands.Create
 @using CleanArchitecture.Blazor.Application.Features.Customers.Commands.Delete
-@using CleanArchitecture.Blazor.Application.Features.Customers.DTOs
 @using CleanArchitecture.Blazor.Application.Features.Customers.Queries.Export
 @using CleanArchitecture.Blazor.Application.Features.Customers.Queries.Pagination
-@using CleanArchitecture.Blazor.Application.Features.Customers.Specifications
-@using CleanArchitecture.Blazor.Application.Features.Customers.Mappers
 @using CleanArchitecture.Blazor.Domain.Enums
 @using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.CusPrices
 @using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Customers.Components
-
 @inject IStringLocalizer<Customers> L
 @attribute [Authorize(Policy = Infrastructure.PermissionSet.Permissions.Customers.View)]
 
@@ -49,8 +45,8 @@
                                StartIcon="@Icons.Material.Outlined.Refresh">
                         @ConstantString.Refresh
                     </MudButton>
-                    @if (_canCreate)
-                    {
+                        @if (_canCreate)
+                        {
                         <MudButton StartIcon="@Icons.Material.Outlined.Add"
                                    OnClick="OnCreateParent">
                             @ConstantString.New
@@ -59,7 +55,7 @@
                                    OnClick="OnCreateChild">
                             @ConstantString.New
                         </MudButton>
-                    }
+                        }
                     <MudMenu TransformOrigin="Origin.BottomRight" AnchorOrigin="Origin.BottomRight" EndIcon="@Icons.Material.Filled.MoreVert" Label="@ConstantString.More">
                         @if (_canDelete)
                         {
@@ -78,12 +74,9 @@
                     </MudMenu>
                 </MudToolBar>
                 <MudStack Row Spacing="1">
-           @*          @if (_canSearch)
-                    { *@
                         <MudTextField T="string" ValueChanged="@(s => OnSearch(s))" Value="@Query.Keyword" Placeholder="@ConstantString.Search" Adornment="Adornment.End"
                                       AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Small">
                         </MudTextField>
-                    @* } *@
                 </MudStack>
             </MudStack>
         </MudStack>
@@ -132,8 +125,6 @@
             </CellTemplate>
         </TemplateColumn>
 
-       
-       @*  <PropertyColumn Property="x => x.ParentId" Title="@L[_currentDto.GetMemberDescription(x => x.ParentId)]" /> *@
         <PropertyColumn Property="x => x.Name" Title="@L[_currentDto.GetMemberDescription(x => x.Name)]" Sortable="true"/>
         <PropertyColumn Property="x => x.Parent" Title="@L[_currentDto.GetMemberDescription(x => x.Parent)]" Sortable="false" Groupable="true" />
         <PropertyColumn Property="x => x.Account" Title="@L[_currentDto.GetMemberDescription(x => x.Account)]" Groupable="true" />
@@ -156,50 +147,32 @@
 </MudDataGrid>
 
 @code {
-
-    [CascadingParameter]
-    private Task<AuthenticationState> AuthState { get; set; } = default!;
-    [CascadingParameter]
-    private UserProfile? UserProfile { get; set; }
-    public string? Title { get; private set; }
+    [CascadingParameter] private Task<AuthenticationState> AuthState { get; set; } = default!;
+    [CascadingParameter] private UserProfile? UserProfile { get; set; }
+    [Inject] private IBlazorDownloadFileService BlazorDownloadFileService { get; set; } = null!;
     private HashSet<CustomerDto> _selectedItems = new();
+    private CustomersWithPaginationQuery Query { get; set; } = new();
     private MudDataGrid<CustomerDto> _table = default!;
     private CustomerDto _currentDto = new();
-    // private CustomersAccessRights _accessRights = new();
+    public string? Title { get; private set; }
     private int _defaultPageSize = 15;
     private bool _loading;
     private bool _uploading;
     private bool _exporting;
-
-    private CustomersWithPaginationQuery Query { get; set; } = new();
-
-    [Inject]
-    private IBlazorDownloadFileService BlazorDownloadFileService { get; set; } = null!;
-    // private bool _canSearch;
     private bool _canCreate;
     private bool _canEdit;
     private bool _canDelete;
-    private bool _canImport;
     private bool _canExport;
-
     protected override async Task OnInitializedAsync()
     {
         Title = L[_currentDto.GetClassDescription()];
         var state = await AuthState;
         _canCreate = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Customers.Create)).Succeeded;
-        // _canSearch = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Customers.Search)).Succeeded;
         _canEdit = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Customers.Edit)).Succeeded;
         _canDelete = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Customers.Delete)).Succeeded;
-        _canImport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Customers.Import)).Succeeded;
+        //_canImport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Customers.Import)).Succeeded;
         _canExport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Customers.Export)).Succeeded;
     }
-
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     Title = L[_currentDto.GetClassDescription()];
-    //     _accessRights = await PermissionService.GetAccessRightsAsync<CustomersAccessRights>();
-    // }
-
     private async Task<GridData<CustomerDto>> ServerReload(GridState<CustomerDto> state)
     {
         try
@@ -219,20 +192,17 @@
             _loading = false;
         }
     }
-
     private async Task OnSearch(string text)
     {
         _selectedItems = new HashSet<CustomerDto>();
         Query.Keyword = text;
         await _table.ReloadServerData();
     }
-
     private async Task OnChangedListView(CustomerListView listview)
     {
         Query.ListView = listview;
         await _table.ReloadServerData();
     }
-
     private async Task OnRefresh()
     {
         CustomerCacheKey.Refresh();
@@ -240,11 +210,8 @@
         Query.Keyword  = string.Empty;
         await _table.ReloadServerData();
     }
-
     private bool IsCusPriceCreateDisabled(CustomerDto dto) => (dto.BillingPlan == BillingPlan.Unkown) || (dto.ParentId is not null) && (dto.BillingPlan == BillingPlan.Advanced);
-
     private bool IsCusPriceViewDisabled(CustomerDto dto) => (dto.ParentId is not null) && (dto.BillingPlan == BillingPlan.Advanced);
-
     private Task OnView(CustomerDto dto)
     {
         if (dto.ParentId is null)
@@ -260,40 +227,6 @@
         }
             
     }
-
-    // private Task OnCreateParent()
-    // {
-    //     var command = new CreateParentCommand();
-    //     return DialogServiceHelper.ShowFormDialogAsync<ParentCustomerCreateFormDialog, CreateParentCommand>(
-    //        L["Create Parent"],
-    //        new DialogParameters<ParentCustomerCreateFormDialog>
-    //        {
-    //                         { x=>x._model,command}
-    //        },
-    //        async () =>
-    //        {
-    //            await _table.ReloadServerData();
-    //            _selectedItems.Clear();
-    //        });
-    // }
-
-    // private Task OnCreateChild()
-    // {
-    //     var command = new CreateChildCommand();
-    //     return DialogServiceHelper.ShowFormDialogAsync<ChildCustomerCreateFormDialog, CreateChildCommand>(
-    //        L["Create Child"],
-    //        new DialogParameters<ChildCustomerCreateFormDialog>
-    //        {
-    //                         { x=>x._model,command}
-    //        },
-    //        async () =>
-    //        {
-    //            await _table.ReloadServerData();
-    //            _selectedItems.Clear();
-    //        });
-
-    // }
-
     private async Task OnCreateParent()
     {
         var title = L["Create Parent"];
@@ -330,42 +263,6 @@
             _selectedItems.Clear();
         }
     }
-
-    // private Task OnEdit(CustomerDto dto)
-    // {
-    //     if (dto.ParentId is null)
-    //     {
-    //          var command = Mapper.Map<UpdateParentCommand>(dto);
-    //         return DialogServiceHelper.ShowFormDialogAsync<ParentCustomerEditFormDialog, UpdateParentCommand>(
-    //         L["Update Parent"],
-    //         new DialogParameters<ParentCustomerEditFormDialog>
-    //         {
-    //                         { x=>x._model,command}
-    //         },
-    //         async () =>
-    //         {
-    //            await _table.ReloadServerData();
-    //            _selectedItems.Clear();
-    //         });
-    //     }
-    //     else
-    //     {
-    //         // var command = new UpdateChildCommand();
-    //         var command = Mapper.Map<UpdateChildCommand>(dto);
-    //         return DialogServiceHelper.ShowFormDialogAsync<ChildCustomerEditFormDialog, UpdateChildCommand>(
-    //         L["Update Child"],
-    //        new DialogParameters<ChildCustomerEditFormDialog>
-    //        {
-    //             { x=>x._model,command}
-    //        },
-    //        async () =>
-    //        {
-    //            await _table.ReloadServerData();
-    //            _selectedItems.Clear();
-    //        });
-    //     }      
-    // }
-
     private async Task OnEdit(CustomerDto dto)
     {
         if (dto.ParentId is null)
@@ -405,24 +302,6 @@
             }
         }
     }
-
-    // private Task OnCreateCusPrice(CustomerDto dto)
-    // {
-    //     var command = new CreateCusPriceCommand() { CustomerId = dto.Id };
-
-    //     return DialogServiceHelper.ShowFormDialogAsync<CusPriceCreateFormDialog, CreateCusPriceCommand>(
-    //         L["Create CusPrice"],
-    //         new DialogParameters<CusPriceCreateFormDialog>
-    //         {
-    //             { x=>x._model,command}
-    //         },
-    //         async () =>
-    //         {
-    //             await _table.ReloadServerData();
-    //             _selectedItems.Clear();
-    //         });
-    // }
-
     private async Task OnCreateCusPrice(CustomerDto dto)
     {
         var title = L["Create CusPrice"];
@@ -442,41 +321,11 @@
         }
 
     }
-
-
     private Task OnViewCusPrice(CustomerDto dto)
     {
         Navigation.NavigateTo($"/pages/TrdBx/Customers/{dto.Id}/CusPrices?returnUrl={Uri.EscapeDataString(Navigation.Uri)}");
         return Task.CompletedTask;
     }
-
-    // private Task OnDelete(CustomerDto dto)
-    // {
-    //     var contentText = string.Format(ConstantString.DeleteConfirmation, dto.Name);
-    //     var command = new DeleteCustomerCommand(new int[] { dto.Id });
-    //     return DeleteInternal(command, contentText);
-    // }
-
-    // private Task OnDeleteChecked()
-    // {
-    //     var contentText = string.Format(ConstantString.DeleteConfirmWithSelected, _selectedItems.Count);
-    //     var command = new DeleteCustomerCommand(_selectedItems.Select(x => x.Id).ToArray());
-    //     return DeleteInternal(command, contentText);
-    // }
-
-    // private Task DeleteInternal(DeleteCustomerCommand command, string contentText)
-    // {
-    //     return DialogServiceHelper.ShowDeleteConfirmationDialogAsync(
-    //         command,
-    //         ConstantString.DeleteConfirmationTitle,
-    //         contentText,
-    //         async () =>
-    //         {
-    //             await _table.ReloadServerData();
-    //             _selectedItems.Clear();
-    //         });
-    // }
-
     private async Task OnDelete(CustomerDto dto)
     {
         var contentText = string.Format(ConstantString.DeleteConfirmation, dto.Name);
@@ -490,7 +339,6 @@
             });
         });
     }
-
     private async Task OnDeleteChecked()
     {
         var contentText = string.Format(ConstantString.DeleteConfirmWithSelected, _selectedItems.Count);
@@ -504,7 +352,6 @@
             });
         });
     }
-
     private async Task OnExport()
     {
         _exporting = true;

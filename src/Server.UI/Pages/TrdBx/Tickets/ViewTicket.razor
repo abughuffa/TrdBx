@@ -1,10 +1,27 @@
 ﻿@page "/pages/TrdBx/Tickets/{id:int}/view"
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.ActivateTrackingUnit
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.ActivateTrackingUnitForGprs
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.ActivateTrackingUnitForHosting
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.DeactivateTrackingUnit
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.RenewSubscription
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Install
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Transfer
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Replace
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Recover
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Check;
 
-@using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Close
-@using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Start
-@using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Stop
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.TrackingUnits.DailyTasks.AGHD
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.TrackingUnits.DailyTasks.IRTR
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.TrackingUnits.DailyTasks.SIMOper
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.TrackingUnits.DailyTasks
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.InstallOrReplaceSim;
+@using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Execute
+
 @using CleanArchitecture.Blazor.Application.Features.Tickets.DTOs
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.DTOs
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Mappers
 @using CleanArchitecture.Blazor.Application.Features.Tickets.Queries.GetById
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Queries.GetById
 @using CleanArchitecture.Blazor.Domain.Entities
 @using CleanArchitecture.Blazor.Domain.Enums
 
@@ -46,13 +63,8 @@
 
                 </MudGrid>
             </MudCardContent>
-            <MudCardActions>
-                
-                <MudLoadingButton Loading=_starting Disabled=CanExecute Color="Color.Primary" DropShadow="false" OnClick="OnExecute">Execute</MudLoadingButton>
-                <MudLoadingButton Loading=_starting Disabled=CanStart Color="Color.Primary" DropShadow="false" OnClick="OnStart">Start</MudLoadingButton>
-                <MudLoadingButton Loading=_stoping Disabled=CanStop Color="Color.Primary" DropShadow="false" OnClick="OnStop">Stop</MudLoadingButton>
-                <MudLoadingButton Loading=_closeing Disabled=CanClose Color="Color.Primary" DropShadow="false" OnClick="OnClose">Complete</MudLoadingButton>
-@*                 <MudButton Disabled=CanRelease Color="Color.Primary" DropShadow="false" OnClick="OnRelease">Release</MudButton> *@
+            <MudCardActions>          
+                <MudButton Disabled=CanExecute Color="Color.Primary" DropShadow="false" OnClick="OnExecute">Execute</MudButton>
                 <MudButton Color="Color.Primary" DropShadow="false" OnClick="OnGoBack">@ConstantString.GoBack</MudButton>
             </MudCardActions>
         </MudCard>
@@ -75,14 +87,8 @@
     bool _submitting;
 
     bool CanExecute = false;
-    bool CanStart = false;
-    bool CanStop = false;
-    bool CanClose = false;
-    // bool CanRelease = false;
+    bool CanReject = false;
 
-    bool _starting = false;
-    bool _stoping = false;
-    bool _closeing = false;
 
 
 
@@ -112,10 +118,6 @@
     void AssignCommands()
     {
         CanExecute = !(model.TicketStatus == TicketStatus.Accepted);
-        CanStart = !(model.TicketStatus == TicketStatus.Accepted);
-        CanStop = !(model.TicketStatus == TicketStatus.OnProcess);
-        CanClose = !(model.TicketStatus == TicketStatus.OnProcess);
-        // CanRelease = !(model.TicketStatus == TicketStatus.Assigned || model.TicketStatus == TicketStatus.OnProcess);
     }
 
     private Task OnGoBack()
@@ -124,210 +126,305 @@
         return Task.CompletedTask;
     }
 
-    // private Task OnRelease()
-    // {
-    //     Navigation.NavigateTo($"/pages/TrdBx/Tickets/{Id}/Release?returnUrl=/pages/TrdBx/Tickets");
-    //     return Task.CompletedTask;
-    // }
+
 
     private async Task OnExecute()
     {
-
-        try
+      var result = await Mediator.Send(new GetTrackingUnitByIdQuery(){Id = model.TrackingUnitId });
+      try
         {
-            _starting = true;
+            switch (model.ServiceTask)
+            {
+                case ServiceTask.Check:
+                    {
 
-        switch (model.ServiceTask)
-        {
-            case ServiceTask.Check:
-                {
+                        await OnCheck(result.Data);
+                        break;
+                    }
+                case ServiceTask.Install:
+                case ServiceTask.ReInstall:
+                    {
+                        await OnInstall(result.Data);
+                        break;
+                    }
 
-                    //Execute
-                    //create servicelog with wailoncheck checkonwialon
-                    //set ticket status as closed on seccuss
+                case ServiceTask.Transfer:
+                    {
 
-                    break;
-                }
-            case ServiceTask.Install:
-                {
-                    //Execute
-                    //open install dailog then 
-                    //set ticket status as closed on seccuss
-                    break;
-                }
-            case ServiceTask.ReInstall:
-                {
+                        await OnTransfer(result.Data);
+                        break;
+                    }
 
-                    //Execute
-                    //open install dailog then 
-                    //set ticket status as closed on seccuss
-                    break;
-                }
+                case ServiceTask.Replace:
+                    {
 
-            case ServiceTask.Transfer:
-                {
+                        await OnReplace(result.Data); 
+                        break;
+                    }
 
-                    //Execute
-                    //open Transfer dailog then 
-                    //set ticket status as closed on seccuss
-                    break;
-                }
+                case ServiceTask.Recover:
+                    {
 
-            case ServiceTask.Replace:
-                {
+                        await OnRecover(result.Data);
+                        break;
+                    }
 
-                    //Execute
-                    //open Replace dailog then 
-                    //set ticket status as closed on seccuss
-                    break;
-                }
+                case ServiceTask.ActivateUnit:
+                    {
+                        await OnActivate(result.Data);
 
-            case ServiceTask.Recover:
-                {
+                        break;
+                    }
 
-                    //Execute
-                    //open Recover dailog then 
-                    //set ticket status as closed on seccuss
-                    break;
-                }
+                case ServiceTask.ActivateUnitForGprs:
+                    {
+                        await OnActivateGprs(result.Data);
+                        break;
+                    }
 
-            case ServiceTask.ActivateUnit:
-                {
-                    //Execute
-                    //open ActivateUnit dailog then 
-                    //set ticket status as closed on seccuss
+                case ServiceTask.ActivateUnitForHosting:
+                    {
+                        await OnActivateHosting(result.Data);
+                        break;
+                    }
 
-                    break;
-                }
+                case ServiceTask.DeactivateUnit:
+                    {
+                        await OnDeactivate(result.Data);
+                        break;
+                    }
 
-            case ServiceTask.ActivateUnitForGprs:
-                {
+                case ServiceTask.RenewUnitSub:
+                    {
 
-                    //Execute
-                    break;
-                }
+                        await OnRenew(result.Data);
+                        break;
+                    }
 
-            case ServiceTask.ActivateUnitForHosting:
-                {
+                case ServiceTask.ReplacSimCard:
+                    {
 
-                    //Execute
-                    break;
-                }
+                        await OnReplaceSim(result.Data);
+                        break;
+                    }
 
-            case ServiceTask.DeactivateUnit:
-                {
+                case ServiceTask.InstallSimCard:
+                    {
 
-                    //Execute
-                    break;
-                }
+                        await OnInstallSim(result.Data);
+                        break;
+                    }
 
-            case ServiceTask.RenewUnitSub:
-                {
+                case ServiceTask.RecoverSimCard:
+                    {
 
-                    //Execute
-                    break;
-                }
-
-            case ServiceTask.ReplacSimCard:
-                {
-
-                    //Execute
-                    break;
-                }
-
-            case ServiceTask.InstallSimCard:
-                {
-
-                    //Execute
-                    break;
-                }
-
-            case ServiceTask.RecoverSimCard:
-                {
-
-                    //Execute
-                    break;
-                }
-        }
-
-
+                        //Execute
+                        break;
+                    }
+            }
         }
         finally
         {
-            _starting = false;
+            
         }
     }
 
-    private async Task OnStart()
+
+    private async Task OnExecuted(int id)
+{
+await Mediator.Send(new MarkAsExecutedTicketCommand(){Id = id});
+}
+    private Task OnActivate(TrackingUnitDto dto)
+    {
+        // var command = Mapper.Map<ActivateTrackingUnitCommand>(dto);
+        var command = Mapper.ToActivateCommand(dto);
+        // command.InstallerId = UserProfile.UserId;
+        return DialogServiceHelper.ShowFormDialogWithContentTextAsync<ActivateDialog, ActivateTrackingUnitCommand>(
+            string.Format(L["Activate TrackingUnit {0}"], dto.SNo),
+            L["Select Activation date to activate tracking unit's subscription."],
+            command,
+            async () =>
+            {
+                await OnExecuted(model.Id);
+              @*   await _table.ReloadServerData();
+                _selectedItems.Clear(); *@
+
+            });
+    }
+    private Task OnActivateHosting(TrackingUnitDto dto)
     {
 
-        try
-        {
-            _starting = true;
-            var command = new StartTicketCommand() { Id = Id };
-            var result = await Mediator.Send(command);
-            if (result.Succeeded)
-            {
-                Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
-                OnGoBack();
-            }
-            else
-            {
-                Snackbar.Add(result.ErrorMessage, MudBlazor.Severity.Error);
-            }
-        }
-        finally
-        {
-            _starting = false;
-        }
+        // var command = Mapper.Map<ActivateTrackingUnitForHostingCommand>(dto);
+        var command = Mapper.ToActivateHostingCommand(dto);
+        // command.InstallerId = UserProfile.UserId;
+        return DialogServiceHelper.ShowFormDialogWithContentTextAsync<ActivateForHostingDialog, ActivateTrackingUnitForHostingCommand>(
+            string.Format(L["Activate TrackingUnit {0} for hosting"], dto.SNo),
+            L["Select Activation date to activate tracking unit's subscription for hosting."],
+            command,
+            async () =>
+           {
+            await OnExecuted(model.Id);
+              @*   await _table.ReloadServerData();
+                _selectedItems.Clear(); *@
+            });
     }
-    private async Task OnStop()
+    private Task OnActivateGprs(TrackingUnitDto dto)
     {
-        try
-        {
-            _stoping = true;
-            var command = new StopTicketCommand() { Id = Id };
-            var result = await Mediator.Send(command);
-            if (result.Succeeded)
+
+        // var command = Mapper.Map<ActivateTrackingUnitForGprsCommand>(dto);
+        var command = Mapper.ToActivateGprsCommand(dto);
+        // command.InstallerId = UserProfile.UserId;
+        return DialogServiceHelper.ShowFormDialogWithContentTextAsync<ActivateForGprsDialog, ActivateTrackingUnitForGprsCommand>(
+            string.Format(L["Activate TrackingUnit {0} for Gprs"], dto.SNo),
+            L["Select Activation date to activate tracking unit's subscription for Gprs."],
+            command,
+            async () =>
             {
-                Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
-                OnGoBack();
-            }
-            else
-            {
-                Snackbar.Add(result.ErrorMessage, MudBlazor.Severity.Error);
-            }
-        }
-        finally
-        {
-            _stoping = false;
-        }
+                await OnExecuted(model.Id);
+              @*   await _table.ReloadServerData();
+                _selectedItems.Clear(); *@
+            });
     }
-    private async Task OnClose()
+    private Task OnDeactivate(TrackingUnitDto dto)
     {
-        try
-        {
-            _closeing = true;
-            var command = new CloseTicketCommand() { Id = Id };
-            var result = await Mediator.Send(command);
-            if (result.Succeeded)
-            {
-                Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
-                OnGoBack();
-            }
-            else
-            {
-                Snackbar.Add(result.ErrorMessage, MudBlazor.Severity.Error);
-            }
-        }
-        finally
-        {
-            _closeing = false;
-        }
+        // var command = Mapper.Map<DeactivateTrackingUnitCommand>(dto);
+        var command = Mapper.ToDeactivateCommand(dto);
+        // command.InstallerId = UserProfile.UserId;
+        return DialogServiceHelper.ShowFormDialogWithContentTextAsync<DeactivateDialog, DeactivateTrackingUnitCommand>(
+            string.Format(L["Deactivate TrackingUnit {0}"], dto.SNo),
+            L["Select Deactivation date to deactivate tracking unit's subscription."],
+            command,
+            async () =>
+     {
+        await OnExecuted(model.Id);
+              @*   await _table.ReloadServerData();
+                _selectedItems.Clear(); *@
+            });
+
+
+
     }
+    private Task OnInstall(TrackingUnitDto dto)
+    {
 
+        var cmd = Mapper.ToInstallCommand(dto);
+        return DialogServiceHelper.ShowFormDialogWithContentTextAsync<InstallTrackingUnitDailog, InstallTrackingUnitCommand>(
+            string.Format(L["Install TrackingUnit {0}"], dto.SNo),
+            L["Fill the form."],
+            cmd,
+            async () =>
+ {
+    await OnExecuted(model.Id);
+              @*   await _table.ReloadServerData();
+                _selectedItems.Clear(); *@
+            });
 
+        //Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits/Install/{dto.Id}");
+        //return Task.CompletedTask;
+    }
+    private Task OnTransfer(TrackingUnitDto dto)
+    {
+         var cmd = Mapper.ToTransferCommand(dto);
+        return DialogServiceHelper.ShowFormDialogWithContentTextAsync<TransferTrackingUnitDailog, TransferTrackingUnitCommand>(
+            string.Format(L["Transfer TrackingUnit {0}"], dto.SNo),
+            L["Fill the form."],
+            cmd,
+            async () =>
+        {
+            await OnExecuted(model.Id);
+              @*   await _table.ReloadServerData();
+                _selectedItems.Clear(); *@
+            }); 
 
+       // Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits/Transfer/{dto.Id}");
+        //return Task.CompletedTask;
+    }
+    private Task OnReplace(TrackingUnitDto dto)
+    {
+        var cmd = Mapper.ToReplaceCommand(dto);
+        return DialogServiceHelper.ShowFormDialogWithContentTextAsync<ReplaceTrackingUnitDailog, ReplaceTrackingUnitCommand>(
+            string.Format(L["Replace TrackingUnit {0}"], dto.SNo),
+            L["Fill the form."],
+            cmd,
+            async () =>
+{
+    await OnExecuted(model.Id);
+              @*   await _table.ReloadServerData();
+                _selectedItems.Clear(); *@
+            });
+        //Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits/Replace/{dto.Id}");
+        //return Task.CompletedTask;
+    }
+    private Task OnRecover(TrackingUnitDto dto)
+    {
+        var cmd = Mapper.ToRecoverCommand(dto);
+        return DialogServiceHelper.ShowFormDialogWithContentTextAsync<RecoverTrackingUnitDailog, RecoverTrackingUnitCommand>(
+            string.Format(L["Recover TrackingUnit {0}"], dto.SNo),
+            L["Fill the form."],
+            cmd,
+            async () =>
+      {
+        await OnExecuted(model.Id);
+             
+            }); 
 
+        //Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits/Recover/{dto.Id}");
+        //return Task.CompletedTask;
+    }
+    private Task OnRenew(TrackingUnitDto dto)
+    {
+        var cmd = Mapper.ToRenewSubscriptionCommand(dto);
+        return DialogServiceHelper.ShowFormDialogWithContentTextAsync<RenewSubscriptionDialog, RenewSubscriptionCommand>(
+            string.Format(L["Renew Subscription of TrackingUnit {0}"], dto.SNo),
+            L["Fill the form."],
+            cmd,
+            async () =>
+      {
+        await OnExecuted(model.Id);
+             
+            }); 
+
+        //Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits/Recover/{dto.Id}");
+        //return Task.CompletedTask;
+    }
+    private Task OnInstallSim(TrackingUnitDto dto)
+    {
+        var cmd = Mapper.ToInstallOrReplaceSimCommand(dto);
+        return DialogServiceHelper.ShowFormDialogWithContentTextAsync<InstallOrReplaceSimDailog, InstallOrReplaceSimCommand>(
+            string.Format(L["Install Sim to TrackingUnit {0}"], dto.SNo),
+            L["Fill the form."],
+            cmd,
+            async () =>
+      {
+        await OnExecuted(model.Id);
+             
+            }); 
+    }
+    private Task OnReplaceSim(TrackingUnitDto dto)
+    {
+        var cmd = Mapper.ToInstallOrReplaceSimCommand(dto);
+        return DialogServiceHelper.ShowFormDialogWithContentTextAsync<InstallOrReplaceSimDailog, InstallOrReplaceSimCommand>(
+            string.Format(L["Replace Sim of TrackingUnit {0}"], dto.SNo),
+            L["Fill the form."],
+            cmd,
+            async () =>
+      {
+        await OnExecuted(model.Id);
+             
+            }); 
+    }
+    private Task OnCheck(TrackingUnitDto dto)
+    {
+        var cmd = Mapper.ToCheckTrackingUnitCommand(dto);
+        return DialogServiceHelper.ShowFormDialogWithContentTextAsync<CheckTrackingUnitDailog, CheckTrackingUnitCommand>(
+            string.Format(L["Check TrackingUnit {0}"], dto.SNo),
+            L["Fill the form."],
+            cmd,
+            async () =>
+      {
+        await OnExecuted(model.Id);
+             
+            }); 
+    }
 
 }

@@ -1,19 +1,14 @@
 ﻿@page "/pages/TrdBx/Invoices"
-
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.AddPayment
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Queries.Download
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Caching
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.Create
-@using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.Delete
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.SetAsCanceled
-@using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.SetNextStatus
-@using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.SetPreviousStatus
 @using CleanArchitecture.Blazor.Application.Features.Invoices.DTOs
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Queries.Export
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Queries.Pagination
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Mappers
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Specifications
-@using CleanArchitecture.Blazor.Domain.Enums
 @using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Invoices.Components
 
 @inject IStringLocalizer<Invoices> L
@@ -22,11 +17,7 @@
 <PageTitle>@Title</PageTitle>
 
 <AdvancedSearchInvoices TRequest="Query" OnFilterCriteriaChanged="FilterCriteriaChanged"></AdvancedSearchInvoices>
-@* <style>
-    .mud-table-toolbar {
-        height: 120px !important;
-    }
-</style> *@
+
 
 <MudDataGrid ServerData="@(ServerReload)"
              FixedHeader="true"
@@ -131,11 +122,8 @@
         <PropertyColumn Property="x => x.IStatus" Title="@L[_currentDto.GetMemberDescription(x=>x.IStatus)]" />
         <PropertyColumn Property="x => x.InvoiceDate" Title="@L[_currentDto.GetMemberDescription(x=>x.InvoiceDate)]" />
         <PropertyColumn Property="x => x.DueDate" Title="@L[_currentDto.GetMemberDescription(x=>x.DueDate)]" />
-       @*  <PropertyColumn Property="x => x.CustomerId" Title="@L[_currentDto.GetMemberDescription(x=>x.CustomerId)]" /> *@
         <PropertyColumn Property="x => x.DisplayCusName" Title="@L[_currentDto.GetMemberDescription(x => x.DisplayCusName)]" />
         <PropertyColumn Property="x => x.Description" Title="@L[_currentDto.GetMemberDescription(x=>x.Description)]" />
-@*         <PropertyColumn Property="x => x.TotalAmount" Title="@L[_currentDto.GetMemberDescription(x=>x.TotalAmount)]" />
-        <PropertyColumn Property="x => x.Taxes" Title="@L[_currentDto.GetMemberDescription(x=>x.Taxes)]" /> *@
         <PropertyColumn Property="x => x.GrandTotal" Title="@L[_currentDto.GetMemberDescription(x=>x.GrandTotal)]" />
     </Columns>
     <NoRecordsContent>
@@ -160,7 +148,6 @@
     private HashSet<InvoiceDto> _selectedItems = new();
     private MudDataGrid<InvoiceDto> _table = default!;
     private InvoiceDto _currentDto = new();
-    // private InvoicesAccessRights _accessRights = new();
     private int _defaultPageSize = 15;
     private bool _loading;
     private bool _exporting;
@@ -170,13 +157,11 @@
     private InvoicesWithPaginationQuery Query { get; set; } = new();
 
 
-    [Inject]
-    private IBlazorDownloadFileService BlazorDownloadFileService { get; set; } = null!;
+    [Inject] private IBlazorDownloadFileService BlazorDownloadFileService { get; set; } = null!;
 
     private bool _canCreate;
     private bool _canEdit;
     private bool _canExport;
-
     private bool _canChangeStatus;
     private bool _canAddPayment;
     private bool _canDownload;
@@ -199,12 +184,6 @@
         InvokeAsync(_table.ReloadServerData);
     }
 
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     Title = L[_currentDto.GetClassDescription()];
-    //     _accessRights = await PermissionService.GetAccessRightsAsync<InvoicesAccessRights>();
-
-    // }
     private async Task<GridData<InvoiceDto>> ServerReload(GridState<InvoiceDto> state)
     {
         try
@@ -308,23 +287,6 @@
             _selectedItems.Clear();
         }
     }
-
-
-    // private async Task OnDelete(InvoiceDto dto)
-    // {
-    //     var contentText = string.Format(ConstantString.DeleteConfirmation, dto.InvoiceNo);
-    //     var command = new DeleteInvoiceCommand(dto.Id);
-    //     await DialogServiceHelper.ShowDeleteConfirmationDialogAsync(command, ConstantString.DeleteConfirmationTitle, contentText, async () =>
-    //     {
-    //         await InvokeAsync(async () =>
-    //         {
-    //             await _table.ReloadServerData();
-    //             _selectedItems.Clear();
-    //         });
-    //     });
-    // }
-
-
 
     private async Task OnExport()
     {

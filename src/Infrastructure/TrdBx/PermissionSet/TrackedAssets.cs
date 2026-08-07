@@ -20,9 +20,6 @@ public static partial class Permissions
         [Description("Allows deleting TrackedAsset records.")]
         public const string Delete = "Permissions.TrackedAssets.Delete";
 
-        [Description("Allows searching for TrackedAsset records.")]
-        public const string Search = "Permissions.TrackedAssets.Search";
-
         [Description("Allows exporting TrackedAsset records.")]
         public const string Export = "Permissions.TrackedAssets.Export";
 
@@ -36,7 +33,6 @@ public class TrackedAssetsAccessRights
     public bool Create { get; set; }
     public bool Edit { get; set; }
     public bool Delete { get; set; }
-    public bool Search { get; set; }
     public bool Export { get; set; }
     public bool Import { get; set; }
 }

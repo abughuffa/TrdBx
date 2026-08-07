@@ -1,5 +1,4 @@
-﻿@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.CusPrices
-@using CleanArchitecture.Blazor.Application.Features.CusPrices.Commands.Create
+﻿@using CleanArchitecture.Blazor.Application.Features.CusPrices.Commands.Create
 @using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.TrackingUnitModels
 
 @inherits MudComponentBase
@@ -11,12 +10,10 @@
     <DialogContent>
         <MudForm Model="@_model" @ref="@_contactForm" Validation="@(Validator.ValidateValue(_model))">
             <MudGrid>
-
                  <MudItem md="12">
                     <TrackingUnitModels @bind-TrackingUnitModelId="_model.TrackingUnitModelId">
                         </TrackingUnitModels>
                  </MudItem>
-
                  <MudItem md="4">
                         <MudTextField Label="@L[_model.GetMemberDescription(x => x.Gprs)]" @bind-Value="_model.Gprs"
                             For="@(() => _model.Gprs)" 
@@ -25,7 +22,6 @@
                             Placeholder="@L["Enter Gprs fees"]">
                         </MudTextField>
                  </MudItem>
-
                  <MudItem md="4">
                         <MudTextField Label="@L[_model.GetMemberDescription(x=>x.Host)]" @bind-Value="_model.Host"
                             For="@(() => _model.Host)"
@@ -34,7 +30,6 @@
                             Placeholder="@L["Enter Host fees"]">
                         </MudTextField>
                  </MudItem>
-
                  <MudItem md="4">
                         <MudTextField Label="@L[_model.GetMemberDescription(x=>x.Price)]" @bind-Value="_model.Price"
                             For="@(() => _model.Price)"
@@ -43,12 +38,10 @@
                             Placeholder="@L["Enter Unit Price"]">
                         </MudTextField>
                  </MudItem>
-
             </MudGrid>
         </MudForm>
     </DialogContent>
     <DialogActions>
-        
         <MudLoadingButton Loading="@_savingnew" OnClick="OnSaveAndNew">@ConstantString.SaveAndNew</MudLoadingButton>
         <MudLoadingButton Loading="@_saving"  OnClick="OnSave">@ConstantString.Save</MudLoadingButton>
         <MudButton OnClick="Cancel">@ConstantString.Cancel</MudButton>
@@ -59,10 +52,8 @@
     MudForm _contactForm = new();
     private bool _saving = false;
     private bool _savingnew = false;
-    [CascadingParameter]
-    IMudDialogInstance MudDialog { get; set; } = default!;
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; } = default!;
     [EditorRequired][Parameter] public CreateCusPriceCommand _model { get; set; } = null!;
-
     async Task OnSave()
     {
         try
@@ -86,15 +77,12 @@
                     Snackbar.Add(errors, MudBlazor.Severity.Error);
                     return -1;
                 });
-
-
         }
         finally
         {
             _saving = false;
         }
     }
-
     async Task OnSaveAndNew()
     {
         try
@@ -118,23 +106,11 @@
                         Snackbar.Add(errors, MudBlazor.Severity.Error);
                         return null;
                     });
-
-            // await result.MatchAsync(async data =>
-            // {
-            //     Snackbar.Add(ConstantString.SaveSuccess, MudBlazor.Severity.Info);
-            //     await Task.Delay(300);
-            //     _model = new CreateCusPriceCommand() { };
-            // }, errors =>
-            // {
-            //     Snackbar.Add(errors, MudBlazor.Severity.Error);
-            //     return Task.CompletedTask;
-            // });
         }
         finally
         {
             _savingnew = false;
         }
     }
-
     void Cancel() => MudDialog.Cancel();
 }

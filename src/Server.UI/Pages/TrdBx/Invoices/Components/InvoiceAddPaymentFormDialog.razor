@@ -1,7 +1,4 @@
 ﻿@using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.AddPayment
-@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.ActivateTrackingUnit
-
-
 
 @inherits MudComponentBase
 @inject IValidationService Validator
@@ -45,7 +42,6 @@
     [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;
     [EditorRequired][Parameter] public AddPaymentCommand _model { get; set; } = default!;
     [Parameter] public string? _contentText { get; set; } = default!;
-
     private DateTime? _date
     {
         get => _model.PaymentDate.ToDateTime(TimeOnly.MinValue);
@@ -57,7 +53,6 @@
             }
         }
     }
-
     async Task Submit()
     {
         try
@@ -82,6 +77,5 @@
             _submitting = false;
         }
     }
-
     void Cancel() => MudDialog.Cancel();
 }

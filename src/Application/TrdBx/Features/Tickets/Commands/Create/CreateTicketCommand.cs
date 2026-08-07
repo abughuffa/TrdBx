@@ -66,7 +66,7 @@ public class CreateTicketCommandHandler : SerialForSharedLogic, IRequestHandler<
 
         var desc = string.Empty;
         
-        var ticketNo = GenSerialNo(_context, "Ticket", request.TcDate).Result;
+        var ticketNo =  await GenSerialNo(_context, "Ticket", request.TcDate);
 
         var items = await _context.TrackingUnits.Where(x => request.Id.Contains(x.Id)).ToListAsync(cancellationToken);
 

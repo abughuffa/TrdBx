@@ -258,17 +258,7 @@ public class InvoiceItem : BaseEntity
 
 
 #region Tickets
-public enum TicketStatus
-{
-    //All = 0,
-    Opened = 2,
-    Accepted = 3,
-    //Assigned = 4,
-    //Released = 5,
-    Rejected = 5,
-    OnProcess = 6,
-    Closed = 7
-}
+
 public class Ticket : BaseAuditableEntity
 {
     public string TicketNo { get; set; } = string.Empty;
