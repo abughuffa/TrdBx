@@ -17,7 +17,7 @@ public static class HostExtensions
 
                 await initializer.SeedTrdBxAsync().ConfigureAwait(false);
 
-                await initializer.SeedDeliveryAsync().ConfigureAwait(false);
+                //await initializer.SeedDeliveryAsync().ConfigureAwait(false);
 
             }
         }

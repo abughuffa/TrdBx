@@ -15,7 +15,7 @@
 @implements IDisposable
 @inject IValidationService Validator
 @inject IStringLocalizer<TrackingUnits> L
-@attribute [Authorize(Policy = Permissions.TrackingUnits.Install)]
+@attribute [Authorize(Policy = Permissions.DailyTasks.InstallUnit)]
 
 <PageTitle>@Title</PageTitle>
 <MudContainer Class="mt-3" MaxWidth="MaxWidth.Small">

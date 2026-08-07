@@ -19,28 +19,28 @@ public static partial class Permissions
         [Description("Allows deleting Invoice records.")]
         public const string Delete = "Permissions.Invoices.Delete";
 
-        [Description("Allows searching for Invoice records.")]
-        public const string Search = "Permissions.Invoices.Search";
 
         [Description("Allows exporting Invoice records.")]
         public const string Export = "Permissions.Invoices.Export";
 
 
+        [Description("Allows deleting Items Group from Invoice record.")]
+        public const string DeleteGroup = "Permissions.Invoices.DeleteGroup";
+
+        [Description("Allows deleting Item from Items Group record.")]
+        public const string DeleteItem = "Permissions.Invoices.DeleteItem";
+        [Description("Allows Add Payment to Invoice record.")]
+        public const string AddPayment = "Permissions.Invoices.AddPayment";
 
         [Description("Allows Change status of Invoice record.")]
         public const string ChangeStatus = "Permissions.Invoices.ChangeStatus";
 
-        [Description("Allows Add Payment to Invoice record.")]
-        public const string AddPayment = "Permissions.Invoices.AddPayment";
-
         [Description("Allows downloading Invoice records.")]
         public const string Download = "Permissions.Invoices.Download";
 
-        [Description("Allows deleting Item from Items Group record.")]
-        public const string DeleteItem = "Permissions.Invoices.DeleteItem";
 
-        [Description("Allows deleting Items Group from Invoice record.")]
-        public const string DeleteGroup = "Permissions.Invoices.DeleteGroup";
+
+
 
 
 

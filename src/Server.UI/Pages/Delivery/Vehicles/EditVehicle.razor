@@ -1,4 +1,4 @@
-﻿@page "/pages/Vehicles/edit/{id:int}"
+﻿@* @page "/pages/Vehicles/edit/{id:int}"
 @using CleanArchitecture.Blazor.Application.Features.Vehicles.Commands.Update
 @using CleanArchitecture.Blazor.Application.Features.Vehicles.Mappers
 @using CleanArchitecture.Blazor.Application.Features.Vehicles.Queries.GetById
@@ -36,10 +36,7 @@
                         <MudTextField Label="@L[model.GetMemberDescription(x => x.VehicleNo)]" @bind-Value="model.VehicleNo" For="@(() => model.VehicleNo)" Required="true" RequiredError="@L["VehicleNo is required!"]"></MudTextField>
                 </MudItem> 
  
-               <MudItem xs="12" md="12">
-                        <DriversSelector @bind-UserId="model.DriverId"></DriversSelector>
-@*                         <MudTextField Label="@L[model.GetMemberDescription(x => x.DriverId)]" For="@(() => model.DriverId)" @bind-Value="model.DriverId"></MudTextField> *@
-                    </MudItem>
+
 
             </MudGrid>
         </MudForm>
@@ -111,4 +108,4 @@
             _saving = false;
         }
     }
-}
+} *@

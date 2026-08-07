@@ -1,13 +1,13 @@
-﻿namespace CleanArchitecture.Blazor.Application.Features.TestCases.ActivateHostingTestCases.Commands.Execute;
+﻿// namespace CleanArchitecture.Blazor.Application.Features.TestCases.ActivateHostingTestCases.Commands.Execute;
 
-public class ExecuteActivateHostingTestCaseCommandValidator : AbstractValidator<ExecuteActivateHostingTestCaseCommand>
-{
-    public ExecuteActivateHostingTestCaseCommandValidator()
-    {
+// public class ExecuteActivateHostingTestCaseCommandValidator : AbstractValidator<ExecuteActivateHostingTestCaseCommand>
+// {
+//     public ExecuteActivateHostingTestCaseCommandValidator()
+//     {
 
-        RuleFor(v => v.Id).NotNull().ForEach(v => v.GreaterThan(0));
+//         RuleFor(v => v.Id).NotNull().ForEach(v => v.GreaterThan(0));
 
-    }
-}
+//     }
+// }
 
 

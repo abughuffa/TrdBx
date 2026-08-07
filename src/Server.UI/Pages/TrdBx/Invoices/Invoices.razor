@@ -288,6 +288,10 @@
         }
     }
 
+
+
+
+
     private async Task OnExport()
     {
         _exporting = true;
@@ -349,20 +353,7 @@
     }
 
 
-    private Task OnSetAsCanceled(InvoiceDto dto)
-    {
-        var contentText = string.Format(ConstantString.ExecuteConfirmation, " Cancel Invoice", dto.InvoiceNo);
-        var command = new SetAsCanceledInvoiceCommand(dto.Id);
 
-        return DialogServiceHelper.ShowExecuteConfirmationDialogAsync(command, ConstantString.ExecuteConfirmationTitle, contentText, async () =>
-        {
-            await InvokeAsync(async () =>
-            {
-                await _table.ReloadServerData();
-                _selectedItems.Clear();
-            });
-        });
-    }
 
 
     private async Task OnDownLoad(InvoiceDto dto)

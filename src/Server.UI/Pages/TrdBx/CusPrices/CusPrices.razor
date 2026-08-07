@@ -155,7 +155,8 @@
 
     [Inject]
     private IBlazorDownloadFileService BlazorDownloadFileService { get; set; } = null!;
-    private bool _canCreate;
+    // private bool _canSearch;
+
     private bool _canEdit;
     private bool _canDelete;
     //private bool _canImport;
@@ -164,12 +165,13 @@
     {
         Title = L[_currentDto.GetClassDescription()];
         var state = await AuthState;
-        _canCreate = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.CusPrices.Create)).Succeeded;
         _canEdit = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.CusPrices.Edit)).Succeeded;
         _canDelete = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.CusPrices.Delete)).Succeeded;
         //_canImport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.CusPrices.Import)).Succeeded;
         _canExport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.CusPrices.Export)).Succeeded;
     }
+
+
     private async Task<GridData<CusPriceDto>> ServerReload(GridState<CusPriceDto> state)
     {
         try
@@ -237,7 +239,13 @@
 
 
     }
-    private async Task OnDelete(CusPriceDto dto)
+
+
+
+
+
+
+        private async Task OnDelete(CusPriceDto dto)
     {
         var contentText = string.Format(ConstantString.DeleteConfirmation, dto.Id);
         var command = new DeleteCusPriceCommand(new int[] { dto.Id });
@@ -289,4 +297,8 @@
             });
         _exporting = false;
     }
+    
+
+
+    
 }

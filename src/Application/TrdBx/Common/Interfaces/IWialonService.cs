@@ -33,13 +33,19 @@ public interface IWialonService
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>Login result containing session info</returns>
     Task<WialonLoginResult> LoginAsync(CancellationToken cancellationToken = default);
-    
+
     /// <summary>
     /// Logs out from current Wialon session
     /// </summary>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>True if logout was successful</returns>
     Task<bool> LogoutAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Attempts to retrieve a new token by submitting credentials to the remote CMS login endpoint.
+    /// Returns the access_token string when successful, or null when it could not be retrieved.
+    /// </summary>
+    Task<string?> RetrieveTokenAsync(string username, string password, CancellationToken cancellationToken = default);
     
     /// <summary>
     /// Gets the current session ID (if session is active)
@@ -79,6 +85,12 @@ public interface IWialonService
     /// </summary>
     /// <returns>True if token is valid</returns>
     Task<bool> ValidateCurrentTokenAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Attempts to retrieve a new token by submitting credentials to the remote CMS login endpoint.
+    /// Returns the access_token string when successful, or null when it could not be retrieved.
+    /// </summary>
+    Task<string?> RetrieveTokenAsync(string username, string password, CancellationToken cancellationToken = default);
     
     // ========== RESOURCE MANAGEMENT ==========
     

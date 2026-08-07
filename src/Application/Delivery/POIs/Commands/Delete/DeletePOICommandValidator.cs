@@ -1,15 +1,15 @@
 ﻿
 
-namespace CleanArchitecture.Blazor.Application.Features.POIs.Commands.Delete;
+// namespace CleanArchitecture.Blazor.Application.Features.POIs.Commands.Delete;
 
-public class DeletePOICommandValidator : AbstractValidator<DeletePOICommand>
-{
-        public DeletePOICommandValidator()
-        {
+// public class DeletePOICommandValidator : AbstractValidator<DeletePOICommand>
+// {
+//         public DeletePOICommandValidator()
+//         {
           
-            RuleFor(v => v.Id).NotNull().ForEach(v=>v.GreaterThan(0));
+//             RuleFor(v => v.Id).NotNull().ForEach(v=>v.GreaterThan(0));
           
-        }
-}
+//         }
+// }
     
 

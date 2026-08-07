@@ -10,7 +10,7 @@
 @inject IValidationService Validator
 @inject IStringLocalizer<TrackingUnits> L
 @inject IDropdownDataService DropdownDataService
-@attribute [Authorize(Policy = Permissions.TrackingUnits.Replace)]
+@attribute [Authorize(Policy = Permissions.DailyTasks.ReplaceUnit)]
 
 <MudDialog>
     <DialogContent>

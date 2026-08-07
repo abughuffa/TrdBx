@@ -1,11 +1,11 @@
-﻿
+﻿@* 
 @using CleanArchitecture.Blazor.Application.Features.VehicleTypes.DTOs
 
 @inherits MudComponentBase
 @inject IStringLocalizer<VehicleTypes> L
 @attribute [Authorize(Policy = Permissions.VehicleTypes.View)]
 
-@* <PageTitle>@Title</PageTitle> *@
+
 
 <MudDialog>
     <DialogContent>
@@ -34,4 +34,4 @@
 
 
     void Cancel() => MudDialog.Cancel();
-}
+} *@

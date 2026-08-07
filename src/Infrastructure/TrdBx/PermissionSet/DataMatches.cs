@@ -10,9 +10,6 @@ public static partial class Permissions
         [Description("Allows viewing DataMatch details.")]
         public const string View = "Permissions.DataMatches.View";
 
-        [Description("Allows searching for DataMatch records.")]
-        public const string Search = "Permissions.DataMatches.Search";
-
         [Description("Allows exporting DataMatch records.")]
         public const string Export = "Permissions.DataMatches.Export";
 
@@ -24,7 +21,7 @@ public static partial class Permissions
 public class DbMatchingsAccessRights
 {
     public bool View { get; set; }
-    public bool Search { get; set; }
+    // public bool Search { get; set; }
     public bool Export { get; set; }
 }
 

@@ -1,4 +1,4 @@
-﻿@using CleanArchitecture.Blazor.Application.Features.Shipments.Queries.Pagination
+﻿@* @using CleanArchitecture.Blazor.Application.Features.Shipments.Queries.Pagination
 @inject IStringLocalizer<Shipments> L
 
 <MudExpansionPanel @bind-Expanded="_advancedSearchExpanded"
@@ -6,12 +6,7 @@
                    Class="mud-elevation-25 pa-2 mb-3" Text="@ConstantString.AdvancedSearch">
     <MudGrid>
         <MudItem xs="12" sm="6" md="4">
-            @*TODO: define advanced search query fields, for example:*@
-            @*<MudTextField @bind-Value="TRequest.Name" 
-                          Placeholder="@L["Search for name"]"
-                          Clearable="true"
-                          TextChanged="TextChanged">
-            </MudTextField>*@
+
         </MudItem>
      </MudGrid>
 </MudExpansionPanel>
@@ -27,4 +22,4 @@
           await OnConditionChanged.InvokeAsync(str);
         }
     }
-}
+} *@

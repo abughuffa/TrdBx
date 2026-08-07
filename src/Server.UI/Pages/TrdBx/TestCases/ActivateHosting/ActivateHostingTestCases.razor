@@ -1,4 +1,4 @@
-﻿@page "/pages/TrdBx/ActivateHostingTestCases"
+﻿@* @page "/pages/TrdBx/ActivateHostingTestCases"
 
 @using CleanArchitecture.Blazor.Application.Features.TestCases.ActivateHostingTestCases.Caching
 @using CleanArchitecture.Blazor.Application.Features.TestCases.ActivateHostingTestCases.Commands.Delete
@@ -91,7 +91,6 @@
                              EndIcon="@Icons.Material.Filled.KeyboardArrowDown" IconColor="Color.Info" AnchorOrigin="Origin.CenterLeft">
                         @if (_canExecute)
                         {
-                            @* <MudMenuItem OnClick="@(()=>OnExcute(context.Item))">@ConstantString.Edit</MudMenuItem> *@
                         }
                         @if (_canDelete)
                         {
@@ -283,4 +282,4 @@
 
 
 }
-
+ *@

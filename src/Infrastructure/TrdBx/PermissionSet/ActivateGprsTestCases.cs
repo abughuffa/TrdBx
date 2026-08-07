@@ -1,4 +1,4 @@
-﻿
+﻿/* 
 using System.ComponentModel;
 
 namespace CleanArchitecture.Blazor.Infrastructure.PermissionSet;
@@ -36,3 +36,4 @@ public class ActivateGprsTestCasesAccessRights
     public bool Import { get; set; }
 }
 
+ */

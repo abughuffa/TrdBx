@@ -1,22 +1,22 @@
-﻿using CleanArchitecture.Blazor.Domain.Entities;
+﻿// using CleanArchitecture.Blazor.Domain.Entities;
 
-namespace CleanArchitecture.Blazor.Domain.Events;
+// namespace CleanArchitecture.Blazor.Domain.Events;
 
-public class DeactivateTestCaseUpdatedEvent : DomainEvent
-{
-        public DeactivateTestCaseUpdatedEvent(DeactivateTestCase item)
-        {
-            Item = item;
-        }
+// public class DeactivateTestCaseUpdatedEvent : DomainEvent
+// {
+//         public DeactivateTestCaseUpdatedEvent(DeactivateTestCase item)
+//         {
+//             Item = item;
+//         }
 
-        public DeactivateTestCase Item { get; }
-    }
-public class DeactivateTestCaseDeletedEvent : DomainEvent
-{
-    public DeactivateTestCaseDeletedEvent(DeactivateTestCase item)
-    {
-        Item = item;
-    }
+//         public DeactivateTestCase Item { get; }
+//     }
+// public class DeactivateTestCaseDeletedEvent : DomainEvent
+// {
+//     public DeactivateTestCaseDeletedEvent(DeactivateTestCase item)
+//     {
+//         Item = item;
+//     }
 
-    public DeactivateTestCase Item { get; }
-}
+//     public DeactivateTestCase Item { get; }
+// }

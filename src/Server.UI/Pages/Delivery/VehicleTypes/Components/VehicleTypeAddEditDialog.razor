@@ -1,4 +1,4 @@
-﻿
+﻿@* 
 @using CleanArchitecture.Blazor.Application.Features.VehicleTypes.Commands.AddEdit
 
 @inherits MudComponentBase
@@ -7,13 +7,13 @@
 @attribute [Authorize(Policy = Permissions.VehicleTypes.Create)]
 @attribute [Authorize(Policy = Permissions.VehicleTypes.Edit)]
 
-@* <PageTitle>@Title</PageTitle> *@
+
 
 <MudDialog>
     <DialogContent>
         <MudForm Model="@model" @ref="@_form" Validation="@(Validator.ValidateValue(model))">
             <MudGrid>
-                @*TODO: define mudform that should be edit fields, for example:*@
+
                 <MudItem md="12">
                     <MudTextField Label="@L[model.GetMemberDescription(x=>x.Name)]" @bind-Value="model.Name" For="@(() => model.Name)" Required="false" RequiredError="@L["VehicleType name is required!"]"></MudTextField>
                 </MudItem>
@@ -62,4 +62,4 @@
 
     }
     void Cancel() => MudDialog.Cancel();
-}
+} *@

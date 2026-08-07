@@ -79,13 +79,13 @@
                                             </MudButton>
                                      }
 
-                                 @if (_canRenewSubscription)
+                                 @* @if (_canRenewSubscription)
                                      {
                                              <MudButton Disabled="@(!(_selectedItems.Count > 0))"
                                                         OnClick="OnRenewSubscriptionChecked">
                                                        @L["Renew Subscription"]
                                              </MudButton>
-                                     }
+                                     } *@
                                  @if (_canCreateTicket)
                                      {
                                              <MudButton Disabled="@(!(_selectedItems.Count > 0))"
@@ -203,7 +203,7 @@
                         }
                     </MudMenu>
                     <!-- Sim Menu -->
-                    <MudMenu Icon="@Icons.Material.Filled.SimCard"
+                    @* <MudMenu Icon="@Icons.Material.Filled.SimCard"
                              Variant="Variant.Filled"
                              Size="Size.Small"
                              Dense="true"
@@ -233,9 +233,9 @@
                                 @L["Recover Sim"]
                             </MudMenuItem>
                         }
-                    </MudMenu>
+                    </MudMenu> *@
                     <!-- Build Menu -->
-                    <MudMenu Icon="@Icons.Material.Filled.Build"
+                    @* <MudMenu Icon="@Icons.Material.Filled.Build"
                              Variant="Variant.Filled"
                              Size="Size.Small"
                              Dense="true"
@@ -273,9 +273,9 @@
                                 @L["Recover"]
                             </MudMenuItem>
                         }
-                    </MudMenu>
+                    </MudMenu> *@
                     <!-- Subscription Operations Menu -->
-                    <MudMenu Icon="@Icons.Material.Filled.SettingsSuggest"
+                    @* <MudMenu Icon="@Icons.Material.Filled.SettingsSuggest"
                              Variant="Variant.Filled"
                              Size="Size.Small"
                              Dense="true"
@@ -335,9 +335,9 @@
 
                             @L["Renew Subscription"]
                         </MudMenuItem>
-                                                }
+                        }
 
-                    </MudMenu>
+                    </MudMenu> *@
                     <!-- Subscriptions Menu -->
                     <MudMenu Icon="@Icons.Material.Filled.AvTimer"
                              Variant="Variant.Filled"
@@ -479,7 +479,7 @@
     private bool _canRecoverSim ;
 
 
-    private bool _canInstall ;
+    @* private bool _canInstall ;
     private bool _canTransfer ;
     private bool _canReplace ;
     private bool _canRecover ;
@@ -487,12 +487,16 @@
     private bool _canActivate ;
     private bool _canActivateForHosting ;
     private bool _canActivateForGprs ;
-    private bool _canDeactivate ;
-    private bool _canRenewSubscription ;
-    private bool _canAssignDailyTaskToOtherUser ;
+    private bool _canDeactivate ; *@
+
+    @* private bool _canRenewSubscription ;
+    private bool _canAssignDailyTaskToOtherUser ; *@
+
     private bool _canCreateTicket ;
-    private bool _canInstallSim ;
-    private bool _canReplaceSim ;
+
+    @* private bool _canInstallSim ;
+    private bool _canRecoverSim ;
+    private bool _canReplaceSim ; *@
 
     protected override async Task OnInitializedAsync()
     {
@@ -503,15 +507,30 @@
         _canDelete = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.Delete)).Succeeded;
         _canImport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.Import)).Succeeded;
         _canExport = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.Export)).Succeeded;
+   _canMarkAsDamaged = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.MarkAsDamaged)).Succeeded;
+   _canMarkAsUsed = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.MarkAsUsed)).Succeeded;
+   _canMarkAsLost = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.MarkAsLost)).Succeeded;
+   _canReassignOwner = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.ReassignOwner)).Succeeded;
+   
+   @* _canInstall = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.Install)).Succeeded;
+   _canTransfer = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.Transfer)).Succeeded;
+   _canReplace = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.Replace)).Succeeded;
+   _canRecover = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.Recover)).Succeeded;
+   _canReserve = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.Reserve)).Succeeded;
+   _canActivate = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.Activate)).Succeeded;
+   _canActivateForHosting = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.ActivateForHosting)).Succeeded;
 
-        _canReserve = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.Reserve)).Succeeded;
-        _canMarkAsDamaged = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.MarkAsDamaged)).Succeeded;
-        _canMarkAsUsed = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.MarkAsUsed)).Succeeded;
-        _canMarkAsLost = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.MarkAsUsed)).Succeeded;
-        _canReassignOwner = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.ReassignOwner)).Succeeded;
-        _canRecoverSim = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.RecoverSim)).Succeeded;
+   _canActivateForGprs = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.ActivateForGprs)).Succeeded;
+   _canDeactivate = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.Deactivate)).Succeeded;
 
-        _canCreateTicket = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.CreateTicket)).Succeeded;
+   _canRenewSubscription = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.RenewSubscription)).Succeeded;
+   //_canAssignDailyTaskToOtherUser = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.TrackingUnits.AssignDailyTaskToOtherUser)).Succeeded; *@
+
+   _canCreateTicket = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.Tickets.Create)).Succeeded;
+
+   @* _canInstallSim =_canReplaceSim = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.InstallOrReplaceSim)).Succeeded;
+   _canRecoverSim = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.RecoverSim)).Succeeded;
+
 
         _canInstall = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.Install)).Succeeded;
         _canTransfer = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.Transfer)).Succeeded;
@@ -524,7 +543,7 @@
         _canRenewSubscription = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.RenewSubscription)).Succeeded;
         _canAssignDailyTaskToOtherUser = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.AssignDailyTaskToOtherUser)).Succeeded;
         _canInstallSim = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.ins)).Succeeded;
-        _canReplaceSim = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.Replace)).Succeeded;
+        _canReplaceSim = (await AuthService.AuthorizeAsync(state.User, Infrastructure.PermissionSet.Permissions.DailyTasks.Replace)).Succeeded; *@
 
     }
 

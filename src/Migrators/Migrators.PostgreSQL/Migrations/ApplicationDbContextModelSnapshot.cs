@@ -22,132 +22,6 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.ActivateGprsTestCase", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("CaseCode")
-                        .HasColumnType("integer")
-                        .HasColumnName("case_code");
-
-                    b.Property<bool?>("IsSucssed")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_sucssed");
-
-                    b.Property<string>("Message")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("message");
-
-                    b.Property<string>("SNo")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("s_no");
-
-                    b.Property<int?>("TrackingUnitId")
-                        .HasColumnType("integer")
-                        .HasColumnName("tracking_unit_id");
-
-                    b.Property<DateOnly>("TsDate")
-                        .HasColumnType("date")
-                        .HasColumnName("ts_date");
-
-                    b.HasKey("Id")
-                        .HasName("pk_activate_gprs_test_cases");
-
-                    b.ToTable("activate_gprs_test_cases", (string)null);
-                });
-
-            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.ActivateHostingTestCase", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("CaseCode")
-                        .HasColumnType("integer")
-                        .HasColumnName("case_code");
-
-                    b.Property<bool?>("IsSucssed")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_sucssed");
-
-                    b.Property<string>("Message")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("message");
-
-                    b.Property<string>("SNo")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("s_no");
-
-                    b.Property<int?>("TrackingUnitId")
-                        .HasColumnType("integer")
-                        .HasColumnName("tracking_unit_id");
-
-                    b.Property<DateOnly>("TsDate")
-                        .HasColumnType("date")
-                        .HasColumnName("ts_date");
-
-                    b.HasKey("Id")
-                        .HasName("pk_activate_hosting_test_cases");
-
-                    b.ToTable("activate_hosting_test_cases", (string)null);
-                });
-
-            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.ActivateTestCase", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("CaseCode")
-                        .HasColumnType("integer")
-                        .HasColumnName("case_code");
-
-                    b.Property<bool?>("IsSucssed")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_sucssed");
-
-                    b.Property<string>("Message")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("message");
-
-                    b.Property<string>("SNo")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("s_no");
-
-                    b.Property<int?>("TrackingUnitId")
-                        .HasColumnType("integer")
-                        .HasColumnName("tracking_unit_id");
-
-                    b.Property<DateOnly>("TsDate")
-                        .HasColumnType("date")
-                        .HasColumnName("ts_date");
-
-                    b.HasKey("Id")
-                        .HasName("pk_activate_test_cases");
-
-                    b.ToTable("activate_test_cases", (string)null);
-                });
-
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.AuditTrail", b =>
                 {
                     b.Property<int>("Id")
@@ -210,59 +84,6 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasDatabaseName("ix_audit_trails_user_id");
 
                     b.ToTable("audit_trails", (string)null);
-                });
-
-            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.BidRecord", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime?>("Created")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("created");
-
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("created_by");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("last_modified");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("last_modified_by");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("numeric")
-                        .HasColumnName("price");
-
-                    b.Property<int>("ShipmentId")
-                        .HasColumnType("integer")
-                        .HasColumnName("shipment_id");
-
-                    b.Property<string>("TransporterId")
-                        .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("transporter_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_bid_records");
-
-                    b.HasIndex("ShipmentId")
-                        .HasDatabaseName("ix_bid_records_shipment_id");
-
-                    b.HasIndex("TransporterId")
-                        .HasDatabaseName("ix_bid_records_transporter_id");
-
-                    b.ToTable("bid_records", (string)null);
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Contact", b =>
@@ -491,48 +312,6 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasDatabaseName("ix_customers_parent_id");
 
                     b.ToTable("customers", (string)null);
-                });
-
-            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.DeactivateTestCase", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("CaseCode")
-                        .HasColumnType("integer")
-                        .HasColumnName("case_code");
-
-                    b.Property<bool?>("IsSucssed")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_sucssed");
-
-                    b.Property<string>("Message")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("message");
-
-                    b.Property<string>("SNo")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("s_no");
-
-                    b.Property<int?>("TrackingUnitId")
-                        .HasColumnType("integer")
-                        .HasColumnName("tracking_unit_id");
-
-                    b.Property<DateOnly>("TsDate")
-                        .HasColumnType("date")
-                        .HasColumnName("ts_date");
-
-                    b.HasKey("Id")
-                        .HasName("pk_deactivate_test_cases");
-
-                    b.ToTable("deactivate_test_cases", (string)null);
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Document", b =>
@@ -953,53 +732,6 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     b.ToTable("loggers", (string)null);
                 });
 
-            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.POI", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime?>("Created")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("created");
-
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("created_by");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("last_modified");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("last_modified_by");
-
-                    b.Property<double>("Latitude")
-                        .HasColumnType("double precision")
-                        .HasColumnName("latitude");
-
-                    b.Property<double>("Longitude")
-                        .HasColumnType("double precision")
-                        .HasColumnName("longitude");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id")
-                        .HasName("pk_po_is");
-
-                    b.ToTable("po_is", (string)null);
-                });
-
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.PicklistSet", b =>
                 {
                     b.Property<int>("Id")
@@ -1316,83 +1048,6 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasName("pk_service_prices");
 
                     b.ToTable("service_prices", (string)null);
-                });
-
-            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Shipment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime?>("Created")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("created");
-
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("created_by");
-
-                    b.Property<bool>("IsBidable")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_bidable");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("last_modified");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("last_modified_by");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("numeric")
-                        .HasColumnName("price");
-
-                    b.Property<string>("ShipmentNo")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("shipment_no");
-
-                    b.Property<int>("ShipmentStatus")
-                        .HasColumnType("integer")
-                        .HasColumnName("shipment_status");
-
-                    b.Property<int?>("VehicleId")
-                        .HasColumnType("integer")
-                        .HasColumnName("vehicle_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_shipments");
-
-                    b.HasIndex("VehicleId")
-                        .HasDatabaseName("ix_shipments_vehicle_id");
-
-                    b.ToTable("shipments", (string)null);
-                });
-
-            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.ShipmentVehicleType", b =>
-                {
-                    b.Property<int>("ShipmentId")
-                        .HasColumnType("integer")
-                        .HasColumnName("shipment_id");
-
-                    b.Property<int>("VehicleTypeId")
-                        .HasColumnType("integer")
-                        .HasColumnName("vehicle_type_id");
-
-                    b.HasKey("ShipmentId", "VehicleTypeId")
-                        .HasName("pk_shipment_vehicle_type");
-
-                    b.HasIndex("VehicleTypeId")
-                        .HasDatabaseName("ix_shipment_vehicle_type_vehicle_type_id");
-
-                    b.ToTable("shipment_vehicle_type", (string)null);
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SimCard", b =>
@@ -1884,115 +1539,6 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasDatabaseName("ix_tracking_unit_models_name");
 
                     b.ToTable("tracking_unit_models", (string)null);
-                });
-
-            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Vehicle", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime?>("Created")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("created");
-
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("created_by");
-
-                    b.Property<string>("DriverId")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("driver_id");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("last_modified");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("last_modified_by");
-
-                    b.Property<string>("VehicleNo")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("vehicle_no");
-
-                    b.Property<int>("VehicleTypeId")
-                        .HasColumnType("integer")
-                        .HasColumnName("vehicle_type_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_vehicles");
-
-                    b.HasIndex("DriverId")
-                        .HasDatabaseName("ix_vehicles_driver_id");
-
-                    b.HasIndex("VehicleTypeId")
-                        .HasDatabaseName("ix_vehicles_vehicle_type_id");
-
-                    b.ToTable("vehicles", (string)null);
-                });
-
-            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.VehicleType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<byte>("Image")
-                        .HasColumnType("smallint")
-                        .HasColumnName("image");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id")
-                        .HasName("pk_vehicle_types");
-
-                    b.ToTable("vehicle_types", (string)null);
-                });
-
-            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.WayPoint", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<double>("Latitude")
-                        .HasColumnType("double precision")
-                        .HasColumnName("latitude");
-
-                    b.Property<double>("Longitude")
-                        .HasColumnType("double precision")
-                        .HasColumnName("longitude");
-
-                    b.Property<int>("ShipmentId")
-                        .HasColumnType("integer")
-                        .HasColumnName("shipment_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_way_points");
-
-                    b.HasIndex("ShipmentId")
-                        .HasDatabaseName("ix_way_points_shipment_id");
-
-                    b.ToTable("way_points", (string)null);
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.WialonTask", b =>
@@ -2521,27 +2067,6 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     b.Navigation("Owner");
                 });
 
-            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.BidRecord", b =>
-                {
-                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Shipment", "Shipment")
-                        .WithMany("BidRecords")
-                        .HasForeignKey("ShipmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_bid_records_shipments_shipment_id");
-
-                    b.HasOne("CleanArchitecture.Blazor.Domain.Identity.ApplicationUser", "Transporter")
-                        .WithMany()
-                        .HasForeignKey("TransporterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_bid_records_users_transporter_id");
-
-                    b.Navigation("Shipment");
-
-                    b.Navigation("Transporter");
-                });
-
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.CusPrice", b =>
                 {
                     b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Customer", "Customer")
@@ -2692,37 +2217,6 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     b.Navigation("InvoiceItem");
                 });
 
-            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Shipment", b =>
-                {
-                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Vehicle", "Vehicle")
-                        .WithMany()
-                        .HasForeignKey("VehicleId")
-                        .HasConstraintName("fk_shipments_vehicles_vehicle_id");
-
-                    b.Navigation("Vehicle");
-                });
-
-            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.ShipmentVehicleType", b =>
-                {
-                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Shipment", "Shipment")
-                        .WithMany("VehicleTypes")
-                        .HasForeignKey("ShipmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_shipment_vehicle_type_shipments_shipment_id");
-
-                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.VehicleType", "VehicleType")
-                        .WithMany("Shipments")
-                        .HasForeignKey("VehicleTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_shipment_vehicle_type_vehicle_types_vehicle_type_id");
-
-                    b.Navigation("Shipment");
-
-                    b.Navigation("VehicleType");
-                });
-
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SimCard", b =>
                 {
                     b.HasOne("CleanArchitecture.Blazor.Domain.Entities.SPackage", "SPackage")
@@ -2815,35 +2309,6 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     b.Navigation("TrackedAsset");
 
                     b.Navigation("TrackingUnitModel");
-                });
-
-            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Vehicle", b =>
-                {
-                    b.HasOne("CleanArchitecture.Blazor.Domain.Identity.ApplicationUser", "Driver")
-                        .WithMany()
-                        .HasForeignKey("DriverId")
-                        .HasConstraintName("fk_vehicles_users_driver_id");
-
-                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.VehicleType", "VehicleType")
-                        .WithMany()
-                        .HasForeignKey("VehicleTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_vehicles_vehicle_types_vehicle_type_id");
-
-                    b.Navigation("Driver");
-
-                    b.Navigation("VehicleType");
-                });
-
-            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.WayPoint", b =>
-                {
-                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Shipment", null)
-                        .WithMany("WayPoints")
-                        .HasForeignKey("ShipmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_way_points_shipments_shipment_id");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.WialonTask", b =>
@@ -3013,15 +2478,6 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     b.Navigation("WialonTasks");
                 });
 
-            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Shipment", b =>
-                {
-                    b.Navigation("BidRecords");
-
-                    b.Navigation("VehicleTypes");
-
-                    b.Navigation("WayPoints");
-                });
-
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SimCard", b =>
                 {
                     b.Navigation("TrackingUnits");
@@ -3049,11 +2505,6 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     b.Navigation("CusPrices");
 
                     b.Navigation("TrackingUnits");
-                });
-
-            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.VehicleType", b =>
-                {
-                    b.Navigation("Shipments");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Identity.ApplicationRole", b =>

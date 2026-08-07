@@ -1,4 +1,4 @@
-﻿@page "/pages/TrdBx/DeactivateTestCases"
+﻿@* @page "/pages/TrdBx/DeactivateTestCases"
 
 
 @using CleanArchitecture.Blazor.Application.Features.TestCases.DeactivateTestCases.Caching
@@ -92,7 +92,6 @@
                              EndIcon="@Icons.Material.Filled.KeyboardArrowDown" IconColor="Color.Info" AnchorOrigin="Origin.CenterLeft">
                         @if (_canExecute)
                         {
-                            @* <MudMenuItem OnClick="@(()=>OnExcute(context.Item))">@ConstantString.Edit</MudMenuItem> *@
                         }
                         @if (_canDelete)
                         {
@@ -283,4 +282,4 @@
 
 
 }
-
+ *@

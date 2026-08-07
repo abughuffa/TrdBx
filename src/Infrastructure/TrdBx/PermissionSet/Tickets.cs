@@ -13,14 +13,23 @@ public static partial class Permissions
         [Description("Allows creating new Ticket records.")]
         public const string Create = "Permissions.Tickets.Create";
 
+
+
         [Description("Allows deleting Ticket records.")]
         public const string Delete = "Permissions.Tickets.Delete";
+
+
 
         [Description("Allows exporting Ticket records.")]
         public const string Export = "Permissions.Tickets.Export";
 
+
+
+
         [Description("Allows Approve Ticket record.")]
         public const string Approve = "Permissions.Tickets.Approve";
+
+
 
         [Description("Allows Reject Ticket record.")]
         public const string Reject = "Permissions.Tickets.Reject";

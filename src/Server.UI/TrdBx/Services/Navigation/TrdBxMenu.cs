@@ -122,7 +122,7 @@ internal static class TrdBxMenu
                     {
                      new()
                         {
-                            Title = "Wialon Server api Test",
+                            Title = "Wialon Server Test",
                             Href = "/wialon/session-manager",
                             PageStatus = PageStatus.Completed
                         },

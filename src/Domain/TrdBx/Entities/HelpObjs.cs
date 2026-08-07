@@ -1,4 +1,4 @@
-﻿namespace CleanArchitecture.Blazor.Domain.Entities;
+﻿/* namespace CleanArchitecture.Blazor.Domain.Entities;
 public class BackupFile
 {
     public string? Name { get; set; }
@@ -23,4 +23,4 @@ public class InvItem
     public decimal SubTotal { get; set; } = 0.0m;
     public decimal ItemTotal { get; set; } = 0.0m;
 
-}
+} */

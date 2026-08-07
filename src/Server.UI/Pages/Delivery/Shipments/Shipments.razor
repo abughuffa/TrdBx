@@ -1,4 +1,4 @@
-﻿@page "/pages/Shipments"
+﻿@* @page "/pages/Shipments"
 
 @using BlazorDownloadFile
 @using CleanArchitecture.Blazor.Application.Features.Shipments.Caching
@@ -7,8 +7,7 @@
 @using CleanArchitecture.Blazor.Application.Features.Shipments.Specifications
 @using CleanArchitecture.Blazor.Application.Features.Shipments.Commands.Delete
 @using CleanArchitecture.Blazor.Application.Features.Shipments.Queries.Pagination
-@* @using CleanArchitecture.Blazor.Application.Features.Shipments.Commands.AddEdit *@
-@* @using CleanArchitecture.Blazor.Server.UI.Pages.Shipments.Components *@
+
 
 @inject IStringLocalizer<Shipments> L
 @attribute [Authorize(Policy = Permissions.Shipments.View)]
@@ -52,10 +51,6 @@
                         </MudButton>
                     }
                     <MudMenu TransformOrigin="Origin.BottomRight" AnchorOrigin="Origin.BottomRight" EndIcon="@Icons.Material.Filled.MoreVert" Label="@ConstantString.More">
-             @*            @if (_canCreate)
-                        {
-                            <MudMenuItem Disabled="@(_selectedItems.Count != 1)" OnClick="OnClone">@ConstantString.Clone</MudMenuItem>
-                        } *@
                         @if (_canDelete)
                         {
                             <MudMenuItem Disabled="@(!(_selectedItems.Count > 0))"
@@ -111,8 +106,7 @@
 
 
         <PropertyColumn Property="x => x.ShipmentNo" Title="@L[_currentDto.GetMemberDescription(x=>x.ShipmentNo)]" />
-@*         <PropertyColumn Property="x => x.StartLocation" Title="@L[_currentDto.GetMemberDescription(x=>x.StartLocation)]" />
-        <PropertyColumn Property="x => x.EndLocation" Title="@L[_currentDto.GetMemberDescription(x=>x.EndLocation)]" /> *@
+
         <PropertyColumn Property="x => x.ShipmentStatus" Title="@L[_currentDto.GetMemberDescription(x => x.ShipmentStatus)]" />
         <PropertyColumn Property="x => x.Price" Title="@L[_currentDto.GetMemberDescription(x => x.Price)]" />
         <PropertyColumn Property="x => x.IsBidable" Title="@L[_currentDto.GetMemberDescription(x => x.IsBidable)]" />
@@ -200,22 +194,7 @@
         Query.Keyword = string.Empty;
         await _table.ReloadServerData();
     }
-    // private async Task ShowEditFormDialog(string title, AddEditShipmentCommand command)
-    // {
-    //     var parameters = new DialogParameters<ShipmentFormDialog>
-    //         {
-    //             { x=>x.model,command },
-    //         };
-    //     var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
-    //     var dialog = DialogService.Show<ShipmentFormDialog>(title, parameters, options);
-    //     var state = await dialog.Result;
 
-    //     if (state != null && !state.Canceled)
-    //     {
-    //         await _table.ReloadServerData();
-    //         _selectedItems.Clear();
-    //     }
-    // }
     private void OnView(ShipmentDto dto)
     {
         Navigation.NavigateTo($"/pages/Shipments/view/{dto.Id}");
@@ -223,15 +202,9 @@
     private async Task OnCreate()
     {
         Navigation.NavigateTo($"/pages/Shipments/create");
-        // var command = new AddEditShipmentCommand();
-        // await ShowEditFormDialog(string.Format(ConstantString.CreateAnItem, L["Shipment"]), command);
+
     }
-    // private async Task OnClone()
-    // {
-    //     var dto = _selectedItems.First();
-    //     // var command = ShipmentMapper.CloneFromDto(dto);
-    //     await ShowEditFormDialog(string.Format(ConstantString.CreateAnItem, L["Shipment"]), command);
-    // }
+
     private async Task OnEdit(ShipmentDto dto)
     {
         Navigation.NavigateTo($"/pages/Shipments/edit/{dto.Id}");
@@ -267,4 +240,4 @@
 
     
 
-}
+} *@

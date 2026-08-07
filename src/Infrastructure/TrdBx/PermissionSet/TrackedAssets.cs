@@ -20,6 +20,8 @@ public static partial class Permissions
         [Description("Allows deleting TrackedAsset records.")]
         public const string Delete = "Permissions.TrackedAssets.Delete";
 
+
+
         [Description("Allows exporting TrackedAsset records.")]
         public const string Export = "Permissions.TrackedAssets.Export";
 

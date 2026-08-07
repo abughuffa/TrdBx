@@ -7,8 +7,7 @@ public static partial class Permissions
     [Description("Set permissions for SProvider operations.")]
     public static class SProviders
     {
-        [Description("Allows viewing SProvider details.")]
-        public const string View = "Permissions.SProviders.View";
+
 
         [Description("Allows creating new SProvider records.")]
         public const string Create = "Permissions.SProviders.Create";
@@ -19,8 +18,6 @@ public static partial class Permissions
         [Description("Allows deleting SProvider records.")]
         public const string Delete = "Permissions.SProviders.Delete";
 
-        [Description("Allows searching for SProvider records.")]
-        public const string Search = "Permissions.SProviders.Search";
 
         [Description("Allows exporting SProvider records.")]
         public const string Export = "Permissions.SProviders.Export";

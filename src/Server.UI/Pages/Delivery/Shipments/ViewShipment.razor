@@ -1,4 +1,4 @@
-﻿@page "/pages/Shipments/view/{id:int}"
+﻿@* @page "/pages/Shipments/view/{id:int}"
 @using CleanArchitecture.Blazor.Application.Features.Shipments.Commands.Delete
 @using CleanArchitecture.Blazor.Application.Features.Shipments.DTOs
 @using CleanArchitecture.Blazor.Application.Features.Shipments.Queries.GetById
@@ -24,12 +24,7 @@
 <MudItem xs="12" md="6"> 
                         <ReadOnlyFieldX6 Label="@L[model.GetMemberDescription(x=>x.ShipmentStatus)]" Value="model.ShipmentStatus"></ReadOnlyFieldX6>
                 </MudItem> 
-@* <MudItem xs="12" md="6"> 
-                        <ReadOnlyFieldX6 Label="@L[model.GetMemberDescription(x=>x.StartLocation)]" Value="model.StartLocation"></ReadOnlyFieldX6>
-                </MudItem> 
-<MudItem xs="12" md="6"> 
-                        <ReadOnlyFieldX6 Label="@L[model.GetMemberDescription(x=>x.EndLocation)]" Value="model.EndLocation"></ReadOnlyFieldX6>
-                </MudItem> *@ 
+
 <MudItem xs="12" md="6"> 
                         <ReadOnlyFieldX6 Label="@L[model.GetMemberDescription(x=>x.Price)]" Value="model.Price"></ReadOnlyFieldX6>
                 </MudItem> 
@@ -100,4 +95,4 @@
             });
         });
     }
-}
+} *@

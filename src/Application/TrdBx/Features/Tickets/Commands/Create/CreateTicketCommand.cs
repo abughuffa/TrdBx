@@ -1,6 +1,8 @@
 ﻿using System.Text.RegularExpressions;
 using CleanArchitecture.Blazor.Application.Features.Common;
+using CleanArchitecture.Blazor.Application.Features.Tickets.Mappers;
 using CleanArchitecture.Blazor.Application.Features.Tickets.Caching;
+using CleanArchitecture.Blazor.Application.Features.Tickets.DTOs;
 using CleanArchitecture.Blazor.Domain.Enums;
 using DocumentFormat.OpenXml.Wordprocessing;
 
@@ -66,7 +68,7 @@ public class CreateTicketCommandHandler : SerialForSharedLogic, IRequestHandler<
 
         var desc = string.Empty;
         
-        var ticketNo =  await GenSerialNo(_context, "Ticket", request.TcDate);
+        var ticketNo = await GenSerialNo(_context, "Ticket", request.TcDate);
 
         var items = await _context.TrackingUnits.Where(x => request.Id.Contains(x.Id)).ToListAsync(cancellationToken);
 
@@ -217,7 +219,7 @@ public class CreateTicketCommandHandler : SerialForSharedLogic, IRequestHandler<
 
         foreach (var item in items)
         {
-            var ticket = new Ticket()
+            var ticket = new TicketDto
             {
                 TrackingUnitId = item.Id,
                 Description = string.Format(desc, item.SNo),
@@ -227,9 +229,9 @@ public class CreateTicketCommandHandler : SerialForSharedLogic, IRequestHandler<
                 TcDate = request.TcDate,
 
             };
-
-            ticket.AddDomainEvent(new TicketCreatedEvent(ticket));
-            _context.Tickets.Add(ticket);
+            var t = Mapper.FromDto(ticket);
+            t.AddDomainEvent(new TicketCreatedEvent(t));
+            _context.Tickets.Add(t);
 
             var match = Regex.Match(ticketNo, @"^(\d{6}-)(\d{3})$");
             var prefix = match.Groups[1].Value;

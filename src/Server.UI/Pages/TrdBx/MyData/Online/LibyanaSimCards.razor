@@ -186,7 +186,7 @@
         _canImport = (await AuthService.AuthorizeAsync(state.User, Permissions.LibyanaSimCards.Import)).Succeeded;
         _canExport = (await AuthService.AuthorizeAsync(state.User, Permissions.LibyanaSimCards.Export)).Succeeded;
 
-        _canSyncData = (await AuthService.AuthorizeAsync(state.User, Permissions.LibyanaSimCards.SyncData)).Succeeded;
+        _canSyncData = (await AuthService.AuthorizeAsync(state.User, Permissions.SimCards.SyncExpiryDate)).Succeeded;
 
     }
 

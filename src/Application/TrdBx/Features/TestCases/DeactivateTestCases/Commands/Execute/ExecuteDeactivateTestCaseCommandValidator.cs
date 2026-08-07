@@ -1,13 +1,13 @@
-﻿namespace CleanArchitecture.Blazor.Application.Features.TestCases.DeactivateTestCases.Commands.Execute;
+﻿// namespace CleanArchitecture.Blazor.Application.Features.TestCases.DeactivateTestCases.Commands.Execute;
 
-public class ExecuteDeactivateTestCaseCommandValidator : AbstractValidator<ExecuteDeactivateTestCaseCommand>
-{
-    public ExecuteDeactivateTestCaseCommandValidator()
-    {
+// public class ExecuteDeactivateTestCaseCommandValidator : AbstractValidator<ExecuteDeactivateTestCaseCommand>
+// {
+//     public ExecuteDeactivateTestCaseCommandValidator()
+//     {
 
-        RuleFor(v => v.Id).NotNull().ForEach(v => v.GreaterThan(0));
+//         RuleFor(v => v.Id).NotNull().ForEach(v => v.GreaterThan(0));
 
-    }
-}
+//     }
+// }
 
 

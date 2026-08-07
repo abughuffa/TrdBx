@@ -63,8 +63,8 @@
 
                 </MudGrid>
             </MudCardContent>
-            <MudCardActions>          
-                <MudButton Disabled=CanExecute Color="Color.Primary" DropShadow="false" OnClick="OnExecute">Execute</MudButton>
+            <MudCardActions>
+                
                 <MudButton Color="Color.Primary" DropShadow="false" OnClick="OnGoBack">@ConstantString.GoBack</MudButton>
             </MudCardActions>
         </MudCard>
@@ -112,13 +112,8 @@
     return null!;
 });
 
-        AssignCommands();
     }
 
-    void AssignCommands()
-    {
-        CanExecute = !(model.TicketStatus == TicketStatus.Accepted);
-    }
 
     private Task OnGoBack()
     {

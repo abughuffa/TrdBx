@@ -1,7 +1,7 @@
 ﻿
-namespace CleanArchitecture.Blazor.Application.Features.POIs.Specifications;
+// namespace CleanArchitecture.Blazor.Application.Features.POIs.Specifications;
 
-public class POIAdvancedFilter: PaginationFilter
-{
-    public UserProfile? CurrentUser { get; set; }
-}
+// public class POIAdvancedFilter: PaginationFilter
+// {
+//     public UserProfile? CurrentUser { get; set; }
+// }

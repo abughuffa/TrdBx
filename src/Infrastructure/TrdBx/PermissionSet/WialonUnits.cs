@@ -21,6 +21,9 @@ public static partial class Permissions
 
         [Description("Allows importing WialonUnit records.")]
         public const string Import = "Permissions.WialonUnits.Import";
+
+        // [Description("Allows Sync Wialon unit Names with local Tracking units names.")]
+        // public const string SyncData = "Permissions.WialonUnits.SyncData";
         
     }
 }
@@ -30,8 +33,11 @@ public class WialonUnitsAccessRights
     public bool View { get; set; }
     public bool Edit { get; set; }
     public bool Delete { get; set; }
+    // public bool Search { get; set; }
     public bool Export { get; set; }
     public bool Import { get; set; }
+
+    // public bool SyncData { get; set; }
 }
 
 
