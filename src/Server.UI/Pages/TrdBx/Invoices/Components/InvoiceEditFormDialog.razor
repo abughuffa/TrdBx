@@ -1,0 +1,55 @@
+﻿@using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.Update
+
+@inherits MudComponentBase
+@inject IValidationService Validator
+@inject IStringLocalizer<Invoices> L
+@attribute [Authorize(Policy = Permissions.Invoices.Edit)]
+
+<MudDialog>
+    <DialogContent>
+        <MudForm Model="@_model" @ref="@_form" Validation="@(Validator.ValidateValue(_model))">
+            <MudGrid Spacing="2">
+                <MudItem xs="12" md="6">
+                    <MudTextField Label="@L[_model.GetMemberDisplayName(x => x.DisplayCusName)]" @bind-Value="_model.DisplayCusName" For="@(() => _model.DisplayCusName)" Required="false" RequiredError="@L["Display Name Is Required!"]"></MudTextField>
+                </MudItem>
+            </MudGrid>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudLoadingButton Loading="@_saving" OnClick="OnSave">@AppStrings.Save</MudLoadingButton>
+        <MudButton OnClick="Cancel">@AppStrings.Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    MudForm _form = new();
+    private bool _saving = false;
+    [CascadingParameter]
+    IMudDialogInstance MudDialog { get; set; } = default!;
+    [EditorRequired][Parameter] public UpdateInvoiceCommand _model { get; set; } = null!;
+    async Task OnSave()
+    {
+
+        try
+        {
+            _saving = true;
+            await _form.ValidateAsync();
+            if (!_form.IsValid)
+                return;
+            var result = await Mediator.Send(_model);
+            result.Match(data =>
+            {
+                MudDialog.Close(DialogResult.Ok(true));
+                Snackbar.Add(AppStrings.SaveSuccess, MudBlazor.Severity.Info);
+            }, errors =>
+            {
+                Snackbar.Add(errors, MudBlazor.Severity.Error);
+            });
+        }
+        finally
+        {
+            _saving = false;
+        }
+    }
+    void Cancel() => MudDialog.Cancel();
+}

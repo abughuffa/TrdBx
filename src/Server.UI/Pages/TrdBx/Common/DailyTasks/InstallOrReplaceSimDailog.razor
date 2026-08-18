@@ -1,0 +1,180 @@
+﻿@using CleanArchitecture.Blazor.Application.Features.SimCards.DTOs
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.InstallOrReplaceSim
+
+@inherits MudComponentBase
+@inject IValidationService Validator
+@inject IStringLocalizer<DailyTasks> L
+@inject IDropdownDataService DropdownDataService
+@attribute [Authorize(Policy = Permissions.DailyTasks.InstallOrReplaceSim)]
+
+<MudDialog>
+    <DialogContent>
+        @if (_isLoading)
+        {
+            <div style="position: relative; min-height: 400px;">
+                <MudOverlay Visible="true" />
+                <MudProgressCircular 
+                    Class="d-flex justify-center align-center" 
+                    Style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"
+                    Color="Color.Primary" 
+                    Size="Size.Large" />
+                <MudText Class="text-center mt-4" Style="position: absolute; bottom: 30%; left: 0; right: 0;">
+                    Loading installation data...
+                </MudText>
+            </div>
+        }
+        else
+        {
+            <MudForm Model="@_model" @ref="@_form" Validation="@(Validator.ValidateValue(_model))">
+                <MudGrid Spacing="2">
+                    <MudItem md="12">
+                        <MudText>@_contentText</MudText>
+                    </MudItem>
+
+                    <MudItem md="6">
+                        <MudSelect 
+                            For="@(() => _model.SimCardId)"
+                            Label="@L["SimCard"]"
+                            Required="true"
+                            RequiredError="@L["SimCard Is Required!"]"
+                            @bind-Value="_model.SimCardId"
+                            Disabled="@_isDataLoading">
+                            <MudSelectItem T="int" Value="0">@L["Select SimCard"]</MudSelectItem>
+                            @foreach (var simCard in SimCards)
+                            {
+                                <MudSelectItem Value="@simCard.Id">@simCard.SimCardNo</MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudItem>
+
+                    <MudItem md="6">
+                        <MudCheckBox 
+                            Label="@L["Create Deserved Services?"]"
+                            For="@(() => _model.CreateDeservedServices)"
+                            @bind-Value="_model.CreateDeservedServices"
+                            Disabled="@_isDataLoading">
+                        </MudCheckBox>
+                    </MudItem>
+
+                    <MudItem md="6">
+                        <MudDatePicker 
+                            Class="pa-4"
+                            PickerVariant="PickerVariant.Dialog"
+                            Editable 
+                            @bind-Date="_date"
+                            For="@(() => _date)"
+                            Required="true"
+                            RequiredError="@L["TaskDate Is Required!"]"
+                            Disabled="@_isDataLoading" />
+                    </MudItem>
+                </MudGrid>
+            </MudForm>
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" DropShadow="false" OnClick="Cancel" Disabled="@_isLoading">@AppStrings.Cancel</MudButton>
+        <MudLoadingButton 
+            Color="Color.Primary" 
+            DropShadow="false" 
+            Loading="@_submitting" 
+            OnClick="Submit"
+            Disabled="_isLoading || _isDataLoading">
+            @AppStrings.Submit
+        </MudLoadingButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] private UserProfile? UserProfile { get; set; }
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;  
+    [EditorRequired][Parameter] public InstallOrReplaceSimCommand _model { get; set; } = default!;
+    [Parameter] public string? _contentText { get; set; } = default!;
+    private MudForm? _form;
+    private bool _submitting = false;
+    private bool _isLoading = true;
+    private bool _isDataLoading = false;
+    private IEnumerable<SimCardDto> SimCards = Enumerable.Empty<SimCardDto>();
+    private DateTime? _date
+    {
+        get => _model.TsDate.ToDateTime(TimeOnly.MinValue);
+        set
+        {
+            if (value is not null)
+                _model.TsDate = DateOnly.FromDateTime(value.Value);
+        }
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDataAsync();
+        await base.OnInitializedAsync();
+    }
+    private async Task LoadDataAsync()
+    {
+        try
+        {
+            _isLoading = true;
+            StateHasChanged();
+
+           int[]? SimCardIds = {_model.SimCardId};
+
+           
+            await LoadSimCardsAsync(new[] {_model.SimCardId});
+        }
+        finally
+        {
+            _isLoading = false;
+            StateHasChanged();
+        }
+    }
+    private async Task LoadSimCardsAsync(int[]? ids = null)
+    {
+        
+
+        try
+        {
+            _isDataLoading = true;
+            // The service uses the cached query automatically
+            SimCards = await DropdownDataService.GetAvailableSimCardsAsync(ids);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Failed to load SIM cards: {ex.Message}", Severity.Warning);
+        }
+        finally
+        {
+            _isDataLoading = false;
+        }
+    }
+    async Task Submit()
+    {
+        try
+        {
+            _submitting = true;
+            await _form.ValidateAsync();
+            if (!_form.IsValid)
+                return;
+            var result = await Mediator.Send(_model);
+            result.Match(data =>
+            {
+                DropdownDataService.ClearSimCardsCacheAsync();
+                MudDialog.Close(DialogResult.Ok(true));
+                Snackbar.Add(AppStrings.SaveSuccess, MudBlazor.Severity.Info);
+            }, errors =>
+            {
+                Snackbar.Add(errors, MudBlazor.Severity.Error);
+            });
+        }
+        finally
+        {
+            _submitting = false;
+        }
+    }
+    void Cancel()
+    {
+        if (!_submitting)
+        {
+            MudDialog.Cancel();
+        }
+    }
+}
+

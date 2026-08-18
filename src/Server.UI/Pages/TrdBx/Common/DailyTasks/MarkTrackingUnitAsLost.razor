@@ -1,0 +1,139 @@
+﻿@page "/pages/TrdBx/TrackingUnits/MarkAsLost/{id:int}"
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.MarkTrackingUnitAsLost
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Queries.GetById
+
+@using CleanArchitecture.Blazor.Domain.Enums
+
+@inherits MudComponentBase
+@inject IValidationService Validator
+@inject IStringLocalizer<DailyTasks> L
+@attribute [Authorize(Policy = Permissions.TrackingUnits.MarkAsLost)]
+
+<PageTitle>@Title</PageTitle>
+
+<MudContainer Class="mt-3" MaxWidth="MaxWidth.Small">
+    @if (_model != null)
+    {
+        <MudCard Class="pa-2">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">@Title</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudForm Model="@_model" @ref="@_form" Validation="@(Validator.ValidateValue(_model))">
+                    <MudGrid Spacing="2">
+                        <MudItem md="12">
+                            <MudText>Selected Unit Serial No</MudText>
+                        </MudItem>
+
+
+                    <MudItem md="6">
+                        <MudCheckBox 
+                            Label="@L["Apply Changes On Wialon?"]"
+                            For="@(() => _model.ApplyChangesOnWialon)"
+                            @bind-Value="_model.ApplyChangesOnWialon"
+                            Disabled="@_submitting">
+                        </MudCheckBox>
+                    </MudItem>
+
+                    <MudItem md="6">
+                        <MudCheckBox 
+                            Label="@L["Create Deserved Services?"]"
+                            For="@(() => _model.CreateDeservedServices)"
+                            @bind-Value="_model.CreateDeservedServices"
+                            Disabled="true">
+                        </MudCheckBox>
+                    </MudItem>
+
+                    <MudItem md="12">
+                        <MudDatePicker 
+                            Class="pa-4"
+                            PickerVariant="PickerVariant.Dialog"
+                            Editable 
+                            @bind-Date="_date"
+                            For="@(() => _date)"
+                            Required="true"
+                            RequiredError="@L["TaskDate Is Required!"]"
+                            Disabled="@_submitting" />
+                    </MudItem>
+
+                    </MudGrid>
+                </MudForm>
+            </MudCardContent>
+            <MudCardActions Class="d-flex justify-end gap-2">
+                <MudButton Color="Color.Primary" DropShadow="false" OnClick="Cancel">@AppStrings.Cancel</MudButton>
+                <MudLoadingButton Color="Color.Primary" DropShadow="false" Loading="@_submitting" OnClick="OnSubmit">@AppStrings.Submit</MudLoadingButton>
+            </MudCardActions>
+        </MudCard>
+    }
+</MudContainer>
+
+
+@code {
+
+    public string? Title { get; private set; }
+    private MudForm? _form;
+    private bool _submitting = false;
+    private MarkTrackingUnitAsLostCommand? _model;
+    private DateTime? _date
+    {
+        get => _model.TsDate.ToDateTime(TimeOnly.MinValue);
+        set
+        {
+            if (value is not null)
+                _model.TsDate = DateOnly.FromDateTime(value.Value);
+        }
+    }
+    [Parameter]
+    public int Id { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        Title = L["Mark TrackingUnit as lost"];
+
+        var result = await Mediator.Send(new GetTrackingUnitByIdQuery() { Id = Id });
+
+          result.Map(data =>
+        {
+            _model = new MarkTrackingUnitAsLostCommand()
+            {
+                Id = data.Id
+            };
+            return _model;
+        }).Match(data =>
+        {
+        }, errors =>
+        {
+            Snackbar.Add(errors, MudBlazor.Severity.Error);
+        });
+    }
+
+    async Task OnSubmit()
+    {
+        try
+        {
+            _submitting = true;
+            await _form.ValidateAsync();
+            if (!_form.IsValid)
+                return;
+            var result = await Mediator.Send(_model);
+            result.Match(data =>
+            {
+            
+                Snackbar.Add(AppStrings.SaveSuccess, MudBlazor.Severity.Info);
+            }, errors =>
+            {
+                Snackbar.Add(errors, MudBlazor.Severity.Error);
+            });
+        }
+        finally
+        {
+            _submitting = false;
+        }
+    }
+
+    void Cancel()
+    {
+ 
+    }
+}

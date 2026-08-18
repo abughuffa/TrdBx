@@ -1,0 +1,340 @@
+﻿@using CleanArchitecture.Blazor.Application.Features.Customers.DTOs
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Replace
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.DTOs
+@using CleanArchitecture.Blazor.Application.Features.SimCards.DTOs
+
+
+@using CleanArchitecture.Blazor.Domain.Enums
+
+@inherits MudComponentBase
+@inject IValidationService Validator
+@inject IStringLocalizer<DailyTasks> L
+@inject IDropdownDataService DropdownDataService
+@attribute [Authorize(Policy = Permissions.DailyTasks.ReplaceUnit)]
+
+<MudDialog>
+    <DialogContent>
+        @if (_isLoading)
+        {
+            <div style="position: relative; min-height: 400px;">
+                <MudOverlay Visible="true" />
+                <MudProgressCircular 
+                    Class="d-flex justify-center align-center" 
+                    Style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"
+                    Color="Color.Primary" 
+                    Size="Size.Large" />
+                <MudText Class="text-center mt-4" Style="position: absolute; bottom: 30%; left: 0; right: 0;">
+                    Loading installation data...
+                </MudText>
+            </div>
+        }
+        else
+        {
+            <MudForm Model="@_model" @ref="@_form" Validation="@(Validator.ValidateValue(_model))">
+                <MudGrid Spacing="2">
+                    <MudItem md="12">
+                        <MudText>@_contentText</MudText>
+                    </MudItem>
+
+                    <MudItem md="6">
+                        <MudSelect 
+                            For="@(() => _model.SimCardId)"
+                            Label="@L["SimCard"]"
+                            Required="true"
+                            RequiredError="@L["SimCard Is Required!"]"
+                            @bind-Value="_model.SimCardId"
+                            Disabled="@_isDataLoading">
+                            <MudSelectItem T="int" Value="0">@L["Select SimCard"]</MudSelectItem>
+                            @foreach (var simCard in SimCards)
+                            {
+                                <MudSelectItem Value="@simCard.Id">@simCard.SimCardNo</MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudItem>
+
+                    <MudItem md="6">
+                        <MudSelect 
+                            For="@(() => _model.SUnitId)"
+                            Label="@L["Replacement Unit"]"
+                            Required="true"
+                            RequiredError="@L["ReplacementUnit Is Required!"]"
+                            @bind-Value="_model.SUnitId"
+                            Disabled="@_isDataLoading">
+                            <MudSelectItem T="int" Value="0">@L["Select ReplacementUnit"]</MudSelectItem>
+                            @foreach (var unit in Units)
+                            {
+                                <MudSelectItem Value="@unit.Id">@unit.SNo</MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudItem>
+
+                    <MudItem md="6">
+                        <MudEnumSelect 
+                            Style="min-width:120px" 
+                            TEnum="InsMode" 
+                            ValueChanged="OnChangedInsMode" 
+                            Value="_model.InsMode" 
+                            Dense="true" 
+                            Label="@L["InsMode"]"
+                            Disabled="@_isDataLoading">
+                        </MudEnumSelect>
+                    </MudItem>
+
+                    <MudItem md="6">
+                        <MudEnumSelect 
+                            Style="min-width:120px" 
+                            TEnum="SubPackage" 
+                            ValueChanged="OnChangedSubPackage" 
+                            Value="_model.SubPackage" 
+                            Dense="true" 
+                            Label="@L["Subscription"]"
+                            Disabled="@_isDataLoading">
+                        </MudEnumSelect>
+                    </MudItem>
+
+                    <MudItem md="12">
+                        <MudSelect 
+                            For="@(() => _model.CustomerId)"
+                            Label="@L["Customer"]"
+                            Required="true"
+                            RequiredError="@L["Customer Is Required!"]"
+                            @bind-Value="_model.CustomerId"
+                            Disabled="@_isDataLoading">
+                            <MudSelectItem T="int" Value="0">@L["Select Customer"]</MudSelectItem>
+                            @foreach (var customer in Customers)
+                            {
+                                <MudSelectItem Value="@customer.Id">@customer.ParentChild</MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudItem>
+
+
+                    <MudItem md="6">
+                            <MudCheckBox Label="@L["Is Tampered?"]"
+                                         For="@(() => _model.IsTampred)"
+                                         @bind-Value="_model.IsTampred"
+                                         Disabled="@_isDataLoading">
+                            </MudCheckBox>
+                        </MudItem>
+
+
+                    <MudItem md="6">
+                        <MudCheckBox 
+                            Label="@L["Create Deserved Services?"]"
+                            For="@(() => _model.CreateDeservedServices)"
+                            @bind-Value="_model.CreateDeservedServices"
+                            Disabled="@_isDataLoading">
+                        </MudCheckBox>
+                    </MudItem>
+
+                    <MudItem md="12">
+                        <MudDatePicker 
+                            Class="pa-4"
+                            PickerVariant="PickerVariant.Dialog"
+                            Editable 
+                            @bind-Date="_date"
+                            For="@(() => _date)"
+                            Required="true"
+                            RequiredError="@L["TaskDate Is Required!"]"
+                            Disabled="@_isDataLoading" />
+                    </MudItem>
+                </MudGrid>
+            </MudForm>
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" DropShadow="false" OnClick="Cancel" Disabled="@_isLoading">@AppStrings.Cancel</MudButton>
+        <MudLoadingButton 
+            Color="Color.Primary" 
+            DropShadow="false" 
+            Loading="@_submitting" 
+            OnClick="Submit"
+            Disabled="_isLoading || _isDataLoading">
+            @AppStrings.Submit
+        </MudLoadingButton>
+    </DialogActions>
+</MudDialog>
+
+    @code {
+    [CascadingParameter] private UserProfile? UserProfile { get; set; }
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;  
+    [EditorRequired][Parameter] public ReplaceTrackingUnitCommand _model { get; set; } = default!;
+    [Parameter] public string? _contentText { get; set; } = default!;
+    
+    private MudForm? _form;
+    private bool _submitting = false;
+    private bool _isLoading = true;
+    private bool _isDataLoading = false;
+    private string? _errorMessage;
+
+    private int[]? SimCardIds;
+    private int? CustomerId;
+
+    private IEnumerable<SimCardDto> SimCards = Enumerable.Empty<SimCardDto>();
+    private IEnumerable<TrackingUnitDto> Units = Enumerable.Empty<TrackingUnitDto>();
+    private IEnumerable<CustomerDto> Customers = Enumerable.Empty<CustomerDto>();
+
+    private DateTime? _date
+    {
+        get => _model.TsDate.ToDateTime(TimeOnly.MinValue);
+        set
+        {
+            if (value is not null)
+                _model.TsDate = DateOnly.FromDateTime(value.Value);
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDataAsync();
+        await base.OnInitializedAsync();
+    }
+
+    private async Task LoadDataAsync()
+    {
+
+        try
+        {
+            _isLoading = true;
+            _errorMessage = null;
+            StateHasChanged();
+
+            // catch SimCardIds and CustomerIds
+            SimCardIds = new[] { _model.SimCardId } ;
+            CustomerId = _model.CustomerId;
+
+            // Get existing data if this is an edit
+            //var result = await Mediator.Send(new GetTrackingUnitByIdQuery() { Id = _model.Id });
+
+
+            //if (result.Succeeded && result.Data != null)
+            //{
+                // Load dropdown data using the service - leverages caching automatically
+                //var loadTasks = new List<Task>
+                //{
+               await     LoadSimCardsAsync(_model.SimCardId > 0 ? SimCardIds : null);
+               await     LoadTrackingUnitsAsync(_model.CustomerId > 0 ? CustomerId : null);
+               await     LoadCustomersAsync(_model.CustomerId > 0 ? CustomerId : null);
+                //};
+
+                //await Task.WhenAll(loadTasks);
+            //}
+            //else
+            //{
+                // If no existing data, load all dropdowns
+                //_errorMessage = $"Tracking unit not found.";
+                //Snackbar.Add(_errorMessage, Severity.Error);
+            //}
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = $"Error loading data: {ex.Message}";
+            Snackbar.Add(_errorMessage, Severity.Error);
+        }
+        finally
+        {
+            _isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task LoadSimCardsAsync(int[]? ids = null)
+    {
+        try
+        {
+            _isDataLoading = true;
+            // The service uses the cached query automatically
+            SimCards = await DropdownDataService.GetAvailableSimCardsAsync(ids);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Failed to load SIM cards: {ex.Message}", Severity.Warning);
+        }
+        finally
+        {
+            _isDataLoading = false;
+        }
+    }
+
+    private async Task LoadTrackingUnitsAsync(int? customerId = null)
+    {
+        try
+        {
+            _isDataLoading = true;
+            Units = await DropdownDataService.GetAvailableTrackingUnitsAsync(customerId);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Failed to load tracked assets: {ex.Message}", Severity.Warning);
+        }
+        finally
+        {
+            _isDataLoading = false;
+        }
+    }
+
+    private async Task LoadCustomersAsync(int? customerId = null)
+    {
+        try
+        {
+            _isDataLoading = true;
+            Customers = await DropdownDataService.GetAvailableCustomersAsync(customerId);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Failed to load customers: {ex.Message}", Severity.Warning);
+        }
+        finally
+        {
+            _isDataLoading = false;
+        }
+    }
+
+    private void OnChangedInsMode(InsMode insMode)
+    {
+        _model.InsMode = insMode;
+        StateHasChanged();
+    }
+
+    private void OnChangedSubPackage(SubPackage gpsSubscriptionStatus)
+    {
+        _model.SubPackage = gpsSubscriptionStatus;
+        StateHasChanged();
+    }
+
+    async Task Submit()
+    {
+         try
+        {
+            _submitting = true;
+            await _form.ValidateAsync();
+            if (!_form.IsValid)
+                return;
+            var result = await Mediator.Send(_model);
+            result.Match(data =>
+            {
+                DropdownDataService.ClearSimCardsCacheAsync();
+                DropdownDataService.ClearTrackedAssetsCacheAsync();
+                DropdownDataService.ClearCustomersCacheAsync();
+                MudDialog.Close(DialogResult.Ok(true));
+                Snackbar.Add(AppStrings.SaveSuccess, MudBlazor.Severity.Info);
+            }, errors =>
+            {
+                Snackbar.Add(errors, MudBlazor.Severity.Error);
+            });
+        }
+        finally
+        {
+            _submitting = false;
+        }
+    }
+
+void Cancel()
+    {
+        if (!_submitting)
+        {
+            MudDialog.Cancel();
+        }
+    }
+
+}

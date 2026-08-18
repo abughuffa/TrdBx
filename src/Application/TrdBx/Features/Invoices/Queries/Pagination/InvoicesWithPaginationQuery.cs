@@ -1,0 +1,43 @@
+﻿using CleanArchitecture.Blazor.Application.Features.Invoices.Caching;
+using CleanArchitecture.Blazor.Application.Features.Invoices.DTOs;
+using CleanArchitecture.Blazor.Application.Features.Invoices.Specifications;
+
+namespace CleanArchitecture.Blazor.Application.Features.Invoices.Queries.Pagination;
+
+public class InvoicesWithPaginationQuery : InvoiceAdvancedFilter, ICacheableRequest<PaginatedData<InvoiceDto>>
+{
+    public override string ToString()
+    {
+
+        return $"Listview:{ListView}, Search:{Keyword},Client/Customer:{CustomerId},InvoiceType:{InvoiceType},IStatus:{IStatus}, SortDirection:{SortDirection}, OrderBy:{OrderBy}, {PageNumber}, {PageSize}";
+    }
+    public string CacheKey => InvoiceCacheKey.GetPaginationCacheKey($"{this}");
+    public IEnumerable<string> Tags => InvoiceCacheKey.Tags;
+    public InvoiceAdvancedSpecification Specification => new InvoiceAdvancedSpecification(this);
+}
+
+public class InvoicesWithPaginationQueryHandler :
+         IRequestHandler<InvoicesWithPaginationQuery, PaginatedData<InvoiceDto>>
+{
+            private readonly IApplicationDbContextFactory _dbContextFactory;
+        private readonly TypeAdapterConfig _typeAdapterConfig;
+        public InvoicesWithPaginationQueryHandler(
+            TypeAdapterConfig typeAdapterConfig,
+            IApplicationDbContextFactory dbContextFactory)
+        {
+            _typeAdapterConfig = typeAdapterConfig;
+            _dbContextFactory = dbContextFactory;
+        }
+    public async ValueTask<PaginatedData<InvoiceDto>> Handle(InvoicesWithPaginationQuery request, CancellationToken cancellationToken)
+    {
+     await using var _context = await _dbContextFactory.CreateAsync(cancellationToken);
+
+        var data = await _context.Invoices.Include(s => s.Customer).OrderBy($"{request.OrderBy} {request.SortDirection}")
+                                                  .ProjectToPaginatedDataAsync<Invoice, InvoiceDto>(request.Specification,
+                                                                               request.PageNumber,
+                                                                               request.PageSize,
+                                                                               _typeAdapterConfig,
+                                                                               cancellationToken);
+        return data;
+    }
+}

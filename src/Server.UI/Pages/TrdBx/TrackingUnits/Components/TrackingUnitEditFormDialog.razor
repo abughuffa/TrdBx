@@ -1,0 +1,69 @@
+﻿
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.Update
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.TrackingUnitModels
+
+@inherits MudComponentBase
+@inject IValidationService Validator
+@inject IStringLocalizer<TrackingUnits> L
+@attribute [Authorize(Policy = Permissions.TrackingUnits.Edit)]
+
+<MudDialog>
+    <DialogContent>
+        <MudForm Model="@_command" @ref="@_form" Validation="@(Validator.ValidateValue(_command))">
+            <MudGrid Spacing="2">
+                <MudItem md="12">
+
+                    <TrackingUnitModels @bind-SelectedItemId="_command.TrackingUnitModelId"></TrackingUnitModels>
+
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField Label="@L[_command.GetMemberDisplayName(x => x.SNo)]" @bind-Value="_command.SNo" For="@(() => _command.SNo)" Required="false" RequiredError="@L["SNo Is Required!"]"></MudTextField>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField Label="@L[_command.GetMemberDisplayName(x => x.Imei)]" @bind-Value="_command.Imei" For="@(() => _command.Imei)" Required="false" RequiredError="@L["Imei Is Required!"]"></MudTextField>
+                </MudItem>
+            </MudGrid>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudLoadingButton Loading="@_saving" OnClick="OnSave">@AppStrings.Save</MudLoadingButton>
+        <MudButton OnClick="Cancel">@AppStrings.Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+
+@code {
+    MudForm _form = new();
+    private bool _saving = false;
+    [CascadingParameter]
+    IMudDialogInstance MudDialog { get; set; } = default!;
+    [EditorRequired][Parameter] public UpdateTrackingUnitCommand _command { get; set; } = null!;
+
+
+    async Task OnSave()
+    {
+        try
+        {
+            _saving = true;
+            await _form.ValidateAsync();
+            if (!_form.IsValid)
+                return;
+            var result = await Mediator.Send(_command);
+            result.Match(data =>
+            {
+                MudDialog.Close(DialogResult.Ok(true));
+                Snackbar.Add(AppStrings.SaveSuccess, MudBlazor.Severity.Info);
+            }, errors =>
+            {
+                Snackbar.Add(errors, MudBlazor.Severity.Error);
+            });
+        }
+        finally
+        {
+            _saving = false;
+        }
+    }
+
+    void Cancel() => MudDialog.Cancel();
+}

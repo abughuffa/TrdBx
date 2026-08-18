@@ -1,0 +1,50 @@
+﻿using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Caching;
+using CleanArchitecture.Blazor.Application.Features.TrackingUnits.DTOs;
+    // using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Mappers;
+using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Specifications;
+using CleanArchitecture.Blazor.Domain.Entities;
+using CleanArchitecture.Blazor.Domain.Enums;
+
+namespace CleanArchitecture.Blazor.Application.Features.TrackingUnits.Queries.Pagination;
+
+public class TrackingUnitsWithPaginationQuery : TrackingUnitAdvancedFilter, ICacheableRequest<PaginatedData<TrackingUnitDto>>
+{
+
+    public override string ToString()
+    {
+        return $"Listview:{ListView}: Search:{Keyword},Client/Customer:{CustomerId},UStatus:{UStatus}, {OrderBy}, {SortDirection}, {PageNumber}, {PageSize}";
+    }
+
+    public string CacheKey => TrackingUnitCacheKey.GetPaginationCacheKey($"{this}");
+    public IEnumerable<string>? Tags => TrackingUnitCacheKey.Tags;
+    public TrackingUnitAdvancedSpecification Specification => new(this);
+
+}
+    
+public class TrackingUnitsWithPaginationQueryHandler :
+         IRequestHandler<TrackingUnitsWithPaginationQuery, PaginatedData<TrackingUnitDto>>
+{
+            private readonly IApplicationDbContextFactory _dbContextFactory;
+        private readonly TypeAdapterConfig _typeAdapterConfig;
+        public TrackingUnitsWithPaginationQueryHandler(
+            TypeAdapterConfig typeAdapterConfig,
+            IApplicationDbContextFactory dbContextFactory)
+        {
+            _typeAdapterConfig = typeAdapterConfig;
+            _dbContextFactory = dbContextFactory;
+        }
+
+    public async ValueTask<PaginatedData<TrackingUnitDto>> Handle(TrackingUnitsWithPaginationQuery request, CancellationToken cancellationToken)
+        {
+         await using var _context = await _dbContextFactory.CreateAsync(cancellationToken);
+
+        var data = await _context.TrackingUnits.Include(s => s.Customer).Include(s => s.SimCard)
+            .Include(s => s.TrackedAsset).Include(s => s.TrackingUnitModel).OrderBy($"{request.OrderBy} {request.SortDirection}")
+                                     .ProjectToPaginatedDataAsync<TrackingUnit, TrackingUnitDto>(request.Specification,
+                                                                  request.PageNumber,
+                                                                  request.PageSize,
+                                                               _typeAdapterConfig,
+                                                                  cancellationToken);
+        return data;
+    }
+}

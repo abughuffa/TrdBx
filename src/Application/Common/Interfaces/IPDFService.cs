@@ -3,7 +3,7 @@
 
 namespace CleanArchitecture.Blazor.Application.Common.Interfaces;
 
-public interface IPDFService
+public partial interface IPDFService
 {
     Task<byte[]> ExportAsync<TData>(IEnumerable<TData> data
         , Dictionary<string, Func<TData, object?>> mappers

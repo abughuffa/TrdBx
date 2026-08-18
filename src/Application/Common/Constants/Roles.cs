@@ -3,7 +3,7 @@
 
 namespace CleanArchitecture.Blazor.Application.Common.Constants;
 
-public abstract class Roles
+public abstract partial class Roles
 {
     public const string Admin = nameof(Admin);
     public const string Basic = nameof(Basic);

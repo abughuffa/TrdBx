@@ -1,0 +1,62 @@
+﻿
+@using CleanArchitecture.Blazor.Application.Features.SProviders.Commands.AddEdit
+
+@inherits MudComponentBase
+@inject IValidationService Validator
+@inject IStringLocalizer<SProviders> L
+@attribute [Authorize(Policy = Permissions.SProviders.Create)]
+@attribute [Authorize(Policy = Permissions.SProviders.Edit)]
+
+
+
+<MudDialog>
+    <DialogContent>
+        <MudForm Model="@_command" @ref="@_form" Validation="@(Validator.ValidateValue(_command))">
+            <MudGrid>
+
+                <MudItem md="12">
+                    <MudTextField Label="@L[_command.GetMemberDisplayName(x=>x.Name)]" @bind-Value="_command.Name" For="@(() => _command.Name)" Required="false" RequiredError="@L["SProvider name is required!"]"></MudTextField>
+                </MudItem>
+            </MudGrid>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudLoadingButton Loading="@_saving" OnClick="OnSubmit">@AppStrings.Save</MudLoadingButton>
+        <MudButton OnClick="Cancel">@AppStrings.Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    MudForm? _form;
+    private bool _saving = false;
+    [CascadingParameter]
+    IMudDialogInstance MudDialog { get; set; } = default!;
+    AddEditSProviderCommandValidator _commandValidator = new();
+    [EditorRequired][Parameter] public AddEditSProviderCommand _command { get; set; } = null!;
+
+
+   async Task OnSubmit()
+    {
+        try
+        {
+            _saving = true;
+            await _form.ValidateAsync();
+            if (!_form.IsValid)
+                return;
+            var result = await Mediator.Send(_command);
+            result.Match(data =>
+            {
+                MudDialog.Close(DialogResult.Ok(true));
+                Snackbar.Add(AppStrings.SaveSuccess, MudBlazor.Severity.Info);
+            }, errors =>
+            {
+                Snackbar.Add(errors, MudBlazor.Severity.Error);
+            });
+        }
+        finally
+        {
+            _saving = false;
+        }
+    }
+    void Cancel() => MudDialog.Cancel();
+}

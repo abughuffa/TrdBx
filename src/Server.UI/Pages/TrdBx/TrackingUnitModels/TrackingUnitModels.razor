@@ -1,0 +1,202 @@
+﻿
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnitModels.Commands.AddEdit
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnitModels.Commands.Delete
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnitModels.DTOs
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnitModels.Queries.GetAll
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.TrackingUnitModels.Components
+
+@inherits MudComponentBase
+@inject IStringLocalizer<TrackingUnitModels> L
+
+<MudGrid>
+    <MudItem md="8">
+        <MudSelect T="int"  
+                   Value="SelectedItemId" 
+                   ValueChanged="OnTrackingUnitModelChanged"
+                   Required="true"
+                   RequiredError="@L["TrackingUnitModel is required!"]" >
+                   <MudSelectItem Value=0>@L["Select TrackingUnitModel"]</MudSelectItem>
+            @foreach (var doc1type in items)
+            {
+                <MudSelectItem Value="doc1type.Id">@doc1type.Name</MudSelectItem>  
+            }
+        </MudSelect>
+    </MudItem>
+
+    <MudItem md="1">
+        <MudIconButton Variant="Variant.Outlined"
+                       OnClick="@(()=>OnView(SelectedItem))"
+                       Disabled="isDisabled"
+                       Icon="@Icons.Material.Filled.Preview"
+                       Size="Size.Small"
+                       Color="Color.Primary">
+        </MudIconButton>
+    </MudItem>
+
+    <MudItem md="1">
+        <MudIconButton Variant="Variant.Outlined"
+                       OnClick="@(()=>OnEdit(SelectedItem))"
+                       Disabled="isDisabled"
+                       Icon="@Icons.Material.Filled.Edit"
+                       Size="Size.Small"
+                       Color="Color.Primary">
+        </MudIconButton>
+    </MudItem>
+
+    <MudItem md="1">
+        <MudIconButton Variant="Variant.Outlined"
+                       OnClick="@(()=>OnCreate())"
+                       Icon="@Icons.Material.Filled.Add"
+                       Size="Size.Small"
+                       Color="Color.Primary">
+        </MudIconButton>
+    </MudItem>
+
+    <MudItem md="1">
+        <MudIconButton Variant="Variant.Outlined"
+                       OnClick="@(()=>OnDelete(SelectedItem))"
+                       Disabled="isDisabled"
+                       Icon="@Icons.Material.Filled.Delete"
+                       Size="Size.Small"
+                       Color="Color.Primary">
+        </MudIconButton>
+    </MudItem>
+
+
+</MudGrid>
+
+@code {
+
+    [Parameter] public EventCallback<int> SelectedItemIdChanged { get; set; }
+
+    private int selectedItemId;
+
+    private IEnumerable<TrackingUnitModelDto> items = new List<TrackingUnitModelDto>();
+
+    private GetAllTrackingUnitModelsQuery GetAllTrackingUnitModelsQuery { get; set; } = new();
+
+    [Parameter] public int SelectedItemId
+    {
+        get => selectedItemId;
+        set
+        {
+            if (selectedItemId != value)
+            {
+                selectedItemId = value;
+                SelectedItemIdChanged.InvokeAsync((int)value);
+            }
+        }
+    }
+
+    public TrackingUnitModelDto SelectedItem { get; set; } = default!;
+
+    private bool isDisabled => (SelectedItem is null);
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        items = await LoadTrackingUnitModels();
+        StateHasChanged();
+    }
+
+    private void OnTrackingUnitModelChanged(int id)
+    {
+        SelectedItemId = id; // is null ? null: id;
+        SelectedItem = items.FirstOrDefault(m => m.Id == id);
+    }
+
+
+    private async Task<IEnumerable<TrackingUnitModelDto>> LoadTrackingUnitModels()
+    {
+        var result = await Mediator.Send(GetAllTrackingUnitModelsQuery);
+        return result;
+    }
+
+    #region Curd
+
+    private Task OnCreate()
+    {
+        var command = new AddEditTrackingUnitModelCommand();
+  
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+
+        return DialogServiceHelper.ShowDialogAsync<TrackingUnitModelAddEditDialog>(
+            L["Create TrackingUnitModel"],
+            async _ =>
+            {
+             items = await LoadTrackingUnitModels();
+             SelectedItem = null;
+            },
+			p =>
+			{
+				p.Add(x => x._command, command);
+			},
+			options);
+    }
+
+    private Task OnEdit(TrackingUnitModelDto dto)
+    {
+        var command = ObjectMapper.Map<AddEditTrackingUnitModelCommand>(dto);
+  
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+
+        return DialogServiceHelper.ShowDialogAsync<TrackingUnitModelAddEditDialog>(
+            L["Update TrackingUnitModel"],
+            async _ =>
+            {
+
+            items = await LoadTrackingUnitModels();
+            SelectedItem = null;
+
+            },
+			p =>
+			{
+				p.Add(x => x._command, command);
+			},
+			options);
+
+
+    }
+
+    private async Task OnDelete(TrackingUnitModelDto dto)
+    {
+        var contentText = string.Format(AppStrings.DeleteConfirmation, dto.Name);
+        var command = new DeleteTrackingUnitModelCommand(new int[] { dto.Id });
+        await DialogServiceHelper.ShowDeleteConfirmationDialogAsync(command, AppStrings.DeleteConfirmationTitle, contentText, async () =>
+        {
+            await InvokeAsync(async () =>
+            {
+                items = await LoadTrackingUnitModels();
+
+                SelectedItem = null;
+            });
+        });
+
+    }
+
+
+
+    private Task OnView(TrackingUnitModelDto dto)
+    {
+         var model = dto;
+  
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+
+        return DialogServiceHelper.ShowDialogAsync<TrackingUnitModelViewDialog>(
+            L["Update TrackingUnitModel"],
+            async _ =>
+            {
+            SelectedItem = null;
+            },
+			p =>
+			{
+				p.Add(x => x._model, model);
+			},
+			options);
+    }
+
+    #endregion
+
+
+}

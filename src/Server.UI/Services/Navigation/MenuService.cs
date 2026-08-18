@@ -7,67 +7,69 @@ public class MenuService : IMenuService
 {
     private readonly List<MenuSectionModel> _features = new()
     {
-        new MenuSectionModel
-        {
-            Title = "Application",
-            SectionItems = new List<MenuSectionItemModel>
-            {
-                new() { Title = "Home", Icon = Icons.Material.Filled.Home, Href = "/" },
-                new()
-                {
-                    Title = "E-Commerce",
-                    Icon = Icons.Material.Filled.ShoppingCart,
-                    PageStatus = PageStatus.Completed,
-                    IsParent = true,
-                    MenuItems = new List<MenuSectionSubItemModel>
-                    {
-                        new()
-                        {
-                            Title = "Products",
-                            Href = "/pages/products",
-                            PageStatus = PageStatus.Completed
-                        },
-                        new()
-                        {
-                            Title = "Documents",
-                            Href = "/pages/documents",
-                            PageStatus = PageStatus.Completed
-                        },
-                        new()
-                        {
-                            Title = "Contacts",
-                            Href = "/pages/contacts",
-                            PageStatus = PageStatus.Completed
-                        }
-                    }
-                },
-                 new()
-                {
-                    Title = "Chatbot",
-                    Roles = new[] { Roles.Admin, Roles.Users },
-                    Icon = Icons.Material.Filled.ChatBubble,
-                    Href ="/ai/chatbot",
-                    PageStatus = PageStatus.Completed
-                },
-                new()
-                {
-                    Title = "Analytics",
-                    Roles = new[] { Roles.Admin, Roles.Users },
-                    Icon = Icons.Material.Filled.Analytics,
-                    Href = "/analytics",
-                    PageStatus = PageStatus.ComingSoon
-                },
-                new()
-                {
-                    Title = "Banking",
-                    Roles = new[] { Roles.Admin, Roles.Users },
-                    Icon = Icons.Material.Filled.Money,
-                    Href = "/banking",
-                    PageStatus = PageStatus.ComingSoon
-                }
+
+        TrdBxMenu.TrdBxMenuSection,
+        // new MenuSectionModel
+        // {
+        //     Title = "Application",
+        //     SectionItems = new List<MenuSectionItemModel>
+        //     {
+        //         new() { Title = "Home", Icon = Icons.Material.Filled.Home, Href = "/" },
+        //         new()
+        //         {
+        //             Title = "E-Commerce",
+        //             Icon = Icons.Material.Filled.ShoppingCart,
+        //             PageStatus = PageStatus.Completed,
+        //             IsParent = true,
+        //             MenuItems = new List<MenuSectionSubItemModel>
+        //             {
+        //                 new()
+        //                 {
+        //                     Title = "Products",
+        //                     Href = "/pages/products",
+        //                     PageStatus = PageStatus.Completed
+        //                 },
+        //                 new()
+        //                 {
+        //                     Title = "Documents",
+        //                     Href = "/pages/documents",
+        //                     PageStatus = PageStatus.Completed
+        //                 },
+        //                 new()
+        //                 {
+        //                     Title = "Contacts",
+        //                     Href = "/pages/contacts",
+        //                     PageStatus = PageStatus.Completed
+        //                 }
+        //             }
+        //         },
+        //          new()
+        //         {
+        //             Title = "Chatbot",
+        //             Roles = new[] { Roles.Admin, Roles.Users },
+        //             Icon = Icons.Material.Filled.ChatBubble,
+        //             Href ="/ai/chatbot",
+        //             PageStatus = PageStatus.Completed
+        //         },
+        //         new()
+        //         {
+        //             Title = "Analytics",
+        //             Roles = new[] { Roles.Admin, Roles.Users },
+        //             Icon = Icons.Material.Filled.Analytics,
+        //             Href = "/analytics",
+        //             PageStatus = PageStatus.ComingSoon
+        //         },
+        //         new()
+        //         {
+        //             Title = "Banking",
+        //             Roles = new[] { Roles.Admin, Roles.Users },
+        //             Icon = Icons.Material.Filled.Money,
+        //             Href = "/banking",
+        //             PageStatus = PageStatus.ComingSoon
+        //         }
                
-            }
-        },
+        //     }
+        // },
         new MenuSectionModel
         {
             Title = "MANAGEMENT",

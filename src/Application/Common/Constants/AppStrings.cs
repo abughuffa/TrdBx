@@ -2,7 +2,7 @@
 
 namespace CleanArchitecture.Blazor.Application.Common.Constants;
 
-public static class AppStrings
+public static partial class AppStrings
 {
     public const string APPSTRINGS_RESOURCE_ID =
         "CleanArchitecture.Blazor.Application.Resources.Constants.AppStrings";

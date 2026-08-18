@@ -1,0 +1,94 @@
+﻿
+@using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.ImpulseCharts.Queries.GetImpulseCharts
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Customers.Components
+
+@inject IStringLocalizer<ImpulseCharts> L
+
+<MudExpansionPanel @bind-Expanded="_advancedSearchExpanded"
+                   Style="border-radius: var(--mud-default-borderradius) !important;"
+                   Class="mud-elevation-25 pa-2 mb-3" Text="@AppStrings.AdvancedSearch">
+    <MudGrid>
+        <MudItem md="6">
+            <AvaliableCustomers @bind-Value="@TRequest.CustomerId"
+                                PHolder="@L["Filter by Customer"]"
+                                WithAdvParents="false"
+                                Clearable="true"
+                                OnCustomerChanged="FilterChanged">
+            </AvaliableCustomers>
+        </MudItem>
+
+        <MudItem md="3">
+            <MudDatePicker Editable @bind-Date="@_fromdate"
+                           Placeholder="@L["By Start Date"]"
+                           Clearable="true"
+                           FilterChanged="OnStartDateChanged">
+            </MudDatePicker>
+        </MudItem>
+        <MudItem md="3">
+            <MudDatePicker Editable @bind-Date="@_todate"
+                           Placeholder="@L["By End Date"]"
+                           Clearable="true"
+                           FilterChanged="OnEndDateChanged">
+            </MudDatePicker>
+        </MudItem>
+     </MudGrid>
+     </MudExpansionPanel>
+
+@code {
+        [EditorRequired][Parameter] public GetImpulseChartsQuery TRequest { get; set; } = null!;
+    [EditorRequired][Parameter] public EventCallback<string> OnFilterCriteriaChanged { get; set; }
+
+    private bool _advancedSearchExpanded;
+
+    private async Task FilterChanged(string? str)
+    {
+        if (_advancedSearchExpanded)
+        {
+            await OnFilterCriteriaChanged.InvokeAsync(str);
+        }
+    }
+
+    private async Task OnStartDateChanged(string? str)
+    {
+        _fromdate = DateTime.TryParse(str,out DateTime result) ? result : null;
+        await FilterChanged(str);
+    }
+
+    private DateTime? _fromdate
+    {
+        get => TRequest.FromDate?.ToDateTime(TimeOnly.MinValue);
+        set
+        {
+            if (value is not null)
+            {
+                TRequest.FromDate = DateOnly.FromDateTime((DateTime)value);
+            }
+            else
+                TRequest.FromDate = null;
+
+
+
+        }
+    }
+
+    private async Task OnEndDateChanged(string? str)
+    {
+        _todate = DateTime.TryParse(str, out DateTime result) ? result : null;
+        await FilterChanged(str);
+    }
+
+    private DateTime? _todate
+    {
+        get => TRequest.ToDate?.ToDateTime(TimeOnly.MinValue);
+        set
+        {
+            if (value is not null)
+            {
+                TRequest.ToDate = DateOnly.FromDateTime((DateTime)value);
+            }
+            else
+                TRequest.ToDate = null;
+        }
+    }
+       
+}

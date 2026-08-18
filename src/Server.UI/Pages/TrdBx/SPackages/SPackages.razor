@@ -1,0 +1,205 @@
+﻿@using CleanArchitecture.Blazor.Application.Features.SPackages.Commands.AddEdit
+@using CleanArchitecture.Blazor.Application.Features.SPackages.Commands.Delete
+@using CleanArchitecture.Blazor.Application.Features.SPackages.DTOs
+@using CleanArchitecture.Blazor.Application.Features.SPackages.Queries.GetAll
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.SPackages.Components
+
+@inherits MudComponentBase
+@inject IStringLocalizer<SPackages> L
+
+
+
+<MudGrid>
+    <MudItem md="8">
+        <MudSelect T="int"
+                   
+                   Required="true"
+                   RequiredError="@L["SPackage is required!"]"
+                   Value="SPackageId"
+                   ValueChanged="OnSPackageChanged">
+            <MudSelectItem Value=0>Select a SPackage</MudSelectItem>
+
+            @foreach (var doc1type in spackages)
+            {
+                <MudSelectItem Value="doc1type.Id">@doc1type.Name</MudSelectItem>
+            }
+        </MudSelect>
+    </MudItem>
+    <MudItem md="1">
+        <MudIconButton Variant="Variant.Outlined"
+                       OnClick="@(()=>OnView(SelectedSPackage))"
+                       Disabled="isDisabled"
+                       Icon="@Icons.Material.Filled.Preview"
+                       Size="Size.Small"
+                       Color="Color.Primary">
+        </MudIconButton>
+    </MudItem>
+
+    <MudItem md="1">
+        <MudIconButton Variant="Variant.Outlined"
+                       OnClick="@(()=>OnEdit(SelectedSPackage))"
+                       Disabled="isDisabled"
+                       Icon="@Icons.Material.Filled.Edit"
+                       Size="Size.Small"
+                       Color="Color.Primary">
+        </MudIconButton>
+    </MudItem>
+
+    <MudItem md="1">
+        <MudIconButton Variant="Variant.Outlined"
+                       OnClick="@(()=>OnCreate())"
+                       Icon="@Icons.Material.Filled.Add"
+                       Size="Size.Small"
+                       Color="Color.Primary">
+        </MudIconButton>
+    </MudItem>
+
+    <MudItem md="1">
+        <MudIconButton Variant="Variant.Outlined"
+                       OnClick="@(()=>OnDelete(SelectedSPackage))"
+                       Disabled="isDisabled"
+                       Icon="@Icons.Material.Filled.Delete"
+                       Size="Size.Small"
+                       Color="Color.Primary">
+        </MudIconButton>
+    </MudItem>
+
+
+
+</MudGrid>
+
+@code {
+
+    [Parameter]
+    public EventCallback<int> SPackageIdChanged { get; set; }
+
+    private int _gpsUnitModelId;
+    [Parameter]
+    public int SPackageId
+    {
+        get => _gpsUnitModelId;
+        set
+        {
+            if (_gpsUnitModelId != value)
+            {
+                _gpsUnitModelId = value;
+                SPackageIdChanged.InvokeAsync(value);
+            }
+        }
+    }
+
+
+    private IEnumerable<SPackageDto> spackages = new List<SPackageDto>();
+    private GetAllSPackagesQuery GetAllSPackagesQuery { get; set; } = new();
+
+    public SPackageDto SelectedSPackage { get; set; } = null!;
+    private void OnSPackageChanged(int id)
+    {
+        SPackageId = id;
+        SelectedSPackage = spackages.FirstOrDefault(m => m.Id == id);
+    }
+
+    bool isDisabled => (SelectedSPackage is null);
+
+    protected override async Task OnInitializedAsync()
+    {
+        spackages = await LoadSPackages();
+        StateHasChanged();
+    }
+
+    private async Task<IEnumerable<SPackageDto>> LoadSPackages()
+    {
+        var result = await Mediator.Send(GetAllSPackagesQuery);
+        return result;
+    }
+
+    #region Curd
+
+    private Task OnCreate()
+    {
+        
+
+        var command = new AddEditSPackageCommand();
+  
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+
+        return DialogServiceHelper.ShowDialogAsync<SPackageAddEditDialog>(
+            L["Create SPackage"],
+            async _ =>
+            {
+            spackages = await LoadSPackages();
+
+            SelectedSPackage = null;
+            },
+			p =>
+			{
+				p.Add(x => x._command, command);
+			},
+			options);
+    }
+
+    private  Task OnEdit(SPackageDto dto)
+    {
+         var command = ObjectMapper.Map<AddEditSPackageCommand>(dto);
+  
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+
+        return DialogServiceHelper.ShowDialogAsync<SPackageAddEditDialog>(
+            L["Update SPackage"],
+            async _ =>
+            {
+
+                spackages = await LoadSPackages();
+
+            SelectedSPackage = null;
+
+            },
+			p =>
+			{
+				p.Add(x => x._command, command);
+			},
+			options);
+
+
+
+    }
+
+    private Task OnDelete(SPackageDto dto)
+    {
+        var contentText = string.Format(AppStrings.DeleteConfirmation, dto.Name);
+        var command = new DeleteSPackageCommand(new int[] { dto.Id });
+        return DialogServiceHelper.ShowDeleteConfirmationDialogAsync(command, AppStrings.DeleteConfirmationTitle, contentText, async () =>
+        {
+            await InvokeAsync(async () =>
+            {
+                spackages = await LoadSPackages();
+
+                SelectedSPackage = null;
+            });
+        });
+    }
+
+
+
+    private Task OnView(SPackageDto dto)
+    {
+
+
+        var model = dto;
+  
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+
+        return DialogServiceHelper.ShowDialogAsync<SPackageViewDialog>(
+            L["View SPackage"],
+            async _ =>
+            {
+            },
+			p =>
+			{
+				p.Add(x => x._model, model);
+			},
+			options);
+    }
+
+    #endregion
+}

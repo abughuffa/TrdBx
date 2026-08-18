@@ -1,0 +1,20 @@
+﻿using CleanArchitecture.Blazor.Domain.Events;
+
+namespace CleanArchitecture.Blazor.Application.Features.Invoices.EventHandlers;
+
+public class InvoiceUpdatedEventHandler : INotificationHandler<InvoiceUpdatedEvent>
+{
+    private readonly ILogger<InvoiceUpdatedEventHandler> _logger;
+
+    public InvoiceUpdatedEventHandler(
+        ILogger<InvoiceUpdatedEventHandler> logger
+        )
+    {
+        _logger = logger;
+    }
+    public ValueTask Handle(InvoiceUpdatedEvent notification, CancellationToken cancellationToken)
+    {
+        _logger.LogInformation("Handled domain event '{EventType}' with notification: {@Notification} ", notification.GetType().Name, notification);
+        return ValueTask.CompletedTask;
+    }
+}

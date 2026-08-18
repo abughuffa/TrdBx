@@ -1,0 +1,345 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Activate" xml:space="preserve">
+    <value>تفعيل كامل</value>
+  </data>
+  <data name="Activate for Gprs" xml:space="preserve">
+    <value>تفعيل للتمديد</value>
+  </data>
+  <data name="Activate for Hosting" xml:space="preserve">
+    <value>تفعيل للاستضافة</value>
+  </data>
+  <data name="Activate TrackingUnit {0}" xml:space="preserve">
+    <value>تفعيل الوحدة {0}</value>
+  </data>
+  <data name="Activate TrackingUnit {0} for Gprs" xml:space="preserve">
+    <value>تفعيل الوحدة {0} للتمديد</value>
+  </data>
+  <data name="Activate TrackingUnit {0} for hosting" xml:space="preserve">
+    <value>تفعيل الوحدة {0} للاستضافة</value>
+  </data>
+  <data name="Create Annual Subscription?" xml:space="preserve">
+    <value>انشاء اشتراك سنوي؟</value>
+  </data>
+  <data name="Create Deserved Services?" xml:space="preserve">
+    <value>انشاء سجل خدمات مستحقة؟</value>
+  </data>
+  <data name="Create Ticket" xml:space="preserve">
+    <value>انشاء بطاقة</value>
+  </data>
+  <data name="Create Ticket for {0}" xml:space="preserve">
+    <value>انشاء بطاقة لـ {0}</value>
+  </data>
+  <data name="Create Tickets" xml:space="preserve">
+    <value>انشاء بطاقات</value>
+  </data>
+  <data name="Create TrackingUnit" xml:space="preserve">
+    <value>انشاء وحدة تتبع</value>
+  </data>
+  <data name="Customer" xml:space="preserve">
+    <value>الزبون</value>
+  </data>
+  <data name="Customer Is Required!" xml:space="preserve">
+    <value>الزبون مطلوب!</value>
+  </data>
+  <data name="Deactivate" xml:space="preserve">
+    <value>إلغاء تفعيل</value>
+  </data>
+  <data name="Deactivate TrackingUnit {0}" xml:space="preserve">
+    <value>إلغاء تفعيل الوحدة {0}</value>
+  </data>
+  <data name="Filter by Customer" xml:space="preserve">
+    <value>تصفية بحسب الزبون</value>
+  </data>
+  <data name="Filter by Status" xml:space="preserve">
+    <value>تصفية بحسب الحالة</value>
+  </data>
+  <data name="Id" xml:space="preserve">
+    <value>معرف</value>
+  </data>
+  <data name="Imei" xml:space="preserve">
+    <value>ايمي</value>
+  </data>
+  <data name="Imei Is Required!" xml:space="preserve">
+    <value>رقم ايمي مطلوب</value>
+  </data>
+  <data name="InsMode" xml:space="preserve">
+    <value>نمط التركيب</value>
+  </data>
+  <data name="Install" xml:space="preserve">
+    <value>تركيب</value>
+  </data>
+  <data name="Install TrackingUnit" xml:space="preserve">
+    <value>تركيب وحدة تتبع</value>
+  </data>
+  <data name="Is Tampered?" xml:space="preserve">
+    <value>هل متضرر؟</value>
+  </data>
+  <data name="IsOnWialon" xml:space="preserve">
+    <value>على المنصة؟</value>
+  </data>
+  <data name="Mark as damaged" xml:space="preserve">
+    <value>تحديد كعاطل</value>
+  </data>
+  <data name="Mark as used" xml:space="preserve">
+    <value>تحديد كمستخدم</value>
+  </data>
+  <data name="Reassign Owner" xml:space="preserve">
+    <value>إعادة تخصيص المالك</value>
+  </data>
+  <data name="Reassign TrackingUnit's Owner" xml:space="preserve">
+    <value>إعادة تخصيص المالك لوحدة التتبع</value>
+  </data>
+  <data name="Recover" xml:space="preserve">
+    <value>استرجاع</value>
+  </data>
+  <data name="Recover TrackingUnit" xml:space="preserve">
+    <value>استرجاع وحدة تتبع</value>
+  </data>
+  <data name="Renew Subscription" xml:space="preserve">
+    <value>تجديد الاشتراك</value>
+  </data>
+  <data name="Renew Subscription for {0}" xml:space="preserve">
+    <value>تجديد الاشتراك للوحدة {0}</value>
+  </data>
+  <data name="Renew Subscriptions" xml:space="preserve">
+    <value>تجديد الاشتراكات</value>
+  </data>
+  <data name="Replace" xml:space="preserve">
+    <value>استبدال</value>
+  </data>
+  <data name="Replace TrackingUnit" xml:space="preserve">
+    <value>استبدال وحدة تتبع</value>
+  </data>
+  <data name="Replacement Unit" xml:space="preserve">
+    <value>الوحدة البديلة</value>
+  </data>
+  <data name="Replacement Unit Is Required!" xml:space="preserve">
+    <value>الوحدة البديلة مطلوبة</value>
+  </data>
+  <data name="Reserve" xml:space="preserve">
+    <value>حجز</value>
+  </data>
+  <data name="Reserve New TrackingUnit for Customer" xml:space="preserve">
+    <value>حجز وحدة تتبع جديدة لزبون</value>
+  </data>
+  <data name="Select Activation date to activate tracking unit's subscription for Gprs." xml:space="preserve">
+    <value>اختر تاريخ التفعيل لتفعيل اشتراك الوحدة للتمديد.</value>
+  </data>
+  <data name="Select Activation date to activate tracking unit's subscription for hosting." xml:space="preserve">
+    <value>اختر تاريخ التفعيل لتفعيل اشتراك الوحدة للاستضافة.</value>
+  </data>
+  <data name="Select Activation date to activate tracking unit's subscription." xml:space="preserve">
+    <value>اختر تاريخ التفعيل لتفعيل اشتراك الوحدة بشكل كامل.</value>
+  </data>
+  <data name="Select Customer" xml:space="preserve">
+    <value>اختر الزبون</value>
+  </data>
+  <data name="Select Deactivation date to deactivate tracking unit's subscription." xml:space="preserve">
+    <value>اختر تاريخ إلغاء تفعيل، لإلغاء تفعيل اشتراك الوحدة.</value>
+  </data>
+  <data name="Select Renew date to Renew subscriptions of selected tracking units." xml:space="preserve">
+    <value>اختر تاريخ التجديد، لتجديد اشتراك الوحدات المختارة.</value>
+  </data>
+  <data name="Select Renew date to Renew tracking unit's subscription." xml:space="preserve">
+    <value>اختر تاريخ التجديد، لتجديد اشتراك الوحدة.</value>
+  </data>
+  <data name="Select Replacement Unit" xml:space="preserve">
+    <value>اختر الوحدة البديلة</value>
+  </data>
+  <data name="Select Service Task to create technical support ticket for the unit." xml:space="preserve">
+    <value>اختر مهمة الخدمة لإنشاء بطاقة دعم فني للوحدة.</value>
+  </data>
+  <data name="Select Service Task to create technical support ticket for the units." xml:space="preserve">
+    <value>اختر مهمة الخدمة لإنشاء بطاقة دعم فني للوحدات المختارة.</value>
+  </data>
+  <data name="Select SimCard" xml:space="preserve">
+    <value>اختر شريحة الاتصال</value>
+  </data>
+  <data name="Select TrackedAsset" xml:space="preserve">
+    <value>اختر الأصل</value>
+  </data>
+  <data name="SimCard" xml:space="preserve">
+    <value>الشريحة</value>
+  </data>
+  <data name="SimCard Is Required!" xml:space="preserve">
+    <value>شريحة الاتصال مطلوبة!</value>
+  </data>
+  <data name="SNo" xml:space="preserve">
+    <value>ر. متسلسل</value>
+  </data>
+  <data name="SNo Is Required!" xml:space="preserve">
+    <value>الرقم المتسلسل مطلوب!</value>
+  </data>
+  <data name="Subscription" xml:space="preserve">
+    <value>الاشتراك</value>
+  </data>
+  <data name="TaskDate" xml:space="preserve">
+    <value>تاريخ المهمة</value>
+  </data>
+  <data name="TaskDate Is Required!" xml:space="preserve">
+    <value>تاريخ المهمة مطلوب!</value>
+  </data>
+  <data name="TrackedAsset" xml:space="preserve">
+    <value>الأصل</value>
+  </data>
+  <data name="TrackedAsset Is Required!" xml:space="preserve">
+    <value>الأصل مطلوب!</value>
+  </data>
+  <data name="TrackingUnit" xml:space="preserve">
+    <value>وحدة التتبع</value>
+  </data>
+  <data name="TrackingUnitModel" xml:space="preserve">
+    <value>الطراز</value>
+  </data>
+  <data name="TrackingUnits" xml:space="preserve">
+    <value>وحدات التتبع</value>
+  </data>
+  <data name="Transfer" xml:space="preserve">
+    <value>نقل</value>
+  </data>
+  <data name="Transfer TrackingUnit" xml:space="preserve">
+    <value>نقل وحدة التتبع</value>
+  </data>
+  <data name="UnitName" xml:space="preserve">
+    <value>اسم الوحدة</value>
+  </data>
+  <data name="Update TrackingUnit" xml:space="preserve">
+    <value>تحديث وحدة التتبع</value>
+  </data>
+  <data name="UStatus" xml:space="preserve">
+    <value>الحالة</value>
+  </data>
+  <data name="View Services Logs" xml:space="preserve">
+    <value>عرض سجلات الخدمات</value>
+  </data>
+  <data name="View Subscription periods" xml:space="preserve">
+    <value>عرض دورات الاشتراك</value>
+  </data>
+  <data name="View Wialon Tasks" xml:space="preserve">
+    <value>عرض مهام المنصة</value>
+  </data>
+  <data name="WryDate" xml:space="preserve">
+    <value>ت. الضمان</value>
+  </data>
+  <data name="WStatus" xml:space="preserve">
+    <value>الحالة على المنصة</value>
+  </data>
+</root>

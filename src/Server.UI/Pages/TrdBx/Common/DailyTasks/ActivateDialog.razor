@@ -1,0 +1,85 @@
+﻿@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.ActivateTrackingUnit
+
+
+@inject IValidationService Validator
+@inject IStringLocalizer<DailyTasks> L
+@attribute [Authorize(Policy = Permissions.DailyTasks.ActivateUnit)]
+
+<MudDialog>
+    <DialogContent>
+        <MudForm Model="@_model" @ref="@_form" Validation="@(Validator.ValidateValue(_model))">
+            <MudGrid>
+
+                <MudItem md="12">
+                    <MudText>@_contentText</MudText>
+                </MudItem>
+
+                <MudItem md="12">
+                    <MudDatePicker Class="pa-4"
+                                   Editable @bind-Date="_date"
+                                   For="@(() => _date)"
+                                   Required="true"
+                                   RequiredError="@L["TaskDate Is Required!"]" />
+                </MudItem>
+            </MudGrid>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudLoadingButton Loading="@_submitting" OnClick="Submit">@AppStrings.Submit</MudLoadingButton>
+        <MudButton OnClick="Cancel">@AppStrings.Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code
+{
+    MudForm _form = new();
+    private bool _submitting = false;
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; } = default!;
+    [EditorRequired][Parameter] public ActivateTrackingUnitCommand _model { get; set; } = null!;
+    [Parameter] public string? _contentText { get; set; } = default!;
+
+    private DateTime? _date
+    {
+        get => _model.TsDate.ToDateTime(TimeOnly.MinValue);
+        set
+        {
+            if (value is not null)
+            {
+                _model.TsDate = DateOnly.FromDateTime((DateTime)value);
+            }
+        }
+    }
+
+    async Task Submit()
+    {
+        try
+        {
+            _submitting = true;
+            await _form.ValidateAsync();
+            if (!_form.IsValid)
+                return;
+            //var result = await Mediator.Send(_model);
+
+            var result = await Mediator.Send(_model);
+             result.Match(
+             data =>
+            {
+                MudDialog.Close(DialogResult.Ok(true));
+                Snackbar.Add(AppStrings.SaveSuccess, Severity.Info);
+            },
+            errors =>
+            {
+                Snackbar.Add(errors, Severity.Error);
+            });
+        }
+        finally
+        {
+            _submitting = false;
+        }
+    }
+
+    void Cancel() => MudDialog.Cancel();
+}
+     
+
+

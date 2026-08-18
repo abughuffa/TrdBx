@@ -18,7 +18,7 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.7")
+                .HasAnnotation("ProductVersion", "10.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -138,6 +138,175 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     b.ToTable("contacts", (string)null);
                 });
 
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.CusPrice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("CreatedById")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("created_by_id");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("integer")
+                        .HasColumnName("customer_id");
+
+                    b.Property<decimal>("Gprs")
+                        .HasColumnType("numeric")
+                        .HasColumnName("gprs");
+
+                    b.Property<decimal>("Host")
+                        .HasColumnType("numeric")
+                        .HasColumnName("host");
+
+                    b.Property<DateTime?>("LastModifiedAt")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("last_modified_at");
+
+                    b.Property<string>("LastModifiedById")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("last_modified_by_id");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric")
+                        .HasColumnName("price");
+
+                    b.Property<int>("TrackingUnitModelId")
+                        .HasColumnType("integer")
+                        .HasColumnName("tracking_unit_model_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_cus_prices");
+
+                    b.HasIndex("CustomerId")
+                        .HasDatabaseName("ix_cus_prices_customer_id");
+
+                    b.HasIndex("TrackingUnitModelId")
+                        .HasDatabaseName("ix_cus_prices_tracking_unit_model_id");
+
+                    b.ToTable("cus_prices", (string)null);
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Customer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Account")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("account");
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("address");
+
+                    b.Property<int>("BillingPlan")
+                        .HasColumnType("integer")
+                        .HasColumnName("billing_plan");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("CreatedById")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("created_by_id");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("email");
+
+                    b.Property<bool>("IsAvaliable")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_avaliable");
+
+                    b.Property<bool>("IsRenewable")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_renewable");
+
+                    b.Property<bool>("IsTaxable")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_taxable");
+
+                    b.Property<DateTime?>("LastModifiedAt")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("last_modified_at");
+
+                    b.Property<string>("LastModifiedById")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("last_modified_by_id");
+
+                    b.Property<string>("Mobile1")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("mobile1");
+
+                    b.Property<string>("Mobile2")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("mobile2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("name");
+
+                    b.Property<int?>("OldId")
+                        .HasColumnType("integer")
+                        .HasColumnName("old_id");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("integer")
+                        .HasColumnName("parent_id");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("user_name");
+
+                    b.Property<int?>("WUnitGroupId")
+                        .HasColumnType("integer")
+                        .HasColumnName("w_unit_group_id");
+
+                    b.Property<int?>("WUserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("w_user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_customers");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasDatabaseName("ix_customers_name");
+
+                    b.HasIndex("ParentId")
+                        .HasDatabaseName("ix_customers_parent_id");
+
+                    b.ToTable("customers", (string)null);
+                });
+
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Document", b =>
                 {
                     b.Property<int>("Id")
@@ -216,6 +385,273 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasDatabaseName("ix_documents_tenant_id");
 
                     b.ToTable("documents", (string)null);
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Invoice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("CreatedById")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("created_by_id");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("integer")
+                        .HasColumnName("customer_id");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("description");
+
+                    b.Property<decimal>("DiscountAmount")
+                        .HasColumnType("numeric")
+                        .HasColumnName("discount_amount");
+
+                    b.Property<decimal>("DiscountRate")
+                        .HasColumnType("numeric")
+                        .HasColumnName("discount_rate");
+
+                    b.Property<string>("DisplayCusName")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("display_cus_name");
+
+                    b.Property<DateOnly>("DueDate")
+                        .HasColumnType("date")
+                        .HasColumnName("due_date");
+
+                    b.Property<decimal>("GrandTotal")
+                        .HasColumnType("numeric")
+                        .HasColumnName("grand_total");
+
+                    b.Property<int>("IStatus")
+                        .HasColumnType("integer")
+                        .HasColumnName("i_status");
+
+                    b.Property<DateOnly>("InvoiceDate")
+                        .HasColumnType("date")
+                        .HasColumnName("invoice_date");
+
+                    b.Property<string>("InvoiceNo")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("invoice_no");
+
+                    b.Property<int>("InvoiceType")
+                        .HasColumnType("integer")
+                        .HasColumnName("invoice_type");
+
+                    b.Property<bool>("IsTaxIgnored")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_tax_ignored");
+
+                    b.Property<bool>("IsTaxable")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_taxable");
+
+                    b.Property<DateTime?>("LastModifiedAt")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("last_modified_at");
+
+                    b.Property<string>("LastModifiedById")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("last_modified_by_id");
+
+                    b.Property<decimal>("PaidAmount")
+                        .HasColumnType("numeric")
+                        .HasColumnName("paid_amount");
+
+                    b.Property<DateOnly?>("PaymentDate")
+                        .HasColumnType("date")
+                        .HasColumnName("payment_date");
+
+                    b.Property<decimal>("TaxAmount")
+                        .HasColumnType("numeric")
+                        .HasColumnName("tax_amount");
+
+                    b.Property<decimal>("TaxRate")
+                        .HasColumnType("numeric")
+                        .HasColumnName("tax_rate");
+
+                    b.Property<decimal>("TaxableAmount")
+                        .HasColumnType("numeric")
+                        .HasColumnName("taxable_amount");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("numeric")
+                        .HasColumnName("total");
+
+                    b.HasKey("Id")
+                        .HasName("pk_invoices");
+
+                    b.HasIndex("CustomerId")
+                        .HasDatabaseName("ix_invoices_customer_id");
+
+                    b.HasIndex("InvoiceNo")
+                        .IsUnique()
+                        .HasDatabaseName("ix_invoices_invoice_no");
+
+                    b.ToTable("invoices", (string)null);
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.InvoiceItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric")
+                        .HasColumnName("amount");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("description");
+
+                    b.Property<int>("InvoiceItemGroupId")
+                        .HasColumnType("integer")
+                        .HasColumnName("invoice_item_group_id");
+
+                    b.Property<int>("SubSerialIndex")
+                        .HasColumnType("integer")
+                        .HasColumnName("sub_serial_index");
+
+                    b.Property<int>("SubscriptionId")
+                        .HasColumnType("integer")
+                        .HasColumnName("subscription_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_invoice_items");
+
+                    b.HasIndex("InvoiceItemGroupId")
+                        .HasDatabaseName("ix_invoice_items_invoice_item_group_id");
+
+                    b.HasIndex("SubscriptionId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_invoice_items_subscription_id");
+
+                    b.ToTable("invoice_items", (string)null);
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.InvoiceItemGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric")
+                        .HasColumnName("amount");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("description");
+
+                    b.Property<int>("InvoiceId")
+                        .HasColumnType("integer")
+                        .HasColumnName("invoice_id");
+
+                    b.Property<int>("SerialIndex")
+                        .HasColumnType("integer")
+                        .HasColumnName("serial_index");
+
+                    b.Property<int>("ServiceLogId")
+                        .HasColumnType("integer")
+                        .HasColumnName("service_log_id");
+
+                    b.Property<decimal>("SubTotal")
+                        .HasColumnType("numeric")
+                        .HasColumnName("sub_total");
+
+                    b.HasKey("Id")
+                        .HasName("pk_invoice_item_groups");
+
+                    b.HasIndex("InvoiceId")
+                        .HasDatabaseName("ix_invoice_item_groups_invoice_id");
+
+                    b.HasIndex("ServiceLogId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_invoice_item_groups_service_log_id");
+
+                    b.ToTable("invoice_item_groups", (string)null);
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.LibyanaSimCard", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("BExDate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("b_ex_date");
+
+                    b.Property<decimal?>("Balance")
+                        .HasColumnType("numeric")
+                        .HasColumnName("balance");
+
+                    b.Property<DateTime?>("DExDate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("d_ex_date");
+
+                    b.Property<DateTime?>("DOExpired")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("do_expired");
+
+                    b.Property<string>("DataOffer")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("data_offer");
+
+                    b.Property<DateTime?>("JoinDate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("join_date");
+
+                    b.Property<string>("Package")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("package");
+
+                    b.Property<string>("SimCardNo")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("sim_card_no");
+
+                    b.Property<int?>("SimCardStatus")
+                        .HasColumnType("integer")
+                        .HasColumnName("sim_card_status");
+
+                    b.HasKey("Id")
+                        .HasName("pk_libyana_sim_cards");
+
+                    b.ToTable("libyana_sim_cards", (string)null);
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.PicklistSet", b =>
@@ -340,6 +776,338 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasDatabaseName("ix_products_name");
 
                     b.ToTable("products", (string)null);
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SPackage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("name");
+
+                    b.Property<int?>("OldId")
+                        .HasColumnType("integer")
+                        .HasColumnName("old_id");
+
+                    b.Property<int>("SProviderId")
+                        .HasColumnType("integer")
+                        .HasColumnName("s_provider_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_s_packages");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasDatabaseName("ix_s_packages_name");
+
+                    b.HasIndex("SProviderId")
+                        .HasDatabaseName("ix_s_packages_s_provider_id");
+
+                    b.ToTable("s_packages", (string)null);
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SProvider", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_s_providers");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasDatabaseName("ix_s_providers_name");
+
+                    b.ToTable("s_providers", (string)null);
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.ServiceLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric")
+                        .HasColumnName("amount");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("CreatedById")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("created_by_id");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("integer")
+                        .HasColumnName("customer_id");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("description");
+
+                    b.Property<int?>("InvoiceItemId")
+                        .HasColumnType("integer")
+                        .HasColumnName("invoice_item_id");
+
+                    b.Property<bool>("IsBilled")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_billed");
+
+                    b.Property<bool>("IsDeserved")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deserved");
+
+                    b.Property<DateTime?>("LastModifiedAt")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("last_modified_at");
+
+                    b.Property<string>("LastModifiedById")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("last_modified_by_id");
+
+                    b.Property<DateOnly>("SerDate")
+                        .HasColumnType("date")
+                        .HasColumnName("ser_date");
+
+                    b.Property<string>("ServiceNo")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("service_no");
+
+                    b.Property<int>("ServiceTask")
+                        .HasColumnType("integer")
+                        .HasColumnName("service_task");
+
+                    b.HasKey("Id")
+                        .HasName("pk_service_logs");
+
+                    b.HasIndex("CreatedById")
+                        .HasDatabaseName("ix_service_logs_created_by_id");
+
+                    b.HasIndex("CustomerId")
+                        .HasDatabaseName("ix_service_logs_customer_id");
+
+                    b.HasIndex("InvoiceItemId")
+                        .HasDatabaseName("ix_service_logs_invoice_item_id");
+
+                    b.HasIndex("ServiceNo")
+                        .IsUnique()
+                        .HasDatabaseName("ix_service_logs_service_no");
+
+                    b.ToTable("service_logs", (string)null);
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.ServicePrice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("CreatedById")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("created_by_id");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("description");
+
+                    b.Property<DateTime?>("LastModifiedAt")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("last_modified_at");
+
+                    b.Property<string>("LastModifiedById")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("last_modified_by_id");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric")
+                        .HasColumnName("price");
+
+                    b.Property<int>("ServiceTask")
+                        .HasColumnType("integer")
+                        .HasColumnName("service_task");
+
+                    b.HasKey("Id")
+                        .HasName("pk_service_prices");
+
+                    b.ToTable("service_prices", (string)null);
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SimCard", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("CreatedById")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("created_by_id");
+
+                    b.Property<DateOnly?>("ExDate")
+                        .HasColumnType("date")
+                        .HasColumnName("ex_date");
+
+                    b.Property<string>("ICCID")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("iccid");
+
+                    b.Property<bool>("IsOwen")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_owen");
+
+                    b.Property<DateTime?>("LastModifiedAt")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("last_modified_at");
+
+                    b.Property<string>("LastModifiedById")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("last_modified_by_id");
+
+                    b.Property<int?>("OldId")
+                        .HasColumnType("integer")
+                        .HasColumnName("old_id");
+
+                    b.Property<int>("SPackageId")
+                        .HasColumnType("integer")
+                        .HasColumnName("s_package_id");
+
+                    b.Property<int>("SStatus")
+                        .HasColumnType("integer")
+                        .HasColumnName("s_status");
+
+                    b.Property<string>("SimCardNo")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("sim_card_no");
+
+                    b.HasKey("Id")
+                        .HasName("pk_sim_cards");
+
+                    b.HasIndex("SPackageId")
+                        .HasDatabaseName("ix_sim_cards_s_package_id");
+
+                    b.HasIndex("SimCardNo")
+                        .IsUnique()
+                        .HasDatabaseName("ix_sim_cards_sim_card_no");
+
+                    b.ToTable("sim_cards", (string)null);
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Subscription", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("numeric")
+                        .HasColumnName("amount")
+                        .HasComputedColumnSql("(\"se_date\" - \"ss_date\") * daily_fees", true);
+
+                    b.Property<int>("CaseCode")
+                        .HasColumnType("integer")
+                        .HasColumnName("case_code");
+
+                    b.Property<decimal>("DailyFees")
+                        .HasColumnType("numeric")
+                        .HasColumnName("daily_fees");
+
+                    b.Property<int>("Days")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("integer")
+                        .HasColumnName("days")
+                        .HasComputedColumnSql("\"se_date\" - \"ss_date\"", true);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("description");
+
+                    b.Property<int>("LastPaidFees")
+                        .HasColumnType("integer")
+                        .HasColumnName("last_paid_fees");
+
+                    b.Property<DateOnly>("SeDate")
+                        .HasColumnType("date")
+                        .HasColumnName("se_date");
+
+                    b.Property<int>("ServiceLogId")
+                        .HasColumnType("integer")
+                        .HasColumnName("service_log_id");
+
+                    b.Property<DateOnly>("SsDate")
+                        .HasColumnType("date")
+                        .HasColumnName("ss_date");
+
+                    b.Property<int>("TrackingUnitId")
+                        .HasColumnType("integer")
+                        .HasColumnName("tracking_unit_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_subscriptions");
+
+                    b.HasIndex("ServiceLogId")
+                        .HasDatabaseName("ix_subscriptions_service_log_id");
+
+                    b.HasIndex("TrackingUnitId")
+                        .HasDatabaseName("ix_subscriptions_tracking_unit_id");
+
+                    b.ToTable("subscriptions", (string)null);
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SystemLog", b =>
@@ -467,6 +1235,431 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasDatabaseName("ix_tenant_users_user_id");
 
                     b.ToTable("tenant_users", (string)null);
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Ticket", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("CreatedById")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("created_by_id");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("description");
+
+                    b.Property<DateTime?>("LastModifiedAt")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("last_modified_at");
+
+                    b.Property<string>("LastModifiedById")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("last_modified_by_id");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("note");
+
+                    b.Property<int>("ServiceTask")
+                        .HasColumnType("integer")
+                        .HasColumnName("service_task");
+
+                    b.Property<DateOnly?>("TaDate")
+                        .HasColumnType("date")
+                        .HasColumnName("ta_date");
+
+                    b.Property<DateOnly>("TcDate")
+                        .HasColumnType("date")
+                        .HasColumnName("tc_date");
+
+                    b.Property<DateOnly?>("TeDate")
+                        .HasColumnType("date")
+                        .HasColumnName("te_date");
+
+                    b.Property<string>("TicketNo")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("ticket_no");
+
+                    b.Property<int>("TicketStatus")
+                        .HasColumnType("integer")
+                        .HasColumnName("ticket_status");
+
+                    b.Property<int>("TrackingUnitId")
+                        .HasColumnType("integer")
+                        .HasColumnName("tracking_unit_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_tickets");
+
+                    b.HasIndex("CreatedById")
+                        .HasDatabaseName("ix_tickets_created_by_id");
+
+                    b.HasIndex("LastModifiedById")
+                        .HasDatabaseName("ix_tickets_last_modified_by_id");
+
+                    b.HasIndex("TicketNo")
+                        .IsUnique()
+                        .HasDatabaseName("ix_tickets_ticket_no");
+
+                    b.HasIndex("TrackingUnitId")
+                        .HasDatabaseName("ix_tickets_tracking_unit_id");
+
+                    b.ToTable("tickets", (string)null);
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.TrackedAsset", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("CreatedById")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("created_by_id");
+
+                    b.Property<bool>("IsAvaliable")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_avaliable");
+
+                    b.Property<DateTime?>("LastModifiedAt")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("last_modified_at");
+
+                    b.Property<string>("LastModifiedById")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("last_modified_by_id");
+
+                    b.Property<int?>("OldId")
+                        .HasColumnType("integer")
+                        .HasColumnName("old_id");
+
+                    b.Property<string>("OldVehicleNo")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("old_vehicle_no");
+
+                    b.Property<string>("PlateNo")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("plate_no");
+
+                    b.Property<string>("TrackedAssetCode")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("tracked_asset_code");
+
+                    b.Property<string>("TrackedAssetDesc")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("tracked_asset_desc");
+
+                    b.Property<string>("TrackedAssetNo")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("tracked_asset_no");
+
+                    b.Property<string>("VinSerNo")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("vin_ser_no");
+
+                    b.HasKey("Id")
+                        .HasName("pk_tracked_assets");
+
+                    b.HasIndex("TrackedAssetNo")
+                        .IsUnique()
+                        .HasDatabaseName("ix_tracked_assets_tracked_asset_no");
+
+                    b.ToTable("tracked_assets", (string)null);
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.TrackingUnit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("CreatedById")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("created_by_id");
+
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("integer")
+                        .HasColumnName("customer_id");
+
+                    b.Property<string>("Imei")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("imei");
+
+                    b.Property<int>("InsMode")
+                        .HasColumnType("integer")
+                        .HasColumnName("ins_mode");
+
+                    b.Property<bool>("IsOnWialon")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_on_wialon");
+
+                    b.Property<DateTime?>("LastModifiedAt")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("last_modified_at");
+
+                    b.Property<string>("LastModifiedById")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("last_modified_by_id");
+
+                    b.Property<int?>("OldId")
+                        .HasColumnType("integer")
+                        .HasColumnName("old_id");
+
+                    b.Property<string>("SNo")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("s_no");
+
+                    b.Property<int?>("SimCardId")
+                        .HasColumnType("integer")
+                        .HasColumnName("sim_card_id");
+
+                    b.Property<int?>("TrackedAssetId")
+                        .HasColumnType("integer")
+                        .HasColumnName("tracked_asset_id");
+
+                    b.Property<int>("TrackingUnitModelId")
+                        .HasColumnType("integer")
+                        .HasColumnName("tracking_unit_model_id");
+
+                    b.Property<int>("UStatus")
+                        .HasColumnType("integer")
+                        .HasColumnName("u_status");
+
+                    b.Property<string>("UnitName")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("unit_name");
+
+                    b.Property<int?>("WStatus")
+                        .HasColumnType("integer")
+                        .HasColumnName("w_status");
+
+                    b.Property<int?>("WUnitId")
+                        .HasColumnType("integer")
+                        .HasColumnName("w_unit_id");
+
+                    b.Property<DateOnly?>("WryDate")
+                        .HasColumnType("date")
+                        .HasColumnName("wry_date");
+
+                    b.HasKey("Id")
+                        .HasName("pk_tracking_units");
+
+                    b.HasIndex("CustomerId")
+                        .HasDatabaseName("ix_tracking_units_customer_id");
+
+                    b.HasIndex("SimCardId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_tracking_units_sim_card_id");
+
+                    b.HasIndex("TrackedAssetId")
+                        .HasDatabaseName("ix_tracking_units_tracked_asset_id");
+
+                    b.HasIndex("TrackingUnitModelId")
+                        .HasDatabaseName("ix_tracking_units_tracking_unit_model_id");
+
+                    b.ToTable("tracking_units", (string)null);
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.TrackingUnitModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("DefualtGprs")
+                        .HasColumnType("numeric")
+                        .HasColumnName("defualt_gprs");
+
+                    b.Property<decimal>("DefualtHost")
+                        .HasColumnType("numeric")
+                        .HasColumnName("defualt_host");
+
+                    b.Property<decimal>("DefualtPrice")
+                        .HasColumnType("numeric")
+                        .HasColumnName("defualt_price");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("name");
+
+                    b.Property<int?>("OldId")
+                        .HasColumnType("integer")
+                        .HasColumnName("old_id");
+
+                    b.Property<int>("PortNo1")
+                        .HasColumnType("integer")
+                        .HasColumnName("port_no1");
+
+                    b.Property<int>("PortNo2")
+                        .HasColumnType("integer")
+                        .HasColumnName("port_no2");
+
+                    b.Property<int>("WhwTypeId")
+                        .HasColumnType("integer")
+                        .HasColumnName("whw_type_id");
+
+                    b.Property<string>("WialonName")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("wialon_name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_tracking_unit_models");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasDatabaseName("ix_tracking_unit_models_name");
+
+                    b.ToTable("tracking_unit_models", (string)null);
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.WialonTask", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("APITask")
+                        .HasColumnType("integer")
+                        .HasColumnName("api_task");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("description");
+
+                    b.Property<DateOnly>("ExcDate")
+                        .HasColumnType("date")
+                        .HasColumnName("exc_date");
+
+                    b.Property<bool>("IsExecuted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_executed");
+
+                    b.Property<int>("ServiceLogId")
+                        .HasColumnType("integer")
+                        .HasColumnName("service_log_id");
+
+                    b.Property<int>("TrackingUnitId")
+                        .HasColumnType("integer")
+                        .HasColumnName("tracking_unit_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_wialon_tasks");
+
+                    b.HasIndex("ServiceLogId")
+                        .HasDatabaseName("ix_wialon_tasks_service_log_id");
+
+                    b.HasIndex("TrackingUnitId")
+                        .HasDatabaseName("ix_wialon_tasks_tracking_unit_id");
+
+                    b.ToTable("wialon_tasks", (string)null);
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.WialonUnit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Account")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("account");
+
+                    b.Property<DateTime?>("Deactivation")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("deactivation");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("note");
+
+                    b.Property<string>("SimCardNo")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("sim_card_no");
+
+                    b.Property<int?>("StatusOnWialon")
+                        .HasColumnType("integer")
+                        .HasColumnName("status_on_wialon");
+
+                    b.Property<string>("UnitName")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("unit_name");
+
+                    b.Property<string>("UnitSNo")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("unit_s_no");
+
+                    b.HasKey("Id")
+                        .HasName("pk_wialon_units");
+
+                    b.ToTable("wialon_units", (string)null);
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Identity.ApplicationRole", b =>
@@ -907,6 +2100,37 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     b.Navigation("LastModifiedBy");
                 });
 
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.CusPrice", b =>
+                {
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_cus_prices_customers_customer_id");
+
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.TrackingUnitModel", "TrackingUnitModel")
+                        .WithMany("CusPrices")
+                        .HasForeignKey("TrackingUnitModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_cus_prices_tracking_unit_models_tracking_unit_model_id");
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("TrackingUnitModel");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Customer", b =>
+                {
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Customer", "Parent")
+                        .WithMany("Childs")
+                        .HasForeignKey("ParentId")
+                        .HasConstraintName("fk_customers_customers_parent_id");
+
+                    b.Navigation("Parent");
+                });
+
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Document", b =>
                 {
                     b.HasOne("CleanArchitecture.Blazor.Domain.Identity.ApplicationUser", "CreatedBy")
@@ -933,6 +2157,132 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     b.Navigation("Tenant");
                 });
 
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Invoice", b =>
+                {
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Customer", "Customer")
+                        .WithMany("Invoices")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_invoices_customers_customer_id");
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.InvoiceItem", b =>
+                {
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.InvoiceItemGroup", "InvoiceItemGroup")
+                        .WithMany("InvoiceItems")
+                        .HasForeignKey("InvoiceItemGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_invoice_items_invoice_item_groups_invoice_item_group_id");
+
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Subscription", "Subscription")
+                        .WithOne("InvoiceItem")
+                        .HasForeignKey("CleanArchitecture.Blazor.Domain.Entities.InvoiceItem", "SubscriptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_invoice_items_subscriptions_subscription_id");
+
+                    b.Navigation("InvoiceItemGroup");
+
+                    b.Navigation("Subscription");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.InvoiceItemGroup", b =>
+                {
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Invoice", "Invoice")
+                        .WithMany("InvoiceItemGroups")
+                        .HasForeignKey("InvoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_invoice_item_groups_invoices_invoice_id");
+
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.ServiceLog", "ServiceLog")
+                        .WithOne("InvoiceItemGroup")
+                        .HasForeignKey("CleanArchitecture.Blazor.Domain.Entities.InvoiceItemGroup", "ServiceLogId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_invoice_item_groups_service_logs_service_log_id");
+
+                    b.Navigation("Invoice");
+
+                    b.Navigation("ServiceLog");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SPackage", b =>
+                {
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.SProvider", "SProvider")
+                        .WithMany("SPackages")
+                        .HasForeignKey("SProviderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_s_packages_s_providers_s_provider_id");
+
+                    b.Navigation("SProvider");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.ServiceLog", b =>
+                {
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Identity.ApplicationUser", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_service_logs_asp_net_users_created_by_id");
+
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_service_logs_customers_customer_id");
+
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.InvoiceItem", "InvoiceItem")
+                        .WithMany()
+                        .HasForeignKey("InvoiceItemId")
+                        .HasConstraintName("fk_service_logs_invoice_items_invoice_item_id");
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("InvoiceItem");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SimCard", b =>
+                {
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.SPackage", "SPackage")
+                        .WithMany("SimCards")
+                        .HasForeignKey("SPackageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_sim_cards_s_packages_s_package_id");
+
+                    b.Navigation("SPackage");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Subscription", b =>
+                {
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.ServiceLog", "ServiceLog")
+                        .WithMany("Subscriptions")
+                        .HasForeignKey("ServiceLogId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_subscriptions_service_logs_service_log_id");
+
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.TrackingUnit", "TrackingUnit")
+                        .WithMany("Subscriptions")
+                        .HasForeignKey("TrackingUnitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_subscriptions_tracking_units_tracking_unit_id");
+
+                    b.Navigation("ServiceLog");
+
+                    b.Navigation("TrackingUnit");
+                });
+
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.TenantUser", b =>
                 {
                     b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Tenant", "Tenant")
@@ -950,6 +2300,88 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     b.Navigation("Tenant");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Ticket", b =>
+                {
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Identity.ApplicationUser", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_tickets_asp_net_users_created_by_id");
+
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Identity.ApplicationUser", "LastModifiedByUser")
+                        .WithMany()
+                        .HasForeignKey("LastModifiedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_tickets_asp_net_users_last_modified_by_id");
+
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.TrackingUnit", "TrackingUnit")
+                        .WithMany()
+                        .HasForeignKey("TrackingUnitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_tickets_tracking_units_tracking_unit_id");
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("LastModifiedByUser");
+
+                    b.Navigation("TrackingUnit");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.TrackingUnit", b =>
+                {
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .HasConstraintName("fk_tracking_units_customers_customer_id");
+
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.SimCard", "SimCard")
+                        .WithOne("TrackingUnits")
+                        .HasForeignKey("CleanArchitecture.Blazor.Domain.Entities.TrackingUnit", "SimCardId")
+                        .HasConstraintName("fk_tracking_units_sim_cards_sim_card_id");
+
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.TrackedAsset", "TrackedAsset")
+                        .WithMany("TrackingUnits")
+                        .HasForeignKey("TrackedAssetId")
+                        .HasConstraintName("fk_tracking_units_tracked_assets_tracked_asset_id");
+
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.TrackingUnitModel", "TrackingUnitModel")
+                        .WithMany("TrackingUnits")
+                        .HasForeignKey("TrackingUnitModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_tracking_units_tracking_unit_models_tracking_unit_model_id");
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("SimCard");
+
+                    b.Navigation("TrackedAsset");
+
+                    b.Navigation("TrackingUnitModel");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.WialonTask", b =>
+                {
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.ServiceLog", "ServiceLog")
+                        .WithMany("WialonTasks")
+                        .HasForeignKey("ServiceLogId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_wialon_tasks_service_logs_service_log_id");
+
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.TrackingUnit", "TrackingUnit")
+                        .WithMany("WialonTasks")
+                        .HasForeignKey("TrackingUnitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_wialon_tasks_tracking_units_tracking_unit_id");
+
+                    b.Navigation("ServiceLog");
+
+                    b.Navigation("TrackingUnit");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Identity.ApplicationRoleClaim", b =>
@@ -1092,9 +2524,74 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Customer", b =>
+                {
+                    b.Navigation("Childs");
+
+                    b.Navigation("Invoices");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Invoice", b =>
+                {
+                    b.Navigation("InvoiceItemGroups");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.InvoiceItemGroup", b =>
+                {
+                    b.Navigation("InvoiceItems");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SPackage", b =>
+                {
+                    b.Navigation("SimCards");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SProvider", b =>
+                {
+                    b.Navigation("SPackages");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.ServiceLog", b =>
+                {
+                    b.Navigation("InvoiceItemGroup");
+
+                    b.Navigation("Subscriptions");
+
+                    b.Navigation("WialonTasks");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SimCard", b =>
+                {
+                    b.Navigation("TrackingUnits");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Subscription", b =>
+                {
+                    b.Navigation("InvoiceItem");
+                });
+
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Tenant", b =>
                 {
                     b.Navigation("TenantUsers");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.TrackedAsset", b =>
+                {
+                    b.Navigation("TrackingUnits");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.TrackingUnit", b =>
+                {
+                    b.Navigation("Subscriptions");
+
+                    b.Navigation("WialonTasks");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.TrackingUnitModel", b =>
+                {
+                    b.Navigation("CusPrices");
+
+                    b.Navigation("TrackingUnits");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Identity.ApplicationRole", b =>

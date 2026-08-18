@@ -5,7 +5,7 @@ using CleanArchitecture.Blazor.Domain.Identity;
 
 namespace CleanArchitecture.Blazor.Infrastructure.Persistence;
 
-public class ApplicationDbContextInitializer
+public partial class ApplicationDbContextInitializer
 {
     private readonly ApplicationDbContext _context;
     private readonly ILogger<ApplicationDbContextInitializer> _logger;
@@ -45,6 +45,7 @@ public class ApplicationDbContextInitializer
             await SeedRolesAsync();
             await SeedUsersAsync();
             await SeedDataAsync();
+        
             _context.ChangeTracker.Clear();
         }
         catch (Exception ex)

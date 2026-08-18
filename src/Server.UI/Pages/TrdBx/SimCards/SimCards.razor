@@ -1,0 +1,397 @@
+﻿@page "/pages/TrdBx/SimCards"
+
+@using CleanArchitecture.Blazor.Application.Features.SimCards.Commands.SetUsed
+@using CleanArchitecture.Blazor.Application.Features.SimCards.Caching
+@using CleanArchitecture.Blazor.Application.Features.SimCards.Commands.Create
+@using CleanArchitecture.Blazor.Application.Features.SimCards.Commands.Delete
+@using CleanArchitecture.Blazor.Application.Features.SimCards.Commands.Import
+@using CleanArchitecture.Blazor.Application.Features.SimCards.Commands.Update
+@using CleanArchitecture.Blazor.Application.Features.SimCards.DTOs
+@using CleanArchitecture.Blazor.Application.Features.SimCards.Queries.Export
+@using CleanArchitecture.Blazor.Application.Features.SimCards.Queries.Pagination
+@using CleanArchitecture.Blazor.Application.Features.SimCards.Specifications
+
+@using CleanArchitecture.Blazor.Domain.Enums
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.SimCards.Components
+
+@inject IStringLocalizer<SimCards> L
+@inject BlazorDownloadFileService BlazorDownloadFileService
+
+@attribute [Authorize(Policy = Permissions.SimCards.View)]
+
+<PageTitle>@Title</PageTitle>
+
+<MudDataGrid ServerData="@(ServerReload)"
+             FixedHeader="true"
+             FixedFooter="false"
+             @bind-RowsPerPage="_defaultPageSize"
+             Loading="@_loading"
+             ColumnResizeMode="ResizeMode.Column"
+             MultiSelection="true"
+             T="SimCardDto"
+             SelectOnRowClick="false"
+             RowClick="@(s=>OnView(s.Item))"
+             @bind-SelectedItems="_selectedItems"
+             Hover="true" @ref="_table">
+
+    <ToolBarContent>
+        <MudStack Row Spacing="0" Class="flex-grow-1" Justify="Justify.SpaceBetween">
+            <MudStack Row AlignItems="AlignItems.Start">
+                <MudIcon Icon="@Icons.Material.Filled.Window" Size="Size.Large" />
+                <MudStack Spacing="0">
+                    <MudText Typo="Typo.subtitle2" Class="mb-2">@Title</MudText>
+                    <MudEnumSelect Style="min-width:120px" TEnum="SimCardListView" ValueChanged="OnChangedListView" Value="Query.ListView" Dense="true" Label="@AppStrings.ListView">
+                    </MudEnumSelect>
+                </MudStack>
+            </MudStack>
+            <MudStack Spacing="0" AlignItems="AlignItems.End">
+                <MudToolBar Dense WrapContent="true" Class="py-1 px-0">
+                    <MudButton Disabled="@_loading"
+                               OnClick="@(() => OnRefresh())"
+                               StartIcon="@Icons.Material.Outlined.Refresh">
+                        @AppStrings.Refresh
+                    </MudButton>
+                    @if (_accessRights.Create)
+                    {
+                        <MudButton StartIcon="@Icons.Material.Outlined.Add"
+                                   OnClick="OnCreate">
+                            @AppStrings.New
+                        </MudButton>
+                    }
+                    <MudMenu TransformOrigin="Origin.BottomRight" AnchorOrigin="Origin.BottomRight" EndIcon="@Icons.Material.Filled.MoreVert" Label="@AppStrings.More">
+
+                        @if (_accessRights.Delete)
+                        {
+                            <MudMenuItem Disabled="@(!(_selectedItems.Count > 0))"
+                                         OnClick="OnDeleteChecked">
+                                @AppStrings.Delete
+                            </MudMenuItem>
+                        }
+                        @if (_accessRights.Export)
+                        {
+                            <MudMenuItem Disabled="@_exporting"
+                                         OnClick="OnExport">
+                                @AppStrings.Export
+                            </MudMenuItem>
+                        }
+                        @if (_accessRights.Import)
+                        {
+                            <MudMenuItem>
+                                <MudFileUpload T="IBrowserFile" FilesChanged="OnImportData" Accept=".xlsx">
+                                    <CustomContent>
+                                        <MudLoadingButton Class="pa-0 ma-0" Style="font-weight:400;text-transform:none;"
+                                                          Variant="Variant.Text"
+                                                          Loading="@_uploading">
+                                            @AppStrings.Import
+                                        </MudLoadingButton>
+                                    </CustomContent>
+                                </MudFileUpload>
+                            </MudMenuItem>
+                        }
+                    </MudMenu>
+                </MudToolBar>
+                <MudStack Row Spacing="1">
+@*                     @if (_accessRights.Search)
+                    { *@
+                        <MudTextField T="string" ValueChanged="@(s => OnSearch(s))" Value="@Query.Keyword" Placeholder="@AppStrings.Search" Adornment="Adornment.End"
+                                      AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Small">
+                        </MudTextField>
+                    @* } *@
+                </MudStack>
+            </MudStack>
+        </MudStack>
+    </ToolBarContent>
+    <Columns>
+        <SelectColumn ShowInFooter="false"></SelectColumn>
+        <TemplateColumn HeaderStyle="width:60px" Title="@AppStrings.Actions" Sortable="false">
+            <CellTemplate>
+                @if (_accessRights.Edit || _accessRights.Delete)
+                {
+                    <MudMenu Icon="@Icons.Material.Filled.Edit" Variant="Variant.Filled" Size="Size.Small"
+                             Dense="true"
+                             EndIcon="@Icons.Material.Filled.KeyboardArrowDown" IconColor="Color.Info" AnchorOrigin="Origin.CenterLeft">
+                        @if (_accessRights.Edit)
+                        {
+                            <MudMenuItem OnClick="@(()=>OnEdit(context.Item))">@AppStrings.Edit</MudMenuItem>
+                        }
+                        
+                        @if (_accessRights.Edit)
+                        {
+                            <MudMenuItem Disabled="(!((context.Item.SStatus == SStatus.Recovered) || (context.Item.SStatus == SStatus.Lost)))"
+                                OnClick="@(()=>OnSetAsUsed(context.Item))">Set as Used</MudMenuItem>
+                        }
+
+                        @if (_accessRights.Delete)
+                        {
+                            <MudMenuItem OnClick="@(()=>OnDelete(context.Item))">@AppStrings.Delete</MudMenuItem>
+                        }
+                    </MudMenu>
+                }
+                else
+                {
+                    <MudIconButton Variant="Variant.Filled"
+                                   Disabled="true"
+                                   Icon="@Icons.Material.Filled.DoNotTouch"
+                                   Size="Size.Small"
+                                   Color="Color.Surface">
+                        @AppStrings.NoAllowed
+                    </MudIconButton>
+                }
+            </CellTemplate>
+        </TemplateColumn>
+        @*TODO: Define the fields that should be displayed in data table*@
+        @*                 <PropertyColumn Property="x => x.Name" Title="@L[_currentDto.GetMemberDisplayName(x=>x.SimCardNo)]"> 
+   <CellTemplate>
+      <div class="d-flex flex-column">
+        <MudText Typo="Typo.body1">@context.Item.Name</MudText>
+        <MudText Typo="Typo.body2" Class="mud-text-secondary">@context.Item.Description</MudText>
+     </div>
+    </CellTemplate>
+</PropertyColumn> *@
+        <PropertyColumn Property="x => x.SimCardNo" Title="@L[_currentDto.GetMemberDisplayName(x=>x.SimCardNo)]" />
+<PropertyColumn Property="x => x.ICCID" Title="@L[_currentDto.GetMemberDisplayName(x=>x.ICCID)]" />
+@* <PropertyColumn Property="x => x.SPackageId" Title="@L[_currentDto.GetMemberDisplayName(x=>x.SPackageId)]" /> *@
+<PropertyColumn Property="x => x.SPackage" Title="@L[_currentDto.GetMemberDisplayName(x => x.SPackage)]" />
+<PropertyColumn Property="x => x.SStatus" Title="@L[_currentDto.GetMemberDisplayName(x=>x.SStatus)]" />
+<PropertyColumn Property="x => x.ExDate" Title="@L[_currentDto.GetMemberDisplayName(x=>x.ExDate)]" />
+        <PropertyColumn Property="x => x.IsOwen" Title="@L[_currentDto.GetMemberDisplayName(x => x.IsOwen)]" />
+
+    </Columns>
+    <NoRecordsContent>
+        <MudText>@AppStrings.NoRecords</MudText>
+    </NoRecordsContent>
+    <LoadingContent>
+        <MudText>@AppStrings.Loading</MudText>
+    </LoadingContent>
+    <PagerContent>
+        <MudDataGridPager PageSizeOptions="@(new int[]{10,15,30,50,100})" />
+    </PagerContent>
+</MudDataGrid>
+
+
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState> AuthState { get; set; } = default!;
+    private UserProfile UserProfile => UserProfileState.Value;
+    private SimCardsAccessRights _accessRights = new();
+    public string? Title { get; private set; }
+    private HashSet<SimCardDto> _selectedItems = new();
+    private MudDataGrid<SimCardDto> _table = default!;
+    private SimCardDto _currentDto = new();
+    private int _defaultPageSize = 15;
+    private bool _loading;
+    private bool _uploading;
+    private bool _exporting;
+    private SimCardsWithPaginationQuery Query { get; set; } = new();
+
+
+
+  protected override async Task OnInitializedAsync()
+    {
+        Title =L[_currentDto.GetClassDescription()];
+        _accessRights = await PermissionService.GetAccessRightsAsync<SimCardsAccessRights>();
+    }
+    private async Task<GridData<SimCardDto>> ServerReload(GridState<SimCardDto> state, CancellationToken cancellationToken)
+    {
+        try
+        {
+            _loading = true;
+            Query.OrderBy = state.SortDefinitions.FirstOrDefault()?.SortBy ?? "Id";
+            Query.SortDirection = state.SortDefinitions.FirstOrDefault()?.Descending ?? true
+                                              ? SortDirection.Descending.ToString()
+                                              : SortDirection.Ascending.ToString();
+            Query.PageNumber = state.Page + 1;
+            Query.PageSize = state.PageSize;
+            var result = await Mediator.Send(Query).ConfigureAwait(false);
+            return new GridData<SimCardDto> { TotalItems = result.TotalItems, Items = result.Items };
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+  private async Task OnRefresh()
+    {
+        await AppCache.RemoveByTagsAsync(SimCardCacheKey.Tags);
+        _selectedItems = new HashSet<SimCardDto>();
+        Query.Keyword  = string.Empty;
+        await _table.ReloadServerData();
+    }
+    private async Task OnSearch(string text)
+    {
+        _selectedItems = new HashSet<SimCardDto>();
+        Query.Keyword = text;
+        await _table.ReloadServerData();
+    }
+
+    private async Task OnChangedListView(SimCardListView listview)
+    {
+        Query.ListView = listview;
+        await _table.ReloadServerData();
+    }
+
+
+    private Task OnView(SimCardDto dto)
+    {
+        Navigation.NavigateTo($"/pages/TrdBx/SimCards/{dto.Id}/view?returnUrl={Uri.EscapeDataString(Navigation.Uri)}");
+        return Task.CompletedTask;
+    }
+
+
+    private async Task OnSetAsUsed(SimCardDto dto)
+    {
+
+        var command = new SetUsedSimCardCommand() { Id = dto.Id };
+        var result = await Mediator.Send(command);
+
+        if (result.Succeeded)
+        {
+            Snackbar.Add(AppStrings.SaveSuccess, MudBlazor.Severity.Info);
+            await InvokeAsync(async () =>
+                                           {
+                                               await _table.ReloadServerData();
+                                               _selectedItems.Clear();
+                                           });
+        }
+        else
+        {
+            Snackbar.Add(result.ErrorMessage, MudBlazor.Severity.Error);
+        }
+    }
+
+
+
+
+
+
+
+    private Task OnCreate()
+    {
+         var command = new CreateSimCardCommand();
+  
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+
+        return DialogServiceHelper.ShowDialogAsync<SimCardCreateFormDialog>(
+            L["Create SimCard"],
+            async _ =>
+            {
+                await _table.ReloadServerData();
+                 _selectedItems.Clear();
+            },
+			p =>
+			{
+				p.Add(x => x._model, command);
+			},
+			options);
+    }
+    private Task OnEdit(SimCardDto dto)
+    {
+        var command = ObjectMapper.Map<UpdateSimCardCommand>(dto);
+  
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+
+        return DialogServiceHelper.ShowDialogAsync<SimCardEditFormDialog>(
+            L["Update SimCard"],
+            async _ =>
+            {
+                await _table.ReloadServerData();
+                 _selectedItems.Clear();
+            },
+			p =>
+			{
+				p.Add(x => x._model, command);
+			},
+			options);
+    }
+
+    private Task OnDelete(SimCardDto dto)
+    {
+        var contentText = string.Format(AppStrings.DeleteConfirmationWithId, dto.Id);
+        var command = new DeleteSimCardCommand(new int[] { dto.Id });
+          return DialogServiceHelper.ShowDeleteConfirmationDialogAsync(
+            command,
+            AppStrings.DeleteConfirmationTitle,
+            contentText,
+            async () =>
+            {
+                 await _table.ReloadServerData();
+                _selectedItems.Clear();
+            });
+    }
+    private Task OnDeleteChecked()
+    {
+        var contentText = string.Format(AppStrings.DeleteConfirmWithSelected, _selectedItems.Count);
+        var command = new DeleteSimCardCommand(_selectedItems.Select(x => x.Id).ToArray());
+        return DialogServiceHelper.ShowDeleteConfirmationDialogAsync(
+            command, 
+            AppStrings.DeleteConfirmationTitle, 
+            contentText, 
+            async () =>
+        {
+            await InvokeAsync(async () =>
+            {
+                await _table.ReloadServerData();
+                _selectedItems.Clear();
+            });
+        });
+    }
+
+    private async Task OnExport()
+    {
+        _exporting = true;
+        try
+		{
+            var request = new ExportSimCardsQuery()
+                {
+                    Keyword = Query.Keyword,
+                    ListView = Query.ListView,
+                    OrderBy = _table.SortDefinitions.Values.FirstOrDefault()?.SortBy ?? "Id",
+                    SortDirection = (_table.SortDefinitions.Values.FirstOrDefault()?.Descending ?? true) ? SortDirection.Descending.ToString() : SortDirection.Ascending.ToString()
+                };
+            var result = await Mediator.Send(request);
+            await result.MatchAsync(
+            async data =>
+            {
+                await BlazorDownloadFileService.DownloadFileAsync($"{L["SimCards"]}.xlsx", data, contentType:"application/octet-stream");
+                Snackbar.Add($"{AppStrings.ExportSuccess}", MudBlazor.Severity.Info);
+            },
+            errors =>
+            {
+                Snackbar.Add($"{errors}", MudBlazor.Severity.Error);
+                return Task.CompletedTask;
+            });
+        }
+		catch (Exception ex)
+		{
+			Snackbar.Add($"Export failed: {ex.Message}", MudBlazor.Severity.Error);
+		}
+		finally
+		{
+			_exporting = false;
+		}
+    }
+
+    private async Task OnImportData(IBrowserFile file)
+    {
+        _uploading = true;
+        var stream = new MemoryStream();
+        await file.OpenReadStream().CopyToAsync(stream);
+        var command = new ImportSimCardsCommand(file.Name, stream.ToArray());
+        var result = await Mediator.Send(command);
+        if (result.Succeeded)
+        {
+            await _table.ReloadServerData();
+            Snackbar.Add($"{AppStrings.ImportSuccess}", Severity.Info);
+        }
+        else
+        {
+            foreach (var msg in result.Errors)
+            {
+                Snackbar.Add($"{msg}", Severity.Error);
+            }
+        }
+        _uploading = false;
+    }
+
+}

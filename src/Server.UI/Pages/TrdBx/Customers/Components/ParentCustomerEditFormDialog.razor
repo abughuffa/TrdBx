@@ -1,0 +1,75 @@
+﻿
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Customers
+@using CleanArchitecture.Blazor.Application.Features.Customers.Commands.Update
+
+@inherits MudComponentBase
+@inject IValidationService Validator
+@inject IStringLocalizer<Customers> L
+@attribute [Authorize(Policy = Permissions.Customers.Edit)]
+
+<MudDialog>
+    <DialogContent>
+        <MudForm Model="@_command" @ref="@_form" Validation="@(Validator.ValidateValue(_command))">
+            <MudGrid>
+                <MudItem md="12">
+                    <MudTextField Label="@L[_command.GetMemberDisplayName(x => x.Name)]" @bind-Value="_command.Name" For="@(() => _command.Name)" Required="false" RequiredError="@L["Name is required!"]"></MudTextField>
+                </MudItem>
+                <MudItem md="6">
+                    <MudTextField Label="@L[_command.GetMemberDisplayName(x => x.Account)]" @bind-Value="_command.Account" For="@(() => _command.Account)" Required="false" RequiredError="@L["Account is required!"]"></MudTextField>
+                </MudItem>
+                <MudItem md="6">
+                    <MudTextField Label="@L[_command.GetMemberDisplayName(x => x.UserName)]" @bind-Value="_command.UserName" For="@(() => _command.UserName)" Required="false" RequiredError="@L["UserName is required!"]"></MudTextField>
+                </MudItem>
+
+                <MudItem md="6">
+                    <MudCheckBox Label="@L[_command.GetMemberDisplayName(x => x.IsTaxable)]" @bind-Value="_command.IsTaxable" For="@(() => _command.IsTaxable)" />
+                </MudItem>
+                <MudItem md="6">
+                    <MudCheckBox Label="@L[_command.GetMemberDisplayName(x => x.IsRenewable)]" @bind-Value="_command.IsRenewable" For="@(() => _command.IsRenewable)" />
+                </MudItem>
+
+            </MudGrid>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+
+        <MudLoadingButton Loading="@_saving" OnClick="OnSave">@AppStrings.Save</MudLoadingButton>
+        <MudButton OnClick="Cancel">@AppStrings.Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    MudForm _form = new();
+    private bool _saving = false;
+    [CascadingParameter]
+    IMudDialogInstance MudDialog { get; set; } = default!;
+    [EditorRequired][Parameter] public UpdateParentCommand _command { get; set; } = null!;
+
+
+    async Task OnSave()
+    {
+       try
+        {
+            _saving = true;
+            await _form.ValidateAsync();
+            if (!_form.IsValid)
+                return;
+            var result = await Mediator.Send(_command);
+            result.Match(data =>
+            {
+                MudDialog.Close(DialogResult.Ok(true));
+                Snackbar.Add(AppStrings.SaveSuccess, MudBlazor.Severity.Info);
+            }, errors =>
+            {
+                Snackbar.Add(errors, MudBlazor.Severity.Error);
+            });
+        }
+        finally
+        {
+            _saving = false;
+        }
+           
+    }
+
+    void Cancel() => MudDialog.Cancel();
+}

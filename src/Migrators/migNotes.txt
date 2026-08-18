@@ -1,0 +1,11 @@
+# Remove the migration you just created
+dotnet ef migrations remove --project src/Migrators/Migrators.PostgreSQL --startup-project src/Server.UI --context ApplicationDbContext
+
+# Add a dummy migration that won't create existing tables
+dotnet ef migrations add InitialCreate --project src/Migrators/Migrators.PostgreSQL --startup-project src/Server.UI --context ApplicationDbContext
+
+# Generate SQL script to see what would be applied
+dotnet ef migrations script --project src/Migrators/Migrators.PostgreSQL --startup-project src/Server.UI --context ApplicationDbContext
+
+# Update the database with the -f flag to force it
+dotnet ef database update --project src/Migrators/Migrators.PostgreSQL --startup-project src/Server.UI --context ApplicationDbContext -f

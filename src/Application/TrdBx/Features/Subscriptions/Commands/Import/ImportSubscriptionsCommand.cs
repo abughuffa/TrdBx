@@ -1,0 +1,125 @@
+﻿using CleanArchitecture.Blazor.Application.Features.Subscriptions.Caching;
+using CleanArchitecture.Blazor.Application.Features.Subscriptions.DTOs;
+using CleanArchitecture.Blazor.Domain.Enums;
+
+namespace CleanArchitecture.Blazor.Application.Features.Subscriptions.Commands.Import;
+
+public class ImportSubscriptionsCommand : ICacheInvalidatorRequest<Result<int>>
+{
+    public string FileName { get; set; }
+    public byte[] Data { get; set; }
+    public string CacheKey => SubscriptionCacheKey.GetAllCacheKey;
+     public IEnumerable<string> Tags => SubscriptionCacheKey.Tags;
+    public ImportSubscriptionsCommand(string fileName, byte[] data)
+    {
+        FileName = fileName;
+        Data = data;
+    }
+}
+public record class CreateSubscriptionsTemplateCommand : IRequest<Result<byte[]>>
+{
+
+}
+
+public class ImportSubscriptionsCommandHandler :
+             IRequestHandler<CreateSubscriptionsTemplateCommand, Result<byte[]>>,
+             IRequestHandler<ImportSubscriptionsCommand, Result<int>>
+{
+    //    private readonly IApplicationDbContextFactory _dbContextFactory;
+    //    private readonly IStringLocalizer<ImportSubscriptionsCommandHandler> _localizer;
+    //    private readonly IExcelService _excelService;
+    //    private readonly SubscriptionDto _dto = new() { Desc = string.Empty };
+    //    private readonly IMapper _mapper;
+    //    public ImportSubscriptionsCommandHandler(
+    //        IApplicationDbContextFactory dbContextFactory,
+    //        IMapper mapper,
+    //        IExcelService excelService,
+    //        IStringLocalizer<ImportSubscriptionsCommandHandler> localizer)
+    //    {
+    //        _dbContextFactory = dbContextFactory;
+    //        _localizer = localizer;
+    //        _excelService = excelService;
+    //        _mapper = mapper;
+    //    }
+
+        private readonly IApplicationDbContextFactory _dbContextFactory;
+        private readonly IStringLocalizer<ImportSubscriptionsCommandHandler> _localizer;
+        private readonly IExcelService _excelService;
+        private readonly SubscriptionDto _dto = new();
+        private readonly IObjectMapper _objectMapper;
+        public ImportSubscriptionsCommandHandler(
+            IApplicationDbContextFactory dbContextFactory,
+            IObjectMapper objectMapper,
+            IExcelService excelService,
+            IStringLocalizer<ImportSubscriptionsCommandHandler> localizer)
+        {
+            _dbContextFactory = dbContextFactory;
+            _localizer = localizer;
+            _excelService = excelService;
+            _objectMapper = objectMapper;
+        }
+        #nullable disable warnings
+    public async ValueTask<Result<int>> Handle(ImportSubscriptionsCommand request, CancellationToken cancellationToken)
+    {
+
+
+        await using var context = await _dbContextFactory.CreateAsync(cancellationToken);
+
+        var result = await _excelService.ImportAsync(request.Data, mappers: new Dictionary<string, Func<DataRow, SubscriptionDto, object?>>
+            {
+               { _localizer[_dto.GetMemberDisplayName(x=>x.Id)], (row, item) => item.Id = int.Parse(row[_localizer[_dto.GetMemberDisplayName(x=>x.Id)]].ToString()) },
+               { _localizer[_dto.GetMemberDisplayName(x=>x.ServiceLogId)], (row, item) => item.ServiceLogId = int.Parse(row[_localizer[_dto.GetMemberDisplayName(x=>x.ServiceLogId)]].ToString())},
+               { _localizer[_dto.GetMemberDisplayName(x=>x.TrackingUnitId)], (row, item) => item.TrackingUnitId = int.Parse(row[_localizer[_dto.GetMemberDisplayName(x=>x.TrackingUnitId)]].ToString())},
+               { _localizer[_dto.GetMemberDisplayName(x=>x.Description)], (row, item) => item.Description = row[_localizer[_dto.GetMemberDisplayName(x=>x.Description)]].ToString() },
+               { _localizer[_dto.GetMemberDisplayName(x=>x.CaseCode)], (row, item) => item.CaseCode = int.Parse(row[_localizer[_dto.GetMemberDisplayName(x=>x.CaseCode)]].ToString())},
+               { _localizer[_dto.GetMemberDisplayName(x=>x.SsDate)], (row, item) => item.SsDate = DateOnly.FromDateTime(DateTime.Parse(row[_localizer[_dto.GetMemberDisplayName(x=>x.SsDate)]].ToString()))},
+               { _localizer[_dto.GetMemberDisplayName(x=>x.SeDate)], (row, item) => item.SeDate = DateOnly.FromDateTime(DateTime.Parse(row[_localizer[_dto.GetMemberDisplayName(x=>x.SeDate)]].ToString()))},
+               { _localizer[_dto.GetMemberDisplayName(x=>x.LastPaidFees)], (row, item) => item.LastPaidFees = (SubPackageFees)Convert.ToInt32(row[_localizer[_dto.GetMemberDisplayName(x=>x.LastPaidFees)]].ToString()) },
+               { _localizer[_dto.GetMemberDisplayName(x=>x.DailyFees)], (row, item) => item.DailyFees = decimal.Parse(row[_localizer[_dto.GetMemberDisplayName(x=>x.DailyFees)]].ToString())},
+               { _localizer[_dto.GetMemberDisplayName(x=>x.Days)], (row, item) => item.Days = int.Parse(row[_localizer[_dto.GetMemberDisplayName(x=>x.Days)]].ToString())},
+               { _localizer[_dto.GetMemberDisplayName(x=>x.Amount)], (row, item) => item.Amount = decimal.Parse(row[_localizer[_dto.GetMemberDisplayName(x=>x.Amount)]].ToString())}
+        }, _localizer[_dto.GetClassDescription()]);
+        if (result.Succeeded && result.Data is not null)
+        {
+            foreach (var dto in result.Data)
+            {
+                var exists = await context.Subscriptions.AnyAsync(x => x.Id == dto.Id, cancellationToken);
+                if (!exists)
+                {
+                    //var item = _mapper.Map<Subscription>(dto);
+                    var item = _objectMapper.Map<Subscription>(dto);
+                    // add create domain events if this entity implement the IHasDomainEvent interface
+                    // item.AddDomainEvent(new SubscriptionCreatedEvent(item));
+                    await context.Subscriptions.AddAsync(item, cancellationToken);
+                }
+            }
+            await context.SaveChangesAsync(cancellationToken);
+            return await Result<int>.SuccessAsync(result.Data.Count());
+        }
+        else
+        {
+            return await Result<int>.FailureAsync(result.Errors);
+        }
+    }
+    public async ValueTask<Result<byte[]>> Handle(CreateSubscriptionsTemplateCommand request, CancellationToken cancellationToken)
+    {
+
+        var fields = new string[] {
+                           _localizer[_dto.GetMemberDisplayName(x=>x.Id)],
+                   _localizer[_dto.GetMemberDisplayName(x=>x.ServiceLogId)],
+_localizer[_dto.GetMemberDisplayName(x=>x.TrackingUnitId)],
+_localizer[_dto.GetMemberDisplayName(x=>x.CaseCode)],
+_localizer[_dto.GetMemberDisplayName(x=>x.LastPaidFees)],
+_localizer[_dto.GetMemberDisplayName(x=>x.SsDate)],
+_localizer[_dto.GetMemberDisplayName(x=>x.SeDate)],
+_localizer[_dto.GetMemberDisplayName(x=>x.Description)],
+_localizer[_dto.GetMemberDisplayName(x=>x.DailyFees)],
+_localizer[_dto.GetMemberDisplayName(x=>x.Days)],
+_localizer[_dto.GetMemberDisplayName(x=>x.Amount)]
+
+                };
+        var result = await _excelService.CreateTemplateAsync(fields, _localizer[_dto.GetClassDescription()]);
+        return await Result<byte[]>.SuccessAsync(result);
+    }
+}
+
