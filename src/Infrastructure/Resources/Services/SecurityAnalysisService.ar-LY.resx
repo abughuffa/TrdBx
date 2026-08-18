@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AccountBruteForceFactor" xml:space="preserve"><value>تم اكتشاف هجوم تخمين كلمات المرور على الحساب: {0} محاولة فاشلة خلال {1} دقيقة</value></data>
+  <data name="IpBruteForceFactor" xml:space="preserve"><value>تم اكتشاف هجوم تخمين كلمات المرور من عنوان IP: {0} محاولة فاشلة من IP {1} تستهدف {2} حسابات مختلفة</value></data>
+  <data name="NewIpFactor" xml:space="preserve"><value>عنوان IP جديد ({0})</value></data>
+  <data name="NewRegionFactor" xml:space="preserve"><value>موقع جغرافي جديد ({0})</value></data>
+  <data name="NewBrowserFactor" xml:space="preserve"><value>جهاز/متصفح جديد ({0})</value></data>
+  <data name="LoginFromFactors" xml:space="preserve"><value>تسجيل دخول من {0}</value></data>
+  <data name="UnusualHoursFactor" xml:space="preserve"><value>تسجيل دخول خلال ساعات غير معتادة ({0} بتوقيت UTC)</value></data>
+  <data name="Advice_Critical_ImmediateAction" xml:space="preserve"><value>إجراء فوري مطلوب: قم بتأمين حسابك فوراً</value></data>
+  <data name="Advice_Critical_ChangePassword" xml:space="preserve"><value>قم بتغيير كلمة المرور الخاصة بك الآن</value></data>
+  <data name="Advice_Critical_Enable2FA" xml:space="preserve"><value>قم بتفعيل المصادقة الثنائية فوراً</value></data>
+  <data name="Advice_Critical_ReviewDevices" xml:space="preserve"><value>قم بمراجعة وإلغاء الوصول لجميع الأجهزة</value></data>
+  <data name="Advice_Critical_ContactSecurity" xml:space="preserve"><value>اتصل بفريق الأمن إذا لم يكن هذا النشاط مصرحاً به</value></data>
+  <data name="Advice_High_ReviewActivity" xml:space="preserve"><value>قم بمراجعة نشاط حسابك الأخير فوراً</value></data>
+  <data name="Advice_High_ChangePasswordConsider" xml:space="preserve"><value>فكر في تغيير كلمة المرور الخاصة بك</value></data>
+  <data name="Advice_High_Enable2FA" xml:space="preserve"><value>قم بتفعيل المصادقة الثنائية إذا لم تكن مفعلة بالفعل</value></data>
+  <data name="Advice_High_MonitorAccount" xml:space="preserve"><value>راقب حسابك عن كثب خلال الأيام القليلة القادمة</value></data>
+  <data name="Advice_Medium_Monitor" xml:space="preserve"><value>راقب حسابك بحثاً عن أي نشاط غير معتاد</value></data>
+  <data name="Advice_Medium_Enable2FAConsider" xml:space="preserve"><value>فكر في تفعيل المصادقة الثنائية</value></data>
+  <data name="Advice_Medium_ReviewLoginHistory" xml:space="preserve"><value>قم بمراجعة سجل تسجيل الدخول الخاص بك مؤخراً</value></data>
+  <data name="Advice_Low_Normal" xml:space="preserve"><value>يبدو أن أمان حسابك طبيعي</value></data>
+  <data name="Advice_Factor_BruteForce_ChangePassword" xml:space="preserve"><value>قم بتغيير كلمة المرور فوراً - تم اكتشاف هجوم تخمين</value></data>
+  <data name="Advice_Factor_BruteForce_ReviewDevices" xml:space="preserve"><value>قم بمراجعة وإلغاء الوصول لأي أجهزة غير معروفة</value></data>
+  <data name="Advice_Factor_BruteForce_StrongerPassword" xml:space="preserve"><value>فكر في استخدام كلمة مرور أكثر تعقيداً</value></data>
+  <data name="Advice_Factor_NewLocation_Verify" xml:space="preserve"><value>تحقق من أن هذا تسجيل الدخول تم بواسطتك من الموقع الجديد</value></data>
+  <data name="Advice_Factor_NewLocation_SecureIfUnrecognized" xml:space="preserve"><value>إذا كان غير معروف، قم بتأمين حسابك وتغيير بيانات الاعتماد فوراً</value></data>
+  <data name="Advice_Factor_NewDevice_Verify" xml:space="preserve"><value>تحقق من أن تسجيل الدخول تم من جهازك</value></data>
+  <data name="Advice_Factor_NewDevice_PublicDevice" xml:space="preserve"><value>إذا كنت تستخدم جهازاً عاماً أو مشتركاً، تأكد من تسجيل الخروج بالكامل</value></data>
+  <data name="Advice_Factor_UnusualHours_Secure" xml:space="preserve"><value>إذا لم تكن أنت من قام بتسجيل الدخول خلال ساعات غير معتادة، قم بتأمين حسابك فوراً</value></data>
+</root>

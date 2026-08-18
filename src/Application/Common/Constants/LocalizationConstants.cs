@@ -29,6 +29,11 @@ public static class LocalizationConstants
             Code = "zh-CN",
             DisplayName = "中文（简体，中国）"
         },
+        new()
+        {
+            Code = "ar-LY",
+            DisplayName = "العربية (ليبيا)"
+        },
  
     };
 }
