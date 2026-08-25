@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<root>
+<root><accessability>internal</accessability>
   <!-- 
     Microsoft ResX Schema 
     
@@ -60,45 +60,45 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -117,37 +117,37 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Create SimCard" xml:space="preserve">
+  <data name="Create SimCard" xml:space="preserve" id="dd377ea8-9ac9-4aaf-82aa-dc8e70656184">
     <value>Create SimCard</value>
   </data>
-  <data name="ExDate" xml:space="preserve">
+  <data name="ExDate" xml:space="preserve" id="47c504dc-d0ce-42af-b1c2-dedb4610526c">
     <value>ExDate</value>
   </data>
-  <data name="ICCID" xml:space="preserve">
+  <data name="ICCID" xml:space="preserve" id="bfd0fb1d-41cd-48e0-b299-644a43efccb7">
     <value>ICCID</value>
   </data>
-  <data name="Is Owened by Eagle eye?&quot;" xml:space="preserve">
+  <data name="Is Owened by Eagle eye?&quot;" xml:space="preserve" id="1354ec8f-0d70-49d5-852c-07d2cdabc7d5">
     <value>Is Owened by Eagle eye?"</value>
   </data>
-  <data name="IsOwen" xml:space="preserve">
+  <data name="IsOwen" xml:space="preserve" id="87cfcb8e-5b57-4899-bce5-08cbe76f0705">
     <value>IsOwen</value>
   </data>
-  <data name="SimCard" xml:space="preserve">
+  <data name="SimCard" xml:space="preserve" id="a43c85fd-1427-406e-8d7b-5ed8d5d4bd73">
     <value>SimCard</value>
   </data>
-  <data name="SimCardNo" xml:space="preserve">
+  <data name="SimCardNo" xml:space="preserve" id="110c75ab-4e16-4686-8d4d-6bfec291da2b">
     <value>SimCardNo</value>
   </data>
-  <data name="SimCards" xml:space="preserve">
+  <data name="SimCards" xml:space="preserve" id="29874347-faf8-40a8-9983-5e8f200b6cff">
     <value>Sim Cards</value>
   </data>
-  <data name="SPackage" xml:space="preserve">
+  <data name="SPackage" xml:space="preserve" id="f377bdfc-03ec-4ac8-a6d2-e8a7d00752da">
     <value>SPackage</value>
   </data>
-  <data name="SStatus" xml:space="preserve">
+  <data name="SStatus" xml:space="preserve" id="04eabb3e-44b7-4380-af21-78d258903c31">
     <value>SStatus</value>
   </data>
-  <data name="Update SimCard" xml:space="preserve">
+  <data name="Update SimCard" xml:space="preserve" id="13b27132-2697-4601-b5f2-af965e910551">
     <value>Update SimCard</value>
   </data>
 </root>

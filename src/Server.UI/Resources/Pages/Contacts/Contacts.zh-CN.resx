@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<root>
+<root><accessability>internal</accessability>
   <!-- 
     Microsoft ResX Schema 
     
@@ -60,45 +60,45 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -117,76 +117,76 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Contact" xml:space="preserve">
+  <data name="Contact" xml:space="preserve" id="d081fa8e-336e-4a90-8ce5-e769a127b671">
     <value>联系人</value>
   </data>
-  <data name="Contacts" xml:space="preserve">
+  <data name="Contacts" xml:space="preserve" id="0d9d792b-7ea3-4576-b14f-5dbe4e671dbf">
     <value>联系人</value>
   </data>
-  <data name="Home" xml:space="preserve">
+  <data name="Home" xml:space="preserve" id="08eb38ae-2537-4876-868b-c3b2ab4e6747">
     <value>首页</value>
   </data>
-  <data name="List View" xml:space="preserve">
+  <data name="List View" xml:space="preserve" id="acb264b4-b5af-4de7-adf1-479bd74a514d">
     <value>列表视图</value>
   </data>
-  <data name="New Contact" xml:space="preserve">
+  <data name="New Contact" xml:space="preserve" id="bd645231-4e43-49f0-af75-01c5d85770a5">
     <value>新建联系人</value>
   </data>
-  <data name="Clone Contact" xml:space="preserve">
+  <data name="Clone Contact" xml:space="preserve" id="abf2277a-4d2e-47ae-a88d-188db165ce8b">
     <value>复制联系人</value>
   </data>
-  <data name="Edit Contact" xml:space="preserve">
+  <data name="Edit Contact" xml:space="preserve" id="9591c7f3-9bc5-4bea-bd0a-7f0071b13940">
     <value>编辑联系人</value>
   </data>
-  <data name="Create Contact" xml:space="preserve">
+  <data name="Create Contact" xml:space="preserve" id="2651e12a-db05-4556-ad63-dfafc9dcee85">
     <value>创建联系人</value>
   </data>
-  <data name="name is required." xml:space="preserve">
+  <data name="name is required." xml:space="preserve" id="ede81483-2b5e-4706-9619-95beb6dadea3">
     <value>姓名为必填项。</value>
   </data>
-  <data name="email is required." xml:space="preserve">
+  <data name="email is required." xml:space="preserve" id="e4ef0e08-7a2c-4c46-bc0f-bcc0dc203aaa">
     <value>电子邮件为必填项。</value>
   </data>
-  <data name="phone number is required." xml:space="preserve">
+  <data name="phone number is required." xml:space="preserve" id="cd2b5a57-f021-4efc-9fcb-f0ecb8f7113e">
     <value>电话号码为必填项。</value>
   </data>
-  <data name="country is required." xml:space="preserve">
+  <data name="country is required." xml:space="preserve" id="cba727c9-f518-45fd-b84f-d6cfe50b0ae0">
     <value>国家为必填项。</value>
   </data>
-  <data name="Id" xml:space="preserve">
+  <data name="Id" xml:space="preserve" id="dcafdf19-1da3-448a-ad52-1a150fe6f686">
     <value>编号</value>
   </data>
-  <data name="Name" xml:space="preserve">
+  <data name="Name" xml:space="preserve" id="50d68e6b-fc28-44cd-a3e9-3041a34c28c6">
     <value>姓名</value>
   </data>
-  <data name="Description" xml:space="preserve">
+  <data name="Description" xml:space="preserve" id="10a439f0-2fc6-49b9-a80d-acd246dfdc3d">
     <value>描述</value>
   </data>
-  <data name="Email" xml:space="preserve">
+  <data name="Email" xml:space="preserve" id="2e1fc571-0749-4025-89b8-4e52efc0d47e">
     <value>电子邮件</value>
   </data>
-  <data name="Phone number" xml:space="preserve">
+  <data name="Phone number" xml:space="preserve" id="3845c265-261f-403f-a3c8-9fe107bce277">
     <value>电话号码</value>
   </data>
-  <data name="Country" xml:space="preserve">
+  <data name="Country" xml:space="preserve" id="6b045e3f-fcfe-43d6-9b0c-35d394659b36">
     <value>国家</value>
   </data>
-  <data name="Enter contact name" xml:space="preserve">
+  <data name="Enter contact name" xml:space="preserve" id="97def2ff-ee36-4b35-b4cd-91c7883140b9">
     <value>请输入联系人姓名</value>
   </data>
-  <data name="Enter description" xml:space="preserve">
+  <data name="Enter description" xml:space="preserve" id="f5e509b3-4924-45c5-81a9-41c76174dfa2">
     <value>请输入描述</value>
   </data>
-  <data name="Enter email address" xml:space="preserve">
+  <data name="Enter email address" xml:space="preserve" id="8806edc3-4696-4421-87ba-e1e1c7297c5d">
     <value>请输入电子邮件地址</value>
   </data>
-  <data name="Enter phone number" xml:space="preserve">
+  <data name="Enter phone number" xml:space="preserve" id="6b515b21-b474-4f1a-99a6-67a0d5e6a432">
     <value>请输入电话号码</value>
   </data>
-  <data name="Enter country" xml:space="preserve">
+  <data name="Enter country" xml:space="preserve" id="9487104f-99fb-4a5a-9e5a-9094fdf12d92">
     <value>请输入国家</value>
   </data>
-  <data name="Last Modified By" xml:space="preserve">
+  <data name="Last Modified By" xml:space="preserve" id="9341ae69-d42f-4655-b4bf-0974d05849e3">
     <value>最后修改人</value>
   </data>
 </root>

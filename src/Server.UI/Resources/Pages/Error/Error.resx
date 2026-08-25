@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<root>
+<root><accessability>internal</accessability>
     <!-- 
       Microsoft ResX Schema 
       
@@ -59,8 +59,7 @@
               : using a System.ComponentModel.TypeConverter
               : and then encoded with base64 encoding.
       -->
-    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root"
-                xmlns="">
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root" xmlns="">
         <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
         <xsd:element name="root" msdata:IsDataSet="true">
             <xsd:complexType>
@@ -122,16 +121,16 @@
             PublicKeyToken=b77a5c561934e089
         </value>
     </resheader>
-    <data name="Server Error" xml:space="preserve">
+    <data name="Server Error" xml:space="preserve" id="558dba4f-1568-4903-89a7-f6bd614952e8">
         <value>Server Error</value>
     </data>
-    <data name="An unexpected error occurred. Please try again later." xml:space="preserve">
+    <data name="An unexpected error occurred. Please try again later." xml:space="preserve" id="ec1c3c09-351b-4858-ab8e-123302b8fa76">
         <value>An unexpected error occurred. Please try again later.</value>
     </data>
-    <data name="Return Home" xml:space="preserve">
+    <data name="Return Home" xml:space="preserve" id="2f17aa0d-f119-4aec-97d8-48d6b6572ad5">
         <value>Return Home</value>
     </data>
-    <data name="Try Again" xml:space="preserve">
+    <data name="Try Again" xml:space="preserve" id="cc37ae6d-5c11-439a-ab4d-2c2ae8f4e56d">
         <value>Try Again</value>
     </data>
-</root> 
+</root>

@@ -213,4 +213,70 @@
   <data name="Email Templates" xml:space="preserve">
     <value>قوالب البريد الإلكتروني</value>
   </data>
+    <data name="Wialon Tasks" xml:space="preserve">
+      <value>مهام ويلون</value>
+    </data>
+    <data name="Wialon Units" xml:space="preserve">
+      <value>الوحدات على ويلون</value>
+    </data>
+    <data name="Chatbot" xml:space="preserve">
+      <value>تراسل</value>
+    </data>
+    <data name="Basic Objects" xml:space="preserve">
+      <value>العناصر الأساسية</value>
+    </data>
+    <data name="Services&apos;s Prices" xml:space="preserve">
+      <value>اسعار الخدمات</value>
+    </data>
+    <data name="Invoices" xml:space="preserve">
+      <value>الفواتير</value>
+    </data>
+    <data name="Services Log" xml:space="preserve">
+      <value>سجل الخدمات</value>
+    </data>
+    <data name="Tickets" xml:space="preserve">
+      <value>بطاقات</value>
+    </data>
+    <data name="Services &amp; Invoices" xml:space="preserve">
+      <value>الخدمات و الفواتير</value>
+    </data>
+    <data name="Backup &amp; Restore" xml:space="preserve">
+      <value>الحفظ و الاسترجاع</value>
+    </data>
+    <data name="Impulse Charts" xml:space="preserve">
+      <value>مخططات نبضية</value>
+    </data>
+    <data name="My Data" xml:space="preserve">
+      <value>بياناتي</value>
+    </data>
+    <data name="Local Data" xml:space="preserve">
+      <value>البيانات المحلية</value>
+    </data>
+    <data name="Online Data" xml:space="preserve">
+      <value>بيانات الشبكة</value>
+    </data>
+    <data name="Data Diagnosises" xml:space="preserve">
+      <value>صحة البيانات</value>
+    </data>
+    <data name="Data Matches" xml:space="preserve">
+      <value>توافق البيانات</value>
+    </data>
+    <data name="Libyana Sim Cards" xml:space="preserve">
+      <value>شرائح ليبيانا</value>
+    </data>
+    <data name="Wialon Server Test" xml:space="preserve">
+      <value>اختبار خادم ويلون</value>
+    </data>
+    <data name="Customers" xml:space="preserve">
+      <value>الزبائن</value>
+    </data>
+    <data name="Sim Cards" xml:space="preserve">
+      <value>شرائح الاتصال</value>
+    </data>
+    <data name="Tracked Assets" xml:space="preserve">
+      <value>الأصول</value>
+    </data>
+    <data name="Tracking Units" xml:space="preserve">
+      <value>وحدات التتبع</value>
+    </data>
 </root>

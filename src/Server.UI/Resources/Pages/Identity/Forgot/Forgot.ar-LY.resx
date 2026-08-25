@@ -1,45 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<root>
+<root><accessability>internal</accessability>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -58,34 +58,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Forgot Password?" xml:space="preserve">
+  <data name="Forgot Password?" xml:space="preserve" id="e1eba589-aafb-4b70-9729-d2d19b7b77bd">
     <value>هل نسيت كلمة المرور؟</value>
   </data>
-  <data name="Please enter your registered email address. We will send you a password reset link if the account exists." xml:space="preserve">
+  <data name="Please enter your registered email address. We will send you a password reset link if the account exists." xml:space="preserve" id="c907121a-f750-46d6-a6d7-2d16e55008cf">
     <value>يرجى إدخال بريدك الإلكتروني المسجل. سنرسل لك رابط إعادة تعيين كلمة المرور إذا كان الحساب موجوداً.</value>
   </data>
-  <data name="E-mail" xml:space="preserve">
+  <data name="E-mail" xml:space="preserve" id="b28b05ba-b2ae-43c0-bffc-767fc2a20ebb">
     <value>البريد الإلكتروني</value>
   </data>
-  <data name="Enter your email address" xml:space="preserve">
+  <data name="Enter your email address" xml:space="preserve" id="04bcb08d-93ec-4e5a-ae44-0cc3db885daf">
     <value>أدخل بريدك الإلكتروني</value>
   </data>
-  <data name="Email address is required" xml:space="preserve">
+  <data name="Email address is required" xml:space="preserve" id="344cdcea-d28c-40ab-b622-eefa0f0d4233">
     <value>البريد الإلكتروني مطلوب</value>
   </data>
-  <data name="Please enter a valid email address" xml:space="preserve">
+  <data name="Please enter a valid email address" xml:space="preserve" id="fdc58907-7f96-45b2-90a5-2a4c46bc48e1">
     <value>يرجى إدخال بريد إلكتروني صحيح</value>
   </data>
-  <data name="Send E-mail" xml:space="preserve">
+  <data name="Send E-mail" xml:space="preserve" id="c9b8fe8e-6d07-4ea2-aab4-5619b8d2a806">
     <value>إرسال البريد الإلكتروني</value>
   </data>
-  <data name="Forgot Password" xml:space="preserve">
+  <data name="Forgot Password" xml:space="preserve" id="a847a7d2-3ccb-4c3f-9ca0-59fc489d830c">
     <value>نسيت كلمة المرور</value>
   </data>
-  <data name="If an account with this email exists, a password reset link will be sent." xml:space="preserve">
+  <data name="If an account with this email exists, a password reset link will be sent." xml:space="preserve" id="82920fe4-808e-40fc-ae5e-6bde3c50ab7d">
     <value>إذا كان هناك حساب بهذا البريد الإلكتروني، سيتم إرسال رابط إعادة تعيين كلمة المرور.</value>
   </data>
-  <data name="Your email address has not been confirmed. Please check your inbox for a confirmation email or request a new one." xml:space="preserve">
+  <data name="Your email address has not been confirmed. Please check your inbox for a confirmation email or request a new one." xml:space="preserve" id="7da040ec-565d-4217-b39d-3fc23afaf271">
     <value>لم يتم تأكيد بريدك الإلكتروني. يرجى التحقق من صندوق الوارد للحصول على بريد التأكيد أو طلب بريد جديد.</value>
   </data>
 </root>

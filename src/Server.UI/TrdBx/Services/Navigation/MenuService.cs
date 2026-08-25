@@ -87,7 +87,6 @@ public class MenuService : IMenuService
                         new ()
                         {
                             Title = "Services's Prices",
-                            Roles = new[] { Roles.Admin },
                             Href = "/pages/TrdBx/ServicePrices",
                             PageStatus = PageStatus.Completed
                         }
@@ -96,6 +95,7 @@ public class MenuService : IMenuService
                 new()
                 {
                     Title = "Local Data",
+                    Roles = new[] { Roles.Admin},
                     Icon = Icons.Material.Filled.Dataset,
                     PageStatus = PageStatus.Completed,
                     IsParent = true,
@@ -104,7 +104,6 @@ public class MenuService : IMenuService
                         new()
                         {
                             Title = "My Data",
-                            Roles = new[] { Roles.Admin },
                             Href = "/pages/TrdBx/MyData/Local/TrdBxData",
                             PageStatus = PageStatus.Completed
                         },
@@ -117,7 +116,6 @@ public class MenuService : IMenuService
                         new()
                         {
                             Title = "Backup & Restore",
-                            Roles = new[] { Roles.Admin },
                             Href = "/pages/TrdBx/MyData/Local/RestoreBackup",
                             PageStatus = PageStatus.Completed
                         }
@@ -126,6 +124,7 @@ public class MenuService : IMenuService
                 new()
                 {
                     Title = "Online Data",
+                    Roles = new[] { Roles.Admin},
                     Icon = Icons.Material.Filled.Api,
                     PageStatus = PageStatus.Completed,
                     IsParent = true,
@@ -165,20 +164,11 @@ public class MenuService : IMenuService
                 },
                 new()
                 {
-                    Title = "Online Tasks",
+                    Title = "Wialon Tasks",
+                    Roles = new[] { Roles.Admin},
                     Icon = Icons.Material.Filled.Web,
-                    PageStatus = PageStatus.Completed,
-                    IsParent = true,
-                    MenuItems = new List<MenuSectionSubItemModel>
-                    {
-                        new()
-                        {
-                            Title = "Wialon Tasks",
-                            Href = "/pages/TrdBx/WialonTasks/0/0",
-                            PageStatus = PageStatus.Completed
-                        }
-
-                    }
+                     Href = "/pages/TrdBx/WialonTasks/0/0",
+                    PageStatus = PageStatus.Completed
                 }
             }
                

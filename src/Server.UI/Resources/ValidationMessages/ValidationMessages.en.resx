@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<root>
+<root><accessability>internal</accessability>
   <!-- 
     Microsoft ResX Schema 
     
@@ -60,45 +60,45 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -117,73 +117,73 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="EmailInvalid" xml:space="preserve">
+  <data name="EmailInvalid" xml:space="preserve" id="e0d52fa1-6858-49be-af18-c733fbf3dddd">
     <value>Invalid email address format.</value>
   </data>
-  <data name="EmailRequired" xml:space="preserve">
+  <data name="EmailRequired" xml:space="preserve" id="222cb4ed-0c47-4260-8c7e-38fa874c5b0b">
     <value>Email address is required.</value>
   </data>
-  <data name="PasswordRequired" xml:space="preserve">
+  <data name="PasswordRequired" xml:space="preserve" id="7158fce5-5550-4690-944b-06b8d829b20e">
     <value>Password is required.</value>
   </data>
-  <data name="PasswordLength" xml:space="preserve">
+  <data name="PasswordLength" xml:space="preserve" id="b8be890f-6934-412b-a6e5-4ce071351dda">
     <value>The {0} must be at least {2} and at max {1} characters long.</value>
   </data>
-  <data name="PasswordComplexity" xml:space="preserve">
+  <data name="PasswordComplexity" xml:space="preserve" id="62f063f2-3226-4a75-8878-25a72ef27ea0">
     <value>Password must be at least 8 characters and contain uppercase, lowercase, digit and special character.</value>
   </data>
-  <data name="ConfirmPasswordRequired" xml:space="preserve">
+  <data name="ConfirmPasswordRequired" xml:space="preserve" id="3689a24c-0a17-4dc3-b513-7a947c08ccfe">
     <value>Confirm password is required.</value>
   </data>
-  <data name="PasswordMismatch" xml:space="preserve">
+  <data name="PasswordMismatch" xml:space="preserve" id="7ac93e93-dfb4-4780-acbd-e28a53f18233">
     <value>The password and confirmation password do not match.</value>
   </data>
-  <data name="UserNameRequired" xml:space="preserve">
+  <data name="UserNameRequired" xml:space="preserve" id="eee3f8ab-03a7-4839-aaa2-b840a71227a9">
     <value>User name is required.</value>
   </data>
-  <data name="UserNameLength" xml:space="preserve">
+  <data name="UserNameLength" xml:space="preserve" id="0cc5b9ba-7950-4023-9f43-e1afebccfc73">
     <value>Name length can't be more than {1} characters.</value>
   </data>
-  <data name="RecoveryCodeRequired" xml:space="preserve">
+  <data name="RecoveryCodeRequired" xml:space="preserve" id="1e0429cb-7dce-4220-bc41-a6b1e9877f8f">
     <value>Recovery code is required.</value>
   </data>
-  <data name="TenantRequired" xml:space="preserve">
+  <data name="TenantRequired" xml:space="preserve" id="49a47626-30d8-4eb0-913d-d0f1b468b80e">
     <value>Tenant is required.</value>
   </data>
-  <data name="TimeZoneRequired" xml:space="preserve">
+  <data name="TimeZoneRequired" xml:space="preserve" id="912040c3-964d-4c56-b8c7-eb1a50cfc74e">
     <value>Time zone is required.</value>
   </data>
-  <data name="LanguageRequired" xml:space="preserve">
+  <data name="LanguageRequired" xml:space="preserve" id="022de9af-a245-4a44-bf28-cd203f9b53b9">
     <value>Language is required.</value>
   </data>
-  <data name="AgreeToTermsRequired" xml:space="preserve">
+  <data name="AgreeToTermsRequired" xml:space="preserve" id="2c0ad4da-043f-4635-a3e8-d902a55370db">
     <value>You must agree to the terms.</value>
   </data>
-  <data name="MaxLengthExceeded" xml:space="preserve">
+  <data name="MaxLengthExceeded" xml:space="preserve" id="193b2c77-8fa6-4816-a25d-b107e8b26bf3">
     <value>The {0} must not exceed {1} characters.</value>
   </data>
-  <data name="PhoneNumberInvalid" xml:space="preserve">
+  <data name="PhoneNumberInvalid" xml:space="preserve" id="9f39f29e-6f6b-4b9e-bd7d-8f07e5db117d">
     <value>Please enter a valid phone number.</value>
   </data>
-  <data name="NameRequired" xml:space="preserve">
+  <data name="NameRequired" xml:space="preserve" id="648dbedd-74d2-428c-a40c-9d37839ceeeb">
     <value>Name is required.</value>
   </data>
-  <data name="NameLength" xml:space="preserve">
+  <data name="NameLength" xml:space="preserve" id="a6dc8e4b-0e19-4ed7-9774-c8d75fdeaf50">
     <value>Name must be between {2} and {1} characters.</value>
   </data>
-  <data name="TwoFactorCodeRequired" xml:space="preserve">
+  <data name="TwoFactorCodeRequired" xml:space="preserve" id="80eb0ec2-aa69-4020-8416-797055c1c16a">
     <value>Authenticator code is required.</value>
   </data>
-  <data name="TwoFactorCodeLength" xml:space="preserve">
+  <data name="TwoFactorCodeLength" xml:space="preserve" id="809d8131-fab7-408f-84c4-32cdac1d0f45">
     <value>The {0} must be at least {2} and at max {1} characters long.</value>
   </data>
-  <data name="TenantsAtLeastOne" xml:space="preserve">
+  <data name="TenantsAtLeastOne" xml:space="preserve" id="ae17dae4-3b16-4a94-879d-041f68288075">
     <value>Please select at least one tenant.</value>
   </data>
-  <data name="UserNameStringLength" xml:space="preserve">
+  <data name="UserNameStringLength" xml:space="preserve" id="aceedde1-c816-46c2-af47-f3c1e70b2dc3">
     <value>User name must be between {2} and {1} characters.</value>
   </data>
-  <data name="ProviderRequired" xml:space="preserve">
+  <data name="ProviderRequired" xml:space="preserve" id="667bd3ef-8628-4191-98d7-2c9af167feca">
     <value>Provider is required.</value>
   </data>
 </root>

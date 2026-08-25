@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<root>
+<root><accessability>internal</accessability>
   <!-- 
       Microsoft ResX Schema 
       
@@ -60,45 +60,45 @@
               : and then encoded with base64 encoding.
       -->
   <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root" xmlns="">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -121,49 +121,49 @@
             PublicKeyToken=b77a5c561934e089
         </value>
   </resheader>
-  <data name="Create a new Tenant" xml:space="preserve">
+  <data name="Create a new Tenant" xml:space="preserve" id="adbb75ee-4a3e-4dff-9956-4bfcd1bde6ed">
     <value>إنشاء مستأجر جديد</value>
   </data>
-  <data name="Edit the Tenant" xml:space="preserve">
+  <data name="Edit the Tenant" xml:space="preserve" id="75c32195-9f83-45d0-bca6-5ef07133a631">
     <value>تعديل المستأجر</value>
   </data>
-  <data name="Multi-Tenant" xml:space="preserve">
+  <data name="Multi-Tenant" xml:space="preserve" id="09b6ba8b-8e85-4abd-b770-e3cf3fcaa100">
     <value>متعدد المستأجرين</value>
   </data>
-  <data name="Tenant" xml:space="preserve">
+  <data name="Tenant" xml:space="preserve" id="7b679511-641f-4f0a-b711-1abbe35017b5">
     <value>المستأجر</value>
   </data>
-  <data name="Tenant Id" xml:space="preserve">
+  <data name="Tenant Id" xml:space="preserve" id="66011375-52a1-4b5f-9c14-3ae15218a5d6">
     <value>معرف المستأجر</value>
   </data>
-  <data name="Tenant id is required." xml:space="preserve">
+  <data name="Tenant id is required." xml:space="preserve" id="5fb8e007-a45e-4c34-8c7d-c5ba558f7125">
     <value>معرف المستأجر مطلوب!</value>
   </data>
-  <data name="Tenant Name" xml:space="preserve">
+  <data name="Tenant Name" xml:space="preserve" id="ff8b5c2b-b376-41b0-896d-ea23fa64a195">
     <value>اسم المستأجر</value>
   </data>
-  <data name="Tenant name is required." xml:space="preserve">
+  <data name="Tenant name is required." xml:space="preserve" id="6aab85e1-da62-45fb-8be6-84d9934a9869">
     <value>اسم المستأجر مطلوب!</value>
   </data>
-  <data name="Tenants" xml:space="preserve">
+  <data name="Tenants" xml:space="preserve" id="060a28eb-8331-402d-aae1-f89fe93c6041">
     <value>المستأجرون</value>
   </data>
-  <data name="Description" xml:space="preserve">
+  <data name="Description" xml:space="preserve" id="9121f7f1-4012-4025-851e-46450140e3a1">
     <value>الوصف</value>
   </data>
-  <data name="No available tenants" xml:space="preserve">
+  <data name="No available tenants" xml:space="preserve" id="ca1d1ad3-879b-4c3b-a762-c068dc854232">
     <value>لا يوجد مستأجرين متاحين</value>
   </data>
-  <data name="Auto-generated tenant id" xml:space="preserve">
+  <data name="Auto-generated tenant id" xml:space="preserve" id="2bc4453c-4d3b-4bd0-878d-0cb1a45a336a">
     <value>معرف مستأجر يتم إنشاؤه تلقائياً</value>
   </data>
-  <data name="This identifier cannot be changed" xml:space="preserve">
+  <data name="This identifier cannot be changed" xml:space="preserve" id="9fa11722-f3e4-4d05-99c8-7bff89fd1cbf">
     <value>لا يمكن تغيير هذا المعرف</value>
   </data>
-  <data name="Enter tenant name" xml:space="preserve">
+  <data name="Enter tenant name" xml:space="preserve" id="918f289f-8681-4aec-b32f-086e18bd5931">
     <value>أدخل اسم المستأجر</value>
   </data>
-  <data name="Enter tenant description" xml:space="preserve">
+  <data name="Enter tenant description" xml:space="preserve" id="7051aa53-2b39-4535-b5fd-e8e19e176891">
     <value>أدخل وصف المستأجر</value>
   </data>
 </root>

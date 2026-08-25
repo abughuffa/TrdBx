@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<root>
+<root><accessability>internal</accessability>
   <!-- 
     Microsoft ResX Schema 
     
@@ -60,45 +60,45 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -117,82 +117,82 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Attachement" xml:space="preserve">
+  <data name="Attachement" xml:space="preserve" id="89daf15a-a372-48e5-928c-4206e30791c2">
     <value>Attachement</value>
   </data>
-  <data name="Choose files" xml:space="preserve">
+  <data name="Choose files" xml:space="preserve" id="7ea81ea5-d83b-421b-902c-d6ef2c2be646">
     <value>Choose files</value>
   </data>
-  <data name="Content" xml:space="preserve">
+  <data name="Content" xml:space="preserve" id="c2e3f232-7c56-4590-a315-c3b96288f3c3">
     <value>Content</value>
   </data>
-  <data name="Document Type" xml:space="preserve">
+  <data name="Document Type" xml:space="preserve" id="603d5d9a-cee4-479c-9132-9fc939b30ce5">
     <value>Document Type</value>
   </data>
-  <data name="Document type is required." xml:space="preserve">
+  <data name="Document type is required." xml:space="preserve" id="9ffd13a1-389d-4a11-8bf9-3c6b479c4d08">
     <value>Document type is required!</value>
   </data>
-  <data name="Documents" xml:space="preserve">
+  <data name="Documents" xml:space="preserve" id="3e650e71-33ee-4927-baa2-bf92bd30e393">
     <value>Documents</value>
   </data>
-  <data name="Is Public" xml:space="preserve">
+  <data name="Is Public" xml:space="preserve" id="29bfd04d-094c-4218-bcd9-175bf724b3cd">
     <value>Is Public</value>
   </data>
-  <data name="Only .jpg and .png files are allowed." xml:space="preserve">
+  <data name="Only .jpg and .png files are allowed." xml:space="preserve" id="ed1dcd59-911b-4b9e-9b2b-de24881e9d99">
     <value>Only .jpg and .png files are allowed.</value>
   </data>
-  <data name="Please click [Choose Files] button to upload your photo." xml:space="preserve">
+  <data name="Please click [Choose Files] button to upload your photo." xml:space="preserve" id="ae4cf93d-2f4d-440d-8747-dff3f4933e9b">
     <value>Please click [Choose Files] button to upload your photo.</value>
   </data>
-  <data name="Recognize result" xml:space="preserve">
+  <data name="Recognize result" xml:space="preserve" id="70d59787-6b3f-42b7-9fbb-61f5c24b8b4a">
     <value>Recognize result</value>
   </data>
-  <data name="Select Document Type" xml:space="preserve">
+  <data name="Select Document Type" xml:space="preserve" id="4110cbb6-c783-4195-946b-99fc2ee9ffd7">
     <value>Select Document Type</value>
   </data>
-  <data name="Tenant Name" xml:space="preserve">
+  <data name="Tenant Name" xml:space="preserve" id="f890a262-2434-4ccf-aed1-f029ea1931ed">
     <value>Tenant Name</value>
   </data>
-  <data name="Title" xml:space="preserve">
+  <data name="Title" xml:space="preserve" id="a0c48d24-e9f4-40af-9e11-bb6b8c0d64cc">
     <value>Title</value>
   </data>
-  <data name="Title is required." xml:space="preserve">
+  <data name="Title is required." xml:space="preserve" id="37e59042-53f2-4b42-b3df-e379f2f1dae2">
     <value>Title is required!</value>
   </data>
-  <data name="Upload" xml:space="preserve">
+  <data name="Upload" xml:space="preserve" id="842fc6f3-71ca-4c74-a91a-8329a122b534">
     <value>Upload</value>
   </data>
-  <data name="Upload Pictures" xml:space="preserve">
+  <data name="Upload Pictures" xml:space="preserve" id="c55c8b30-78dc-471e-b52b-ade44f1d0d4e">
     <value>Upload Pictures</value>
   </data>
-  <data name="Upload successfully" xml:space="preserve">
+  <data name="Upload successfully" xml:space="preserve" id="991c8970-fdac-419d-a136-bbde82e69ba6">
     <value>Upload successfully</value>
   </data>
-  <data name="{0} job started." xml:space="preserve">
+  <data name="{0} job started." xml:space="preserve" id="4ce06b10-8662-4642-8332-1b42989bb806">
     <value>{0} job started.</value>
   </data>
-  <data name="{0} recognize completed." xml:space="preserve">
+  <data name="{0} recognize completed." xml:space="preserve" id="05c7da1e-3469-4c06-b4c2-3687fe4b68ff">
     <value>{0} recognize completed.</value>
   </data>
-  <data name="Download" xml:space="preserve">
+  <data name="Download" xml:space="preserve" id="6a80ad1d-c489-491d-8269-f8d415ba757e">
     <value>Download</value>
   </data>
-  <data name="Owner" xml:space="preserve">
+  <data name="Owner" xml:space="preserve" id="3256b3c6-500a-4ad4-a897-3545c780e67f">
     <value>Owner</value>
   </data>
-  <data name="Created By" xml:space="preserve">
+  <data name="Created By" xml:space="preserve" id="940bb606-740e-4bc1-bb0e-0eaf7f08adf6">
     <value>Created By</value>
   </data>
-  <data name="Status" xml:space="preserve">
+  <data name="Status" xml:space="preserve" id="85e704fd-fd63-46b4-851b-ee17f10679fa">
     <value>Status</value>
   </data>
-  <data name="No Documents Found" xml:space="preserve">
+  <data name="No Documents Found" xml:space="preserve" id="3509ef07-c63d-48a1-901d-b60b5404c4ce">
     <value>No Documents Found</value>
   </data>
-  <data name="Try adjusting your search or filter to find what you're looking for." xml:space="preserve">
+  <data name="Try adjusting your search or filter to find what you're looking for." xml:space="preserve" id="2b06d607-12ef-482d-a5e3-f4a22466cd61">
     <value>Try adjusting your search or filter to find what you're looking for.</value>
   </data>
-  <data name="Loading Documents..." xml:space="preserve">
+  <data name="Loading Documents..." xml:space="preserve" id="2f6d071d-882f-49a3-a222-9dd81514ac50">
     <value>Loading Documents...</value>
   </data>
 </root>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<root>
+<root><accessability>internal</accessability>
   <!-- 
     Microsoft ResX Schema 
     
@@ -60,45 +60,45 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -117,82 +117,82 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Attachement" xml:space="preserve">
+  <data name="Attachement" xml:space="preserve" id="76029df4-5109-4d13-9550-b0784907559f">
     <value>附件</value>
   </data>
-  <data name="Choose files" xml:space="preserve">
+  <data name="Choose files" xml:space="preserve" id="2f49fe70-4290-46a0-8a0f-8e568d77ca82">
     <value>选择文件</value>
   </data>
-  <data name="Content" xml:space="preserve">
+  <data name="Content" xml:space="preserve" id="c801b277-4094-4d38-872d-6039ccee47c8">
     <value>内容</value>
   </data>
-  <data name="Document Type" xml:space="preserve">
+  <data name="Document Type" xml:space="preserve" id="0a673eca-02fd-42c3-9c65-f2f7f783a9bf">
     <value>文件类型</value>
   </data>
-  <data name="Document type is required." xml:space="preserve">
+  <data name="Document type is required." xml:space="preserve" id="980413c7-1672-4bee-a826-df50d8db960a">
     <value>文件类型为必填项！</value>
   </data>
-  <data name="Documents" xml:space="preserve">
+  <data name="Documents" xml:space="preserve" id="14dc5f91-7ec1-41fc-8a58-4fdc8bce9c17">
     <value>文件</value>
   </data>
-  <data name="Is Public" xml:space="preserve">
+  <data name="Is Public" xml:space="preserve" id="a1699010-e518-4f1b-8a6f-948963c7347b">
     <value>是公开的</value>
   </data>
-  <data name="Only .jpg and .png files are allowed." xml:space="preserve">
+  <data name="Only .jpg and .png files are allowed." xml:space="preserve" id="54bb2eca-7887-4e92-8173-8b1ce2d7858a">
     <value>仅允许使用 .jpg 和 .png 文件。</value>
   </data>
-  <data name="Please click [Choose Files] button to upload your photo." xml:space="preserve">
+  <data name="Please click [Choose Files] button to upload your photo." xml:space="preserve" id="526094d7-f5cf-48b8-99eb-c13b4a81adb9">
     <value>请点击[选择文件]按钮上传您的照片。</value>
   </data>
-  <data name="Recognize result" xml:space="preserve">
+  <data name="Recognize result" xml:space="preserve" id="173a9a25-016b-42be-94e7-7ee6aae84ab0">
     <value>识别结果</value>
   </data>
-  <data name="Select Document Type" xml:space="preserve">
+  <data name="Select Document Type" xml:space="preserve" id="19d2db2c-8882-4cfb-9a16-ba0a5189a6f0">
     <value>选择文档类型</value>
   </data>
-  <data name="Tenant Name" xml:space="preserve">
+  <data name="Tenant Name" xml:space="preserve" id="e8c96b20-68a7-4e2e-b85f-36831b5b10c4">
     <value>租户名称</value>
   </data>
-  <data name="Title" xml:space="preserve">
+  <data name="Title" xml:space="preserve" id="66138734-ab64-460b-b6a8-58dc9f2c8730">
     <value>标题</value>
   </data>
-  <data name="Title is required." xml:space="preserve">
+  <data name="Title is required." xml:space="preserve" id="de6fab16-f4f7-476c-ba0f-47ca4249d05f">
     <value>标题为必填项！</value>
   </data>
-  <data name="Upload" xml:space="preserve">
+  <data name="Upload" xml:space="preserve" id="e94a88b0-d4d2-49c9-ac9e-1242ed56204d">
     <value>上传</value>
   </data>
-  <data name="Upload Pictures" xml:space="preserve">
+  <data name="Upload Pictures" xml:space="preserve" id="05fb98b3-a418-4583-9c4a-39160f633d46">
     <value>上传图片</value>
   </data>
-  <data name="Upload successfully" xml:space="preserve">
+  <data name="Upload successfully" xml:space="preserve" id="2d68a3ac-bb0f-47bc-abbc-affe5e8e7026">
     <value>上传成功</value>
   </data>
-  <data name="{0} job started." xml:space="preserve">
+  <data name="{0} job started." xml:space="preserve" id="c2700d96-ad41-49f8-bcd6-3f988e38e60a">
     <value>{0} 作业已开始。</value>
   </data>
-  <data name="{0} recognize completed." xml:space="preserve">
+  <data name="{0} recognize completed." xml:space="preserve" id="52bc5d03-c3be-4732-917f-15aa208a11b8">
     <value>{0}识别完成。</value>
   </data>
-  <data name="Download" xml:space="preserve">
+  <data name="Download" xml:space="preserve" id="0e3c7628-86f3-4522-9901-2d8cfd8d566f">
     <value>下载</value>
   </data>
-  <data name="Owner" xml:space="preserve">
+  <data name="Owner" xml:space="preserve" id="a98e680f-94e1-455f-aef6-7d9fe232641a">
     <value>所有者</value>
   </data>
-  <data name="Created By" xml:space="preserve">
+  <data name="Created By" xml:space="preserve" id="cbe6b933-7e13-44bc-8e81-4dde8ab7c272">
     <value>创建人</value>
   </data>
-  <data name="Status" xml:space="preserve">
+  <data name="Status" xml:space="preserve" id="08b9e161-fd2a-4921-8243-c0e131937868">
     <value>状态</value>
   </data>
-  <data name="No Documents Found" xml:space="preserve">
+  <data name="No Documents Found" xml:space="preserve" id="2512ad00-8d47-48bd-8c26-576242326e6b">
     <value>未找到文件</value>
   </data>
-  <data name="Try adjusting your search or filter to find what you're looking for." xml:space="preserve">
+  <data name="Try adjusting your search or filter to find what you're looking for." xml:space="preserve" id="e82d9aa1-56b8-45ec-8f2f-f251f193901b">
     <value>请尝试调整搜索或筛选条件以找到您需要的内容。</value>
   </data>
-  <data name="Loading Documents..." xml:space="preserve">
+  <data name="Loading Documents..." xml:space="preserve" id="78fbbe48-32ba-4daa-ad19-713a4418fa3a">
     <value>正在加载文件...</value>
   </data>
 </root>

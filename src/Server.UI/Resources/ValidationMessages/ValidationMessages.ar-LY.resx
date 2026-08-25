@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<root>
+<root><accessability>internal</accessability>
   <!-- 
     Microsoft ResX Schema 
     
@@ -60,45 +60,45 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -117,73 +117,73 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="EmailInvalid" xml:space="preserve">
+  <data name="EmailInvalid" xml:space="preserve" id="288b4c21-8c94-4c97-acd5-c3339d4afbfe">
     <value>تنسيق عنوان البريد الإلكتروني غير صحيح.</value>
   </data>
-  <data name="EmailRequired" xml:space="preserve">
+  <data name="EmailRequired" xml:space="preserve" id="4edbc74b-5aa7-43d9-9e82-e463c7312290">
     <value>عنوان البريد الإلكتروني مطلوب.</value>
   </data>
-  <data name="PasswordRequired" xml:space="preserve">
+  <data name="PasswordRequired" xml:space="preserve" id="528c8ea8-a39e-4923-976b-f0b8e3ecd40a">
     <value>كلمة المرور مطلوبة.</value>
   </data>
-  <data name="PasswordLength" xml:space="preserve">
+  <data name="PasswordLength" xml:space="preserve" id="fb0af952-9d9d-4726-8642-8a4f9abb9930">
     <value>يجب أن يكون طول {0} على الأقل {2} وعلى الأكثر {1} أحرف.</value>
   </data>
-  <data name="PasswordComplexity" xml:space="preserve">
+  <data name="PasswordComplexity" xml:space="preserve" id="5b7a13d7-008c-4c09-90ea-e490a71eea5a">
     <value>يجب أن تتكون كلمة المرور من 8 أحرف على الأقل وأن تحتوي على حرف كبير وحرف صغير ورقم وحرف خاص.</value>
   </data>
-  <data name="ConfirmPasswordRequired" xml:space="preserve">
+  <data name="ConfirmPasswordRequired" xml:space="preserve" id="b8d60d02-3f68-489a-b5cf-e8dccdf67a67">
     <value>تأكيد كلمة المرور مطلوب.</value>
   </data>
-  <data name="PasswordMismatch" xml:space="preserve">
+  <data name="PasswordMismatch" xml:space="preserve" id="99387f13-f541-4e8f-8c55-c115081d259b">
     <value>كلمة المرور وتأكيد كلمة المرور غير متطابقين.</value>
   </data>
-  <data name="UserNameRequired" xml:space="preserve">
+  <data name="UserNameRequired" xml:space="preserve" id="ecceb054-8c06-4edf-acf9-06611fc5e999">
     <value>اسم المستخدم مطلوب.</value>
   </data>
-  <data name="UserNameLength" xml:space="preserve">
+  <data name="UserNameLength" xml:space="preserve" id="2bb5a450-6d14-4ad1-b607-bad779d5afe2">
     <value>لا يمكن أن يتجاوز طول الاسم {1} أحرف.</value>
   </data>
-  <data name="RecoveryCodeRequired" xml:space="preserve">
+  <data name="RecoveryCodeRequired" xml:space="preserve" id="b7a29fea-0e50-41ff-bcb6-2feb80957b0d">
     <value>رمز الاسترداد مطلوب.</value>
   </data>
-  <data name="TenantRequired" xml:space="preserve">
+  <data name="TenantRequired" xml:space="preserve" id="23b1b5a3-28a4-444b-a796-6e0696e089fd">
     <value>المستأجر مطلوب.</value>
   </data>
-  <data name="TimeZoneRequired" xml:space="preserve">
+  <data name="TimeZoneRequired" xml:space="preserve" id="80f27898-739d-4028-b369-164a88cc9a96">
     <value>المنطقة الزمنية مطلوبة.</value>
   </data>
-  <data name="LanguageRequired" xml:space="preserve">
+  <data name="LanguageRequired" xml:space="preserve" id="5bf599bd-6028-4957-be8c-88a96d87b82e">
     <value>اللغة مطلوبة.</value>
   </data>
-  <data name="AgreeToTermsRequired" xml:space="preserve">
+  <data name="AgreeToTermsRequired" xml:space="preserve" id="e89b9a18-4d01-4ff0-be0c-ab8ad610a40a">
     <value>يجب الموافقة على الشروط.</value>
   </data>
-  <data name="MaxLengthExceeded" xml:space="preserve">
+  <data name="MaxLengthExceeded" xml:space="preserve" id="d95827da-a458-45db-8de2-31d012f04a5c">
     <value>يجب ألا يتجاوز {0} {1} أحرف.</value>
   </data>
-  <data name="PhoneNumberInvalid" xml:space="preserve">
+  <data name="PhoneNumberInvalid" xml:space="preserve" id="5613bc4e-e01a-4dbb-a2a1-e1dc9508cb97">
     <value>يرجى إدخال رقم هاتف صحيح.</value>
   </data>
-  <data name="NameRequired" xml:space="preserve">
+  <data name="NameRequired" xml:space="preserve" id="00728cc5-4288-47f8-bd4c-21417d186a02">
     <value>الاسم مطلوب.</value>
   </data>
-  <data name="NameLength" xml:space="preserve">
+  <data name="NameLength" xml:space="preserve" id="4357bccd-55b2-4679-b6e6-aeb995005fd5">
     <value>يجب أن يكون الاسم بين {2} و {1} أحرف.</value>
   </data>
-  <data name="TwoFactorCodeRequired" xml:space="preserve">
+  <data name="TwoFactorCodeRequired" xml:space="preserve" id="0827d9ac-8447-4b87-af52-c22bff77fcf2">
     <value>رمز المصادقة مطلوب.</value>
   </data>
-  <data name="TwoFactorCodeLength" xml:space="preserve">
+  <data name="TwoFactorCodeLength" xml:space="preserve" id="55c2486d-281a-4a0d-b61b-d3b64f9e9bee">
     <value>يجب أن يكون طول {0} على الأقل {2} وعلى الأكثر {1} أحرف.</value>
   </data>
-  <data name="TenantsAtLeastOne" xml:space="preserve">
+  <data name="TenantsAtLeastOne" xml:space="preserve" id="928948f4-7d04-46d2-a226-f4fbb6d2e067">
     <value>يرجى اختيار مستأجر واحد على الأقل.</value>
   </data>
-  <data name="UserNameStringLength" xml:space="preserve">
+  <data name="UserNameStringLength" xml:space="preserve" id="7c5dfc54-7769-4e04-8ec9-2c7cd3c1cd11">
     <value>يجب أن يكون اسم المستخدم بين {2} و {1} أحرف.</value>
   </data>
-  <data name="ProviderRequired" xml:space="preserve">
+  <data name="ProviderRequired" xml:space="preserve" id="ec38976a-230e-4eb1-9c57-bb8118051faf">
     <value>المزود مطلوب.</value>
   </data>
 </root>

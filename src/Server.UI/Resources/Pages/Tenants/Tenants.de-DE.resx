@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<root>
+<root><accessability>internal</accessability>
   <!-- 
         Microsoft ResX Schema 
         
@@ -60,45 +60,45 @@
                 : and then encoded with base64 encoding.
         -->
   <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root" xmlns="">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -121,58 +121,58 @@
             PublicKeyToken=b77a5c561934e089
         </value>
   </resheader>
-  <data name="Create a new Tenant" xml:space="preserve">
+  <data name="Create a new Tenant" xml:space="preserve" id="05361110-d6a9-4432-9c85-461085809515">
     <value>Erstellen Sie einen neuen Mandanten</value>
   </data>
-  <data name="Edit the Tenant" xml:space="preserve">
+  <data name="Edit the Tenant" xml:space="preserve" id="2317749c-3c43-4293-b022-48c5c9e4783e">
     <value>Bearbeiten Sie den Mieter</value>
   </data>
-  <data name="Multi-Tenant" xml:space="preserve">
+  <data name="Multi-Tenant" xml:space="preserve" id="0ec70230-1045-400d-8394-3461d8b5e206">
     <value>Multi-Tenant</value>
   </data>
-  <data name="Tenant" xml:space="preserve">
+  <data name="Tenant" xml:space="preserve" id="1002cc1e-a04c-41fc-93f4-aa289fd21da4">
     <value>Mieter</value>
   </data>
-  <data name="Tenant Id" xml:space="preserve">
+  <data name="Tenant Id" xml:space="preserve" id="8c3e9bec-6d87-4a9c-b36d-4d5f48b8f3ac">
     <value>Mieter-ID</value>
   </data>
-  <data name="Tenant id is required." xml:space="preserve">
+  <data name="Tenant id is required." xml:space="preserve" id="b6a7ccf1-93ca-4f87-9ed3-e299d750ebe4">
     <value>Mieterausweis erforderlich!</value>
   </data>
-  <data name="Tenant Name" xml:space="preserve">
+  <data name="Tenant Name" xml:space="preserve" id="00e41660-bbdf-49d2-a2f7-8eb0d455648b">
     <value>Name des Mieters</value>
   </data>
-  <data name="Tenant name is required." xml:space="preserve">
+  <data name="Tenant name is required." xml:space="preserve" id="a777088d-75a0-4780-963a-5af01e838c3a">
     <value>Name des Mieters ist erforderlich!</value>
   </data>
-  <data name="Tenants" xml:space="preserve">
+  <data name="Tenants" xml:space="preserve" id="78ced147-cc41-47b4-a2c3-a358348d1ac9">
     <value>Mieter</value>
   </data>
-  <data name="Description" xml:space="preserve">
+  <data name="Description" xml:space="preserve" id="6bbbdbf1-1d01-4564-bbe9-01559e3330d4">
     <value>Beschreibung</value>
   </data>
-  <data name="No available tenants" xml:space="preserve">
+  <data name="No available tenants" xml:space="preserve" id="b40fef07-67ac-4cd6-ac8c-68e350d24e0f">
     <value>Keine verfügbaren Mandanten</value>
   </data>
-  <data name="Auto-generated tenant id" xml:space="preserve">
+  <data name="Auto-generated tenant id" xml:space="preserve" id="af57749b-e936-438f-813a-3689b7e21e09">
     <value>Automatisch generierte Mandanten-ID</value>
   </data>
-  <data name="This identifier cannot be changed" xml:space="preserve">
+  <data name="This identifier cannot be changed" xml:space="preserve" id="767b0b88-e687-46de-983e-b10df7f6e125">
     <value>Dieser Bezeichner kann nicht geändert werden</value>
   </data>
-  <data name="Enter tenant name" xml:space="preserve">
+  <data name="Enter tenant name" xml:space="preserve" id="5410a8c8-ac3f-47ab-a460-919975978eef">
     <value>Bitte geben Sie den Mandantennamen ein</value>
   </data>
-  <data name="Enter tenant description" xml:space="preserve">
+  <data name="Enter tenant description" xml:space="preserve" id="175a6e39-9350-409b-9ca4-3edb0c7ad679">
     <value>Bitte geben Sie eine Mandantenbeschreibung ein</value>
   </data>
-  <data name="No Tenants Found" xml:space="preserve">
+  <data name="No Tenants Found" xml:space="preserve" id="ac2aed51-f0d4-44d6-8c6d-749a70bf0a4f">
     <value>Keine Mandanten gefunden</value>
   </data>
-  <data name="Try adjusting your search or filter to find what you're looking for." xml:space="preserve">
+  <data name="Try adjusting your search or filter to find what you're looking for." xml:space="preserve" id="9cb06952-cb90-4583-8cf0-16b81159d1b2">
     <value>Passen Sie Ihre Suche oder Filter an, um die gewünschten Ergebnisse zu finden.</value>
   </data>
-  <data name="Loading Tenants..." xml:space="preserve">
+  <data name="Loading Tenants..." xml:space="preserve" id="55210e02-3f14-43a7-8d43-058a1ed60472">
     <value>Mandanten werden geladen...</value>
   </data>
 </root>

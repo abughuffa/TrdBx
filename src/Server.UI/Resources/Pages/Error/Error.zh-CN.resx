@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<root>
+<root><accessability>internal</accessability>
     <!-- 
       Microsoft ResX Schema 
       
@@ -59,8 +59,7 @@
               : using a System.ComponentModel.TypeConverter
               : and then encoded with base64 encoding.
       -->
-    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root"
-                xmlns="">
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root" xmlns="">
         <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
         <xsd:element name="root" msdata:IsDataSet="true">
             <xsd:complexType>
@@ -122,16 +121,16 @@
             PublicKeyToken=b77a5c561934e089
         </value>
     </resheader>
-    <data name="Server Error" xml:space="preserve">
+    <data name="Server Error" xml:space="preserve" id="febe287a-1447-4d53-886e-15c11363d2f7">
         <value>服务器错误</value>
     </data>
-    <data name="An unexpected error occurred. Please try again later." xml:space="preserve">
+    <data name="An unexpected error occurred. Please try again later." xml:space="preserve" id="d28a7b66-36d9-4146-bfcc-33da15dde4da">
         <value>发生了意外错误。请稍后重试。</value>
     </data>
-    <data name="Return Home" xml:space="preserve">
+    <data name="Return Home" xml:space="preserve" id="d0e39a29-cebf-4741-b44c-97b76ecdf46b">
         <value>返回首页</value>
     </data>
-    <data name="Try Again" xml:space="preserve">
+    <data name="Try Again" xml:space="preserve" id="1a56a8ed-6656-4a25-922c-4cd9ec21d579">
         <value>重试</value>
     </data>
-</root> 
+</root>

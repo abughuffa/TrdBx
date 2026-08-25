@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<root>
+<root><accessability>internal</accessability>
   <!-- 
     Microsoft ResX Schema 
     
@@ -60,45 +60,45 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -117,73 +117,73 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="EmailInvalid" xml:space="preserve">
+  <data name="EmailInvalid" xml:space="preserve" id="56b1b401-8ecb-49f2-94e0-70e2585e9cc8">
     <value>邮箱格式不正确</value>
   </data>
-  <data name="EmailRequired" xml:space="preserve">
+  <data name="EmailRequired" xml:space="preserve" id="dd047a16-1f81-4572-b41d-4797dcd42d97">
     <value>请输入邮箱地址</value>
   </data>
-  <data name="PasswordRequired" xml:space="preserve">
+  <data name="PasswordRequired" xml:space="preserve" id="3925297f-3187-4c5e-a62b-0b78fc0a24e2">
     <value>请输入密码。</value>
   </data>
-  <data name="PasswordLength" xml:space="preserve">
+  <data name="PasswordLength" xml:space="preserve" id="a3bd44a6-f41d-4807-bc48-a95f7040f057">
     <value>{0} 的长度必须在 {2} 到 {1} 个字符之间。</value>
   </data>
-  <data name="PasswordComplexity" xml:space="preserve">
+  <data name="PasswordComplexity" xml:space="preserve" id="8520f251-0afa-4e89-a118-96d760f7665e">
     <value>密码至少 8 位，并且必须包含：大写字母、小写字母、数字和特殊字符。</value>
   </data>
-  <data name="ConfirmPasswordRequired" xml:space="preserve">
+  <data name="ConfirmPasswordRequired" xml:space="preserve" id="9e5486a6-a97e-4a4c-b3ee-54322061408c">
     <value>请再次输入密码（确认密码）</value>
   </data>
-  <data name="PasswordMismatch" xml:space="preserve">
+  <data name="PasswordMismatch" xml:space="preserve" id="1b273e8c-440f-41d9-942e-fa558ae3048a">
     <value>两次输入的密码不一致。</value>
   </data>
-  <data name="UserNameRequired" xml:space="preserve">
+  <data name="UserNameRequired" xml:space="preserve" id="51d6d687-9be4-476a-92c7-bf9bacc62e84">
     <value>请输入用户名。</value>
   </data>
-  <data name="UserNameLength" xml:space="preserve">
+  <data name="UserNameLength" xml:space="preserve" id="64f66394-ca33-495b-8880-9ade8ecc5e3d">
     <value>名称长度不能超过 {1} 个字符。</value>
   </data>
-  <data name="RecoveryCodeRequired" xml:space="preserve">
+  <data name="RecoveryCodeRequired" xml:space="preserve" id="1883ec15-8c39-4eef-881f-e091598e1a6c">
     <value>请输入恢复码。</value>
   </data>
-  <data name="TenantRequired" xml:space="preserve">
+  <data name="TenantRequired" xml:space="preserve" id="37546c86-98a1-47c2-9e2d-696550d42dcf">
     <value>请选择租户。</value>
   </data>
-  <data name="TimeZoneRequired" xml:space="preserve">
+  <data name="TimeZoneRequired" xml:space="preserve" id="3e0834fa-f729-42fa-aeb8-3354f3b2ad25">
     <value>请选择时区。</value>
   </data>
-  <data name="LanguageRequired" xml:space="preserve">
+  <data name="LanguageRequired" xml:space="preserve" id="f5129a7c-58c9-4979-90a5-6780c4be6bc7">
     <value>请选择语言。</value>
   </data>
-  <data name="AgreeToTermsRequired" xml:space="preserve">
+  <data name="AgreeToTermsRequired" xml:space="preserve" id="71c27daf-4614-4b0f-93ad-8dc581a6fbf0">
     <value>您必须同意服务条款。</value>
   </data>
-  <data name="MaxLengthExceeded" xml:space="preserve">
+  <data name="MaxLengthExceeded" xml:space="preserve" id="72d7ba9a-8a04-4eaf-ba3d-aceeea9665d9">
     <value>{0} 不能超过 {1} 个字符。</value>
   </data>
-  <data name="PhoneNumberInvalid" xml:space="preserve">
+  <data name="PhoneNumberInvalid" xml:space="preserve" id="f252911c-02e3-4057-9203-28db4661a0b7">
     <value>请输入有效的电话号码。</value>
   </data>
-  <data name="NameRequired" xml:space="preserve">
+  <data name="NameRequired" xml:space="preserve" id="b612f6ff-ff6b-4c15-be69-81aae0fabe1c">
     <value>名称不能为空。</value>
   </data>
-  <data name="NameLength" xml:space="preserve">
+  <data name="NameLength" xml:space="preserve" id="b568b844-e9bb-4f0a-816e-366e4c97d4ce">
     <value>名称长度必须在 {2} 到 {1} 个字符之间。</value>
   </data>
-  <data name="TwoFactorCodeRequired" xml:space="preserve">
+  <data name="TwoFactorCodeRequired" xml:space="preserve" id="226f2b9c-7583-4381-933c-95c008dec1f3">
     <value>请输入验证码。</value>
   </data>
-  <data name="TwoFactorCodeLength" xml:space="preserve">
+  <data name="TwoFactorCodeLength" xml:space="preserve" id="69000012-d6d6-4d7e-876c-c6e4df95a1f8">
     <value>{0} 的长度必须在 {2} 到 {1} 个字符之间。</value>
   </data>
-  <data name="TenantsAtLeastOne" xml:space="preserve">
+  <data name="TenantsAtLeastOne" xml:space="preserve" id="471de4a3-5496-4010-8852-1189595be8ff">
     <value>请至少选择一个租户。</value>
   </data>
-  <data name="UserNameStringLength" xml:space="preserve">
+  <data name="UserNameStringLength" xml:space="preserve" id="e96931b9-eec7-40eb-bd3b-86f0745dcfb2">
     <value>用户名长度必须在 {2} 到 {1} 个字符之间。</value>
   </data>
-  <data name="ProviderRequired" xml:space="preserve">
+  <data name="ProviderRequired" xml:space="preserve" id="38e20b23-9fae-4c6a-9c49-8d2d0dd6abf5">
     <value>登录方式不能为空。</value>
   </data>
 </root>

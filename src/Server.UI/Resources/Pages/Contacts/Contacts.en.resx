@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<root>
+<root><accessability>internal</accessability>
   <!-- 
     Microsoft ResX Schema 
     
@@ -60,45 +60,45 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -117,76 +117,76 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Contact" xml:space="preserve">
+  <data name="Contact" xml:space="preserve" id="47159e33-020b-4450-983a-ee07f72cfbc3">
     <value>Contact</value>
   </data>
-  <data name="Contacts" xml:space="preserve">
+  <data name="Contacts" xml:space="preserve" id="da0b4ecb-7ac0-47d4-a746-8ba831bb8843">
     <value>Contacts</value>
   </data>
-  <data name="Home" xml:space="preserve">
+  <data name="Home" xml:space="preserve" id="3f3e7f3a-d88c-4c6a-a343-0c99e8c00670">
     <value>Home</value>
   </data>
-  <data name="List View" xml:space="preserve">
+  <data name="List View" xml:space="preserve" id="32decad9-2856-474d-a691-9087a002b6d9">
     <value>List View</value>
   </data>
-  <data name="New Contact" xml:space="preserve">
+  <data name="New Contact" xml:space="preserve" id="05f3ec68-6861-45dd-8fde-bf39aa9cbf05">
     <value>New Contact</value>
   </data>
-  <data name="Clone Contact" xml:space="preserve">
+  <data name="Clone Contact" xml:space="preserve" id="51f3f88b-7003-4bf1-83e9-9a40f6239564">
     <value>Clone Contact</value>
   </data>
-  <data name="Edit Contact" xml:space="preserve">
+  <data name="Edit Contact" xml:space="preserve" id="5ac1fcad-50f8-4de7-a91f-c3f41d5f8374">
     <value>Edit Contact</value>
   </data>
-  <data name="Create Contact" xml:space="preserve">
+  <data name="Create Contact" xml:space="preserve" id="a4ccea89-1102-4544-8ec6-e19a3a6564e7">
     <value>Create Contact</value>
   </data>
-  <data name="name is required." xml:space="preserve">
+  <data name="name is required." xml:space="preserve" id="e0dca0b6-39cf-4e98-b399-2d031e7c1f66">
     <value>name is required.</value>
   </data>
-  <data name="email is required." xml:space="preserve">
+  <data name="email is required." xml:space="preserve" id="0a73399e-6edc-44d4-aaa4-ceae077d4dc0">
     <value>email is required.</value>
   </data>
-  <data name="phone number is required." xml:space="preserve">
+  <data name="phone number is required." xml:space="preserve" id="7a92f002-4b7e-4f25-8fb6-5eb181b356ef">
     <value>phone number is required.</value>
   </data>
-  <data name="country is required." xml:space="preserve">
+  <data name="country is required." xml:space="preserve" id="95a7be2d-b56a-40ba-a197-f39524ed65e5">
     <value>country is required.</value>
   </data>
-  <data name="Id" xml:space="preserve">
+  <data name="Id" xml:space="preserve" id="72db12ce-3a6e-4ef8-b815-f5af3a21a77d">
     <value>Id</value>
   </data>
-  <data name="Name" xml:space="preserve">
+  <data name="Name" xml:space="preserve" id="2061a699-6a1d-49b0-883e-3fc0ea5e42bf">
     <value>Name</value>
   </data>
-  <data name="Description" xml:space="preserve">
+  <data name="Description" xml:space="preserve" id="2e18f1dd-e90b-45fe-aab8-8d11118152af">
     <value>Description</value>
   </data>
-  <data name="Email" xml:space="preserve">
+  <data name="Email" xml:space="preserve" id="3879fb3a-cf31-4e51-ba39-63bdc96fa6f0">
     <value>Email</value>
   </data>
-  <data name="Phone number" xml:space="preserve">
+  <data name="Phone number" xml:space="preserve" id="9643ec12-405c-402a-864e-fb68b9876458">
     <value>Phone number</value>
   </data>
-  <data name="Country" xml:space="preserve">
+  <data name="Country" xml:space="preserve" id="d8ff087e-dc85-4ab0-bf6f-9492304f9afa">
     <value>Country</value>
   </data>
-  <data name="Enter contact name" xml:space="preserve">
+  <data name="Enter contact name" xml:space="preserve" id="94e7baec-9fcd-45e5-a0ff-e6b1fe126497">
     <value>Enter contact name</value>
   </data>
-  <data name="Enter description" xml:space="preserve">
+  <data name="Enter description" xml:space="preserve" id="bb12262b-2cd6-4de5-ab9d-81ac11a7c185">
     <value>Enter description</value>
   </data>
-  <data name="Enter email address" xml:space="preserve">
+  <data name="Enter email address" xml:space="preserve" id="f5ced225-e93c-499e-85ed-c55f4c55a0b3">
     <value>Enter email address</value>
   </data>
-  <data name="Enter phone number" xml:space="preserve">
+  <data name="Enter phone number" xml:space="preserve" id="57fe9d42-83b6-4f30-bf93-332a693ac1fc">
     <value>Enter phone number</value>
   </data>
-  <data name="Enter country" xml:space="preserve">
+  <data name="Enter country" xml:space="preserve" id="1245fb5d-b7a3-4989-ad0d-196ef98db6e8">
     <value>Enter country</value>
   </data>
-  <data name="Last Modified By" xml:space="preserve">
+  <data name="Last Modified By" xml:space="preserve" id="b0047cfe-d0a4-4a03-910a-db8b74a25972">
     <value>Last Modified By</value>
   </data>
 </root>

@@ -1,45 +1,45 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<root>
+<root><accessability>internal</accessability>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -58,34 +58,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Dashboard" xml:space="preserve">
+  <data name="Dashboard" xml:space="preserve" id="294ab4b7-f191-42ac-9471-b38adb91a54f">
     <value>Dashboard</value>
   </data>
-  <data name="Total Requests" xml:space="preserve">
+  <data name="Total Requests" xml:space="preserve" id="b1925c4d-fc28-421d-802d-db4e5b7105c2">
     <value>Total Requests</value>
   </data>
-  <data name="Avg. CPU Load" xml:space="preserve">
+  <data name="Avg. CPU Load" xml:space="preserve" id="6f0b6125-097c-407b-88df-ed9eddf74169">
     <value>Avg. CPU Load</value>
   </data>
-  <data name="Storage Usage" xml:space="preserve">
+  <data name="Storage Usage" xml:space="preserve" id="c84ee970-ab65-47da-ac19-cf60483871c7">
     <value>Storage Usage</value>
   </data>
-  <data name="Core Telemetry" xml:space="preserve">
+  <data name="Core Telemetry" xml:space="preserve" id="4e764443-0779-4539-8aae-65315f0e927e">
     <value>Core Telemetry</value>
   </data>
-  <data name="Nr" xml:space="preserve">
+  <data name="Nr" xml:space="preserve" id="93a5c3d9-3dca-4979-bec6-63d5dfe2ed7a">
     <value>Nr</value>
   </data>
-  <data name="Sign" xml:space="preserve">
+  <data name="Sign" xml:space="preserve" id="d7a62d0f-9fb7-4502-9a5a-e9b58dd2ab57">
     <value>Sign</value>
   </data>
-  <data name="Name" xml:space="preserve">
+  <data name="Name" xml:space="preserve" id="8f652887-26f1-4905-bad4-c069e65bf8ce">
     <value>Name</value>
   </data>
-  <data name="Position" xml:space="preserve">
+  <data name="Position" xml:space="preserve" id="ebde5d9e-0e6a-4a77-acd1-2f7625e5e739">
     <value>Position</value>
   </data>
-  <data name="Molar mass" xml:space="preserve">
+  <data name="Molar mass" xml:space="preserve" id="e861f9a0-bb63-4858-81cd-bd1007d2bc0f">
     <value>Molar mass</value>
   </data>
 </root>

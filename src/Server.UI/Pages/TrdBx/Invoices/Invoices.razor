@@ -14,6 +14,7 @@
 @using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Invoices.Components
 
 @inject IStringLocalizer<Invoices> L
+
 @inject BlazorDownloadFileService BlazorDownloadFileService
 
 @attribute [Authorize(Policy = Permissions.Invoices.View)]
@@ -127,7 +128,9 @@
         <PropertyColumn Property="x => x.DueDate" Title="@L[_currentDto.GetMemberDisplayName(x=>x.DueDate)]" />
         <PropertyColumn Property="x => x.DisplayCusName" Title="@L[_currentDto.GetMemberDisplayName(x => x.DisplayCusName)]" />
         <PropertyColumn Property="x => x.Description" Title="@L[_currentDto.GetMemberDisplayName(x=>x.Description)]" />
-        <PropertyColumn Property="x => x.GrandTotal" Title="@L[_currentDto.GetMemberDisplayName(x=>x.GrandTotal)]" />
+        <PropertyColumn Property="x => x.GrandTotal" Format="0.000" Title="@L[_currentDto.GetMemberDisplayName(x=>x.GrandTotal)]">
+
+        </PropertyColumn>
     </Columns>
     <NoRecordsContent>
         <MudText>@AppStrings.NoRecords</MudText>
