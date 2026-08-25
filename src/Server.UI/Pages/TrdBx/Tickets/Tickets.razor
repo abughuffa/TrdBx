@@ -136,7 +136,7 @@
                              EndIcon="@Icons.Material.Filled.KeyboardArrowDown" IconColor="Color.Info" AnchorOrigin="Origin.CenterLeft">
 
                        
-                        @if (_accessRights.Approve)
+                        @if (_accessRights.Accept)
                         {
                             <MudMenuItem Disabled="!(context.Item.TicketStatus == TicketStatus.Opened)" OnClick="@(() => OnAccept(context.Item))">"@L["Approve"]"</MudMenuItem>
                         }

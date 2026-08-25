@@ -25,8 +25,8 @@ public static partial class Permissions
 
 
 
-        [Description("Allows Approve Ticket record.")]
-        public const string Approve = "Permissions.Tickets.Approve";
+        [Description("Allows Accept Ticket record.")]
+        public const string Accept = "Permissions.Tickets.Accept";
 
 
 
@@ -50,7 +50,7 @@ public class TicketsAccessRights
 
 
     
-    public bool Approve { get; set; }
+    public bool Accept { get; set; }
     public bool Reject { get; set; }
     public bool UnReject { get; set; }
     public bool Execute { get; set; }

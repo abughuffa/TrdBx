@@ -1,16 +1,14 @@
 ﻿@page "/pages/TrdBx/SimCards"
-
-@using CleanArchitecture.Blazor.Application.Features.SimCards.Commands.SetUsed
+@using CleanArchitecture.Blazor.Application.Features.SimCards.DTOs
 @using CleanArchitecture.Blazor.Application.Features.SimCards.Caching
 @using CleanArchitecture.Blazor.Application.Features.SimCards.Commands.Create
 @using CleanArchitecture.Blazor.Application.Features.SimCards.Commands.Delete
 @using CleanArchitecture.Blazor.Application.Features.SimCards.Commands.Import
 @using CleanArchitecture.Blazor.Application.Features.SimCards.Commands.Update
-@using CleanArchitecture.Blazor.Application.Features.SimCards.DTOs
+@using CleanArchitecture.Blazor.Application.Features.SimCards.Commands.SetUsed
 @using CleanArchitecture.Blazor.Application.Features.SimCards.Queries.Export
 @using CleanArchitecture.Blazor.Application.Features.SimCards.Queries.Pagination
 @using CleanArchitecture.Blazor.Application.Features.SimCards.Specifications
-
 @using CleanArchitecture.Blazor.Domain.Enums
 @using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.SimCards.Components
 
@@ -91,12 +89,11 @@
                     </MudMenu>
                 </MudToolBar>
                 <MudStack Row Spacing="1">
-@*                     @if (_accessRights.Search)
-                    { *@
+
                         <MudTextField T="string" ValueChanged="@(s => OnSearch(s))" Value="@Query.Keyword" Placeholder="@AppStrings.Search" Adornment="Adornment.End"
                                       AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Small">
                         </MudTextField>
-                    @* } *@
+
                 </MudStack>
             </MudStack>
         </MudStack>

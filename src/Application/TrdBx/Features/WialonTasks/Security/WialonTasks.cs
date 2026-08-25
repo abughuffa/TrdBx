@@ -21,8 +21,7 @@ public class WialonTasksAccessRights
     public bool View { get; set; }
 
     public bool Delete { get; set; }
-    // public bool Search { get; set; }
-    // public bool MarkAsCompleted { get; set; }
+
     public bool Execute { get; set; }
 }
 

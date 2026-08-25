@@ -14,6 +14,7 @@ public static class DependencyInjection
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.AddSingleton(_ => MapsterConfiguration.Create());
+        //services.AddSingleton(_ => MapsterConfiguration.CreateTrdBx());
         services.AddScoped<IObjectMapper, MapsterObjectMapper>();
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddMediator(options =>

@@ -28,11 +28,9 @@ public static partial class Permissions
 }
 public class TrackingUnitModelsAccessRights
 {
-   // public bool View { get; set; }
     public bool Create { get; set; }
     public bool Edit { get; set; }
     public bool Delete { get; set; }
-   // public bool Search { get; set; }
     public bool Export { get; set; }
     public bool Import { get; set; }
 }

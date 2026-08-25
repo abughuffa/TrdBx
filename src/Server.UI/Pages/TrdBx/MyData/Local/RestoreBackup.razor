@@ -138,6 +138,7 @@
             result.Match(
             async data =>
             {
+               backups = data;
                StateHasChanged();  
             },
             errors =>

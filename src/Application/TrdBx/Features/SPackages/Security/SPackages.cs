@@ -18,9 +18,6 @@ public static partial class Permissions
         [Description("Allows deleting SPackage records.")]
         public const string Delete = "Permissions.SPackages.Delete";
 
-        // [Description("Allows searching for SPackage records.")]
-        // public const string Search = "Permissions.SPackages.Search";
-
         [Description("Allows exporting SPackage records.")]
         public const string Export = "Permissions.SPackages.Export";
 

@@ -1,17 +1,28 @@
-﻿
-using CleanArchitecture.Blazor.Application.Common.Constants;
+﻿using CleanArchitecture.Blazor.Application.Common.Constants;
 using CleanArchitecture.Blazor.Server.UI.Models.NavigationMenu;
+
 namespace CleanArchitecture.Blazor.Server.UI.Services.Navigation;
 
-internal static class TrdBxMenu
+public class MenuService : IMenuService
 {
-
-    public readonly static MenuSectionModel TrdBxMenuSection =
-    new MenuSectionModel
+    private readonly List<MenuSectionModel> _features = new()
     {
-        Title = "TrdBx",
-        SectionItems = new List<MenuSectionItemModel>
+
+
+        new MenuSectionModel
+        {
+            Title = "Application",
+            SectionItems = new List<MenuSectionItemModel>
             {
+                new() { Title = "Home", Icon = Icons.Material.Filled.Home, Href = "/" },
+                new()
+                {
+                    Title = "Chatbot",
+                    Roles = new[] { Roles.Admin, Roles.Users },
+                    Icon = Icons.Material.Filled.ChatBubble,
+                    Href ="/ai/chatbot",
+                    PageStatus = PageStatus.Completed
+                },
                 new ()
                 {
                     Title = "Basic Objects",
@@ -51,7 +62,6 @@ internal static class TrdBxMenu
                 {
                     Title = "Services & Invoices",
                     Icon = Icons.Material.Filled.Analytics,
-
                     PageStatus = PageStatus.Completed,
                     IsParent = true,
                     MenuItems = new List<MenuSectionSubItemModel>
@@ -74,7 +84,7 @@ internal static class TrdBxMenu
                             Href = "/pages/TrdBx/Invoices",
                             PageStatus = PageStatus.Completed
                         },
-                         new ()
+                        new ()
                         {
                             Title = "Services's Prices",
                             Roles = new[] { Roles.Admin },
@@ -95,7 +105,7 @@ internal static class TrdBxMenu
                         {
                             Title = "My Data",
                             Roles = new[] { Roles.Admin },
-                            Href = "/pages/TrdBx/MyData/Local",
+                            Href = "/pages/TrdBx/MyData/Local/TrdBxData",
                             PageStatus = PageStatus.Completed
                         },
                         new()
@@ -121,7 +131,7 @@ internal static class TrdBxMenu
                     IsParent = true,
                     MenuItems = new List<MenuSectionSubItemModel>
                     {
-                     new()
+                        new()
                         {
                             Title = "Wialon Server Test",
                             Href = "/wialon/session-manager",
@@ -138,8 +148,7 @@ internal static class TrdBxMenu
                             Title = "Libyana Sim Cards",
                             Href = "/pages/TrdBx/MyData/Online/LibyanaSimCards",
                             PageStatus = PageStatus.Completed
-                        }
-                        ,
+                        },
                         new()
                         {
                            Title = "Data Matches",
@@ -152,7 +161,6 @@ internal static class TrdBxMenu
                             Href =  "/pages/TrdBx/MyData/Online/DataDiagnosises",
                             PageStatus = PageStatus.Completed
                         }
-
                     }
                 },
                 new()
@@ -173,6 +181,96 @@ internal static class TrdBxMenu
                     }
                 }
             }
+               
+        },
+        new MenuSectionModel
+        {
+            Title = "MANAGEMENT",
+            Roles = new[] { Roles.Admin },
+            SectionItems = new List<MenuSectionItemModel>
+            {
+                new()
+                {
+                    IsParent = true,
+                    Title = "Authorization",
+                    Icon = Icons.Material.Filled.ManageAccounts,
+                    MenuItems = new List<MenuSectionSubItemModel>
+                    {
+                        new()
+                        {
+                            Title = "Multi-Tenant",
+                            Href = "/system/tenants",
+                            PageStatus = PageStatus.Completed
+                        },
+                        new()
+                        {
+                            Title = "Users",
+                            Href = "/identity/users",
+                            PageStatus = PageStatus.Completed
+                        },
+                        new()
+                        {
+                            Title = "Roles",
+                            Href = "/identity/roles",
+                            PageStatus = PageStatus.Completed
+                        },
+                        new()
+                        {
+                            Title = "Profile",
+                            Href = "/user/profile",
+                            PageStatus = PageStatus.Completed
+                        },
+                        new()
+                        {
+                            Title = "Login History",
+                            Href = "/pages/identity/loginaudits",
+                            PageStatus = PageStatus.Completed
+                        },
+                    }
+                },
+                new()
+                {
+                    IsParent = true,
+                    Title = "System",
+                    Icon = Icons.Material.Filled.Devices,
+                    MenuItems = new List<MenuSectionSubItemModel>
+                    {
+                        new()
+                        {
+                            Title = "Picklist",
+                            Href = "/system/picklistset",
+                            PageStatus = PageStatus.Completed
+                        },
+                        new()
+                        {
+                            Title = "Audit Trails",
+                            Href = "/system/audittrails",
+                            PageStatus = PageStatus.Completed
+                        },
+                        new()
+                        {
+                            Title = "Email Templates",
+                            Href = "/pages/system/email-templates",
+                            PageStatus = PageStatus.Completed
+                        },
+                        new()
+                        {
+                            Title = "Logs",
+                            Href = "/system/logs",
+                            PageStatus = PageStatus.Completed
+                        },
+                        new()
+                        {
+                            Title = "Jobs",
+                            Href = "/jobs",
+                            PageStatus = PageStatus.Completed,
+                            Target = "_blank"
+                        }
+                    }
+                }
+            }
+        }
     };
 
+    public IEnumerable<MenuSectionModel> Features => _features;
 }
