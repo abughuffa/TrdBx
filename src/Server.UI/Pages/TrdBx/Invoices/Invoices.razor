@@ -15,7 +15,8 @@
 
 @inject IStringLocalizer<Invoices> L
 
-@inject BlazorDownloadFileService BlazorDownloadFileService
+
+@inject BlazorDownloadFileService _downloadFileService
 
 @attribute [Authorize(Policy = Permissions.Invoices.View)]
 
@@ -309,7 +310,7 @@
             await result.MatchAsync(
             async data =>
             {
-                await BlazorDownloadFileService.DownloadFileAsync($"{L["Invoices"]}.xlsx", data, contentType:"application/octet-stream");
+                await _downloadFileService.DownloadFileAsync($"{L["Invoices"]}.xlsx", data, "application/octet-stream");
                 Snackbar.Add($"{AppStrings.ExportSuccess}", MudBlazor.Severity.Info);
             },
             errors =>
@@ -411,7 +412,26 @@
     private async Task OnDownLoad(InvoiceDto dto)
     {
 
-          try
+        try
+		{
+			_downloading = true;
+			var file = await Mediator.Send(new DownloadInvoiceByIdQuery(dto.Id));
+			if (file.Succeeded != null)
+			{
+				await _downloadFileService.DownloadFileAsync(dto.InvoiceNo, file.Data, "application/octet-stream");
+			}
+		}
+		catch (Exception ex)
+		{
+			Snackbar.Add(ex.Message, Severity.Error);
+		}
+		finally
+		{
+			_downloading = false;
+		}
+
+
+          @* try
         {
             _downloading = true;
             var result = await Mediator.Send(new DownloadInvoiceByIdQuery(dto.Id));
@@ -428,7 +448,7 @@
         finally
         {
             _downloading = false;
-        }
+        } *@
 
     }
 

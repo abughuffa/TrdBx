@@ -66,7 +66,7 @@ public class RecoverTrackingUnitCommandHandler : SubscriptionSharedLogic, IReque
             serviceLog.WialonTasks.Add(new WialonTask()
             {
                 TrackingUnitId = unit.Id,
-                APITask = APITask.RemoveFromWialon,
+                WialonAPIAction = WialonAPIAction.RemoveFromWialon,
                 Description = string.Format("حذف الوحدة ({0}) من منصة ويلون.", unit.SNo),
                 ExcDate = request.TsDate,
                 IsExecuted = false,

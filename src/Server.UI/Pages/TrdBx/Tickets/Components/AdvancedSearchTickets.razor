@@ -10,14 +10,28 @@
                    Class="mud-elevation-25 pa-2 mb-3" Text="@AppStrings.AdvancedSearch">
     <MudGrid>
         <MudItem md="6">
-            <MudEnumSelect Style="min-width:120px"
+            <MudSelect Style="min-width:120px"
+                Placeholder="@L["Filter By Service"]"
+                T="ServiceTask?"
+                Clearable="true"
+                Value="@TRequest.ServiceTask"
+                ValueChanged="OnServiceTaskChanged"
+                Dense="true">
+                @foreach (var task in GetFilteredServiceTasks())
+                {
+                    <MudSelectItem Value="task">
+                        @task.ToString()  <!-- Or use a display name if needed -->
+                    </MudSelectItem>
+                }
+            </MudSelect>
+            @* <MudEnumSelect Style="min-width:120px"
                            Placeholder="@L["Filter By Service"]"
                            TEnum="ServiceTask?"
                            Clearable="true"
                            Value="@TRequest.ServiceTask"
                            ValueChanged="OnServiceTaskChanged"
                            Dense="true">
-            </MudEnumSelect>
+            </MudEnumSelect> *@
         </MudItem>
 
         <MudItem md="6">
@@ -37,6 +51,24 @@
     [EditorRequired][Parameter] public TicketsWithPaginationQuery TRequest { get; set; } = null!;
     [EditorRequired][Parameter] public EventCallback<string> OnConditionChanged { get; set; }
     private bool _advancedSearchExpanded;
+
+    
+   private IEnumerable<ServiceTask?> GetFilteredServiceTasks()
+    {
+        // Define which enum values to exclude
+        var excluded = new HashSet<ServiceTask> { 
+            ServiceTask.TrdbxDataUpload,
+            ServiceTask.StatusUpdate
+        };
+
+        // Return all enum values except the excluded ones
+        return Enum.GetValues(typeof(ServiceTask))
+                   .Cast<ServiceTask>()
+                   .Where(x => !excluded.Contains(x))
+                   .Select(x => (ServiceTask?)x)
+                   .ToList(); // Materialize to avoid re-evaluation on each render
+    }
+
     private async Task FilterChanged(string str)
     {
         if (_advancedSearchExpanded)
@@ -56,4 +88,7 @@
         TRequest.TicketStatus = ticketStatus;
         await FilterChanged(ticketStatus.ToString());
     }
+
+
 }
+

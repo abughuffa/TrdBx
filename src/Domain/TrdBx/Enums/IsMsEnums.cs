@@ -71,51 +71,58 @@ public enum TicketStatus
     [Display(Name = "Closed")] Closed = 7
 }
 
-public enum TicketTask
-{
-    [Display(Name = "Check")] Check = 10, //just created invoice
+// public enum TicketTask
+// {
+//     [Display(Name = "Check")] Check = 10, //just created invoice
 
-    [Display(Name = "Support")] Support_Recover = 20, //invoice in tax process
-    [Display(Name = "Support")] Support_ReInstall = 21, //invoice in tax process
-    [Display(Name = "Support")] Support_Transfer = 22, //invoice in tax process
-    [Display(Name = "Support")] Support_Replace = 23, //invoice in tax process
+//     [Display(Name = "Support")] Support_Recover = 20, //invoice in tax process
+//     [Display(Name = "Support")] Support_ReInstall = 21, //invoice in tax process
+//     [Display(Name = "Support")] Support_Transfer = 22, //invoice in tax process
+//     [Display(Name = "Support")] Support_Replace = 23, //invoice in tax process
 
-    [Display(Name = "Support")] Support_InstallSimCard = 24, //invoice in tax process
-    [Display(Name = "Support")] Support_RecoverSimCard = 25, //invoice in tax process
-    [Display(Name = "Support")] Support_ReplacSimCard = 26, //invoice in tax process
+//     [Display(Name = "Support")] Support_InstallSimCard = 24, //invoice in tax process
+//     [Display(Name = "Support")] Support_RecoverSimCard = 25, //invoice in tax process
+//     [Display(Name = "Support")] Support_ReplacSimCard = 26, //invoice in tax process
 
-    [Display(Name = "Install")] Install_New = 31, //invoice retrived from taxes
-    [Display(Name = "Install")] ReInstall_Used = 32, //invoice retrived from taxes
+//     [Display(Name = "Install")] Install_New = 31, //invoice retrived from taxes
+//     [Display(Name = "Install")] ReInstall_Used = 32, //invoice retrived from taxes
 
-    [Display(Name = "Renew")] Renew_RenewUnitSub = 41, //invoice sent to customer
+//     [Display(Name = "Renew")] Renew_RenewUnitSub = 41, //invoice sent to customer
 
-    [Display(Name = "Subscription")] Subscription_ActivateUnit = 51, //invoice paid
-    [Display(Name = "Subscription")] Subscription_ActivateUnitForGprs = 52, //invoice paid
-    [Display(Name = "Subscription")] Subscription_ActivateUnitForHosting = 53, //invoice paid
-    [Display(Name = "Subscription")] Subscription_DeactivateUnit = 54, //invoice paid
+//     [Display(Name = "Subscription")] Subscription_ActivateUnit = 51, //invoice paid
+//     [Display(Name = "Subscription")] Subscription_ActivateUnitForGprs = 52, //invoice paid
+//     [Display(Name = "Subscription")] Subscription_ActivateUnitForHosting = 53, //invoice paid
+//     [Display(Name = "Subscription")] Subscription_DeactivateUnit = 54, //invoice paid
 
-}
+// }
 
 public enum ServiceTask
 {
     [Display(Name = "Check")] Check = 1,
+
     [Display(Name = "Install New unit")] Install = 2,
     [Display(Name = "ReInstall Used unit")] ReInstall = 3,
     [Display(Name = "Recover Installed unit")] Recover = 4,
     [Display(Name = "Transfer Installed unit")] Transfer = 5,
     [Display(Name = "Replace Installed unit")] Replace = 6,
+
     [Display(Name = "Install SimCard card")] InstallSimCard = 7,
     [Display(Name = "Recover SimCard card")] RecoverSimCard = 8,
     [Display(Name = "Replace SimCard card")] ReplacSimCard = 9,
+
     [Display(Name = "Activate unit's Subscription")] ActivateUnit = 10,
     [Display(Name = "Activate unit's Subscription for GPRS")] ActivateUnitForGprs = 11,
     [Display(Name = "Activate unit's Subscription FOR Hosting")] ActivateUnitForHosting = 12,
     [Display(Name = "Deactivate unit's Subscription")] DeactivateUnit = 13,
+
     [Display(Name = "Renew unit's Subscription")] RenewUnitSub = 14,
+    
     [Display(Name = "UploadedData from TrdBx")] TrdbxDataUpload = 15,
     [Display(Name = "Status Update")] StatusUpdate = 16
 }
-public enum APITask
+
+
+public enum WialonAPIAction
 {
     [Display(Name = "Check on Wialon")] CheckOnWialon = 0,
     [Display(Name = "Add To Wialon")] AddToWialon = 1,

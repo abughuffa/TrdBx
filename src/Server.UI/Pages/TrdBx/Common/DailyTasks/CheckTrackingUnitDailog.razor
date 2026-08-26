@@ -53,7 +53,7 @@
     [CascadingParameter] private UserProfile? UserProfile { get; set; }
     [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;  
     [EditorRequired][Parameter] public CheckTrackingUnitCommand _model { get; set; } = default!;
-    [Parameter] public string? _contentText { get; set; } = default!;
+   [Parameter] public string? _contentText { get; set; } = default!;
     
     private MudForm? _form;
     private bool _submitting = false;

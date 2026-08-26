@@ -6,10 +6,11 @@ using CleanArchitecture.Blazor.Application.Common.PublishStrategies;
 using CleanArchitecture.Blazor.Application.Pipeline;
 using Microsoft.Extensions.DependencyInjection;
 using Mediator;
+using CleanArchitecture.Blazor.Application.TrdBx.Services;
 
 namespace CleanArchitecture.Blazor.Application;
 
-public static class DependencyInjection
+public static partial class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
@@ -32,7 +33,7 @@ public static class DependencyInjection
 
         });
        
-
+        services.AddScoped<IDropdownDataService, DropdownDataService>();
         return services;
     }
 }

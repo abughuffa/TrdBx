@@ -135,9 +135,6 @@
   <data name="Created By User" xml:space="preserve">
     <value>Creator</value>
   </data>
-  <data name="Desc" xml:space="preserve">
-    <value>Desc</value>
-  </data>
   <data name="Filter By Service" xml:space="preserve">
     <value>Filter By Service</value>
   </data>
@@ -201,4 +198,7 @@
   <data name="UnReject" xml:space="preserve">
     <value>UnReject</value>
   </data>
+    <data name="Description" xml:space="preserve">
+      <value>Description</value>
+    </data>
 </root>

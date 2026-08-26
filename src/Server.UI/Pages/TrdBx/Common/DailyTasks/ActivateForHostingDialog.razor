@@ -42,7 +42,7 @@
     private bool _submitting = false;
     [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;
     [EditorRequired][Parameter] public ActivateTrackingUnitForHostingCommand _model { get; set; } = default!;
-    [Parameter] public string? _contentText { get; set; } = default!;
+   [Parameter] public string? _contentText { get; set; } = default!;
 
     private DateTime? _date
     {

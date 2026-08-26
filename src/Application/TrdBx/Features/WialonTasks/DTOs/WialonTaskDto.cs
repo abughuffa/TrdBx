@@ -11,7 +11,7 @@ public class WialonTaskDto
     [Display(Name = "ServiceLogId")] public int ServiceLogId { get; set; }
     [Display(Name = "TrackingUnitId")]  public int TrackingUnitId { get; set; }
     [Display(Name = "Description")] public string Description { get; set; } = string.Empty;
-    [Display(Name = "APITask")] public APITask APITask { get; set; }
+    [Display(Name = "WialonAPIAction")] public WialonAPIAction WialonAPIAction { get; set; }
     [Display(Name = "ExcDate")] public DateOnly? ExcDate { get; set; }
     [Display(Name = "IsExecuted")] public bool IsExecuted { get; set; }
 

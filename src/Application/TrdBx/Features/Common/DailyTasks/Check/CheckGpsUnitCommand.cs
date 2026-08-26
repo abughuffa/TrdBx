@@ -81,7 +81,7 @@ public class CheckTrackingUnitCommandHandler : PriceSharedLogic, IRequestHandler
             Subscriptions = [],
             WialonTasks = [new WialonTask (){
                 TrackingUnitId = unit.Id,
-                APITask = APITask.CheckOnWialon,
+                WialonAPIAction = WialonAPIAction.CheckOnWialon,
                 Description = string.Format("تحقق من الوحدة ({0}) على منصة ويلون.", unit.SNo),
                 ExcDate = request.TsDate,
                IsExecuted = false,

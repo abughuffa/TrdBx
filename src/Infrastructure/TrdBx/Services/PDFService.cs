@@ -23,7 +23,7 @@ public partial class PDFService : IPDFService
                     page.Size(PageSizes.A4);
                     page.PageColor(Colors.White);
                     page.DefaultTextStyle(x => x
-                        .FontFamily("Calibri")
+                        .FontFamily(ChFontFamilyName)
                         .FontSize(12)
                         .DirectionFromRightToLeft());
 
@@ -170,8 +170,10 @@ public partial class PDFService : IPDFService
                         });
                     });
                 });
-            }).GeneratePdf(stream);
-        });
+            })
+            .GeneratePdf(stream);
+         });
+        //return Task.FromResult(stream.ToArray());
         return stream.ToArray();
     }
 

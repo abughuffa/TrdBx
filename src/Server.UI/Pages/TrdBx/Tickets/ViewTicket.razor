@@ -57,6 +57,10 @@
                 </MudGrid>
             </MudCardContent>
             <MudCardActions>
+
+                 @* <MudButton Color="Color.Primary" Disabled=CanExecute DropShadow="false" OnClick="OnExecute">Execute</MudButton> *@
+
+                <MudButton Color="Color.Primary" Disabled=CanExecute DropShadow="false" OnClick="OnExecute">Execute</MudButton>
                 
                 <MudButton Color="Color.Primary" DropShadow="false" OnClick="OnGoBack">@AppStrings.GoBack</MudButton>
             </MudCardActions>
@@ -73,14 +77,14 @@
 
     private TicketDto? _model;
 
-    [Parameter]
+    @* [Parameter]
     [SupplyParameterFromQuery]
-    public string? ReturnUrl { get; set; }
+    public string? ReturnUrl { get; set; } *@
 
-    bool _submitting;
+    // bool _submitting;
 
     bool CanExecute = false;
-    bool CanReject = false;
+    @* bool CanReject = false; *@
 
 
 
@@ -94,7 +98,9 @@
 
         result.Map(data =>
         {
+             
             _model = data;
+            CanExecute = _model.TicketStatus != TicketStatus.Accepted;
             return data;
         }).Match(data =>
         {
@@ -111,6 +117,21 @@
     private async Task OnExecute()
     {
       var result = await Mediator.Send(new GetTrackingUnitByIdQuery(){Id = _model.TrackingUnitId });
+        result.Map(data =>
+        { 
+            var tdto = data;
+            return Execute(tdto);
+
+        }).Match(data =>
+        {
+        }, errors =>
+        {
+            Snackbar.Add(errors, MudBlazor.Severity.Error);
+        });
+    }
+       
+    private async Task Execute(TrackingUnitDto dto)
+    {
       try
         {
             switch (_model.ServiceTask)
@@ -118,80 +139,79 @@
                 case ServiceTask.Check:
                     {
 
-                        await OnCheck(result.Data);
+                        await OnCheck(dto);
                         break;
                     }
                 case ServiceTask.Install:
                 case ServiceTask.ReInstall:
                     {
-                        await OnInstall(result.Data);
+                        await OnInstall(dto);
                         break;
                     }
 
                 case ServiceTask.Transfer:
                     {
 
-                        await OnTransfer(result.Data);
+                        await OnTransfer(dto);
                         break;
                     }
 
                 case ServiceTask.Replace:
                     {
 
-                        await OnReplace(result.Data); 
+                        await OnReplace(dto); 
                         break;
                     }
 
                 case ServiceTask.Recover:
                     {
 
-                        await OnRecover(result.Data);
+                        await OnRecover(dto);
                         break;
                     }
 
                 case ServiceTask.ActivateUnit:
                     {
-                        await OnActivate(result.Data);
-
+                        await OnActivate(dto);
                         break;
                     }
 
                 case ServiceTask.ActivateUnitForGprs:
                     {
-                        await OnActivateGprs(result.Data);
+                        await OnActivateGprs(dto);
                         break;
                     }
 
                 case ServiceTask.ActivateUnitForHosting:
                     {
-                        await OnActivateHosting(result.Data);
+                        await OnActivateHosting(dto);
                         break;
                     }
 
                 case ServiceTask.DeactivateUnit:
                     {
-                        await OnDeactivate(result.Data);
+                        await OnDeactivate(dto);
                         break;
                     }
 
                 case ServiceTask.RenewUnitSub:
                     {
 
-                        await OnRenew(result.Data);
+                        await OnRenew(dto);
                         break;
                     }
 
                 case ServiceTask.ReplacSimCard:
                     {
 
-                        await OnReplaceSim(result.Data);
+                        await OnReplaceSim(dto);
                         break;
                     }
 
                 case ServiceTask.InstallSimCard:
                     {
 
-                        await OnInstallSim(result.Data);
+                        await OnInstallSim(dto);
                         break;
                     }
 
@@ -207,92 +227,96 @@
         {
             
         }
-    }
+}
 
 
-    private async Task OnExecuted(int id)
+
+    private Task OnActivate(TrackingUnitDto dto)
     {
-        await Mediator.Send(new MarkAsExecutedTicketCommand(){Id = id});
-    }
-    private async Task OnActivate(TrackingUnitDto dto)
-    {
-        //var command = ObjectMapper.Map<ActivateTrackingUnitCommand>(dto);
-        var command = new ActivateTrackingUnitCommand(){Id = dto.Id};
-        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+            var command = new ActivateTrackingUnitCommand(){Id = dto.Id};
 
-        await DialogServiceHelper.ShowDialogAsync<ActivateDialog>(
-            string.Format(L["Activate TrackingUnit {0}"], dto.SNo),
-            async _ =>
+            var title = L["Activate TrackingUnit"];
+
+            var contentText = string.Format(L["Activate TrackingUnit {0}"], dto.SNo);
+
+             return DialogServiceHelper.ShowFormDialogAsync<ActivateDialog, ActivateTrackingUnitCommand>(
+            title,
+            async (res) =>
             {
-              await OnExecuted(_model.Id);
+                await OnExecuted(_model.Id);
             },
-			p =>
+            para =>
 			{
-				p.Add(x => x._model, command);
-                
-			},
-			options);
+				para.Add(x => x._model, command);
+                para.Add(x => x._contentText, contentText);
+			}
+            );
     }
-    private async Task OnActivateHosting(TrackingUnitDto dto)
+    private Task OnActivateHosting(TrackingUnitDto dto)
     {
-        //var command = ObjectMapper.Map<ActivateTrackingUnitForHostingCommand>(dto);
         var command = new ActivateTrackingUnitForHostingCommand(){Id = dto.Id};
-        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+            
+            var title = L["Activate TrackingUnit for hosting"];
 
-        await DialogServiceHelper.ShowDialogAsync<ActivateForHostingDialog>(
-            string.Format(L["Activate TrackingUnit {0} for hosting"], dto.SNo),
-            async _ =>
+            var contentText = string.Format(L["Activate TrackingUnit {0} for hosting"], dto.SNo);
+
+             return DialogServiceHelper.ShowFormDialogAsync<ActivateForHostingDialog, ActivateTrackingUnitForHostingCommand>(
+            title,
+            async (res) =>
             {
-               await OnExecuted(_model.Id);
+                await OnExecuted(_model.Id);
             },
-			p =>
+            para =>
 			{
-				p.Add(x => x._model, command);
-			},
-			options);
+				para.Add(x => x._model, command);
+                para.Add(x => x._contentText, contentText);
+			}
+            );
     }
-    private async Task OnActivateGprs(TrackingUnitDto dto)
+    private Task OnActivateGprs(TrackingUnitDto dto)
     {
-        //var command = ObjectMapper.Map<ActivateTrackingUnitForGprsCommand>(dto);
-        var command = new ActivateTrackingUnitForGprsCommand(){Id = dto.Id};
-        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+            var command = new ActivateTrackingUnitForGprsCommand(){Id = dto.Id};
+            
+            var title = L["Activate TrackingUnit for Gprs"];
 
-        await DialogServiceHelper.ShowDialogAsync<ActivateForGprsDialog>(
-            string.Format(L["Activate TrackingUnit {0} for Gprs"], dto.SNo),
-            async _ =>
+            var contentText = string.Format(L["Activate TrackingUnit {0} for Gprs"], dto.SNo);
+
+             return DialogServiceHelper.ShowFormDialogAsync<ActivateForGprsDialog, ActivateTrackingUnitForGprsCommand>(
+            title,
+            async (res) =>
             {
-              await OnExecuted(_model.Id);
+                await OnExecuted(_model.Id);
             },
-			p =>
+            para =>
 			{
-				p.Add(x => x._model, command);
-			},
-			options);
+				para.Add(x => x._model, command);
+                para.Add(x => x._contentText, contentText);
+			}
+            );
     }
-    private async Task OnDeactivate(TrackingUnitDto dto)
+    private Task OnDeactivate(TrackingUnitDto dto)
     {
-            //var command = ObjectMapper.Map<DeactivateTrackingUnitCommand>(dto);
-            var command = new DeactivateTrackingUnitCommand(){Id = dto.Id};
-            var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+                    var command = new DeactivateTrackingUnitCommand(){Id = dto.Id};
+            
+            var title = L["Deactivate TrackingUnit for Gprs"];
 
-            await DialogServiceHelper.ShowDialogAsync<DeactivateDialog>(
-            string.Format(L["Deactivate TrackingUnit {0}"], dto.SNo),
-            async _ =>
+            var contentText = string.Format(L["Deactivate TrackingUnit {0}"], dto.SNo);
+
+             return DialogServiceHelper.ShowFormDialogAsync<DeactivateDialog, DeactivateTrackingUnitCommand>(
+            title,
+            async (res) =>
             {
-             await OnExecuted(_model.Id);
+                await OnExecuted(_model.Id);
             },
-			p =>
+            para =>
 			{
-				p.Add(x => x._model, command);
-			},
-			options);
-
-
-
+				para.Add(x => x._model, command);
+                para.Add(x => x._contentText, contentText);
+			}
+            );
     }
-    private async Task OnInstall(TrackingUnitDto dto)
+    private Task OnInstall(TrackingUnitDto dto)
     {
-            //var command = ObjectMapper.Map<InstallTrackingUnitCommand>(dto);
             var command = new InstallTrackingUnitCommand()
             {
                 Id = dto.Id,
@@ -300,24 +324,25 @@
                 TrackedAssetId = (int)dto.TrackedAssetId,
                 CustomerId= (int)dto.CustomerId
             };
-            
-            var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
-            
-            await DialogServiceHelper.ShowDialogAsync<InstallTrackingUnitDailog>(
-            string.Format(L["Install TrackingUnit {0}"], dto.SNo),
-            async _ =>
+            var title = L["Install TrackingUnit"];
+
+            var contentText = string.Format(L["Install TrackingUnit {0}"], dto.SNo);
+
+             return DialogServiceHelper.ShowFormDialogAsync<InstallTrackingUnitDailog, InstallTrackingUnitCommand>(
+            title,
+            async (res) =>
             {
-             await OnExecuted(_model.Id);
+                await OnExecuted(_model.Id);
             },
-			p =>
+            para =>
 			{
-				p.Add(x => x._model, command);
-			},
-			options);
+				para.Add(x => x._model, command);
+                para.Add(x => x._contentText, contentText);
+			}
+            );
     }
-    private async Task OnTransfer(TrackingUnitDto dto)
+    private Task OnTransfer(TrackingUnitDto dto)
     {
-            //var command = ObjectMapper.Map<TransferTrackingUnitCommand>(dto);
             var command = new TransferTrackingUnitCommand()
             {
                 Id = dto.Id,
@@ -325,138 +350,181 @@
                 TrackedAssetId = (int)dto.TrackedAssetId,
                 CustomerId= (int)dto.CustomerId
             };
-            var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
-            await DialogServiceHelper.ShowDialogAsync<TransferTrackingUnitDailog>(
-            string.Format(L["Transfer TrackingUnit {0}"], dto.SNo),
-            async _ =>
+            var title = L["Transfer TrackingUnit"];
+
+            var contentText = string.Format(L["Transfer TrackingUnit {0}"], dto.SNo);
+
+             return DialogServiceHelper.ShowFormDialogAsync<TransferTrackingUnitDailog, TransferTrackingUnitCommand>(
+            title,
+            async (res) =>
             {
-             await OnExecuted(_model.Id);
+                await OnExecuted(_model.Id);
             },
-			p =>
+            para =>
 			{
-				p.Add(x => x._model, command);
-			},
-			options);
+				para.Add(x => x._model, command);
+                para.Add(x => x._contentText, contentText);
+			}
+            );
     }
-    private async Task OnReplace(TrackingUnitDto dto)
+    private Task OnReplace(TrackingUnitDto dto)
     {
-        //var command = ObjectMapper.Map<ReplaceTrackingUnitCommand>(dto);
-        var command = new ReplaceTrackingUnitCommand()
+             var command = new ReplaceTrackingUnitCommand()
             {
                 Id = dto.Id,
                 SimCardId = (int)dto.SimCardId,
                 CustomerId= (int)dto.CustomerId
             };
-        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
-        
-        await DialogServiceHelper.ShowDialogAsync<ReplaceTrackingUnitDailog>(
-        string.Format(L["Replace TrackingUnit {0}"], dto.SNo),
-        async _ =>
-        {
-        await OnExecuted(_model.Id);
-        },
-		p =>
-		{
-		p.Add(x => x._model, command);
-		},
-		options);
+            var title = L["Replace TrackingUnit"];
+
+            var contentText = string.Format(L["Replace TrackingUnit {0}"], dto.SNo);
+
+             return DialogServiceHelper.ShowFormDialogAsync<ReplaceTrackingUnitDailog, ReplaceTrackingUnitCommand>(
+            title,
+            async (res) =>
+            {
+                await OnExecuted(_model.Id);
+            },
+            para =>
+			{
+				para.Add(x => x._model, command);
+                para.Add(x => x._contentText, contentText);
+			}
+            );
     }
-    private async Task OnRecover(TrackingUnitDto dto)
+    private Task OnRecover(TrackingUnitDto dto)
     {
-        //var command = new RecoverTrackingUnitCommand(){Id = dto.Id};
-        var command = new RecoverTrackingUnitCommand(){Id = dto.Id};
-        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
-        
-        await DialogServiceHelper.ShowDialogAsync<RecoverTrackingUnitDailog>(
-        string.Format(L["Recover TrackingUnit {0}"], dto.SNo),
-        async _ =>
-        {
-        await OnExecuted(_model.Id);
-        },
-		p =>
-		{
-		p.Add(x => x._model, command);
-		},
-		options);
+            var command = new RecoverTrackingUnitCommand(){Id = dto.Id};
+            
+            var title = L["Recover TrackingUnit"];
+
+            var contentText = string.Format(L["Recover TrackingUnit {0}"], dto.SNo);
+
+             return DialogServiceHelper.ShowFormDialogAsync<RecoverTrackingUnitDailog, RecoverTrackingUnitCommand>(
+            title,
+            async (res) =>
+            {
+                await OnExecuted(_model.Id);
+            },
+            para =>
+			{
+				para.Add(x => x._model, command);
+                para.Add(x => x._contentText, contentText);
+			}
+            );
     }
-    private async Task OnRenew(TrackingUnitDto dto)
+    private Task OnRenew(TrackingUnitDto dto)
     {
-        //var command = ObjectMapper.Map<RenewSubscriptionCommand>(dto);
-        var command = new RenewSubscriptionCommand(){Id = dto.Id};
-        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
-        await DialogServiceHelper.ShowDialogAsync<RenewSubscriptionDialog>(
-        string.Format(L["Renew Subscription of TrackingUnit {0}"], dto.SNo),
-        async _ =>
-        {
-        await OnExecuted(_model.Id);
-        },
-		p =>
-		{
-		p.Add(x => x._model, command);
-		},
-		options);
+            var command = new RenewSubscriptionCommand(){Id = dto.Id};
+            
+            var title = L["Renew Subscription"];
+
+            var contentText = string.Format(L["Renew Subscription of TrackingUnit {0}"], dto.SNo);
+
+             return DialogServiceHelper.ShowFormDialogAsync<RenewSubscriptionDialog, RenewSubscriptionCommand>(
+            title,
+            async (res) =>
+            {
+                await OnExecuted(_model.Id);
+            },
+            para =>
+			{
+				para.Add(x => x._model, command);
+                para.Add(x => x._contentText, contentText);
+			}
+            );
     }
-    private async Task OnInstallSim(TrackingUnitDto dto)
+    private Task OnInstallSim(TrackingUnitDto dto)
     {
 
-        //var command = ObjectMapper.Map<InstallOrReplaceSimCommand>(dto);
-        var command = new InstallOrReplaceSimCommand()
+            var command = new InstallOrReplaceSimCommand()
             {
                 Id = dto.Id,
                 SimCardId = (int)dto.SimCardId
             };
-        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
-        await DialogServiceHelper.ShowDialogAsync<InstallOrReplaceSimDailog>(
-        string.Format(L["Install Sim to TrackingUnit {0}"], dto.SNo),
-        async _ =>
-        {
-        await OnExecuted(_model.Id);
-        },
-		p =>
-		{
-		p.Add(x => x._model, command);
-		},
-		options);
+
+            var title = L["Install Sim card"];
+
+            var contentText = string.Format(L["Install Sim to TrackingUnit {0}"], dto.SNo);
+
+             return DialogServiceHelper.ShowFormDialogAsync<InstallOrReplaceSimDailog, InstallOrReplaceSimCommand>(
+            title,
+            async (res) =>
+            {
+                await OnExecuted(_model.Id);
+            },
+            para =>
+			{
+				para.Add(x => x._model, command);
+                para.Add(x => x._contentText, contentText);
+			}
+            );
     }
-    private async Task OnReplaceSim(TrackingUnitDto dto)
+    private Task OnReplaceSim(TrackingUnitDto dto)
     {
-        //var command = ObjectMapper.Map<InstallOrReplaceSimCommand>(dto);
-        var command = new InstallOrReplaceSimCommand()
+            var command = new InstallOrReplaceSimCommand()
             {
                 Id = dto.Id,
                 SimCardId = (int)dto.SimCardId
             };
-        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
-        
-        await DialogServiceHelper.ShowDialogAsync<InstallOrReplaceSimDailog>(
-        string.Format(L["Replace Sim of TrackingUnit {0}"], dto.SNo),
-        async _ =>
-        {
-        await OnExecuted(_model.Id);
-        },
-		p =>
-		{
-		p.Add(x => x._model, command);
-		},
-		options);
+
+            var title = L["Replace Sim card"];
+
+            var contentText = string.Format(L["Replace Sim of TrackingUnit {0}"], dto.SNo);
+
+             return DialogServiceHelper.ShowFormDialogAsync<InstallOrReplaceSimDailog, InstallOrReplaceSimCommand>(
+            title,
+            async (res) =>
+            {
+                await OnExecuted(_model.Id);
+            },
+            para =>
+			{
+				para.Add(x => x._model, command);
+                para.Add(x => x._contentText, contentText);
+			}
+            );
+
     }
-    private async Task OnCheck(TrackingUnitDto dto)
+    private Task OnCheck(TrackingUnitDto dto)
     {
-        //var command = ObjectMapper.Map<CheckTrackingUnitCommand>(dto);
-        var command = new CheckTrackingUnitCommand(){Id = dto.Id};
-        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
-        
-        await DialogServiceHelper.ShowDialogAsync<CheckTrackingUnitDailog>(
-        string.Format(L["Check TrackingUnit {0}"], dto.SNo),
-        async _ =>
-        {
-        await OnExecuted(_model.Id);
-        },
-		p =>
-		{
-		p.Add(x => x._model, command);
-		},
-		options);
+            var command = new CheckTrackingUnitCommand(){Id = dto.Id};
+            
+            var title = L["Check TrackingUnit"];
+
+            var contentText = string.Format(L["Check TrackingUnit {0}"], dto.SNo);
+
+             return DialogServiceHelper.ShowFormDialogAsync<CheckTrackingUnitDailog, CheckTrackingUnitCommand>(
+            title,
+            async (res) =>
+            {
+                await OnExecuted(_model.Id);
+            },
+            para =>
+			{
+				para.Add(x => x._model, command);
+                para.Add(x => x._contentText, contentText);
+			}
+            );
+
+
     }
 
+    private async Task OnExecuted(int id)
+    {
+         var result = await Mediator.Send(new MarkAsExecutedTicketCommand(){Id = id});
+
+            if (result.Succeeded)
+            {
+                Snackbar.Add(AppStrings.SaveSuccess, MudBlazor.Severity.Info);
+                await InvokeAsync(async () =>
+                                               {
+                                                   Navigation.NavigateTo($"/pages/TrdBx/Tickets");
+                                               });
+            }
+            else
+            {
+                Snackbar.Add(result.ErrorMessage, MudBlazor.Severity.Error);
+            }
+    }
 }

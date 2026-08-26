@@ -1576,10 +1576,6 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("APITask")
-                        .HasColumnType("integer")
-                        .HasColumnName("api_task");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -1601,6 +1597,10 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     b.Property<int>("TrackingUnitId")
                         .HasColumnType("integer")
                         .HasColumnName("tracking_unit_id");
+
+                    b.Property<int?>("WialonAPIAction")
+                        .HasColumnType("integer")
+                        .HasColumnName("wialon_api_action");
 
                     b.HasKey("Id")
                         .HasName("pk_wialon_tasks");

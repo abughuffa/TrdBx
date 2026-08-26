@@ -159,7 +159,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                     servcieLog.WialonTasks.Add(new WialonTask()
                     {
                         TrackingUnitId = unit.Id,
-                        APITask = APITask.AddToWialon,
+                        WialonAPIAction = WialonAPIAction.AddToWialon,
                         Description = string.Format("اضف الوحدة ({0}) الى منصة ويلون.", unit.SNo),
                         ExcDate = caseProfile.TsDt,
                         IsExecuted = false,
@@ -382,7 +382,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                     servcieLog.WialonTasks.Add(new WialonTask()
                     {
                         TrackingUnitId = unit.Id,
-                        APITask = APITask.ActivateOnWialon,
+                        WialonAPIAction = WialonAPIAction.ActivateOnWialon,
                         Description = string.Format("فعل الوحدة ({0}) على منصة ويلون.", unit.SNo),
                         ExcDate = caseProfile.TsDt,
                         IsExecuted = false,
@@ -610,7 +610,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                     servcieLog.WialonTasks.Add(new WialonTask()
                     {
                         TrackingUnitId = unit.Id,
-                        APITask = APITask.AddToWialon,
+                        WialonAPIAction = WialonAPIAction.AddToWialon,
                         Description = string.Format("اضف الوحدة ({0}) الى منصة ويلون.", unit.SNo),
                         ExcDate = caseProfile.TsDt,
                         IsExecuted = false,
@@ -819,7 +819,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                                 servcieLog.WialonTasks.Add(new WialonTask()
                                 {
                                     TrackingUnitId = unit.Id,
-                                    APITask = APITask.DeactivateOnWialon,
+                                    WialonAPIAction = WialonAPIAction.DeactivateOnWialon,
                                     Description = string.Format("إلغاء تفعيل الوحدة ({0}) على منصة ويلون.", unit.SNo),
                                     ExcDate = caseProfile.TsDt,
                                     IsExecuted = false,
@@ -838,7 +838,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                                 servcieLog.WialonTasks.Add(new WialonTask()
                                 {
                                     TrackingUnitId = unit.Id,
-                                    APITask = APITask.DeactivateOnWialon,
+                                    WialonAPIAction = WialonAPIAction.DeactivateOnWialon,
                                     Description = string.Format("مهمة مؤجلة - إلغاء تفعيل الوحدة ({0}) على منصة ويلون.", unit.SNo),
                                     ExcDate = (DateOnly)caseProfile.SeDt,
                                     IsExecuted = false,
@@ -1097,7 +1097,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                     servcieLog.WialonTasks.Add(new WialonTask()
                     {
                         TrackingUnitId = unit.Id,
-                        APITask = APITask.AddToWialon,
+                        WialonAPIAction = WialonAPIAction.AddToWialon,
                         Description = string.Format("اضف الوحدة ({0}) الى منصة ويلون.", unit.SNo),
                         ExcDate = caseProfile.TsDt,
                         IsExecuted = false,
@@ -1306,7 +1306,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                     servcieLog.WialonTasks.Add(new WialonTask()
                     {
                         TrackingUnitId = unit.Id,
-                        APITask = APITask.ActivateOnWialon,
+                        WialonAPIAction = WialonAPIAction.ActivateOnWialon,
                         Description = string.Format("فعل الوحدة ({0}) على منصة ويلون.", unit.SNo),
                         ExcDate = caseProfile.TsDt,
                         IsExecuted = false,
@@ -1597,7 +1597,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                                 servcieLog.WialonTasks.Add(new WialonTask()
                                 {
                                     TrackingUnitId = unit.Id,
-                                    APITask = APITask.RemoveFromWialon,
+                                    WialonAPIAction = WialonAPIAction.RemoveFromWialon,
                                     Description = string.Format("حذف الوحدة ({0}) من منصة ويلون.", unit.SNo),
                                     ExcDate = caseProfile.TsDt,
                                     IsExecuted = false,
@@ -1616,7 +1616,7 @@ public class SubscriptionSharedLogic : PriceSharedLogic
                                 servcieLog.WialonTasks.Add(new WialonTask()
                                 {
                                     TrackingUnitId = unit.Id,
-                                    APITask = APITask.RemoveFromWialon,
+                                    WialonAPIAction = WialonAPIAction.RemoveFromWialon,
                                     Description = string.Format("مهمة مؤجلة - احذف الوحدة ({0}) من منصة ويلون.", unit.SNo),
                                     ExcDate = (DateOnly)caseProfile.SeDt,
                                     IsExecuted = false,

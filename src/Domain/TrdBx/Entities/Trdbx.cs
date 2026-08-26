@@ -192,7 +192,7 @@ public class WialonTask : BaseEntity
     public int ServiceLogId { get; set; }
     public int TrackingUnitId { get; set; }
     public string Description { get; set; } = string.Empty;
-    public APITask? APITask { get; set; }
+    public WialonAPIAction? WialonAPIAction { get; set; }
     public DateOnly ExcDate { get; set; }
     public bool IsExecuted { get; set; } = false;
     public ServiceLog? ServiceLog { get; set; } = null;

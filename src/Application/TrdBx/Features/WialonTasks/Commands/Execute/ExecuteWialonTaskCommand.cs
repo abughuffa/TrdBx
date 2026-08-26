@@ -55,9 +55,9 @@ public class ExecuteWialonTaskCommandHandler :
 
         var APIExecuationSuccessed = false;
 
-        switch (item.APITask)
+        switch (item.WialonAPIAction)
             {
-                case APITask.CheckOnWialon:
+                case WialonAPIAction.CheckOnWialon:
                     {
                          APIExecuationSuccessed = true;
                     if (request.ApplyChangesToWialon)
@@ -66,7 +66,7 @@ public class ExecuteWialonTaskCommandHandler :
                         }
                         break;
                     }
-                case APITask.AddToWialon:
+                case WialonAPIAction.AddToWialon:
                     {
                     var unit = context.TrackingUnits.Include(u => u.Customer.Parent)
                         .Include(u=>u.TrackingUnitModel)
@@ -84,7 +84,7 @@ public class ExecuteWialonTaskCommandHandler :
                         }
                         break;
                     }
-                case APITask.ActivateOnWialon:
+                case WialonAPIAction.ActivateOnWialon:
                     {
                     var unit = context.TrackingUnits.Where(u => u.Id == item.TrackingUnitId).FirstAsync().Result;
                     if (request.ApplyChangesToWialon)
@@ -100,7 +100,7 @@ public class ExecuteWialonTaskCommandHandler :
                         }
                         break;
                     }
-                case APITask.DeactivateOnWialon:
+                case WialonAPIAction.DeactivateOnWialon:
                     {
                     var unit = context.TrackingUnits.Where(u => u.Id == item.TrackingUnitId).FirstAsync().Result;
                     if (request.ApplyChangesToWialon)
@@ -116,7 +116,7 @@ public class ExecuteWialonTaskCommandHandler :
                         }
                         break;
                     }
-                case APITask.RemoveFromWialon:
+                case WialonAPIAction.RemoveFromWialon:
                     {
                     var unit = context.TrackingUnits.Where(u => u.Id == item.TrackingUnitId).FirstAsync().Result;
                     if (request.ApplyChangesToWialon)
@@ -133,7 +133,7 @@ public class ExecuteWialonTaskCommandHandler :
                         }
                         break;
                     }
-                case APITask.UpdateOnWialon:
+                case WialonAPIAction.UpdateOnWialon:
                 {
                     var unit = context.TrackingUnits.Include(u => u.SimCard).Where(u => u.Id == item.TrackingUnitId).FirstAsync().Result;
                    

@@ -135,9 +135,6 @@
   <data name="Created By User" xml:space="preserve">
     <value>المنشئ</value>
   </data>
-  <data name="Desc" xml:space="preserve">
-    <value>بيـــان</value>
-  </data>
   <data name="Filter By Service" xml:space="preserve">
     <value>تصفية بحسب الخدمة</value>
   </data>
@@ -201,4 +198,7 @@
   <data name="UnReject" xml:space="preserve">
     <value>تراجع عن الرفض</value>
   </data>
+    <data name="Description" xml:space="preserve">
+      <value>بيــأن</value>
+    </data>
 </root>

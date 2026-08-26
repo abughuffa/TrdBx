@@ -88,7 +88,7 @@ public class MarkTrackingUnitAsLostCommandHandler :SubscriptionSharedLogic , IRe
                     serviceLog.WialonTasks.Add(new WialonTask()
             {
                 TrackingUnitId = unit.Id,
-                APITask = APITask.CheckOnWialon,
+                WialonAPIAction = WialonAPIAction.CheckOnWialon,
                 Description = string.Format(" تحقق من الوحدة ({0}) على منصة ويلون.", unit.SNo),
                 ExcDate = request.TsDate,
                 IsExecuted = false,
@@ -102,7 +102,7 @@ public class MarkTrackingUnitAsLostCommandHandler :SubscriptionSharedLogic , IRe
             serviceLog.WialonTasks.Add(new WialonTask()
             {
                 TrackingUnitId = unit.Id,
-                APITask = APITask.RemoveFromWialon,
+                WialonAPIAction = WialonAPIAction.RemoveFromWialon,
                 Description = string.Format("حذف الوحدة ({0}) من منصة ويلون.", unit.SNo),
                 ExcDate = request.TsDate,
                 IsExecuted = false,
@@ -110,7 +110,7 @@ public class MarkTrackingUnitAsLostCommandHandler :SubscriptionSharedLogic , IRe
                     serviceLog.WialonTasks.Add(new WialonTask()
             {
                 TrackingUnitId = unit.Id,
-                APITask = APITask.CheckOnWialon,
+                WialonAPIAction = WialonAPIAction.CheckOnWialon,
                 Description = string.Format(" تحقق من الوحدة ({0}) على منصة ويلون.", unit.SNo),
                 ExcDate = request.TsDate,
                 IsExecuted = false,

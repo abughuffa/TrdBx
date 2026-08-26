@@ -54,11 +54,8 @@ public class DownloadInvoiceByIdQueryHandler :
 
         if (invoice is null) return null;
 
-        byte[] result = await _pdfService.ExportInvoiceAsync(invoice);
-
+        var result = await _pdfService.ExportInvoiceAsync(invoice);
         return await Result<byte[]>.SuccessAsync(result);
-
-
     }
 }
 

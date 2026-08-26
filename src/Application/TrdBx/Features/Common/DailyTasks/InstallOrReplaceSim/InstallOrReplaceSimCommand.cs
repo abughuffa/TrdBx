@@ -112,7 +112,7 @@ public class InstallOrReplaceSimCommandHandler :PriceSharedLogic, IRequestHandle
            serviceLog.WialonTasks.Add(new WialonTask()
                     {
                         TrackingUnitId = unit.Id,
-                        APITask = APITask.UpdateOnWialon,
+                        WialonAPIAction = WialonAPIAction.UpdateOnWialon,
                         Description = string.Format("حدث بيانات الوحدة ({0}) على منصة ويلون.", unit.SNo),
                         ExcDate = request.TsDate,
                         IsExecuted = false,

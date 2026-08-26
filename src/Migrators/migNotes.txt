@@ -9,3 +9,7 @@ dotnet ef migrations script --project src/Migrators/Migrators.PostgreSQL --start
 
 # Update the database with the -f flag to force it
 dotnet ef database update --project src/Migrators/Migrators.PostgreSQL --startup-project src/Server.UI --context ApplicationDbContext
+
+
+
+dotnet ef migrations add ApiTaskColumnRenamed --project src/Migrators/Migrators.PostgreSQL --startup-project src/Server.UI --context ApplicationDbContext

@@ -73,7 +73,7 @@ public class ImportWialonTasksCommandHandler :
                { _localizer[_dto.GetMemberDisplayName(x=>x.Description)], (row, item) => item.Description = row[_localizer[_dto.GetMemberDisplayName(x=>x.Description)]].ToString() },
                //{ _localizer[_dto.GetMemberDisplayName(x=>x.ExcDate)], (row, item) => item.ExcDate = row[_localizer[_dto.GetMemberDisplayName(x=>x.ExcDate)]].ToString().IsNullOrEmpty() ? null : DateOnly.FromDateTime(DateTime.Parse(row[_localizer[_dto.GetMemberDisplayName(x=>x.ExcDate)]].ToString()))},
                { _localizer[_dto.GetMemberDisplayName(x=>x.ExcDate)], (row, item) => item.ExcDate = DateOnly.FromDateTime(DateTime.Parse(row[_localizer[_dto.GetMemberDisplayName(x=>x.ExcDate)]].ToString()))},
-               { _localizer[_dto.GetMemberDisplayName(x=>x.APITask)], (row, item) => item.APITask = (APITask)Convert.ToInt32(row[_localizer[_dto.GetMemberDisplayName(x=>x.APITask)]].ToString()) },
+               { _localizer[_dto.GetMemberDisplayName(x=>x.WialonAPIAction)], (row, item) => item.WialonAPIAction = (WialonAPIAction)Convert.ToInt32(row[_localizer[_dto.GetMemberDisplayName(x=>x.WialonAPIAction)]].ToString()) },
                { _localizer[_dto.GetMemberDisplayName(x=>x.IsExecuted)], (row, item) => item.IsExecuted = bool.Parse(row[_localizer[_dto.GetMemberDisplayName(x=>x.IsExecuted)]].ToString())},
 
             }, _localizer[_dto.GetClassDescription()]);
@@ -111,7 +111,7 @@ public class ImportWialonTasksCommandHandler :
                     _localizer[_dto.GetMemberDisplayName(x=>x.ServiceLogId)],
                     _localizer[_dto.GetMemberDisplayName(x=>x.TrackingUnitId)],
                     _localizer[_dto.GetMemberDisplayName(x=>x.Description)],
-                    _localizer[_dto.GetMemberDisplayName(x=>x.APITask)],
+                    _localizer[_dto.GetMemberDisplayName(x=>x.WialonAPIAction)],
                     _localizer[_dto.GetMemberDisplayName(x=>x.ExcDate)],
                     _localizer[_dto.GetMemberDisplayName(x=>x.IsExecuted)]
                 };
