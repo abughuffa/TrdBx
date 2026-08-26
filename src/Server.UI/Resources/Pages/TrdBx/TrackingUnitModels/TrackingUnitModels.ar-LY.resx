@@ -120,13 +120,13 @@
   <data name="Create TrackingUnitModel" xml:space="preserve">
     <value>انشاء طراز</value>
   </data>
-  <data name="DefualtGprs" xml:space="preserve">
+  <data name="DefaultGprs" xml:space="preserve">
     <value>رسوم التمديد الافتراضية</value>
   </data>
-  <data name="DefualtHost" xml:space="preserve">
+  <data name="DefaultHost" xml:space="preserve">
     <value>رسوم الاستضافة الافتراضية</value>
   </data>
-  <data name="DefualtPrice" xml:space="preserve">
+  <data name="DefaultPrice" xml:space="preserve">
     <value>سعر الوحدة الافتراضي</value>
   </data>
   <data name="Name" xml:space="preserve">

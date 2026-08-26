@@ -12,4 +12,4 @@ dotnet ef database update --project src/Migrators/Migrators.PostgreSQL --startup
 
 
 
-dotnet ef migrations add ApiTaskColumnRenamed --project src/Migrators/Migrators.PostgreSQL --startup-project src/Server.UI --context ApplicationDbContext
+dotnet ef migrations add ModelsColumnRenamed --project src/Migrators/Migrators.PostgreSQL --startup-project src/Server.UI --context ApplicationDbContext

@@ -2,6 +2,7 @@
 using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Online.DataMatches.Caching;
 using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Online.DataMatches.DTOs;
 using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Online.DataMatches.Specifications;
+using CleanArchitecture.Blazor.Domain.Enums;
 
 namespace CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Online.DataMatches.Queries.Pagination;
 
@@ -58,7 +59,7 @@ public class DataMatchesWithPaginationQueryHandler :
                                       StatusOnTrdBx = t.UStatus,
                                       WNote = w.Note
                                   }).OrderBy($"{request.OrderBy} {request.SortDirection}")
-                                                  .ProjectToPaginatedDataAsync<DataMatch, DataMatchDto>(request.Specification,
+                                                  .ProjectToPaginatedDataAsync<DataMatch,DataMatchDto>(request.Specification,
                                                     request.PageNumber,
                                                     request.PageSize,
                                                _typeAdapterConfig,
@@ -83,7 +84,7 @@ public class DataMatchesWithPaginationQueryHandler :
                      StatusOnTrdBx = t.UStatus,
                      WNote = w.Note
                  }).OrderBy($"{request.OrderBy} {request.SortDirection}")
-                                                   .ProjectToPaginatedDataAsync<DataMatch, DataMatchDto>(request.Specification,
+                                                   .ProjectToPaginatedDataAsync<DataMatch,DataMatchDto>(request.Specification,
                                                     request.PageNumber,
                                                     request.PageSize,
                                                     _typeAdapterConfig,
@@ -109,7 +110,7 @@ public class DataMatchesWithPaginationQueryHandler :
                           StatusOnTrdBx = t.UStatus,
                           WNote = w.Note
                       }).OrderBy($"{request.OrderBy} {request.SortDirection}")
-                                         .ProjectToPaginatedDataAsync<DataMatch, DataMatchDto>(request.Specification,
+                                         .ProjectToPaginatedDataAsync<DataMatch,DataMatchDto>(request.Specification,
                                                     request.PageNumber,
                                                     request.PageSize,
                                                    _typeAdapterConfig,

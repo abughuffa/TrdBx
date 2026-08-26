@@ -13,9 +13,9 @@ public class AddEditTrackingUnitModelCommand: ICacheInvalidatorRequest<Result<in
     [Display(Name = "WhwTypeId")] public int WhwTypeId { get; set; }
     [Display(Name = "PortNo1")] public int PortNo1 { get; set; } = 0;
     [Display(Name = "PortNo2")] public int PortNo2 { get; set; } = 0;
-    [Display(Name = "DefualtHost")] public decimal DefualtHost { get; set; } = 0.0m;
-    [Display(Name = "DefualtGprs")] public decimal DefualtGprs { get; set; } = 0.0m;
-    [Display(Name = "DefualtPrice")] public decimal DefualtPrice { get; set; } = 0.0m;
+    [Display(Name = "DefaultHost")] public decimal DefaultHost { get; set; } = 0.0m;
+    [Display(Name = "DefaultGprs")] public decimal DefaultGprs { get; set; } = 0.0m;
+    [Display(Name = "DefaultPrice")] public decimal DefaultPrice { get; set; } = 0.0m;
 
 
 

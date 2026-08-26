@@ -75,7 +75,7 @@ public class ImportSimCardsCommandHandler :
                 { _localizer[_dto.GetMemberDisplayName(x=>x.ExDate)], (row, item) => item.ExDate = row[_localizer[_dto.GetMemberDisplayName(x=>x.ExDate)]].ToString().IsNullOrEmpty() ? null : DateOnly.FromDateTime(DateTime.Parse(row[_localizer[_dto.GetMemberDisplayName(x=>x.ExDate)]].ToString()))},
                 //{ _localizer[_dto.GetMemberDisplayName(x=>x.ExDate)], (row, item) => item.ExDate = (DateOnly.TryParse((row["ExDate"] is null ? null: row["ExDate"].ToString()) , out DateOnly result) ? result : null)},
                 { _localizer[_dto.GetMemberDisplayName(x=>x.OldId)], (row, item) => item.OldId = (int.TryParse(row[_localizer[_dto.GetMemberDisplayName(x=>x.OldId)]].ToString(), out int result) == true ? result : null) },
-                 { _localizer[_dto.GetMemberDisplayName(x=>x.IsOwen)], (row, item) => item.IsOwen =Convert.ToBoolean(row[_localizer[_dto.GetMemberDisplayName(x=>x.IsOwen)]]) },
+                 { _localizer[_dto.GetMemberDisplayName(x=>x.IsOwned)], (row, item) => item.IsOwned =Convert.ToBoolean(row[_localizer[_dto.GetMemberDisplayName(x=>x.IsOwned)]]) },
 
             }, _localizer[_dto.GetClassDescription()]);
         if (result.Succeeded && result.Data is not null)
@@ -110,7 +110,7 @@ _localizer[_dto.GetMemberDisplayName(x=>x.SPackageId)],
 _localizer[_dto.GetMemberDisplayName(x=>x.SStatus)],
 _localizer[_dto.GetMemberDisplayName(x=>x.ExDate)],
 _localizer[_dto.GetMemberDisplayName(x=>x.OldId)],
-_localizer[_dto.GetMemberDisplayName(x=>x.IsOwen)],
+_localizer[_dto.GetMemberDisplayName(x=>x.IsOwned)],
 
 
                 };

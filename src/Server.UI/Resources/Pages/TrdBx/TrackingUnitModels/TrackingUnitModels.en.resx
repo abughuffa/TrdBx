@@ -120,14 +120,14 @@
   <data name="Create TrackingUnitModel" xml:space="preserve">
     <value>Create Model</value>
   </data>
-  <data name="DefualtGprs" xml:space="preserve">
-    <value>DefualtGprs</value>
+  <data name="DefaultGprs" xml:space="preserve">
+    <value>DefaultGprs</value>
   </data>
-  <data name="DefualtHost" xml:space="preserve">
-    <value>DefualtHost</value>
+  <data name="DefaultHost" xml:space="preserve">
+    <value>DefaultHost</value>
   </data>
-  <data name="DefualtPrice" xml:space="preserve">
-    <value>DefualtPrice</value>
+  <data name="DefaultPrice" xml:space="preserve">
+    <value>DefaultPrice</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Name</value>

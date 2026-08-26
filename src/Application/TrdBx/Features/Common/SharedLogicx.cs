@@ -44,9 +44,9 @@ public class PriceSharedLogic : SerialForSharedLogic
     //            result.Add(new CPrice
     //            {
     //                TrackingUnitModelId = gpsUnitModel.Id,
-    //                Price = gpsUnitModel.DefualtPrice,
-    //                Host = gpsUnitModel.DefualtHost,
-    //                Gprs = gpsUnitModel.DefualtGprs
+    //                Price = gpsUnitModel.DefaultPrice,
+    //                Host = gpsUnitModel.DefaultHost,
+    //                Gprs = gpsUnitModel.DefaultGprs
     //            });
     //        }
     //    }
@@ -80,9 +80,9 @@ public class PriceSharedLogic : SerialForSharedLogic
             return new CPrice
             {
                 TrackingUnitModelId = um.Id,
-                Price = um.DefualtPrice,
-                Host = um.DefualtHost,
-                Gprs = um.DefualtGprs
+                Price = um.DefaultPrice,
+                Host = um.DefaultHost,
+                Gprs = um.DefaultGprs
             };
         }
     }

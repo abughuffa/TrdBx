@@ -38,8 +38,8 @@ public class CustomerDto
     public string? Mobile2 { get; set; } = string.Empty;
     [Display(Name ="Email")]
     public string? Email { get; set; } = string.Empty;
-    [Display(Name ="IsAvaliable")]
-    public bool IsAvaliable { get; set; }
+    [Display(Name ="IsAvailable")]
+    public bool IsAvailable { get; set; }
     [Display(Name ="OldId")]
     public int? OldId { get; set; } = null;
 

@@ -12,9 +12,9 @@ public class TrackingUnitModel : BaseEntity
     public required string WialonName { get; set; } = string.Empty;
     public required string Name { get; set; } = string.Empty;
     public required int WhwTypeId { get; set; } = 0;
-    public required decimal DefualtHost { get; set; } = 0.0m;
-    public required decimal DefualtGprs { get; set; } = 0.0m;
-    public required decimal DefualtPrice { get; set; } = 0.0m;
+    public required decimal DefaultHost { get; set; } = 0.0m;
+    public required decimal DefaultGprs { get; set; } = 0.0m;
+    public required decimal DefaultPrice { get; set; } = 0.0m;
     public List<TrackingUnit>? TrackingUnits { get; set; } = null;
     public List<CusPrice>? CusPrices { get; set; } = null;
     public int PortNo1 { get; set; } = 0;
@@ -70,7 +70,7 @@ public class Customer : BaseAuditableEntity
     public string? Mobile1 { get; set; } = string.Empty;
     public string? Mobile2 { get; set; } = string.Empty;
     public string? Email { get; set; } = string.Empty;
-    public bool IsAvaliable { get; set; } = true;
+    public bool IsAvailable { get; set; } = true;
     public int? OldId { get; set; } = null;
     public Customer? Parent { get; set; } = null;
     public List<Customer>? Childs { get; set; } = null;
@@ -110,7 +110,7 @@ public class SimCard : BaseAuditableEntity
     public int SPackageId { get; set; }
     public SPackage? SPackage { get; set; } = null;
     public SStatus SStatus { get; set; } = SStatus.New;
-    public bool IsOwen { get; set; } = true;
+    public bool IsOwned { get; set; } = true;
     public DateOnly? ExDate { get; set; } = null;
 
     //public DateOnly? SPLastUpdate { get; set; } = null;
@@ -136,7 +136,7 @@ public class TrackedAsset : BaseAuditableEntity
     public string? VinSerNo { get; set; } = string.Empty;
     public string? PlateNo { get; set; } = string.Empty;
     public required string TrackedAssetDesc { get; set; } = string.Empty;
-    public bool IsAvaliable { get; set; } = true;
+    public bool IsAvailable { get; set; } = true;
     public int? OldId { get; set; } = null;
     public string? OldVehicleNo { get; set; } = null;
     public List<TrackingUnit>? TrackingUnits { get; set; } = null;

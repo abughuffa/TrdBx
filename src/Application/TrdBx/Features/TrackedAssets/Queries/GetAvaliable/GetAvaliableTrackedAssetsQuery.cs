@@ -34,7 +34,7 @@ public class GetAvaliableTrackedAssetsQueryHandler :
          int? id = request.Id is null ? -1 : request.Id;
 
          var data = await _context.TrackedAssets
-            .Where(q => q.IsAvaliable || q.Id == id)
+            .Where(q => q.IsAvailable || q.Id == id)
             .ProjectToType<TrackedAssetDto>(_typeAdapterConfig).ToListAsync(cancellationToken);
             
         return data;

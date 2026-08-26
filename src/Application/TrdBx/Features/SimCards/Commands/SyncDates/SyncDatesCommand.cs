@@ -28,7 +28,7 @@ public class SyncDatesCommandHandler : IRequestHandler<SyncDatesCommand, Result>
 
         if (!libyana.Any()) return await Result.FailureAsync("Thier is no Libyana Sim Cards imported!");
 
-            var simcards = await context.SimCards.Where(s=>s.IsOwen==true).ToListAsync(cancellationToken);
+            var simcards = await context.SimCards.Where(s=>s.IsOwned==true).ToListAsync(cancellationToken);
 
             foreach (var sim in simcards)
             {

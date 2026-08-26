@@ -82,7 +82,7 @@ public class ExportTrackedAssetsQueryHandler :
                     {_localizer[_dto.GetMemberDisplayName(x=>x.VinSerNo)],item => item.VinSerNo},
                     {_localizer[_dto.GetMemberDisplayName(x=>x.PlateNo)],item => item.PlateNo},
                     {_localizer[_dto.GetMemberDisplayName(x=>x.TrackedAssetDesc)],item => item.TrackedAssetDesc},
-                    {_localizer[_dto.GetMemberDisplayName(x=>x.IsAvaliable)],item => item.IsAvaliable},
+                    {_localizer[_dto.GetMemberDisplayName(x=>x.IsAvailable)],item => item.IsAvailable},
                      {_localizer[_dto.GetMemberDisplayName(x=>x.OldId)],item => item.OldId},
                       {_localizer[_dto.GetMemberDisplayName(x=>x.OldVehicleNo)],item => item.OldVehicleNo},
 

@@ -73,7 +73,7 @@ public class RecoverTrackingUnitCommandHandler : SubscriptionSharedLogic, IReque
             });
         }
 
-        asset.IsAvaliable = true;
+        asset.IsAvailable = true;
 
         unit.UnitName = null;
         unit.UStatus = UStatus.Recovered;

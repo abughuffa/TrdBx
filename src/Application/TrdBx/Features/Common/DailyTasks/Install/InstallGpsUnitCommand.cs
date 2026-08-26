@@ -143,7 +143,7 @@ public class InstallTrackingUnitCommandHandler : SubscriptionSharedLogic, IReque
         sim.SStatus = SStatus.Installed;
         sim.AddDomainEvent(new SimCardUpdatedEvent(sim));
 
-        asset.IsAvaliable = false;
+        asset.IsAvailable = false;
         asset.AddDomainEvent(new TrackedAssetUpdatedEvent(asset));
 
         unit.UStatus = UStatus.InstalledInactive;

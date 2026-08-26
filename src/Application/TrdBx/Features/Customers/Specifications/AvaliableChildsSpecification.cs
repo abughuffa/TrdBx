@@ -9,7 +9,7 @@ public class AvaliableChildsSpecification : Specification<Customer>
     {
 
         Query.Where(q => q.ParentId != null)
-             .Where(q => q.IsAvaliable == true);
+             .Where(q => q.IsAvailable == true);
     }
 
 }

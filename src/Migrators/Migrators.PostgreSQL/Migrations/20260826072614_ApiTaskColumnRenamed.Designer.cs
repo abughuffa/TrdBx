@@ -238,7 +238,7 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasColumnType("character varying(450)")
                         .HasColumnName("email");
 
-                    b.Property<bool>("IsAvaliable")
+                    b.Property<bool>("IsAvailable")
                         .HasColumnType("boolean")
                         .HasColumnName("is_avaliable");
 
@@ -1002,7 +1002,7 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasColumnType("character varying(450)")
                         .HasColumnName("iccid");
 
-                    b.Property<bool>("IsOwen")
+                    b.Property<bool>("IsOwned")
                         .HasColumnType("boolean")
                         .HasColumnName("is_owen");
 
@@ -1345,7 +1345,7 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasColumnType("character varying(450)")
                         .HasColumnName("created_by_id");
 
-                    b.Property<bool>("IsAvaliable")
+                    b.Property<bool>("IsAvailable")
                         .HasColumnType("boolean")
                         .HasColumnName("is_avaliable");
 
@@ -1520,15 +1520,15 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("DefualtGprs")
+                    b.Property<decimal>("DefaultGprs")
                         .HasColumnType("numeric")
                         .HasColumnName("defualt_gprs");
 
-                    b.Property<decimal>("DefualtHost")
+                    b.Property<decimal>("DefaultHost")
                         .HasColumnType("numeric")
                         .HasColumnName("defualt_host");
 
-                    b.Property<decimal>("DefualtPrice")
+                    b.Property<decimal>("DefaultPrice")
                         .HasColumnType("numeric")
                         .HasColumnName("defualt_price");
 

@@ -17,8 +17,8 @@ public class UpdateTrackedAssetCommand : ICacheInvalidatorRequest<Result<int>>
     public string? PlateNo { get; set; }
     [Display(Name = "TrackedAssetDesc")]
     public string? TrackedAssetDesc { get; set; }
-    [Display(Name = "IsAvaliable")]
-    public bool IsAvaliable { get; set; }
+    [Display(Name = "IsAvailable")]
+    public bool IsAvailable { get; set; }
 
 
     public string CacheKey => TrackedAssetCacheKey.GetAllCacheKey;

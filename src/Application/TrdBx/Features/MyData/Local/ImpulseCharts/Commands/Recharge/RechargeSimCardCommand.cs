@@ -27,7 +27,7 @@ public class RechargeSimCardCommandHandler : IRequestHandler<RechargeSimCardComm
         await using var context = await _dbContextFactory.CreateAsync(cancellationToken);
         var item = await context.SimCards.FindAsync(request.Id, cancellationToken);
         if (item == null) return await Result<int>.FailureAsync("SimCard not found");
-        if (!item.IsOwen) return await Result<int>.FailureAsync("Could not recharge Sim card which not beleong to Eagele eye.");
+        if (!item.IsOwned) return await Result<int>.FailureAsync("Could not recharge Sim card which not beleong to Eagele eye.");
 
         item.ExDate = (DateOnly.FromDateTime(DateTime.Now)).AddDays(360);
         // raise a update domain event

@@ -64,7 +64,7 @@ public record class CreateCustomersTemplateCommand : IRequest<Result<byte[]>>
            { _localizer[_dto.GetMemberDisplayName(x=>x.Mobile1)], (row, item) => item.Mobile1 = row[_localizer[_dto.GetMemberDisplayName(x=>x.Mobile1)]].ToString() },
             { _localizer[_dto.GetMemberDisplayName(x=>x.Mobile2)], (row, item) => item.Mobile2 = row[_localizer[_dto.GetMemberDisplayName(x=>x.Mobile2)]].ToString() },
              { _localizer[_dto.GetMemberDisplayName(x=>x.Email)], (row, item) => item.Email = row[_localizer[_dto.GetMemberDisplayName(x=>x.Email)]].ToString() },
-             { _localizer[_dto.GetMemberDisplayName(x=>x.IsAvaliable)], (row, item) => item.IsAvaliable =Convert.ToBoolean(row[_localizer[_dto.GetMemberDisplayName(x=>x.IsAvaliable)]]) },
+             { _localizer[_dto.GetMemberDisplayName(x=>x.IsAvailable)], (row, item) => item.IsAvailable =Convert.ToBoolean(row[_localizer[_dto.GetMemberDisplayName(x=>x.IsAvailable)]]) },
               { _localizer[_dto.GetMemberDisplayName(x=>x.OldId)], (row, item) => item.OldId = (int.TryParse(row[_localizer[_dto.GetMemberDisplayName(x=>x.OldId)]].ToString(), out int result) == true ? result : null) }
 
             }, _localizer[_dto.GetClassDescription()]);
@@ -107,7 +107,7 @@ public record class CreateCustomersTemplateCommand : IRequest<Result<byte[]>>
                    _localizer[_dto.GetMemberDisplayName(x=>x.Mobile1)],
                    _localizer[_dto.GetMemberDisplayName(x=>x.Mobile2)],
                    _localizer[_dto.GetMemberDisplayName(x=>x.Email)],
-                   _localizer[_dto.GetMemberDisplayName(x=>x.IsAvaliable)],
+                   _localizer[_dto.GetMemberDisplayName(x=>x.IsAvailable)],
                    _localizer[_dto.GetMemberDisplayName(x=>x.OldId)],
 
                 };

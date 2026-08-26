@@ -75,9 +75,9 @@ public class ImportTrackingUnitModelsCommand: ICacheInvalidatorRequest<Result<in
                 { _localizer[_dto.GetMemberDisplayName(x=>x.WhwTypeId)], (row, item) => item.WhwTypeId = int.Parse(row[_localizer[_dto.GetMemberDisplayName(x=>x.WhwTypeId)]].ToString()) },
                 { _localizer[_dto.GetMemberDisplayName(x=>x.PortNo1)], (row, item) => item.PortNo1 = (int.TryParse(row[_localizer[_dto.GetMemberDisplayName(x=>x.PortNo1)]].ToString(), out int result) == true ? result : 0) },
                 { _localizer[_dto.GetMemberDisplayName(x=>x.PortNo2)], (row, item) => item.PortNo2 = (int.TryParse(row[_localizer[_dto.GetMemberDisplayName(x=>x.PortNo2)]].ToString(), out int result) == true ? result : 0) },
-                { _localizer[_dto.GetMemberDisplayName(x=>x.DefualtGprs)], (row, item) => item.DefualtGprs = decimal.Parse(row[_localizer[_dto.GetMemberDisplayName(x=>x.DefualtGprs)]].ToString())},
-                { _localizer[_dto.GetMemberDisplayName(x=>x.DefualtHost)], (row, item) => item.DefualtHost = decimal.Parse(row[_localizer[_dto.GetMemberDisplayName(x=>x.DefualtHost)]].ToString())},
-                { _localizer[_dto.GetMemberDisplayName(x=>x.DefualtPrice)], (row, item) => item.DefualtPrice = decimal.Parse(row[_localizer[_dto.GetMemberDisplayName(x=>x.DefualtPrice)]].ToString())},
+                { _localizer[_dto.GetMemberDisplayName(x=>x.DefaultGprs)], (row, item) => item.DefaultGprs = decimal.Parse(row[_localizer[_dto.GetMemberDisplayName(x=>x.DefaultGprs)]].ToString())},
+                { _localizer[_dto.GetMemberDisplayName(x=>x.DefaultHost)], (row, item) => item.DefaultHost = decimal.Parse(row[_localizer[_dto.GetMemberDisplayName(x=>x.DefaultHost)]].ToString())},
+                { _localizer[_dto.GetMemberDisplayName(x=>x.DefaultPrice)], (row, item) => item.DefaultPrice = decimal.Parse(row[_localizer[_dto.GetMemberDisplayName(x=>x.DefaultPrice)]].ToString())},
                 { _localizer[_dto.GetMemberDisplayName(x=>x.OldId)], (row, item) => item.OldId = (int.TryParse(row[_localizer[_dto.GetMemberDisplayName(x=>x.OldId)]].ToString(), out int result) == true ? result : null) }
 
             }, _localizer[_dto.GetClassDescription()]);
@@ -113,9 +113,9 @@ public class ImportTrackingUnitModelsCommand: ICacheInvalidatorRequest<Result<in
 _localizer[_dto.GetMemberDisplayName(x=>x.WhwTypeId)],
 _localizer[_dto.GetMemberDisplayName(x=>x.PortNo1)],
 _localizer[_dto.GetMemberDisplayName(x=>x.PortNo2)],
-_localizer[_dto.GetMemberDisplayName(x=>x.DefualtGprs)],
-_localizer[_dto.GetMemberDisplayName(x=>x.DefualtHost)],
-_localizer[_dto.GetMemberDisplayName(x=>x.DefualtPrice)],
+_localizer[_dto.GetMemberDisplayName(x=>x.DefaultGprs)],
+_localizer[_dto.GetMemberDisplayName(x=>x.DefaultHost)],
+_localizer[_dto.GetMemberDisplayName(x=>x.DefaultPrice)],
 _localizer[_dto.GetMemberDisplayName(x=>x.OldId)],
 
                 };

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using CleanArchitecture.Blazor.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260826185822_ModelsColumnRenamed")]
+    partial class ModelsColumnRenamed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -237,7 +240,7 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("boolean")
-                        .HasColumnName("is_available");
+                        .HasColumnName("is_avaliable");
 
                     b.Property<bool>("IsRenewable")
                         .HasColumnType("boolean")
@@ -1001,7 +1004,7 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 
                     b.Property<bool>("IsOwned")
                         .HasColumnType("boolean")
-                        .HasColumnName("is_owned");
+                        .HasColumnName("is_owen");
 
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp without time zone")
@@ -1344,7 +1347,7 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("boolean")
-                        .HasColumnName("is_available");
+                        .HasColumnName("is_avaliable");
 
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp without time zone")

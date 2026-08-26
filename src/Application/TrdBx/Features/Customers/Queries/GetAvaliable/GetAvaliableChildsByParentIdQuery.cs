@@ -35,7 +35,7 @@ public class GetAvaliableChildsByParentIdQueryHandler :
     {
         var customer = await _context.Customers
             .Where(c => c.Id == request.Id.Value)
-            .Select(c => new { c.BillingPlan, c.ParentId, c.IsAvaliable })
+            .Select(c => new { c.BillingPlan, c.ParentId, c.IsAvailable })
             .FirstOrDefaultAsync(cancellationToken);
 
         if (customer is null)
@@ -58,7 +58,7 @@ public class GetAvaliableChildsByParentIdQueryHandler :
         
         var data = await _context.Customers
             .Include(c => c.Parent)
-            .Where(c => (c.ParentId == parentId && c.BillingPlan == BillingPlan.Advanced && c.IsAvaliable)
+            .Where(c => (c.ParentId == parentId && c.BillingPlan == BillingPlan.Advanced && c.IsAvailable)
                         || c.Id == customerId) // Always include the original customer
             .ProjectToType<CustomerDto>(_typeAdapterConfig)
             .ToListAsync(cancellationToken);
@@ -71,7 +71,7 @@ public class GetAvaliableChildsByParentIdQueryHandler :
     // because we don't have a specific customer to include
     var allData = await _context.Customers
         .Include(c => c.Parent)
-        .Where(c => c.IsAvaliable 
+        .Where(c => c.IsAvailable 
                     && ((c.ParentId == null && c.BillingPlan == BillingPlan.Basic)
                         || (c.ParentId != null && c.BillingPlan == BillingPlan.Advanced)))
         .ProjectToType<CustomerDto>(_typeAdapterConfig)

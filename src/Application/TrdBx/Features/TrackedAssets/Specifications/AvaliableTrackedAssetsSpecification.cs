@@ -9,6 +9,6 @@ public class AvaliableTrackedAssetsSpecification : Specification<TrackedAsset>
 {
     public AvaliableTrackedAssetsSpecification()
     {
-       Query.Where(q => q.IsAvaliable == true);
+       Query.Where(q => q.IsAvailable == true);
     }
 }

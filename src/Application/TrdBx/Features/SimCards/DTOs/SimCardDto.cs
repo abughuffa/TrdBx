@@ -21,8 +21,8 @@ public class SimCardDto
     [Display(Name = "OldId")]
     public int? OldId { get; set; } = null;
 
-    [Display(Name = "IsOwen")]
-    public bool IsOwen { get; set; } = true;
+    [Display(Name = "IsOwned")]
+    public bool IsOwned { get; set; } = true;
 
     
     [Display(Name = "SPackage")] public string? SPackage { get; set; }

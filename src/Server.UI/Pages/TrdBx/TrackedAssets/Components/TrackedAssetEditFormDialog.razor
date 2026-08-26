@@ -23,7 +23,7 @@
                     <MudTextField Label="@L[_model.GetMemberDisplayName(x => x.VinSerNo)]" @bind-Value="_model.VinSerNo" For="@(() => _model.VinSerNo)" Required="(_model.TrackedAssetCode is null && _model.PlateNo is null)" RequiredError="@L["VinSerNo is required!"]" />
                 </MudItem>
                 <MudItem md="12">
-                    <MudCheckBox Label="@L[_model.GetMemberDisplayName(x => x.IsAvaliable)]" @bind-Value="_model.IsAvaliable" For="@(() => _model.IsAvaliable)" />
+                    <MudCheckBox Label="@L[_model.GetMemberDisplayName(x => x.IsAvailable)]" @bind-Value="_model.IsAvailable" For="@(() => _model.IsAvailable)" />
                 </MudItem>
             </MudGrid>
         </MudForm>

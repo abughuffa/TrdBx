@@ -73,7 +73,7 @@ public class ImportTrackedAssetsCommandHandler :
                { _localizer[_dto.GetMemberDisplayName(x=>x.VinSerNo)], (row, item) => item.VinSerNo = row[_localizer[_dto.GetMemberDisplayName(x=>x.VinSerNo)]].ToString() },
                { _localizer[_dto.GetMemberDisplayName(x=>x.PlateNo)], (row, item) => item.PlateNo = row[_localizer[_dto.GetMemberDisplayName(x=>x.PlateNo)]].ToString() },
                { _localizer[_dto.GetMemberDisplayName(x=>x.TrackedAssetDesc)], (row, item) => item.TrackedAssetDesc = row[_localizer[_dto.GetMemberDisplayName(x=>x.TrackedAssetDesc)]].ToString() },
-               { _localizer[_dto.GetMemberDisplayName(x=>x.IsAvaliable)], (row, item) => item.IsAvaliable =Convert.ToBoolean(row[_localizer[_dto.GetMemberDisplayName(x=>x.IsAvaliable)]]) },
+               { _localizer[_dto.GetMemberDisplayName(x=>x.IsAvailable)], (row, item) => item.IsAvailable =Convert.ToBoolean(row[_localizer[_dto.GetMemberDisplayName(x=>x.IsAvailable)]]) },
                 { _localizer[_dto.GetMemberDisplayName(x=>x.OldId)], (row, item) => item.OldId = (int.TryParse(row[_localizer[_dto.GetMemberDisplayName(x=>x.OldId)]].ToString(), out int result) == true ? result : null) },
                  { _localizer[_dto.GetMemberDisplayName(x=>x.OldVehicleNo)], (row, item) => item.OldVehicleNo = row[_localizer[_dto.GetMemberDisplayName(x=>x.OldVehicleNo)]].ToString() }
 
@@ -108,7 +108,7 @@ _localizer[_dto.GetMemberDisplayName(x=>x.TrackedAssetCode)],
 _localizer[_dto.GetMemberDisplayName(x=>x.VinSerNo)],
 _localizer[_dto.GetMemberDisplayName(x=>x.PlateNo)],
 _localizer[_dto.GetMemberDisplayName(x=>x.TrackedAssetDesc)],
-_localizer[_dto.GetMemberDisplayName(x=>x.IsAvaliable)],
+_localizer[_dto.GetMemberDisplayName(x=>x.IsAvailable)],
 _localizer[_dto.GetMemberDisplayName(x=>x.OldId)],
 _localizer[_dto.GetMemberDisplayName(x=>x.OldVehicleNo)],
 

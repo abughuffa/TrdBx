@@ -13,7 +13,7 @@ public class AvaliableChildsByParentIdSpecification : Specification<Customer>
         
         .Where(q => q.ParentId == parentId 
                          && q.BillingPlan == BillingPlan.Advanced 
-                         && q.IsAvaliable,parentId > 0);
+                         && q.IsAvailable,parentId > 0);
     }     
     
 

@@ -11,10 +11,10 @@ public class AvaliableCustomersSpecification : Specification<Customer>
     {
  
         if (WithAdvParents)     
-            Query.Where(q => q.IsAvaliable == true);
+            Query.Where(q => q.IsAvailable == true);
         else
             Query.Where(c => (c.ParentId == null && c.BillingPlan == BillingPlan.Basic) || (c.ParentId != null && c.BillingPlan == BillingPlan.Advanced))
-                .Where(c => c.IsAvaliable == true);
+                .Where(c => c.IsAvailable == true);
     }
 
 }

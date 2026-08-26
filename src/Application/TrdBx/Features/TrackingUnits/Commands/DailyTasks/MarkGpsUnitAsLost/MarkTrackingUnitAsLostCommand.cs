@@ -119,7 +119,7 @@ public class MarkTrackingUnitAsLostCommandHandler :SubscriptionSharedLogic , IRe
 
 
 
-        asset.IsAvaliable = true;
+        asset.IsAvailable = true;
 
         unit.UnitName = null;
         unit.UStatus = UStatus.Lost;

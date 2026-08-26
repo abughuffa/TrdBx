@@ -109,7 +109,7 @@ public class TransferTrackingUnitCommandHandler : SubscriptionSharedLogic, IRequ
 
         var oasset = context.TrackedAssets.Where(a => a.Id == (int)unit.TrackedAssetId).FirstOrDefault();
 
-        oasset.IsAvaliable = true;
+        oasset.IsAvailable = true;
 
         oasset.AddDomainEvent(new TrackedAssetUpdatedEvent(oasset));
 
@@ -117,7 +117,7 @@ public class TransferTrackingUnitCommandHandler : SubscriptionSharedLogic, IRequ
         serviceLog.IsDeserved = request.CreateDeservedServices;
 
 
-        asset.IsAvaliable = false;
+        asset.IsAvailable = false;
         asset.AddDomainEvent(new TrackedAssetUpdatedEvent(asset));
 
         unit.UnitName = asset.TrackedAssetCode;

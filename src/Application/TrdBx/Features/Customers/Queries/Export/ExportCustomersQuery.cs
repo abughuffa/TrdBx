@@ -90,7 +90,7 @@ public class ExportCustomersQueryHandler :
                     {_localizer[_dto.GetMemberDisplayName(x=>x.Mobile1)],item => item.Mobile1},
                 {_localizer[_dto.GetMemberDisplayName(x=>x.Mobile2)],item => item.Mobile1},
                 {_localizer[_dto.GetMemberDisplayName(x=>x.Email)],item => item.Email},
-                 {_localizer[_dto.GetMemberDisplayName(x=>x.IsAvaliable)],item => item.IsAvaliable},
+                 {_localizer[_dto.GetMemberDisplayName(x=>x.IsAvailable)],item => item.IsAvailable},
                  {_localizer[_dto.GetMemberDisplayName(x=>x.OldId)],item => item.OldId},
 
 

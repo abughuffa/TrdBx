@@ -1,4 +1,5 @@
-﻿using CleanArchitecture.Blazor.Domain.Enums;
+﻿using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Online.DataMatches.DTOs;
+using CleanArchitecture.Blazor.Domain.Enums;
 
 namespace CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Online.DataMatches.Specifications;
 #nullable disable warnings

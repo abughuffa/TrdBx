@@ -123,8 +123,8 @@
   <data name="Id" xml:space="preserve">
     <value>Id</value>
   </data>
-  <data name="IsAvaliable" xml:space="preserve">
-    <value>IsAvaliable?</value>
+  <data name="IsAvailable" xml:space="preserve">
+    <value>IsAvailable?</value>
   </data>
   <data name="OldVehicleNo" xml:space="preserve">
     <value>OldVehicleNo</value>

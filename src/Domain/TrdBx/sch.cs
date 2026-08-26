@@ -210,9 +210,9 @@
 //     public required string WialonName { get; set; } = string.Empty;
 //     public required string Name { get; set; } = string.Empty;
 //     public required int WhwTypeId { get; set; } = 0;
-//     public required decimal DefualtHost { get; set; } = 0.0m;
-//     public required decimal DefualtGprs { get; set; } = 0.0m;
-//     public required decimal DefualtPrice { get; set; } = 0.0m;
+//     public required decimal DefaultHost { get; set; } = 0.0m;
+//     public required decimal DefaultGprs { get; set; } = 0.0m;
+//     public required decimal DefaultPrice { get; set; } = 0.0m;
 //     public List<TrackingUnit>? TrackingUnits { get; set; } = null;
 //     public List<CusPrice>? CusPrices { get; set; } = null;
 //     public int PortNo1 { get; set; } = 0;
@@ -261,7 +261,7 @@
 //     public string? Mobile1 { get; set; } = string.Empty;
 //     public string? Mobile2 { get; set; } = string.Empty;
 //     public string? Email { get; set; } = string.Empty;
-//     public bool IsAvaliable { get; set; } = true;
+//     public bool IsAvailable { get; set; } = true;
 //     public int? OldId { get; set; } = null;
 //     public Customer? Parent { get; set; } = null;
 //     public List<Customer>? Childs { get; set; } = null;
@@ -299,7 +299,7 @@
 //     public int SPackageId { get; set; }
 //     public SPackage? SPackage { get; set; } = null;
 //     public SStatus SStatus { get; set; } = SStatus.New;
-//     public bool IsOwen { get; set; } = true;
+//     public bool IsOwned { get; set; } = true;
 //     public DateOnly? ExDate { get; set; } = null;
 
 
@@ -314,7 +314,7 @@
 //     public string? VinSerNo { get; set; } = string.Empty;
 //     public string? PlateNo { get; set; } = string.Empty;
 //     public required string TrackedAssetDesc { get; set; } = string.Empty;
-//     public bool IsAvaliable { get; set; } = true;
+//     public bool IsAvailable { get; set; } = true;
 //     public int? OldId { get; set; } = null;
 //     public string? OldVehicleNo { get; set; } = null;
 //     public List<TrackingUnit>? TrackingUnits { get; set; } = null;
@@ -516,5 +516,40 @@
 
 // }
 
+// public partial class ApplicationDbContext 
+// {
+//     #region TrdBx
+//     public DbSet<TrackingUnitModel> TrackingUnitModels { get; set; }
+//     public DbSet<TrackingUnit> TrackingUnits { get; set; }
+//     public DbSet<Customer> Customers { get; set; }
+//     public DbSet<CusPrice> CusPrices { get; set; }
+//     public DbSet<SProvider> SProviders { get; set; }
+//     public DbSet<SPackage> SPackages { get; set; }
+//     public DbSet<SimCard> SimCards { get; set; }
+//     public DbSet<TrackedAsset> TrackedAssets { get; set; }
+//     public DbSet<ServiceLog> ServiceLogs { get; set; }
+//     public DbSet<Subscription> Subscriptions { get; set; }
+//     public DbSet<WialonTask> WialonTasks { get; set; }
+//     public DbSet<ServicePrice> ServicePrices { get; set; }
+//     public DbSet<Ticket> Tickets { get; set; }
+//     public DbSet<LibyanaSimCard> LibyanaSimCards { get; set; }
+//     public DbSet<WialonUnit> WialonUnits { get; set; }
+//     #endregion
 
+//     public DbSet<Invoice> Invoices { get; set; }
+//     public DbSet<InvoiceItemGroup> InvoiceItemGroups { get; set; }
+//     public DbSet<InvoiceItem> InvoiceItems { get; set; }
+
+
+
+
+
+
+
+
+
+
+
+
+// }
 

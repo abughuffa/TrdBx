@@ -153,7 +153,7 @@
   <data name="Id" xml:space="preserve">
     <value>معرف</value>
   </data>
-  <data name="IsAvaliable" xml:space="preserve">
+  <data name="IsAvailable" xml:space="preserve">
     <value>الإتاحية</value>
   </data>
   <data name="IsRenewable" xml:space="preserve">

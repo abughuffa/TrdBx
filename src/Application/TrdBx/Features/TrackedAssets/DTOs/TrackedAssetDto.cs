@@ -19,8 +19,8 @@ public class TrackedAssetDto
     [Display(Name = "TrackedAssetDesc")]
     public string? TrackedAssetDesc { get; set; }
 
-    [Display(Name = "IsAvaliable")]
-    public bool IsAvaliable { get; set; }
+    [Display(Name = "IsAvailable")]
+    public bool IsAvailable { get; set; }
     [Display(Name = "OldId")]
     public int? OldId { get; set; } = null;
     [Display(Name = "OldVehicleNo")]
