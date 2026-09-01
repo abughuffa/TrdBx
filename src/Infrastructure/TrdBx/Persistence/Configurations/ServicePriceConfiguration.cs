@@ -14,11 +14,11 @@ namespace CleanArchitecture.Blazor.Infrastructure.Persistence.Configurations;
 //     }
 // }
 
-public class SPackageConfiguration : IEntityTypeConfiguration<SPackage>
+public class ServicePriceConfiguration : IEntityTypeConfiguration<ServicePrice>
 {
-    public void Configure(EntityTypeBuilder<SPackage> builder)
+    public void Configure(EntityTypeBuilder<ServicePrice> builder)
     {
-        builder.ToTable("SPackages");
+        builder.ToTable("ServicePrices");
 
         builder.Ignore(e => e.DomainEvents);
         
@@ -26,25 +26,26 @@ public class SPackageConfiguration : IEntityTypeConfiguration<SPackage>
         
         builder.Property(e => e.Id)
             .UseIdentityColumn();
-
-        builder.Property(e => e.SProviderId)
-            .IsRequired()
-            .HasColumnName("SProviderId");
         
-        builder.Property(e => e.Name)
+        builder.Property(e => e.ServiceTask)
+        .IsRequired()
+        // .HasConversion<string>()
+        .HasColumnName("ServiceTask");
+
+        builder.Property(e => e.Description)
             .IsRequired()
-            .HasMaxLength(50)
-            .HasColumnName("Name");
+            .HasMaxLength(500)
+            .HasColumnName("Description");
+
+        builder.Property(e => e.Price)
+            .IsRequired()
+            .HasPrecision(7, 3)
+            .HasColumnName("Price");
 
         // Indexes
-        builder.HasIndex(e => e.Name)
-            .HasDatabaseName("IX_SPackage_Name");
-        
-        // Relationships
-        builder.HasMany(e => e.SimCards)
-            .WithOne(e => e.SPackage)
-            .HasForeignKey(e => e.SPackageId)
-            .OnDelete(DeleteBehavior.Restrict);
+    
+        builder.HasIndex(e => e.ServiceTask)
+                .HasDatabaseName("IX_ServicePrice_ServiceTask");
         
     }
 }

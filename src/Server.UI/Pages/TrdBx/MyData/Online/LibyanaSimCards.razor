@@ -49,7 +49,19 @@
                     </MudButton>
                     @if (_accessRights.Import)
                     {
-                            <MudFileUpload T="IBrowserFile" FilesChanged="OnImportData" Accept=".xlsx">
+                         <MudFileUpload T="IBrowserFile" FilesChanged="OnImportData" Accept=".xlsx">
+                                    <CustomContent>
+                                        <MudButton Class="pa-0 ma-0" Style="font-weight:400;text-transform:none;"
+                                                   OnClick="@context.OpenFilePickerAsync"
+                                                   Variant="Variant.Text"
+                                                   Disabled="@_uploading">
+                                            @AppStrings.Import
+                                        </MudButton>
+                                    </CustomContent>
+                                    <SelectedTemplate></SelectedTemplate>
+                         </MudFileUpload>
+
+                            @* <MudFileUpload T="IBrowserFile" FilesChanged="OnImportData" Accept=".xlsx">
                                 <CustomContent>
                                     <MudLoadingButton Class="pa-0 ma-0" Style="font-weight:400;text-transform:none;"
                                                       Variant="Variant.Text"
@@ -58,7 +70,7 @@
                                     @AppStrings.Import
                                     </MudLoadingButton>
                                 </CustomContent>
-                            </MudFileUpload>
+                            </MudFileUpload> *@
                     }
                     @if (_accessRights.Export)
                     {

@@ -47,7 +47,7 @@ public class CustomerDto
     [Display(Name ="Parent")] public string? Parent { get; set; }
 
 
-     [Display(Name ="ParentChild")] public string? ParentChild => Parent is null ? Name : $"{Parent} - {Name}";
+    [Display(Name ="ParentChild")] public string? ParentChild => Parent is null ? Name : $"{Parent} - {Name}";
 
 
 

@@ -1,3 +1,14 @@
+# Verify dotnet version:
+dotnet ef --version
+
+# Update dotnet packages
+dotnet tool update --global dotnet-ef
+
+# Restore the packages:
+dotnet restore
+
+#************************************************
+
 # Remove the migration you just created
 dotnet ef migrations remove --project src/Migrators/Migrators.PostgreSQL --startup-project src/Server.UI --context ApplicationDbContext
 
@@ -10,6 +21,7 @@ dotnet ef migrations script --project src/Migrators/Migrators.PostgreSQL --start
 # Update the database with the -f flag to force it
 dotnet ef database update --project src/Migrators/Migrators.PostgreSQL --startup-project src/Server.UI --context ApplicationDbContext
 
+#************************************************
 
 
-dotnet ef migrations add ModelsColumnRenamed --project src/Migrators/Migrators.PostgreSQL --startup-project src/Server.UI --context ApplicationDbContext
+dotnet ef migrations add TrackingUnitModelModfied --project src/Migrators/Migrators.PostgreSQL --startup-project src/Server.UI --context ApplicationDbContext

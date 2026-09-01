@@ -68,7 +68,6 @@
 // {
 //     [Display(Name = "Active")] Active = 1,
 //     [Display(Name = "Inactive")] Inactive = 2,
-    
 // }
 // public enum UStatus
 // {
@@ -82,8 +81,6 @@
 //     [Display(Name = "Used")] Used = 7,
 //     [Display(Name = "Damaged")] Damaged = 8,
 //     [Display(Name = "Lost")] Lost = 9,
-
-
 // }
 // public enum SubPackageFees
 // {
@@ -109,42 +106,14 @@
 //     [Display(Name = "Two-Way Block")] TwoWayBlock = 2,
 //     [Display(Name = "Frozen Block")] Frozen = 3,
 //     [Display(Name = "Inactive")] Inactive = 4,
-
 // }
 // public enum TicketStatus
 // {
-//     //All = 0,
 //     [Display(Name = "Opened")] Opened = 2,
 //     [Display(Name = "Accepted")] Accepted = 3,
 //     [Display(Name = "Rejected")] Rejected = 5,
 //     [Display(Name = "Closed")] Closed = 7
 // }
-
-// public enum TicketTask
-// {
-//     [Display(Name = "Check")] Check = 10, //just created invoice
-
-//     [Display(Name = "Support")] Support_Recover = 20, //invoice in tax process
-//     [Display(Name = "Support")] Support_ReInstall = 21, //invoice in tax process
-//     [Display(Name = "Support")] Support_Transfer = 22, //invoice in tax process
-//     [Display(Name = "Support")] Support_Replace = 23, //invoice in tax process
-
-//     [Display(Name = "Support")] Support_InstallSimCard = 24, //invoice in tax process
-//     [Display(Name = "Support")] Support_RecoverSimCard = 25, //invoice in tax process
-//     [Display(Name = "Support")] Support_ReplacSimCard = 26, //invoice in tax process
-
-//     [Display(Name = "Install")] Install_New = 31, //invoice retrived from taxes
-//     [Display(Name = "Install")] ReInstall_Used = 32, //invoice retrived from taxes
-
-//     [Display(Name = "Renew")] Renew_RenewUnitSub = 41, //invoice sent to customer
-
-//     [Display(Name = "Subscription")] Subscription_ActivateUnit = 51, //invoice paid
-//     [Display(Name = "Subscription")] Subscription_ActivateUnitForGprs = 52, //invoice paid
-//     [Display(Name = "Subscription")] Subscription_ActivateUnitForHosting = 53, //invoice paid
-//     [Display(Name = "Subscription")] Subscription_DeactivateUnit = 54, //invoice paid
-
-// }
-
 // public enum ServiceTask
 // {
 //     [Display(Name = "Check")] Check = 1,
@@ -200,13 +169,8 @@
 //     [Display(Name = "Subscription")] Subscription = 5, //invoice paid
 //     [Display(Name = "Replace")] Replace = 6 //invoice canceled
 // }
-
-
-
-
 // public class TrackingUnitModel : BaseEntity
 // {
-    
 //     public required string WialonName { get; set; } = string.Empty;
 //     public required string Name { get; set; } = string.Empty;
 //     public required int WhwTypeId { get; set; } = 0;
@@ -217,8 +181,7 @@
 //     public List<CusPrice>? CusPrices { get; set; } = null;
 //     public int PortNo1 { get; set; } = 0;
 //     public int PortNo2 { get; set; } = 0;
-//     public int? OldId { get; set; } = null;
-    
+//     public int? OldId { get; set; } = null; 
 // }
 // public class TrackingUnit : BaseAuditableEntity
 // {
@@ -236,8 +199,6 @@
 //     public WStatus? WStatus { get; set; }
 //     public int? WUnitId { get; set; }
 //     public int? OldId { get; set; }
-
-
 //     public TrackingUnitModel? TrackingUnitModel { get; set; } = null;
 //     public SimCard? SimCard { get; set; } = null;
 //     public Customer? Customer { get; set; } = null;
@@ -269,7 +230,6 @@
 // }
 // public class CusPrice : BaseAuditableEntity
 // {
-//     //public AssignedTo AssignedTo { get; set; } = AssignedTo.Null;
 //     public int CustomerId { get; set; }
 //     public int TrackingUnitModelId { get; set; }
 //     public decimal Host { get; set; } = 0.0m;
@@ -301,8 +261,6 @@
 //     public SStatus SStatus { get; set; } = SStatus.New;
 //     public bool IsOwned { get; set; } = true;
 //     public DateOnly? ExDate { get; set; } = null;
-
-
 //     public int? OldId { get; set; } = null;
 //     public TrackingUnit? TrackingUnits { get; set; } = null;
 // }
@@ -325,15 +283,12 @@
 //     public string ServiceNo { get; set; } = string.Empty;
 //     public ServiceTask ServiceTask { get; set; }
 //     public int CustomerId { get; set; }
-//     //public required string InstallerId { get; set; }
 //     public string Description { get; set; } = string.Empty;
 //     public DateOnly SerDate { get; set; }
 //     public bool IsDeserved { get; set; } = true;
 //     public bool IsBilled { get; set; } = false;
 //     public decimal Amount { get; set; } = 0.0m;
 //     public Customer? Customer { get; set; } = null;
-//     //public ApplicationUser? Installer { get; set; } = null;
-//     public InvoiceItem? InvoiceItem { get; set; } = null;
 //     public InvoiceItemGroup? InvoiceItemGroup { get; set; } = null;
 //     public List<Subscription>? Subscriptions { get; set; } = null;
 //     public List<WialonTask>? WialonTasks { get; set; } = null;
@@ -396,7 +351,6 @@
 //     public decimal TaxAmount { get; set; } = 0.0m;
 //     public decimal TaxableAmount { get; set; } = 0.0m;
 //     public decimal GrandTotal { get; set; } = 0.0m;
-
 //     public Customer? Customer { get; set; }
 //     public List<InvoiceItemGroup>? InvoiceItemGroups { get; set; } = null;
 // }
@@ -418,14 +372,10 @@
 //     public int InvoiceItemGroupId { get; set; }
 //     public int SubscriptionId { get; set; }
 //     public string? Description { get; set; }
-//     //public DateOnly StartDate { get; set; }
-//     //public DateOnly EndDate { get; set; }
 //     public decimal Amount { get; set; } = 0.0m;
 //     public Subscription? Subscription { get; set; }
 //     public InvoiceItemGroup? InvoiceItemGroup { get; set; }
 // }
-
-
 // public class Ticket : BaseAuditableEntity
 // {
 //     public string TicketNo { get; set; } = string.Empty;
@@ -455,7 +405,6 @@
 //     public DateTime? DExDate { get; set; } = null;
 //     public string? DataOffer { get; set; } = string.Empty;
 //     public DateTime? DOExpired { get; set; } = null;
-
 // }
 // public class WialonUnit : BaseEntity
 // {
@@ -483,37 +432,30 @@
 // }
 // public class DataDiagnosis : IEntity
 // {
-//     [Description("Account")]
+//     [Display(Name = "Account")]
 //     public string? Account { get; set; }
-//     [Description("Client")]
+//     [Display(Name = "Client")]
 //     public string? Client { get; set; }
-//     [Description("Customer")]
+//     [Display(Name = "Customer")]
 //     public string? Customer { get; set; }
-
-//     [Description("UnitSNo")]
+//     [Display(Name = "UnitSNo")]
 //     public string? UnitSNo { get; set; }
-
-//     [Description("SimCardNo")]
+//     [Display(Name = "SimCardNo")]
 //     public string? SimCardNo { get; set; }
-
-//     [Description("StatusOnWialon")]
+//     [Display(Name = "StatusOnWialon")]
 //     public WStatus? StatusOnWialon { get; set; }
-
-//     [Description("StatusOnTrdBx")]
+//     [Display(Name = "StatusOnTrdBx")]
 //     public UStatus? StatusOnTrdBx { get; set; }
-
-//     [Description("SimCardStatus")]
+//     [Display(Name = "SimCardStatus")]
 //     public SLStatus? SimCardStatus { get; set; }
-//     [Description("LDExDate")]
+//     [Display(Name = "LDExDate")]
 //     public DateTime? LDExDate { get; set; }
-//     [Description("LDOExpired")]
+//     [Display(Name = "LDOExpired")]
 //     public DateTime? LDOExpired { get; set; }
-
-//     [Description("WNote")]
+//     [Display(Name = "WNote")]
 //     public string? WNote { get; set; }
-//     [Description("Balance")]
+//     [Display(Name = "Balance")]
 //     public decimal? Balance { get; set; }
-
 // }
 
 // public partial class ApplicationDbContext 
@@ -534,22 +476,9 @@
 //     public DbSet<Ticket> Tickets { get; set; }
 //     public DbSet<LibyanaSimCard> LibyanaSimCards { get; set; }
 //     public DbSet<WialonUnit> WialonUnits { get; set; }
-//     #endregion
-
 //     public DbSet<Invoice> Invoices { get; set; }
 //     public DbSet<InvoiceItemGroup> InvoiceItemGroups { get; set; }
 //     public DbSet<InvoiceItem> InvoiceItems { get; set; }
-
-
-
-
-
-
-
-
-
-
-
-
+//     #endregion
 // }
 

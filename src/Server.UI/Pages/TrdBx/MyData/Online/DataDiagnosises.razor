@@ -149,7 +149,7 @@
         try
         {
             _loading = true;
-            Query.OrderBy = state.SortDefinitions.FirstOrDefault()?.SortBy ?? "Id";
+            Query.OrderBy = state.SortDefinitions.FirstOrDefault()?.SortBy ?? "SimCardNo";
             Query.SortDirection = state.SortDefinitions.FirstOrDefault()?.Descending ?? true
                                               ? SortDirection.Descending.ToString()
                                               : SortDirection.Ascending.ToString();

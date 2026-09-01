@@ -14,10 +14,10 @@
                    Clearable="@Clearable"
                    Value="@Value"
                    ValueChanged="OnValueChanged">
-            @foreach (var customer in customers)
-            {
-                <MudSelectItem Value="(int?)customer.Id">@customer.ParentChild</MudSelectItem>
-            }
+                    @foreach (var customer in customers)
+                    {
+                        <MudSelectItem Value="(int?)customer.Id">@customer.ParentChild</MudSelectItem>
+                    }
         </MudSelect>
     </MudItem>
 </MudGrid>
@@ -37,9 +37,7 @@
 
 
     private IEnumerable<CustomerDto> customers =  new List<CustomerDto>();
-
     private GetAvaliableCustomersQuery GetAvaliableCustomersQuery = new();
-
     private void OnValueChanged(int? id)
     {
         Value = id;

@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260823095006_InitialCreate")]
+    [Migration("20260901113440_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -161,15 +161,17 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("integer")
-                        .HasColumnName("customer_id");
+                        .HasColumnName("CustomerId");
 
                     b.Property<decimal>("Gprs")
-                        .HasColumnType("numeric")
-                        .HasColumnName("gprs");
+                        .HasPrecision(7, 3)
+                        .HasColumnType("numeric(7,3)")
+                        .HasColumnName("Gprs");
 
                     b.Property<decimal>("Host")
-                        .HasColumnType("numeric")
-                        .HasColumnName("host");
+                        .HasPrecision(7, 3)
+                        .HasColumnType("numeric(7,3)")
+                        .HasColumnName("Host");
 
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp without time zone")
@@ -181,23 +183,24 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasColumnName("last_modified_by_id");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("numeric")
-                        .HasColumnName("price");
+                        .HasPrecision(7, 3)
+                        .HasColumnType("numeric(7,3)")
+                        .HasColumnName("Price");
 
                     b.Property<int>("TrackingUnitModelId")
                         .HasColumnType("integer")
-                        .HasColumnName("tracking_unit_model_id");
+                        .HasColumnName("TrackingUnitModelId");
 
                     b.HasKey("Id")
                         .HasName("pk_cus_prices");
 
                     b.HasIndex("CustomerId")
-                        .HasDatabaseName("ix_cus_prices_customer_id");
+                        .HasDatabaseName("IX_CusPrice_CustomerId");
 
                     b.HasIndex("TrackingUnitModelId")
-                        .HasDatabaseName("ix_cus_prices_tracking_unit_model_id");
+                        .HasDatabaseName("IX_CusPrice_TrackingUnitModelId");
 
-                    b.ToTable("cus_prices", (string)null);
+                    b.ToTable("CusPrices", (string)null);
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Customer", b =>
@@ -211,18 +214,18 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 
                     b.Property<string>("Account")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)")
-                        .HasColumnName("account");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("Account");
 
                     b.Property<string>("Address")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("address");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("Address");
 
                     b.Property<int>("BillingPlan")
                         .HasColumnType("integer")
-                        .HasColumnName("billing_plan");
+                        .HasColumnName("BillingPlan");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp without time zone")
@@ -234,21 +237,21 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasColumnName("created_by_id");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("email");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("Email");
 
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("boolean")
-                        .HasColumnName("is_avaliable");
+                        .HasColumnName("IsAvailable");
 
                     b.Property<bool>("IsRenewable")
                         .HasColumnType("boolean")
-                        .HasColumnName("is_renewable");
+                        .HasColumnName("IsRenewable");
 
                     b.Property<bool>("IsTaxable")
                         .HasColumnType("boolean")
-                        .HasColumnName("is_taxable");
+                        .HasColumnName("IsTaxable");
 
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp without time zone")
@@ -260,54 +263,59 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasColumnName("last_modified_by_id");
 
                     b.Property<string>("Mobile1")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("mobile1");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("Mobile1");
 
                     b.Property<string>("Mobile2")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("mobile2");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("Mobile2");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)")
-                        .HasColumnName("name");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("Name");
 
                     b.Property<int?>("OldId")
                         .HasColumnType("integer")
-                        .HasColumnName("old_id");
+                        .HasColumnName("OldId");
 
                     b.Property<int?>("ParentId")
                         .HasColumnType("integer")
-                        .HasColumnName("parent_id");
+                        .HasColumnName("ParentId");
 
                     b.Property<string>("UserName")
                         .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("user_name");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("UserName");
 
                     b.Property<int?>("WUnitGroupId")
                         .HasColumnType("integer")
-                        .HasColumnName("w_unit_group_id");
+                        .HasColumnName("WUnitGroupId");
 
                     b.Property<int?>("WUserId")
                         .HasColumnType("integer")
-                        .HasColumnName("w_user_id");
+                        .HasColumnName("WUserId");
 
                     b.HasKey("Id")
                         .HasName("pk_customers");
 
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasDatabaseName("ix_customers_name");
+                    b.HasIndex("Account")
+                        .HasDatabaseName("IX_Customer_Account");
+
+                    b.HasIndex("Email")
+                        .HasDatabaseName("IX_Customer_Email");
 
                     b.HasIndex("ParentId")
-                        .HasDatabaseName("ix_customers_parent_id");
+                        .HasDatabaseName("IX_Customer_ParentId");
 
-                    b.ToTable("customers", (string)null);
+                    b.HasIndex("UserName")
+                        .HasDatabaseName("IX_Customer_UserName");
+
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Document", b =>
@@ -410,61 +418,64 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("integer")
-                        .HasColumnName("customer_id");
+                        .HasColumnName("CustomerId");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("description");
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("Description");
 
                     b.Property<decimal>("DiscountAmount")
-                        .HasColumnType("numeric")
-                        .HasColumnName("discount_amount");
+                        .HasPrecision(9, 3)
+                        .HasColumnType("numeric(9,3)")
+                        .HasColumnName("DiscountAmount");
 
                     b.Property<decimal>("DiscountRate")
-                        .HasColumnType("numeric")
-                        .HasColumnName("discount_rate");
+                        .HasPrecision(9, 3)
+                        .HasColumnType("numeric(9,3)")
+                        .HasColumnName("DiscountRate");
 
                     b.Property<string>("DisplayCusName")
                         .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("display_cus_name");
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("DisplayCusName");
 
                     b.Property<DateOnly>("DueDate")
                         .HasColumnType("date")
-                        .HasColumnName("due_date");
+                        .HasColumnName("DueDate");
 
                     b.Property<decimal>("GrandTotal")
-                        .HasColumnType("numeric")
-                        .HasColumnName("grand_total");
+                        .HasPrecision(9, 3)
+                        .HasColumnType("numeric(9,3)")
+                        .HasColumnName("GrandTotal");
 
                     b.Property<int>("IStatus")
                         .HasColumnType("integer")
-                        .HasColumnName("i_status");
+                        .HasColumnName("IStatus");
 
                     b.Property<DateOnly>("InvoiceDate")
                         .HasColumnType("date")
-                        .HasColumnName("invoice_date");
+                        .HasColumnName("InvoiceDate");
 
                     b.Property<string>("InvoiceNo")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("invoice_no");
+                        .HasColumnName("InvoiceNo");
 
                     b.Property<int>("InvoiceType")
                         .HasColumnType("integer")
-                        .HasColumnName("invoice_type");
+                        .HasColumnName("InvoiceType");
 
                     b.Property<bool>("IsTaxIgnored")
                         .HasColumnType("boolean")
-                        .HasColumnName("is_tax_ignored");
+                        .HasColumnName("IsTaxIgnored");
 
                     b.Property<bool>("IsTaxable")
                         .HasColumnType("boolean")
-                        .HasColumnName("is_taxable");
+                        .HasColumnName("IsTaxable");
 
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp without time zone")
@@ -476,40 +487,50 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasColumnName("last_modified_by_id");
 
                     b.Property<decimal>("PaidAmount")
-                        .HasColumnType("numeric")
-                        .HasColumnName("paid_amount");
+                        .HasPrecision(9, 3)
+                        .HasColumnType("numeric(9,3)")
+                        .HasColumnName("PaidAmount");
 
                     b.Property<DateOnly?>("PaymentDate")
                         .HasColumnType("date")
-                        .HasColumnName("payment_date");
+                        .HasColumnName("PaymentDate");
 
                     b.Property<decimal>("TaxAmount")
-                        .HasColumnType("numeric")
-                        .HasColumnName("tax_amount");
+                        .HasPrecision(9, 3)
+                        .HasColumnType("numeric(9,3)")
+                        .HasColumnName("TaxAmount");
 
                     b.Property<decimal>("TaxRate")
-                        .HasColumnType("numeric")
-                        .HasColumnName("tax_rate");
+                        .HasPrecision(9, 3)
+                        .HasColumnType("numeric(9,3)")
+                        .HasColumnName("TaxRate");
 
                     b.Property<decimal>("TaxableAmount")
-                        .HasColumnType("numeric")
-                        .HasColumnName("taxable_amount");
+                        .HasPrecision(9, 3)
+                        .HasColumnType("numeric(9,3)")
+                        .HasColumnName("TaxableAmount");
 
                     b.Property<decimal>("Total")
-                        .HasColumnType("numeric")
-                        .HasColumnName("total");
+                        .HasPrecision(9, 3)
+                        .HasColumnType("numeric(9,3)")
+                        .HasColumnName("Total");
 
                     b.HasKey("Id")
                         .HasName("pk_invoices");
 
-                    b.HasIndex("CustomerId")
-                        .HasDatabaseName("ix_invoices_customer_id");
+                    b.HasIndex("IStatus")
+                        .HasDatabaseName("IX_Invoice_IStatus");
+
+                    b.HasIndex("InvoiceDate")
+                        .HasDatabaseName("IX_Invoice_InvoiceDate");
 
                     b.HasIndex("InvoiceNo")
-                        .IsUnique()
-                        .HasDatabaseName("ix_invoices_invoice_no");
+                        .HasDatabaseName("IX_Invoice_InvoiceNo");
 
-                    b.ToTable("invoices", (string)null);
+                    b.HasIndex("CustomerId", "IStatus", "InvoiceDate")
+                        .HasDatabaseName("IX_Invoice_CustomerId_IStatus_InvoiceDate");
+
+                    b.ToTable("Invoices", (string)null);
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.InvoiceItem", b =>
@@ -522,37 +543,38 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("numeric")
-                        .HasColumnName("amount");
+                        .HasPrecision(9, 3)
+                        .HasColumnType("numeric(9,3)")
+                        .HasColumnName("Amount");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("description");
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("Description");
 
                     b.Property<int>("InvoiceItemGroupId")
                         .HasColumnType("integer")
-                        .HasColumnName("invoice_item_group_id");
+                        .HasColumnName("InvoiceItemGroupId");
 
                     b.Property<int>("SubSerialIndex")
                         .HasColumnType("integer")
-                        .HasColumnName("sub_serial_index");
+                        .HasColumnName("SubSerialIndex");
 
                     b.Property<int>("SubscriptionId")
                         .HasColumnType("integer")
-                        .HasColumnName("subscription_id");
+                        .HasColumnName("SubscriptionId");
 
                     b.HasKey("Id")
                         .HasName("pk_invoice_items");
 
                     b.HasIndex("InvoiceItemGroupId")
-                        .HasDatabaseName("ix_invoice_items_invoice_item_group_id");
+                        .HasDatabaseName("IX_InvoiceItem_InvoiceItemGroupId");
 
                     b.HasIndex("SubscriptionId")
                         .IsUnique()
-                        .HasDatabaseName("ix_invoice_items_subscription_id");
+                        .HasDatabaseName("IX_InvoiceItem_SubscriptionId");
 
-                    b.ToTable("invoice_items", (string)null);
+                    b.ToTable("InvoiceItems", (string)null);
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.InvoiceItemGroup", b =>
@@ -565,42 +587,44 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("numeric")
-                        .HasColumnName("amount");
+                        .HasPrecision(9, 3)
+                        .HasColumnType("numeric(9,3)")
+                        .HasColumnName("Amount");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("description");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("Description");
 
                     b.Property<int>("InvoiceId")
                         .HasColumnType("integer")
-                        .HasColumnName("invoice_id");
+                        .HasColumnName("InvoiceId");
 
                     b.Property<int>("SerialIndex")
                         .HasColumnType("integer")
-                        .HasColumnName("serial_index");
+                        .HasColumnName("SerialIndex");
 
                     b.Property<int>("ServiceLogId")
                         .HasColumnType("integer")
-                        .HasColumnName("service_log_id");
+                        .HasColumnName("ServiceLogId");
 
                     b.Property<decimal>("SubTotal")
-                        .HasColumnType("numeric")
-                        .HasColumnName("sub_total");
+                        .HasPrecision(9, 3)
+                        .HasColumnType("numeric(9,3)")
+                        .HasColumnName("SubTotal");
 
                     b.HasKey("Id")
                         .HasName("pk_invoice_item_groups");
 
                     b.HasIndex("InvoiceId")
-                        .HasDatabaseName("ix_invoice_item_groups_invoice_id");
+                        .HasDatabaseName("IX_InvoiceItemGroup_InvoiceId");
 
                     b.HasIndex("ServiceLogId")
                         .IsUnique()
-                        .HasDatabaseName("ix_invoice_item_groups_service_log_id");
+                        .HasDatabaseName("IX_InvoiceItemGroup_ServiceLogId");
 
-                    b.ToTable("invoice_item_groups", (string)null);
+                    b.ToTable("InvoiceItemGroups", (string)null);
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.LibyanaSimCard", b =>
@@ -614,47 +638,51 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 
                     b.Property<DateTime?>("BExDate")
                         .HasColumnType("timestamp without time zone")
-                        .HasColumnName("b_ex_date");
+                        .HasColumnName("BExDate");
 
                     b.Property<decimal?>("Balance")
-                        .HasColumnType("numeric")
-                        .HasColumnName("balance");
+                        .HasPrecision(9, 3)
+                        .HasColumnType("numeric(9,3)")
+                        .HasColumnName("Balance");
 
                     b.Property<DateTime?>("DExDate")
                         .HasColumnType("timestamp without time zone")
-                        .HasColumnName("d_ex_date");
+                        .HasColumnName("DExDate");
 
                     b.Property<DateTime?>("DOExpired")
                         .HasColumnType("timestamp without time zone")
-                        .HasColumnName("do_expired");
+                        .HasColumnName("DOExpired");
 
                     b.Property<string>("DataOffer")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("data_offer");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("DataOffer");
 
                     b.Property<DateTime?>("JoinDate")
                         .HasColumnType("timestamp without time zone")
-                        .HasColumnName("join_date");
+                        .HasColumnName("JoinDate");
 
                     b.Property<string>("Package")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("package");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("Package");
 
                     b.Property<string>("SimCardNo")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("sim_card_no");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("SimCardNo");
 
                     b.Property<int?>("SimCardStatus")
                         .HasColumnType("integer")
-                        .HasColumnName("sim_card_status");
+                        .HasColumnName("SimCardStatus");
 
                     b.HasKey("Id")
                         .HasName("pk_libyana_sim_cards");
 
-                    b.ToTable("libyana_sim_cards", (string)null);
+                    b.HasIndex("SimCardNo")
+                        .HasDatabaseName("IX_LibyanaSimCard_SimCardNo");
+
+                    b.ToTable("LibyanaSimCards", (string)null);
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.PicklistSet", b =>
@@ -794,7 +822,7 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("name");
+                        .HasColumnName("Name");
 
                     b.Property<int?>("OldId")
                         .HasColumnType("integer")
@@ -802,19 +830,18 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 
                     b.Property<int>("SProviderId")
                         .HasColumnType("integer")
-                        .HasColumnName("s_provider_id");
+                        .HasColumnName("SProviderId");
 
                     b.HasKey("Id")
                         .HasName("pk_s_packages");
 
                     b.HasIndex("Name")
-                        .IsUnique()
-                        .HasDatabaseName("ix_s_packages_name");
+                        .HasDatabaseName("IX_SPackage_Name");
 
                     b.HasIndex("SProviderId")
                         .HasDatabaseName("ix_s_packages_s_provider_id");
 
-                    b.ToTable("s_packages", (string)null);
+                    b.ToTable("SPackages", (string)null);
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SProvider", b =>
@@ -830,16 +857,15 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("name");
+                        .HasColumnName("Name");
 
                     b.HasKey("Id")
                         .HasName("pk_s_providers");
 
                     b.HasIndex("Name")
-                        .IsUnique()
-                        .HasDatabaseName("ix_s_providers_name");
+                        .HasDatabaseName("IX_SProvider_Name");
 
-                    b.ToTable("s_providers", (string)null);
+                    b.ToTable("SProviders", (string)null);
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.ServiceLog", b =>
@@ -852,8 +878,9 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("numeric")
-                        .HasColumnName("amount");
+                        .HasPrecision(7, 3)
+                        .HasColumnType("numeric(7,3)")
+                        .HasColumnName("Amount");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp without time zone")
@@ -866,25 +893,21 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("integer")
-                        .HasColumnName("customer_id");
+                        .HasColumnName("CustomerId");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
-                        .HasColumnName("description");
-
-                    b.Property<int?>("InvoiceItemId")
-                        .HasColumnType("integer")
-                        .HasColumnName("invoice_item_id");
+                        .HasColumnName("Description");
 
                     b.Property<bool>("IsBilled")
                         .HasColumnType("boolean")
-                        .HasColumnName("is_billed");
+                        .HasColumnName("IsBilled");
 
                     b.Property<bool>("IsDeserved")
                         .HasColumnType("boolean")
-                        .HasColumnName("is_deserved");
+                        .HasColumnName("IsDeserved");
 
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp without time zone")
@@ -897,17 +920,17 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 
                     b.Property<DateOnly>("SerDate")
                         .HasColumnType("date")
-                        .HasColumnName("ser_date");
+                        .HasColumnName("SerDate");
 
                     b.Property<string>("ServiceNo")
                         .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("service_no");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("ServiceNo");
 
                     b.Property<int>("ServiceTask")
                         .HasColumnType("integer")
-                        .HasColumnName("service_task");
+                        .HasColumnName("ServiceTask");
 
                     b.HasKey("Id")
                         .HasName("pk_service_logs");
@@ -915,17 +938,16 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     b.HasIndex("CreatedById")
                         .HasDatabaseName("ix_service_logs_created_by_id");
 
-                    b.HasIndex("CustomerId")
-                        .HasDatabaseName("ix_service_logs_customer_id");
-
-                    b.HasIndex("InvoiceItemId")
-                        .HasDatabaseName("ix_service_logs_invoice_item_id");
-
                     b.HasIndex("ServiceNo")
-                        .IsUnique()
-                        .HasDatabaseName("ix_service_logs_service_no");
+                        .HasDatabaseName("IX_ServiceLog_ServiceNo");
 
-                    b.ToTable("service_logs", (string)null);
+                    b.HasIndex("ServiceTask")
+                        .HasDatabaseName("IX_ServiceLog_ServiceTask");
+
+                    b.HasIndex("CustomerId", "SerDate")
+                        .HasDatabaseName("IX_ServiceLog_CustomerId_SerDate");
+
+                    b.ToTable("ServiceLogs", (string)null);
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.ServicePrice", b =>
@@ -948,9 +970,9 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("description");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("Description");
 
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp without time zone")
@@ -962,17 +984,21 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasColumnName("last_modified_by_id");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("numeric")
-                        .HasColumnName("price");
+                        .HasPrecision(7, 3)
+                        .HasColumnType("numeric(7,3)")
+                        .HasColumnName("Price");
 
                     b.Property<int>("ServiceTask")
                         .HasColumnType("integer")
-                        .HasColumnName("service_task");
+                        .HasColumnName("ServiceTask");
 
                     b.HasKey("Id")
                         .HasName("pk_service_prices");
 
-                    b.ToTable("service_prices", (string)null);
+                    b.HasIndex("ServiceTask")
+                        .HasDatabaseName("IX_ServicePrice_ServiceTask");
+
+                    b.ToTable("ServicePrices", (string)null);
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SimCard", b =>
@@ -995,16 +1021,16 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 
                     b.Property<DateOnly?>("ExDate")
                         .HasColumnType("date")
-                        .HasColumnName("ex_date");
+                        .HasColumnName("ExDate");
 
                     b.Property<string>("ICCID")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("iccid");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("ICCID");
 
                     b.Property<bool>("IsOwned")
                         .HasColumnType("boolean")
-                        .HasColumnName("is_owen");
+                        .HasColumnName("IsOwned");
 
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp without time zone")
@@ -1017,33 +1043,35 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 
                     b.Property<int?>("OldId")
                         .HasColumnType("integer")
-                        .HasColumnName("old_id");
+                        .HasColumnName("OldId");
 
                     b.Property<int>("SPackageId")
                         .HasColumnType("integer")
-                        .HasColumnName("s_package_id");
+                        .HasColumnName("SPackageId");
 
                     b.Property<int>("SStatus")
                         .HasColumnType("integer")
-                        .HasColumnName("s_status");
+                        .HasColumnName("SStatus");
 
                     b.Property<string>("SimCardNo")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("sim_card_no");
+                        .HasColumnName("SimCardNo");
 
                     b.HasKey("Id")
                         .HasName("pk_sim_cards");
 
+                    b.HasIndex("ICCID")
+                        .HasDatabaseName("IX_SimCard_ICCID");
+
                     b.HasIndex("SPackageId")
-                        .HasDatabaseName("ix_sim_cards_s_package_id");
+                        .HasDatabaseName("IX_SimCard_SPackageId");
 
                     b.HasIndex("SimCardNo")
-                        .IsUnique()
-                        .HasDatabaseName("ix_sim_cards_sim_card_no");
+                        .HasDatabaseName("IX_SimCard_SimCardNo");
 
-                    b.ToTable("sim_cards", (string)null);
+                    b.ToTable("SimCards", (string)null);
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Subscription", b =>
@@ -1055,62 +1083,51 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("Amount")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("numeric")
-                        .HasColumnName("amount")
-                        .HasComputedColumnSql("(\"se_date\" - \"ss_date\") * daily_fees", true);
-
                     b.Property<int>("CaseCode")
                         .HasColumnType("integer")
-                        .HasColumnName("case_code");
+                        .HasColumnName("CaseCode");
 
                     b.Property<decimal>("DailyFees")
-                        .HasColumnType("numeric")
-                        .HasColumnName("daily_fees");
-
-                    b.Property<int>("Days")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("integer")
-                        .HasColumnName("days")
-                        .HasComputedColumnSql("\"se_date\" - \"ss_date\"", true);
+                        .HasPrecision(7, 3)
+                        .HasColumnType("numeric(7,3)")
+                        .HasColumnName("DailyFees");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
-                        .HasColumnName("description");
+                        .HasColumnName("Description");
 
                     b.Property<int>("LastPaidFees")
                         .HasColumnType("integer")
-                        .HasColumnName("last_paid_fees");
+                        .HasColumnName("LastPaidFees");
 
                     b.Property<DateOnly>("SeDate")
                         .HasColumnType("date")
-                        .HasColumnName("se_date");
+                        .HasColumnName("SeDate");
 
                     b.Property<int>("ServiceLogId")
                         .HasColumnType("integer")
-                        .HasColumnName("service_log_id");
+                        .HasColumnName("ServiceLogId");
 
                     b.Property<DateOnly>("SsDate")
                         .HasColumnType("date")
-                        .HasColumnName("ss_date");
+                        .HasColumnName("SsDate");
 
                     b.Property<int>("TrackingUnitId")
                         .HasColumnType("integer")
-                        .HasColumnName("tracking_unit_id");
+                        .HasColumnName("TrackingUnitId");
 
                     b.HasKey("Id")
                         .HasName("pk_subscriptions");
 
                     b.HasIndex("ServiceLogId")
-                        .HasDatabaseName("ix_subscriptions_service_log_id");
+                        .HasDatabaseName("IX_Subscription_ServiceLogId");
 
-                    b.HasIndex("TrackingUnitId")
-                        .HasDatabaseName("ix_subscriptions_tracking_unit_id");
+                    b.HasIndex("TrackingUnitId", "SsDate", "SeDate")
+                        .HasDatabaseName("IX_Subscription_TrackingUnitId_Dates");
 
-                    b.ToTable("subscriptions", (string)null);
+                    b.ToTable("Subscriptions", (string)null);
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SystemLog", b =>
@@ -1260,9 +1277,9 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("description");
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("Description");
 
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp without time zone")
@@ -1274,39 +1291,39 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasColumnName("last_modified_by_id");
 
                     b.Property<string>("Note")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("note");
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)")
+                        .HasColumnName("Note");
 
                     b.Property<int>("ServiceTask")
                         .HasColumnType("integer")
-                        .HasColumnName("service_task");
+                        .HasColumnName("ServiceTask");
 
                     b.Property<DateOnly?>("TaDate")
                         .HasColumnType("date")
-                        .HasColumnName("ta_date");
+                        .HasColumnName("TaDate");
 
                     b.Property<DateOnly>("TcDate")
                         .HasColumnType("date")
-                        .HasColumnName("tc_date");
+                        .HasColumnName("TcDate");
 
                     b.Property<DateOnly?>("TeDate")
                         .HasColumnType("date")
-                        .HasColumnName("te_date");
+                        .HasColumnName("TeDate");
 
                     b.Property<string>("TicketNo")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("ticket_no");
+                        .HasColumnName("TicketNo");
 
                     b.Property<int>("TicketStatus")
                         .HasColumnType("integer")
-                        .HasColumnName("ticket_status");
+                        .HasColumnName("TicketStatus");
 
                     b.Property<int>("TrackingUnitId")
                         .HasColumnType("integer")
-                        .HasColumnName("tracking_unit_id");
+                        .HasColumnName("TrackingUnitId");
 
                     b.HasKey("Id")
                         .HasName("pk_tickets");
@@ -1318,13 +1335,15 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasDatabaseName("ix_tickets_last_modified_by_id");
 
                     b.HasIndex("TicketNo")
-                        .IsUnique()
-                        .HasDatabaseName("ix_tickets_ticket_no");
+                        .HasDatabaseName("IX_Ticket_TicketNo");
 
-                    b.HasIndex("TrackingUnitId")
-                        .HasDatabaseName("ix_tickets_tracking_unit_id");
+                    b.HasIndex("TicketStatus")
+                        .HasDatabaseName("IX_Ticket_TicketStatus");
 
-                    b.ToTable("tickets", (string)null);
+                    b.HasIndex("TrackingUnitId", "TicketStatus")
+                        .HasDatabaseName("IX_Ticket_TrackingUnitId_TicketStatus");
+
+                    b.ToTable("Tickets", (string)null);
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.TrackedAsset", b =>
@@ -1347,7 +1366,7 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("boolean")
-                        .HasColumnName("is_avaliable");
+                        .HasColumnName("IsAvailable");
 
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp without time zone")
@@ -1360,49 +1379,56 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 
                     b.Property<int?>("OldId")
                         .HasColumnType("integer")
-                        .HasColumnName("old_id");
+                        .HasColumnName("OldId");
 
                     b.Property<string>("OldVehicleNo")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("old_vehicle_no");
-
-                    b.Property<string>("PlateNo")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("plate_no");
-
-                    b.Property<string>("TrackedAssetCode")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("tracked_asset_code");
+                        .HasColumnName("OldVehicleNo");
+
+                    b.Property<string>("PlateNo")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("PlateNo");
+
+                    b.Property<string>("TrackedAssetCode")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("TrackedAssetCode");
 
                     b.Property<string>("TrackedAssetDesc")
                         .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("tracked_asset_desc");
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("TrackedAssetDesc");
 
                     b.Property<string>("TrackedAssetNo")
                         .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("tracked_asset_no");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("TrackedAssetNo");
 
                     b.Property<string>("VinSerNo")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("vin_ser_no");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("VinSerNo");
 
                     b.HasKey("Id")
                         .HasName("pk_tracked_assets");
 
-                    b.HasIndex("TrackedAssetNo")
-                        .IsUnique()
-                        .HasDatabaseName("ix_tracked_assets_tracked_asset_no");
+                    b.HasIndex("PlateNo")
+                        .HasDatabaseName("IX_TrackedAsset_PlateNo");
 
-                    b.ToTable("tracked_assets", (string)null);
+                    b.HasIndex("TrackedAssetCode")
+                        .HasDatabaseName("IX_TrackedAsset_TrackedAssetCode");
+
+                    b.HasIndex("TrackedAssetNo")
+                        .HasDatabaseName("IX_TrackedAsset_TrackedAssetNo");
+
+                    b.HasIndex("VinSerNo")
+                        .HasDatabaseName("IX_TrackedAsset_VinSerNo");
+
+                    b.ToTable("TrackedAssets", (string)null);
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.TrackingUnit", b =>
@@ -1425,20 +1451,20 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 
                     b.Property<int?>("CustomerId")
                         .HasColumnType("integer")
-                        .HasColumnName("customer_id");
+                        .HasColumnName("CustomerId");
 
                     b.Property<string>("Imei")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("imei");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("Imei");
 
                     b.Property<int>("InsMode")
                         .HasColumnType("integer")
-                        .HasColumnName("ins_mode");
+                        .HasColumnName("InsMode");
 
                     b.Property<bool>("IsOnWialon")
                         .HasColumnType("boolean")
-                        .HasColumnName("is_on_wialon");
+                        .HasColumnName("IsOnWialon");
 
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp without time zone")
@@ -1451,52 +1477,56 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 
                     b.Property<int?>("OldId")
                         .HasColumnType("integer")
-                        .HasColumnName("old_id");
+                        .HasColumnName("OldId");
 
                     b.Property<string>("SNo")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("s_no");
+                        .HasColumnName("SNo");
 
                     b.Property<int?>("SimCardId")
                         .HasColumnType("integer")
-                        .HasColumnName("sim_card_id");
+                        .HasColumnName("SimCardId");
 
                     b.Property<int?>("TrackedAssetId")
                         .HasColumnType("integer")
-                        .HasColumnName("tracked_asset_id");
+                        .HasColumnName("TrackedAssetId");
 
                     b.Property<int>("TrackingUnitModelId")
                         .HasColumnType("integer")
-                        .HasColumnName("tracking_unit_model_id");
+                        .HasColumnName("TrackingUnitModelId");
 
                     b.Property<int>("UStatus")
                         .HasColumnType("integer")
-                        .HasColumnName("u_status");
+                        .HasColumnName("UStatus");
 
                     b.Property<string>("UnitName")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("unit_name");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("UnitName");
 
                     b.Property<int?>("WStatus")
                         .HasColumnType("integer")
-                        .HasColumnName("w_status");
+                        .HasColumnName("WStatus");
 
                     b.Property<int?>("WUnitId")
                         .HasColumnType("integer")
-                        .HasColumnName("w_unit_id");
+                        .HasColumnName("WUnitId");
 
                     b.Property<DateOnly?>("WryDate")
                         .HasColumnType("date")
-                        .HasColumnName("wry_date");
+                        .HasColumnName("WryDate");
 
                     b.HasKey("Id")
                         .HasName("pk_tracking_units");
 
-                    b.HasIndex("CustomerId")
-                        .HasDatabaseName("ix_tracking_units_customer_id");
+                    b.HasIndex("Imei")
+                        .HasDatabaseName("IX_TrackingUnit_Imei")
+                        .HasFilter("\"Imei\" IS NOT NULL");
+
+                    b.HasIndex("SNo")
+                        .HasDatabaseName("IX_TrackingUnit_SNo");
 
                     b.HasIndex("SimCardId")
                         .IsUnique()
@@ -1506,9 +1536,15 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasDatabaseName("ix_tracking_units_tracked_asset_id");
 
                     b.HasIndex("TrackingUnitModelId")
-                        .HasDatabaseName("ix_tracking_units_tracking_unit_model_id");
+                        .HasDatabaseName("IX_TrackingUnit_TrackingUnitModelId");
 
-                    b.ToTable("tracking_units", (string)null);
+                    b.HasIndex("CustomerId", "UStatus")
+                        .HasDatabaseName("IX_TrackingUnit_CustomerId_UStatus");
+
+                    b.HasIndex("UStatus", "IsOnWialon")
+                        .HasDatabaseName("IX_TrackingUnit_UStatus_IsOnWialon");
+
+                    b.ToTable("TrackingUnits", (string)null);
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.TrackingUnitModel", b =>
@@ -1521,53 +1557,58 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("DefaultGprs")
-                        .HasColumnType("numeric")
-                        .HasColumnName("defualt_gprs");
+                        .HasPrecision(7, 3)
+                        .HasColumnType("numeric(7,3)")
+                        .HasColumnName("DefaultGprs");
 
                     b.Property<decimal>("DefaultHost")
-                        .HasColumnType("numeric")
-                        .HasColumnName("defualt_host");
+                        .HasPrecision(7, 3)
+                        .HasColumnType("numeric(7,3)")
+                        .HasColumnName("DefaultHost");
 
                     b.Property<decimal>("DefaultPrice")
-                        .HasColumnType("numeric")
-                        .HasColumnName("defualt_price");
+                        .HasPrecision(7, 3)
+                        .HasColumnType("numeric(7,3)")
+                        .HasColumnName("DefaultPrice");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("name");
+                        .HasColumnName("Name");
 
                     b.Property<int?>("OldId")
                         .HasColumnType("integer")
-                        .HasColumnName("old_id");
+                        .HasColumnName("OldId");
 
                     b.Property<int>("PortNo1")
                         .HasColumnType("integer")
-                        .HasColumnName("port_no1");
+                        .HasColumnName("PortNo1");
 
                     b.Property<int>("PortNo2")
                         .HasColumnType("integer")
-                        .HasColumnName("port_no2");
+                        .HasColumnName("PortNo2");
 
                     b.Property<int>("WhwTypeId")
                         .HasColumnType("integer")
-                        .HasColumnName("whw_type_id");
+                        .HasColumnName("WhwTypeId");
 
                     b.Property<string>("WialonName")
                         .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("wialon_name");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("WialonName");
 
                     b.HasKey("Id")
                         .HasName("pk_tracking_unit_models");
 
                     b.HasIndex("Name")
-                        .IsUnique()
-                        .HasDatabaseName("ix_tracking_unit_models_name");
+                        .HasDatabaseName("IX_TrackingUnitModel_Name");
 
-                    b.ToTable("tracking_unit_models", (string)null);
+                    b.HasIndex("WialonName")
+                        .HasDatabaseName("IX_TrackingUnitModel_WialonName");
+
+                    b.ToTable("TrackingUnitModels", (string)null);
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.WialonTask", b =>
@@ -1579,42 +1620,42 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("WialonAPIAction")
-                        .HasColumnType("integer")
-                        .HasColumnName("api_task");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
-                        .HasColumnName("description");
+                        .HasColumnName("Description");
 
                     b.Property<DateOnly>("ExcDate")
                         .HasColumnType("date")
-                        .HasColumnName("exc_date");
+                        .HasColumnName("ExcDate");
 
                     b.Property<bool>("IsExecuted")
                         .HasColumnType("boolean")
-                        .HasColumnName("is_executed");
+                        .HasColumnName("IsExecuted");
 
                     b.Property<int>("ServiceLogId")
                         .HasColumnType("integer")
-                        .HasColumnName("service_log_id");
+                        .HasColumnName("ServiceLogId");
 
                     b.Property<int>("TrackingUnitId")
                         .HasColumnType("integer")
-                        .HasColumnName("tracking_unit_id");
+                        .HasColumnName("TrackingUnitId");
+
+                    b.Property<int?>("WialonAPIAction")
+                        .HasColumnType("integer")
+                        .HasColumnName("WialonAPIAction");
 
                     b.HasKey("Id")
                         .HasName("pk_wialon_tasks");
 
                     b.HasIndex("ServiceLogId")
-                        .HasDatabaseName("ix_wialon_tasks_service_log_id");
+                        .HasDatabaseName("IX_WialonTask_ServiceLogId");
 
-                    b.HasIndex("TrackingUnitId")
-                        .HasDatabaseName("ix_wialon_tasks_tracking_unit_id");
+                    b.HasIndex("TrackingUnitId", "IsExecuted")
+                        .HasDatabaseName("IX_WialonTask_TrackingUnitId_IsExecuted");
 
-                    b.ToTable("wialon_tasks", (string)null);
+                    b.ToTable("WialonTasks", (string)null);
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.WialonUnit", b =>
@@ -1627,42 +1668,48 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Account")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("account");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("Account");
 
                     b.Property<DateTime?>("Deactivation")
                         .HasColumnType("timestamp without time zone")
-                        .HasColumnName("deactivation");
+                        .HasColumnName("Deactivation");
 
                     b.Property<string>("Note")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("note");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)")
+                        .HasColumnName("Note");
 
                     b.Property<string>("SimCardNo")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("sim_card_no");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("SimCardNo");
 
                     b.Property<int?>("StatusOnWialon")
                         .HasColumnType("integer")
-                        .HasColumnName("status_on_wialon");
+                        .HasColumnName("StatusOnWialon");
 
                     b.Property<string>("UnitName")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("unit_name");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("UnitName");
 
                     b.Property<string>("UnitSNo")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("unit_s_no");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("UnitSNo");
 
                     b.HasKey("Id")
                         .HasName("pk_wialon_units");
 
-                    b.ToTable("wialon_units", (string)null);
+                    b.HasIndex("SimCardNo")
+                        .HasDatabaseName("IX_WialonUnit_SimCardNo");
+
+                    b.HasIndex("UnitSNo")
+                        .HasDatabaseName("IX_WialonUnit_UnitSNo");
+
+                    b.ToTable("WialonUnits", (string)null);
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Identity.ApplicationRole", b =>
@@ -2106,7 +2153,7 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.CusPrice", b =>
                 {
                     b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Customer", "Customer")
-                        .WithMany()
+                        .WithMany("CusPrices")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
@@ -2129,6 +2176,7 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Customer", "Parent")
                         .WithMany("Childs")
                         .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .HasConstraintName("fk_customers_customers_parent_id");
 
                     b.Navigation("Parent");
@@ -2165,7 +2213,7 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Customer", "Customer")
                         .WithMany("Invoices")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_invoices_customers_customer_id");
 
@@ -2184,7 +2232,7 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Subscription", "Subscription")
                         .WithOne("InvoiceItem")
                         .HasForeignKey("CleanArchitecture.Blazor.Domain.Entities.InvoiceItem", "SubscriptionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_invoice_items_subscriptions_subscription_id");
 
@@ -2198,14 +2246,14 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Invoice", "Invoice")
                         .WithMany("InvoiceItemGroups")
                         .HasForeignKey("InvoiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_invoice_item_groups_invoices_invoice_id");
 
                     b.HasOne("CleanArchitecture.Blazor.Domain.Entities.ServiceLog", "ServiceLog")
                         .WithOne("InvoiceItemGroup")
                         .HasForeignKey("CleanArchitecture.Blazor.Domain.Entities.InvoiceItemGroup", "ServiceLogId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_invoice_item_groups_service_logs_service_log_id");
 
@@ -2219,7 +2267,7 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     b.HasOne("CleanArchitecture.Blazor.Domain.Entities.SProvider", "SProvider")
                         .WithMany("SPackages")
                         .HasForeignKey("SProviderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_s_packages_s_providers_s_provider_id");
 
@@ -2235,22 +2283,15 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasConstraintName("fk_service_logs_asp_net_users_created_by_id");
 
                     b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Customer", "Customer")
-                        .WithMany()
+                        .WithMany("ServiceLogs")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_service_logs_customers_customer_id");
-
-                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.InvoiceItem", "InvoiceItem")
-                        .WithMany()
-                        .HasForeignKey("InvoiceItemId")
-                        .HasConstraintName("fk_service_logs_invoice_items_invoice_item_id");
 
                     b.Navigation("CreatedByUser");
 
                     b.Navigation("Customer");
-
-                    b.Navigation("InvoiceItem");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SimCard", b =>
@@ -2258,7 +2299,7 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     b.HasOne("CleanArchitecture.Blazor.Domain.Entities.SPackage", "SPackage")
                         .WithMany("SimCards")
                         .HasForeignKey("SPackageId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_sim_cards_s_packages_s_package_id");
 
@@ -2270,14 +2311,14 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     b.HasOne("CleanArchitecture.Blazor.Domain.Entities.ServiceLog", "ServiceLog")
                         .WithMany("Subscriptions")
                         .HasForeignKey("ServiceLogId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_subscriptions_service_logs_service_log_id");
 
                     b.HasOne("CleanArchitecture.Blazor.Domain.Entities.TrackingUnit", "TrackingUnit")
                         .WithMany("Subscriptions")
                         .HasForeignKey("TrackingUnitId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_subscriptions_tracking_units_tracking_unit_id");
 
@@ -2310,19 +2351,19 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     b.HasOne("CleanArchitecture.Blazor.Domain.Identity.ApplicationUser", "CreatedByUser")
                         .WithMany()
                         .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .HasConstraintName("fk_tickets_asp_net_users_created_by_id");
 
                     b.HasOne("CleanArchitecture.Blazor.Domain.Identity.ApplicationUser", "LastModifiedByUser")
                         .WithMany()
                         .HasForeignKey("LastModifiedById")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .HasConstraintName("fk_tickets_asp_net_users_last_modified_by_id");
 
                     b.HasOne("CleanArchitecture.Blazor.Domain.Entities.TrackingUnit", "TrackingUnit")
-                        .WithMany()
+                        .WithMany("Tickets")
                         .HasForeignKey("TrackingUnitId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_tickets_tracking_units_tracking_unit_id");
 
@@ -2336,24 +2377,27 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.TrackingUnit", b =>
                 {
                     b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Customer", "Customer")
-                        .WithMany()
+                        .WithMany("TrackingUnits")
                         .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.SetNull)
                         .HasConstraintName("fk_tracking_units_customers_customer_id");
 
                     b.HasOne("CleanArchitecture.Blazor.Domain.Entities.SimCard", "SimCard")
-                        .WithOne("TrackingUnits")
+                        .WithOne("TrackingUnit")
                         .HasForeignKey("CleanArchitecture.Blazor.Domain.Entities.TrackingUnit", "SimCardId")
+                        .OnDelete(DeleteBehavior.SetNull)
                         .HasConstraintName("fk_tracking_units_sim_cards_sim_card_id");
 
                     b.HasOne("CleanArchitecture.Blazor.Domain.Entities.TrackedAsset", "TrackedAsset")
                         .WithMany("TrackingUnits")
                         .HasForeignKey("TrackedAssetId")
+                        .OnDelete(DeleteBehavior.SetNull)
                         .HasConstraintName("fk_tracking_units_tracked_assets_tracked_asset_id");
 
                     b.HasOne("CleanArchitecture.Blazor.Domain.Entities.TrackingUnitModel", "TrackingUnitModel")
                         .WithMany("TrackingUnits")
                         .HasForeignKey("TrackingUnitModelId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_tracking_units_tracking_unit_models_tracking_unit_model_id");
 
@@ -2371,14 +2415,14 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     b.HasOne("CleanArchitecture.Blazor.Domain.Entities.ServiceLog", "ServiceLog")
                         .WithMany("WialonTasks")
                         .HasForeignKey("ServiceLogId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_wialon_tasks_service_logs_service_log_id");
 
                     b.HasOne("CleanArchitecture.Blazor.Domain.Entities.TrackingUnit", "TrackingUnit")
                         .WithMany("WialonTasks")
                         .HasForeignKey("TrackingUnitId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_wialon_tasks_tracking_units_tracking_unit_id");
 
@@ -2531,7 +2575,13 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                 {
                     b.Navigation("Childs");
 
+                    b.Navigation("CusPrices");
+
                     b.Navigation("Invoices");
+
+                    b.Navigation("ServiceLogs");
+
+                    b.Navigation("TrackingUnits");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Invoice", b =>
@@ -2565,7 +2615,7 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SimCard", b =>
                 {
-                    b.Navigation("TrackingUnits");
+                    b.Navigation("TrackingUnit");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Subscription", b =>
@@ -2586,6 +2636,8 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.TrackingUnit", b =>
                 {
                     b.Navigation("Subscriptions");
+
+                    b.Navigation("Tickets");
 
                     b.Navigation("WialonTasks");
                 });

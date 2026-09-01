@@ -38,7 +38,7 @@
 
 @code
 {
-    private MudForm? _form;
+    private MudForm _form;
     private bool _submitting = false;
     [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;
     [EditorRequired][Parameter] public ActivateTrackingUnitForGprsCommand _model { get; set; } = default!;

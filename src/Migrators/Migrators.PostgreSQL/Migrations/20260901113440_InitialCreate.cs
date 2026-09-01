@@ -31,26 +31,26 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "customers",
+                name: "Customers",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    parent_id = table.Column<int>(type: "integer", nullable: true),
-                    name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    account = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    user_name = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: false),
-                    billing_plan = table.Column<int>(type: "integer", nullable: false),
-                    is_taxable = table.Column<bool>(type: "boolean", nullable: false),
-                    is_renewable = table.Column<bool>(type: "boolean", nullable: false),
-                    w_user_id = table.Column<int>(type: "integer", nullable: true),
-                    w_unit_group_id = table.Column<int>(type: "integer", nullable: true),
-                    address = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true),
-                    mobile1 = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true),
-                    mobile2 = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true),
-                    email = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true),
-                    is_avaliable = table.Column<bool>(type: "boolean", nullable: false),
-                    old_id = table.Column<int>(type: "integer", nullable: true),
+                    ParentId = table.Column<int>(type: "integer", nullable: true),
+                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Account = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    UserName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    BillingPlan = table.Column<int>(type: "integer", nullable: false),
+                    IsTaxable = table.Column<bool>(type: "boolean", nullable: false),
+                    IsRenewable = table.Column<bool>(type: "boolean", nullable: false),
+                    WUserId = table.Column<int>(type: "integer", nullable: true),
+                    WUnitGroupId = table.Column<int>(type: "integer", nullable: true),
+                    Address = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
+                    Mobile1 = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    Mobile2 = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    Email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    IsAvailable = table.Column<bool>(type: "boolean", nullable: false),
+                    OldId = table.Column<int>(type: "integer", nullable: true),
                     created_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     created_by_id = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true),
                     last_modified_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
@@ -61,9 +61,10 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     table.PrimaryKey("pk_customers", x => x.id);
                     table.ForeignKey(
                         name: "fk_customers_customers_parent_id",
-                        column: x => x.parent_id,
-                        principalTable: "customers",
-                        principalColumn: "id");
+                        column: x => x.ParentId,
+                        principalTable: "Customers",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -81,20 +82,20 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "libyana_sim_cards",
+                name: "LibyanaSimCards",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    sim_card_no = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true),
-                    sim_card_status = table.Column<int>(type: "integer", nullable: true),
-                    balance = table.Column<decimal>(type: "numeric", nullable: true),
-                    b_ex_date = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    join_date = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    package = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true),
-                    d_ex_date = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    data_offer = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true),
-                    do_expired = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
+                    SimCardNo = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    SimCardStatus = table.Column<int>(type: "integer", nullable: true),
+                    Balance = table.Column<decimal>(type: "numeric(9,3)", precision: 9, scale: 3, nullable: true),
+                    BExDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    JoinDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    Package = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    DExDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    DataOffer = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    DOExpired = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -144,27 +145,14 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "s_providers",
+                name: "ServicePrices",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_s_providers", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "service_prices",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    service_task = table.Column<int>(type: "integer", nullable: false),
-                    description = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: false),
-                    price = table.Column<decimal>(type: "numeric", nullable: false),
+                    ServiceTask = table.Column<int>(type: "integer", nullable: false),
+                    Description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
+                    Price = table.Column<decimal>(type: "numeric(7,3)", precision: 7, scale: 3, nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     created_by_id = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true),
                     last_modified_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
@@ -173,6 +161,19 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_service_prices", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SProviders",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_s_providers", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -211,19 +212,19 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "tracked_assets",
+                name: "TrackedAssets",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    tracked_asset_no = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: false),
-                    tracked_asset_code = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    vin_ser_no = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true),
-                    plate_no = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true),
-                    tracked_asset_desc = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: false),
-                    is_avaliable = table.Column<bool>(type: "boolean", nullable: false),
-                    old_id = table.Column<int>(type: "integer", nullable: true),
-                    old_vehicle_no = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true),
+                    TrackedAssetNo = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    TrackedAssetCode = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    VinSerNo = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    PlateNo = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    TrackedAssetDesc = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    IsAvailable = table.Column<bool>(type: "boolean", nullable: false),
+                    OldId = table.Column<int>(type: "integer", nullable: true),
+                    OldVehicleNo = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
                     created_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     created_by_id = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true),
                     last_modified_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
@@ -235,20 +236,20 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "tracking_unit_models",
+                name: "TrackingUnitModels",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    wialon_name = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: false),
-                    name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    whw_type_id = table.Column<int>(type: "integer", nullable: false),
-                    defualt_host = table.Column<decimal>(type: "numeric", nullable: false),
-                    defualt_gprs = table.Column<decimal>(type: "numeric", nullable: false),
-                    defualt_price = table.Column<decimal>(type: "numeric", nullable: false),
-                    port_no1 = table.Column<int>(type: "integer", nullable: false),
-                    port_no2 = table.Column<int>(type: "integer", nullable: false),
-                    old_id = table.Column<int>(type: "integer", nullable: true)
+                    WialonName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    WhwTypeId = table.Column<int>(type: "integer", nullable: false),
+                    DefaultHost = table.Column<decimal>(type: "numeric(7,3)", precision: 7, scale: 3, nullable: false),
+                    DefaultGprs = table.Column<decimal>(type: "numeric(7,3)", precision: 7, scale: 3, nullable: false),
+                    DefaultPrice = table.Column<decimal>(type: "numeric(7,3)", precision: 7, scale: 3, nullable: false),
+                    PortNo1 = table.Column<int>(type: "integer", nullable: false),
+                    PortNo2 = table.Column<int>(type: "integer", nullable: false),
+                    OldId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -256,18 +257,18 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "wialon_units",
+                name: "WialonUnits",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    unit_name = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true),
-                    account = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true),
-                    unit_s_no = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true),
-                    deactivation = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    sim_card_no = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true),
-                    status_on_wialon = table.Column<int>(type: "integer", nullable: true),
-                    note = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true)
+                    UnitName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    Account = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    UnitSNo = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    Deactivation = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    SimCardNo = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    StatusOnWialon = table.Column<int>(type: "integer", nullable: true),
+                    Note = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -298,30 +299,30 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "invoices",
+                name: "Invoices",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    invoice_no = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    invoice_date = table.Column<DateOnly>(type: "date", nullable: false),
-                    due_date = table.Column<DateOnly>(type: "date", nullable: false),
-                    payment_date = table.Column<DateOnly>(type: "date", nullable: true),
-                    paid_amount = table.Column<decimal>(type: "numeric", nullable: false),
-                    invoice_type = table.Column<int>(type: "integer", nullable: false),
-                    i_status = table.Column<int>(type: "integer", nullable: false),
-                    display_cus_name = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: false),
-                    customer_id = table.Column<int>(type: "integer", nullable: false),
-                    description = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: false),
-                    is_taxable = table.Column<bool>(type: "boolean", nullable: false),
-                    is_tax_ignored = table.Column<bool>(type: "boolean", nullable: false),
-                    total = table.Column<decimal>(type: "numeric", nullable: false),
-                    discount_rate = table.Column<decimal>(type: "numeric", nullable: false),
-                    discount_amount = table.Column<decimal>(type: "numeric", nullable: false),
-                    tax_rate = table.Column<decimal>(type: "numeric", nullable: false),
-                    tax_amount = table.Column<decimal>(type: "numeric", nullable: false),
-                    taxable_amount = table.Column<decimal>(type: "numeric", nullable: false),
-                    grand_total = table.Column<decimal>(type: "numeric", nullable: false),
+                    InvoiceNo = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    InvoiceDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    DueDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    PaymentDate = table.Column<DateOnly>(type: "date", nullable: true),
+                    PaidAmount = table.Column<decimal>(type: "numeric(9,3)", precision: 9, scale: 3, nullable: false),
+                    InvoiceType = table.Column<int>(type: "integer", nullable: false),
+                    IStatus = table.Column<int>(type: "integer", nullable: false),
+                    DisplayCusName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    CustomerId = table.Column<int>(type: "integer", nullable: false),
+                    Description = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    IsTaxable = table.Column<bool>(type: "boolean", nullable: false),
+                    IsTaxIgnored = table.Column<bool>(type: "boolean", nullable: false),
+                    Total = table.Column<decimal>(type: "numeric(9,3)", precision: 9, scale: 3, nullable: false),
+                    DiscountRate = table.Column<decimal>(type: "numeric(9,3)", precision: 9, scale: 3, nullable: false),
+                    DiscountAmount = table.Column<decimal>(type: "numeric(9,3)", precision: 9, scale: 3, nullable: false),
+                    TaxRate = table.Column<decimal>(type: "numeric(9,3)", precision: 9, scale: 3, nullable: false),
+                    TaxAmount = table.Column<decimal>(type: "numeric(9,3)", precision: 9, scale: 3, nullable: false),
+                    TaxableAmount = table.Column<decimal>(type: "numeric(9,3)", precision: 9, scale: 3, nullable: false),
+                    GrandTotal = table.Column<decimal>(type: "numeric(9,3)", precision: 9, scale: 3, nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     created_by_id = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true),
                     last_modified_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
@@ -332,20 +333,20 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     table.PrimaryKey("pk_invoices", x => x.id);
                     table.ForeignKey(
                         name: "fk_invoices_customers_customer_id",
-                        column: x => x.customer_id,
-                        principalTable: "customers",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "s_packages",
+                name: "SPackages",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    s_provider_id = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    SProviderId = table.Column<int>(type: "integer", nullable: false),
                     old_id = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
@@ -353,10 +354,10 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     table.PrimaryKey("pk_s_packages", x => x.id);
                     table.ForeignKey(
                         name: "fk_s_packages_s_providers_s_provider_id",
-                        column: x => x.s_provider_id,
-                        principalTable: "s_providers",
+                        column: x => x.SProviderId,
+                        principalTable: "SProviders",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -408,16 +409,16 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "cus_prices",
+                name: "CusPrices",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    customer_id = table.Column<int>(type: "integer", nullable: false),
-                    tracking_unit_model_id = table.Column<int>(type: "integer", nullable: false),
-                    host = table.Column<decimal>(type: "numeric", nullable: false),
-                    gprs = table.Column<decimal>(type: "numeric", nullable: false),
-                    price = table.Column<decimal>(type: "numeric", nullable: false),
+                    CustomerId = table.Column<int>(type: "integer", nullable: false),
+                    TrackingUnitModelId = table.Column<int>(type: "integer", nullable: false),
+                    Host = table.Column<decimal>(type: "numeric(7,3)", precision: 7, scale: 3, nullable: false),
+                    Gprs = table.Column<decimal>(type: "numeric(7,3)", precision: 7, scale: 3, nullable: false),
+                    Price = table.Column<decimal>(type: "numeric(7,3)", precision: 7, scale: 3, nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     created_by_id = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true),
                     last_modified_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
@@ -428,31 +429,31 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     table.PrimaryKey("pk_cus_prices", x => x.id);
                     table.ForeignKey(
                         name: "fk_cus_prices_customers_customer_id",
-                        column: x => x.customer_id,
-                        principalTable: "customers",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "fk_cus_prices_tracking_unit_models_tracking_unit_model_id",
-                        column: x => x.tracking_unit_model_id,
-                        principalTable: "tracking_unit_models",
+                        column: x => x.TrackingUnitModelId,
+                        principalTable: "TrackingUnitModels",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "sim_cards",
+                name: "SimCards",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    sim_card_no = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    iccid = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true),
-                    s_package_id = table.Column<int>(type: "integer", nullable: false),
-                    s_status = table.Column<int>(type: "integer", nullable: false),
-                    is_owen = table.Column<bool>(type: "boolean", nullable: false),
-                    ex_date = table.Column<DateOnly>(type: "date", nullable: true),
-                    old_id = table.Column<int>(type: "integer", nullable: true),
+                    SimCardNo = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    ICCID = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    SPackageId = table.Column<int>(type: "integer", nullable: false),
+                    SStatus = table.Column<int>(type: "integer", nullable: false),
+                    IsOwned = table.Column<bool>(type: "boolean", nullable: false),
+                    ExDate = table.Column<DateOnly>(type: "date", nullable: true),
+                    OldId = table.Column<int>(type: "integer", nullable: true),
                     created_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     created_by_id = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true),
                     last_modified_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
@@ -463,10 +464,10 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     table.PrimaryKey("pk_sim_cards", x => x.id);
                     table.ForeignKey(
                         name: "fk_sim_cards_s_packages_s_package_id",
-                        column: x => x.s_package_id,
-                        principalTable: "s_packages",
+                        column: x => x.SPackageId,
+                        principalTable: "SPackages",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -672,6 +673,42 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ServiceLogs",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ServiceNo = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    ServiceTask = table.Column<int>(type: "integer", nullable: false),
+                    CustomerId = table.Column<int>(type: "integer", nullable: false),
+                    Description = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    SerDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    IsDeserved = table.Column<bool>(type: "boolean", nullable: false),
+                    IsBilled = table.Column<bool>(type: "boolean", nullable: false),
+                    Amount = table.Column<decimal>(type: "numeric(7,3)", precision: 7, scale: 3, nullable: false),
+                    created_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    created_by_id = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true),
+                    last_modified_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    last_modified_by_id = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_service_logs", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_service_logs_asp_net_users_created_by_id",
+                        column: x => x.created_by_id,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "fk_service_logs_customers_customer_id",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "tenant_users",
                 columns: table => new
                 {
@@ -697,25 +734,25 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "tracking_units",
+                name: "TrackingUnits",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    s_no = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    imei = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true),
-                    unit_name = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true),
-                    tracking_unit_model_id = table.Column<int>(type: "integer", nullable: false),
-                    u_status = table.Column<int>(type: "integer", nullable: false),
-                    ins_mode = table.Column<int>(type: "integer", nullable: false),
-                    wry_date = table.Column<DateOnly>(type: "date", nullable: true),
-                    tracked_asset_id = table.Column<int>(type: "integer", nullable: true),
-                    sim_card_id = table.Column<int>(type: "integer", nullable: true),
-                    customer_id = table.Column<int>(type: "integer", nullable: true),
-                    is_on_wialon = table.Column<bool>(type: "boolean", nullable: false),
-                    w_status = table.Column<int>(type: "integer", nullable: true),
-                    w_unit_id = table.Column<int>(type: "integer", nullable: true),
-                    old_id = table.Column<int>(type: "integer", nullable: true),
+                    SNo = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Imei = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    UnitName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    TrackingUnitModelId = table.Column<int>(type: "integer", nullable: false),
+                    UStatus = table.Column<int>(type: "integer", nullable: false),
+                    InsMode = table.Column<int>(type: "integer", nullable: false),
+                    WryDate = table.Column<DateOnly>(type: "date", nullable: true),
+                    TrackedAssetId = table.Column<int>(type: "integer", nullable: true),
+                    SimCardId = table.Column<int>(type: "integer", nullable: true),
+                    CustomerId = table.Column<int>(type: "integer", nullable: true),
+                    IsOnWialon = table.Column<bool>(type: "boolean", nullable: false),
+                    WStatus = table.Column<int>(type: "integer", nullable: true),
+                    WUnitId = table.Column<int>(type: "integer", nullable: true),
+                    OldId = table.Column<int>(type: "integer", nullable: true),
                     created_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     created_by_id = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true),
                     last_modified_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
@@ -726,42 +763,107 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     table.PrimaryKey("pk_tracking_units", x => x.id);
                     table.ForeignKey(
                         name: "fk_tracking_units_customers_customer_id",
-                        column: x => x.customer_id,
-                        principalTable: "customers",
-                        principalColumn: "id");
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "fk_tracking_units_sim_cards_sim_card_id",
-                        column: x => x.sim_card_id,
-                        principalTable: "sim_cards",
-                        principalColumn: "id");
+                        column: x => x.SimCardId,
+                        principalTable: "SimCards",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "fk_tracking_units_tracked_assets_tracked_asset_id",
-                        column: x => x.tracked_asset_id,
-                        principalTable: "tracked_assets",
-                        principalColumn: "id");
+                        column: x => x.TrackedAssetId,
+                        principalTable: "TrackedAssets",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "fk_tracking_units_tracking_unit_models_tracking_unit_model_id",
-                        column: x => x.tracking_unit_model_id,
-                        principalTable: "tracking_unit_models",
+                        column: x => x.TrackingUnitModelId,
+                        principalTable: "TrackingUnitModels",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "tickets",
+                name: "InvoiceItemGroups",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ticket_no = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    service_task = table.Column<int>(type: "integer", nullable: false),
-                    description = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: false),
-                    ticket_status = table.Column<int>(type: "integer", nullable: false),
-                    tracking_unit_id = table.Column<int>(type: "integer", nullable: false),
-                    tc_date = table.Column<DateOnly>(type: "date", nullable: false),
-                    ta_date = table.Column<DateOnly>(type: "date", nullable: true),
-                    te_date = table.Column<DateOnly>(type: "date", nullable: true),
-                    note = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true),
+                    SerialIndex = table.Column<int>(type: "integer", nullable: false),
+                    InvoiceId = table.Column<int>(type: "integer", nullable: false),
+                    ServiceLogId = table.Column<int>(type: "integer", nullable: false),
+                    Description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
+                    Amount = table.Column<decimal>(type: "numeric(9,3)", precision: 9, scale: 3, nullable: false),
+                    SubTotal = table.Column<decimal>(type: "numeric(9,3)", precision: 9, scale: 3, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_invoice_item_groups", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_invoice_item_groups_invoices_invoice_id",
+                        column: x => x.InvoiceId,
+                        principalTable: "Invoices",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "fk_invoice_item_groups_service_logs_service_log_id",
+                        column: x => x.ServiceLogId,
+                        principalTable: "ServiceLogs",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Subscriptions",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ServiceLogId = table.Column<int>(type: "integer", nullable: false),
+                    TrackingUnitId = table.Column<int>(type: "integer", nullable: false),
+                    CaseCode = table.Column<int>(type: "integer", nullable: false),
+                    LastPaidFees = table.Column<int>(type: "integer", nullable: false),
+                    Description = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    SsDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    SeDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    DailyFees = table.Column<decimal>(type: "numeric(7,3)", precision: 7, scale: 3, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_subscriptions", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_subscriptions_service_logs_service_log_id",
+                        column: x => x.ServiceLogId,
+                        principalTable: "ServiceLogs",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "fk_subscriptions_tracking_units_tracking_unit_id",
+                        column: x => x.TrackingUnitId,
+                        principalTable: "TrackingUnits",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tickets",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    TicketNo = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    ServiceTask = table.Column<int>(type: "integer", nullable: false),
+                    Description = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    TicketStatus = table.Column<int>(type: "integer", nullable: false),
+                    TrackingUnitId = table.Column<int>(type: "integer", nullable: false),
+                    TcDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    TaDate = table.Column<DateOnly>(type: "date", nullable: true),
+                    TeDate = table.Column<DateOnly>(type: "date", nullable: true),
+                    Note = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: true),
                     created_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     created_by_id = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true),
                     last_modified_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
@@ -775,172 +877,78 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         column: x => x.created_by_id,
                         principalTable: "AspNetUsers",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "fk_tickets_asp_net_users_last_modified_by_id",
                         column: x => x.last_modified_by_id,
                         principalTable: "AspNetUsers",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "fk_tickets_tracking_units_tracking_unit_id",
-                        column: x => x.tracking_unit_id,
-                        principalTable: "tracking_units",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "invoice_item_groups",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    serial_index = table.Column<int>(type: "integer", nullable: false),
-                    invoice_id = table.Column<int>(type: "integer", nullable: false),
-                    service_log_id = table.Column<int>(type: "integer", nullable: false),
-                    description = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: false),
-                    amount = table.Column<decimal>(type: "numeric", nullable: false),
-                    sub_total = table.Column<decimal>(type: "numeric", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_invoice_item_groups", x => x.id);
-                    table.ForeignKey(
-                        name: "fk_invoice_item_groups_invoices_invoice_id",
-                        column: x => x.invoice_id,
-                        principalTable: "invoices",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "invoice_items",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    sub_serial_index = table.Column<int>(type: "integer", nullable: false),
-                    invoice_item_group_id = table.Column<int>(type: "integer", nullable: false),
-                    subscription_id = table.Column<int>(type: "integer", nullable: false),
-                    description = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true),
-                    amount = table.Column<decimal>(type: "numeric", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_invoice_items", x => x.id);
-                    table.ForeignKey(
-                        name: "fk_invoice_items_invoice_item_groups_invoice_item_group_id",
-                        column: x => x.invoice_item_group_id,
-                        principalTable: "invoice_item_groups",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "service_logs",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    service_no = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: false),
-                    service_task = table.Column<int>(type: "integer", nullable: false),
-                    customer_id = table.Column<int>(type: "integer", nullable: false),
-                    description = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    ser_date = table.Column<DateOnly>(type: "date", nullable: false),
-                    is_deserved = table.Column<bool>(type: "boolean", nullable: false),
-                    is_billed = table.Column<bool>(type: "boolean", nullable: false),
-                    amount = table.Column<decimal>(type: "numeric", nullable: false),
-                    invoice_item_id = table.Column<int>(type: "integer", nullable: true),
-                    created_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    created_by_id = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true),
-                    last_modified_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    last_modified_by_id = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_service_logs", x => x.id);
-                    table.ForeignKey(
-                        name: "fk_service_logs_asp_net_users_created_by_id",
-                        column: x => x.created_by_id,
-                        principalTable: "AspNetUsers",
+                        column: x => x.TrackingUnitId,
+                        principalTable: "TrackingUnits",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "fk_service_logs_customers_customer_id",
-                        column: x => x.customer_id,
-                        principalTable: "customers",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "fk_service_logs_invoice_items_invoice_item_id",
-                        column: x => x.invoice_item_id,
-                        principalTable: "invoice_items",
-                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "subscriptions",
+                name: "WialonTasks",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    service_log_id = table.Column<int>(type: "integer", nullable: false),
-                    tracking_unit_id = table.Column<int>(type: "integer", nullable: false),
-                    case_code = table.Column<int>(type: "integer", nullable: false),
-                    last_paid_fees = table.Column<int>(type: "integer", nullable: false),
-                    description = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    ss_date = table.Column<DateOnly>(type: "date", nullable: false),
-                    se_date = table.Column<DateOnly>(type: "date", nullable: false),
-                    days = table.Column<int>(type: "integer", nullable: false, computedColumnSql: "\"se_date\" - \"ss_date\"", stored: true),
-                    daily_fees = table.Column<decimal>(type: "numeric", nullable: false),
-                    amount = table.Column<decimal>(type: "numeric", nullable: false, computedColumnSql: "(\"se_date\" - \"ss_date\") * daily_fees", stored: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_subscriptions", x => x.id);
-                    table.ForeignKey(
-                        name: "fk_subscriptions_service_logs_service_log_id",
-                        column: x => x.service_log_id,
-                        principalTable: "service_logs",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "fk_subscriptions_tracking_units_tracking_unit_id",
-                        column: x => x.tracking_unit_id,
-                        principalTable: "tracking_units",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "wialon_tasks",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    service_log_id = table.Column<int>(type: "integer", nullable: false),
-                    tracking_unit_id = table.Column<int>(type: "integer", nullable: false),
-                    description = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    api_task = table.Column<int>(type: "integer", nullable: true),
-                    exc_date = table.Column<DateOnly>(type: "date", nullable: false),
-                    is_executed = table.Column<bool>(type: "boolean", nullable: false)
+                    ServiceLogId = table.Column<int>(type: "integer", nullable: false),
+                    TrackingUnitId = table.Column<int>(type: "integer", nullable: false),
+                    Description = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    WialonAPIAction = table.Column<int>(type: "integer", nullable: true),
+                    ExcDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    IsExecuted = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_wialon_tasks", x => x.id);
                     table.ForeignKey(
                         name: "fk_wialon_tasks_service_logs_service_log_id",
-                        column: x => x.service_log_id,
-                        principalTable: "service_logs",
+                        column: x => x.ServiceLogId,
+                        principalTable: "ServiceLogs",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "fk_wialon_tasks_tracking_units_tracking_unit_id",
+                        column: x => x.TrackingUnitId,
+                        principalTable: "TrackingUnits",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "InvoiceItems",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    SubSerialIndex = table.Column<int>(type: "integer", nullable: false),
+                    InvoiceItemGroupId = table.Column<int>(type: "integer", nullable: false),
+                    SubscriptionId = table.Column<int>(type: "integer", nullable: false),
+                    Description = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    Amount = table.Column<decimal>(type: "numeric(9,3)", precision: 9, scale: 3, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_invoice_items", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_invoice_items_invoice_item_groups_invoice_item_group_id",
+                        column: x => x.InvoiceItemGroupId,
+                        principalTable: "InvoiceItemGroups",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "fk_wialon_tasks_tracking_units_tracking_unit_id",
-                        column: x => x.tracking_unit_id,
-                        principalTable: "tracking_units",
+                        name: "fk_invoice_items_subscriptions_subscription_id",
+                        column: x => x.SubscriptionId,
+                        principalTable: "Subscriptions",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -1011,25 +1019,34 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                 column: "last_modified_by_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_cus_prices_customer_id",
-                table: "cus_prices",
-                column: "customer_id");
+                name: "IX_CusPrice_CustomerId",
+                table: "CusPrices",
+                column: "CustomerId");
 
             migrationBuilder.CreateIndex(
-                name: "ix_cus_prices_tracking_unit_model_id",
-                table: "cus_prices",
-                column: "tracking_unit_model_id");
+                name: "IX_CusPrice_TrackingUnitModelId",
+                table: "CusPrices",
+                column: "TrackingUnitModelId");
 
             migrationBuilder.CreateIndex(
-                name: "ix_customers_name",
-                table: "customers",
-                column: "name",
-                unique: true);
+                name: "IX_Customer_Account",
+                table: "Customers",
+                column: "Account");
 
             migrationBuilder.CreateIndex(
-                name: "ix_customers_parent_id",
-                table: "customers",
-                column: "parent_id");
+                name: "IX_Customer_Email",
+                table: "Customers",
+                column: "Email");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Customer_ParentId",
+                table: "Customers",
+                column: "ParentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Customer_UserName",
+                table: "Customers",
+                column: "UserName");
 
             migrationBuilder.CreateIndex(
                 name: "ix_documents_created_by_id",
@@ -1047,37 +1064,51 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                 column: "tenant_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_invoice_item_groups_invoice_id",
-                table: "invoice_item_groups",
-                column: "invoice_id");
+                name: "IX_InvoiceItemGroup_InvoiceId",
+                table: "InvoiceItemGroups",
+                column: "InvoiceId");
 
             migrationBuilder.CreateIndex(
-                name: "ix_invoice_item_groups_service_log_id",
-                table: "invoice_item_groups",
-                column: "service_log_id",
+                name: "IX_InvoiceItemGroup_ServiceLogId",
+                table: "InvoiceItemGroups",
+                column: "ServiceLogId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "ix_invoice_items_invoice_item_group_id",
-                table: "invoice_items",
-                column: "invoice_item_group_id");
+                name: "IX_InvoiceItem_InvoiceItemGroupId",
+                table: "InvoiceItems",
+                column: "InvoiceItemGroupId");
 
             migrationBuilder.CreateIndex(
-                name: "ix_invoice_items_subscription_id",
-                table: "invoice_items",
-                column: "subscription_id",
+                name: "IX_InvoiceItem_SubscriptionId",
+                table: "InvoiceItems",
+                column: "SubscriptionId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "ix_invoices_customer_id",
-                table: "invoices",
-                column: "customer_id");
+                name: "IX_Invoice_CustomerId_IStatus_InvoiceDate",
+                table: "Invoices",
+                columns: new[] { "CustomerId", "IStatus", "InvoiceDate" });
 
             migrationBuilder.CreateIndex(
-                name: "ix_invoices_invoice_no",
-                table: "invoices",
-                column: "invoice_no",
-                unique: true);
+                name: "IX_Invoice_InvoiceDate",
+                table: "Invoices",
+                column: "InvoiceDate");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Invoice_InvoiceNo",
+                table: "Invoices",
+                column: "InvoiceNo");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Invoice_IStatus",
+                table: "Invoices",
+                column: "IStatus");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LibyanaSimCard_SimCardNo",
+                table: "LibyanaSimCards",
+                column: "SimCardNo");
 
             migrationBuilder.CreateIndex(
                 name: "ix_picklist_sets_name_value",
@@ -1092,63 +1123,69 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "ix_s_packages_name",
-                table: "s_packages",
-                column: "name",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "ix_s_packages_s_provider_id",
-                table: "s_packages",
-                column: "s_provider_id");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_s_providers_name",
-                table: "s_providers",
-                column: "name",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "ix_service_logs_created_by_id",
-                table: "service_logs",
+                table: "ServiceLogs",
                 column: "created_by_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_service_logs_customer_id",
-                table: "service_logs",
-                column: "customer_id");
+                name: "IX_ServiceLog_CustomerId_SerDate",
+                table: "ServiceLogs",
+                columns: new[] { "CustomerId", "SerDate" });
 
             migrationBuilder.CreateIndex(
-                name: "ix_service_logs_invoice_item_id",
-                table: "service_logs",
-                column: "invoice_item_id");
+                name: "IX_ServiceLog_ServiceNo",
+                table: "ServiceLogs",
+                column: "ServiceNo");
 
             migrationBuilder.CreateIndex(
-                name: "ix_service_logs_service_no",
-                table: "service_logs",
-                column: "service_no",
-                unique: true);
+                name: "IX_ServiceLog_ServiceTask",
+                table: "ServiceLogs",
+                column: "ServiceTask");
 
             migrationBuilder.CreateIndex(
-                name: "ix_sim_cards_s_package_id",
-                table: "sim_cards",
-                column: "s_package_id");
+                name: "IX_ServicePrice_ServiceTask",
+                table: "ServicePrices",
+                column: "ServiceTask");
 
             migrationBuilder.CreateIndex(
-                name: "ix_sim_cards_sim_card_no",
-                table: "sim_cards",
-                column: "sim_card_no",
-                unique: true);
+                name: "IX_SimCard_ICCID",
+                table: "SimCards",
+                column: "ICCID");
 
             migrationBuilder.CreateIndex(
-                name: "ix_subscriptions_service_log_id",
-                table: "subscriptions",
-                column: "service_log_id");
+                name: "IX_SimCard_SimCardNo",
+                table: "SimCards",
+                column: "SimCardNo");
 
             migrationBuilder.CreateIndex(
-                name: "ix_subscriptions_tracking_unit_id",
-                table: "subscriptions",
-                column: "tracking_unit_id");
+                name: "IX_SimCard_SPackageId",
+                table: "SimCards",
+                column: "SPackageId");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_s_packages_s_provider_id",
+                table: "SPackages",
+                column: "SProviderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SPackage_Name",
+                table: "SPackages",
+                column: "Name");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SProvider_Name",
+                table: "SProviders",
+                column: "Name");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Subscription_ServiceLogId",
+                table: "Subscriptions",
+                column: "ServiceLogId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Subscription_TrackingUnitId_Dates",
+                table: "Subscriptions",
+                columns: new[] { "TrackingUnitId", "SsDate", "SeDate" });
 
             migrationBuilder.CreateIndex(
                 name: "ix_system_logs_level",
@@ -1177,121 +1214,121 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Ticket_TicketNo",
+                table: "Tickets",
+                column: "TicketNo");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ticket_TicketStatus",
+                table: "Tickets",
+                column: "TicketStatus");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ticket_TrackingUnitId_TicketStatus",
+                table: "Tickets",
+                columns: new[] { "TrackingUnitId", "TicketStatus" });
+
+            migrationBuilder.CreateIndex(
                 name: "ix_tickets_created_by_id",
-                table: "tickets",
+                table: "Tickets",
                 column: "created_by_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_tickets_last_modified_by_id",
-                table: "tickets",
+                table: "Tickets",
                 column: "last_modified_by_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_tickets_ticket_no",
-                table: "tickets",
-                column: "ticket_no",
-                unique: true);
+                name: "IX_TrackedAsset_PlateNo",
+                table: "TrackedAssets",
+                column: "PlateNo");
 
             migrationBuilder.CreateIndex(
-                name: "ix_tickets_tracking_unit_id",
-                table: "tickets",
-                column: "tracking_unit_id");
+                name: "IX_TrackedAsset_TrackedAssetCode",
+                table: "TrackedAssets",
+                column: "TrackedAssetCode");
 
             migrationBuilder.CreateIndex(
-                name: "ix_tracked_assets_tracked_asset_no",
-                table: "tracked_assets",
-                column: "tracked_asset_no",
-                unique: true);
+                name: "IX_TrackedAsset_TrackedAssetNo",
+                table: "TrackedAssets",
+                column: "TrackedAssetNo");
 
             migrationBuilder.CreateIndex(
-                name: "ix_tracking_unit_models_name",
-                table: "tracking_unit_models",
-                column: "name",
-                unique: true);
+                name: "IX_TrackedAsset_VinSerNo",
+                table: "TrackedAssets",
+                column: "VinSerNo");
 
             migrationBuilder.CreateIndex(
-                name: "ix_tracking_units_customer_id",
-                table: "tracking_units",
-                column: "customer_id");
+                name: "IX_TrackingUnitModel_Name",
+                table: "TrackingUnitModels",
+                column: "Name");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TrackingUnitModel_WialonName",
+                table: "TrackingUnitModels",
+                column: "WialonName");
 
             migrationBuilder.CreateIndex(
                 name: "ix_tracking_units_sim_card_id",
-                table: "tracking_units",
-                column: "sim_card_id",
+                table: "TrackingUnits",
+                column: "SimCardId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "ix_tracking_units_tracked_asset_id",
-                table: "tracking_units",
-                column: "tracked_asset_id");
+                table: "TrackingUnits",
+                column: "TrackedAssetId");
 
             migrationBuilder.CreateIndex(
-                name: "ix_tracking_units_tracking_unit_model_id",
-                table: "tracking_units",
-                column: "tracking_unit_model_id");
+                name: "IX_TrackingUnit_CustomerId_UStatus",
+                table: "TrackingUnits",
+                columns: new[] { "CustomerId", "UStatus" });
 
             migrationBuilder.CreateIndex(
-                name: "ix_wialon_tasks_service_log_id",
-                table: "wialon_tasks",
-                column: "service_log_id");
+                name: "IX_TrackingUnit_Imei",
+                table: "TrackingUnits",
+                column: "Imei",
+                filter: "\"Imei\" IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "ix_wialon_tasks_tracking_unit_id",
-                table: "wialon_tasks",
-                column: "tracking_unit_id");
+                name: "IX_TrackingUnit_SNo",
+                table: "TrackingUnits",
+                column: "SNo");
 
-            migrationBuilder.AddForeignKey(
-                name: "fk_invoice_item_groups_service_logs_service_log_id",
-                table: "invoice_item_groups",
-                column: "service_log_id",
-                principalTable: "service_logs",
-                principalColumn: "id",
-                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.CreateIndex(
+                name: "IX_TrackingUnit_TrackingUnitModelId",
+                table: "TrackingUnits",
+                column: "TrackingUnitModelId");
 
-            migrationBuilder.AddForeignKey(
-                name: "fk_invoice_items_subscriptions_subscription_id",
-                table: "invoice_items",
-                column: "subscription_id",
-                principalTable: "subscriptions",
-                principalColumn: "id",
-                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.CreateIndex(
+                name: "IX_TrackingUnit_UStatus_IsOnWialon",
+                table: "TrackingUnits",
+                columns: new[] { "UStatus", "IsOnWialon" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WialonTask_ServiceLogId",
+                table: "WialonTasks",
+                column: "ServiceLogId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WialonTask_TrackingUnitId_IsExecuted",
+                table: "WialonTasks",
+                columns: new[] { "TrackingUnitId", "IsExecuted" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WialonUnit_SimCardNo",
+                table: "WialonUnits",
+                column: "SimCardNo");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WialonUnit_UnitSNo",
+                table: "WialonUnits",
+                column: "UnitSNo");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "fk_service_logs_asp_net_users_created_by_id",
-                table: "service_logs");
-
-            migrationBuilder.DropForeignKey(
-                name: "fk_invoices_customers_customer_id",
-                table: "invoices");
-
-            migrationBuilder.DropForeignKey(
-                name: "fk_service_logs_customers_customer_id",
-                table: "service_logs");
-
-            migrationBuilder.DropForeignKey(
-                name: "fk_tracking_units_customers_customer_id",
-                table: "tracking_units");
-
-            migrationBuilder.DropForeignKey(
-                name: "fk_tracking_units_tracking_unit_models_tracking_unit_model_id",
-                table: "tracking_units");
-
-            migrationBuilder.DropForeignKey(
-                name: "fk_invoice_item_groups_invoices_invoice_id",
-                table: "invoice_item_groups");
-
-            migrationBuilder.DropForeignKey(
-                name: "fk_invoice_item_groups_service_logs_service_log_id",
-                table: "invoice_item_groups");
-
-            migrationBuilder.DropForeignKey(
-                name: "fk_subscriptions_service_logs_service_log_id",
-                table: "subscriptions");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -1317,7 +1354,7 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                 name: "contacts");
 
             migrationBuilder.DropTable(
-                name: "cus_prices");
+                name: "CusPrices");
 
             migrationBuilder.DropTable(
                 name: "data_protection_keys");
@@ -1326,7 +1363,10 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                 name: "documents");
 
             migrationBuilder.DropTable(
-                name: "libyana_sim_cards");
+                name: "InvoiceItems");
+
+            migrationBuilder.DropTable(
+                name: "LibyanaSimCards");
 
             migrationBuilder.DropTable(
                 name: "picklist_sets");
@@ -1335,7 +1375,7 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                 name: "products");
 
             migrationBuilder.DropTable(
-                name: "service_prices");
+                name: "ServicePrices");
 
             migrationBuilder.DropTable(
                 name: "system_logs");
@@ -1344,58 +1384,55 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                 name: "tenant_users");
 
             migrationBuilder.DropTable(
-                name: "tickets");
+                name: "Tickets");
 
             migrationBuilder.DropTable(
-                name: "wialon_tasks");
+                name: "WialonTasks");
 
             migrationBuilder.DropTable(
-                name: "wialon_units");
+                name: "WialonUnits");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "InvoiceItemGroups");
+
+            migrationBuilder.DropTable(
+                name: "Subscriptions");
+
+            migrationBuilder.DropTable(
+                name: "Invoices");
+
+            migrationBuilder.DropTable(
+                name: "ServiceLogs");
+
+            migrationBuilder.DropTable(
+                name: "TrackingUnits");
+
+            migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Customers");
+
+            migrationBuilder.DropTable(
+                name: "SimCards");
+
+            migrationBuilder.DropTable(
+                name: "TrackedAssets");
+
+            migrationBuilder.DropTable(
+                name: "TrackingUnitModels");
 
             migrationBuilder.DropTable(
                 name: "tenants");
 
             migrationBuilder.DropTable(
-                name: "customers");
+                name: "SPackages");
 
             migrationBuilder.DropTable(
-                name: "tracking_unit_models");
-
-            migrationBuilder.DropTable(
-                name: "invoices");
-
-            migrationBuilder.DropTable(
-                name: "service_logs");
-
-            migrationBuilder.DropTable(
-                name: "invoice_items");
-
-            migrationBuilder.DropTable(
-                name: "invoice_item_groups");
-
-            migrationBuilder.DropTable(
-                name: "subscriptions");
-
-            migrationBuilder.DropTable(
-                name: "tracking_units");
-
-            migrationBuilder.DropTable(
-                name: "sim_cards");
-
-            migrationBuilder.DropTable(
-                name: "tracked_assets");
-
-            migrationBuilder.DropTable(
-                name: "s_packages");
-
-            migrationBuilder.DropTable(
-                name: "s_providers");
+                name: "SProviders");
         }
     }
 }

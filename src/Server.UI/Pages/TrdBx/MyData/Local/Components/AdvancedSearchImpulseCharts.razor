@@ -21,21 +21,21 @@
             <MudDatePicker Editable @bind-Date="@_fromdate"
                            Placeholder="@L["By Start Date"]"
                            Clearable="true"
-                           FilterChanged="OnStartDateChanged">
+                           TextChanged="OnStartDateChanged">
             </MudDatePicker>
         </MudItem>
         <MudItem md="3">
             <MudDatePicker Editable @bind-Date="@_todate"
                            Placeholder="@L["By End Date"]"
                            Clearable="true"
-                           FilterChanged="OnEndDateChanged">
+                           TextChanged="OnEndDateChanged">
             </MudDatePicker>
         </MudItem>
      </MudGrid>
      </MudExpansionPanel>
 
 @code {
-        [EditorRequired][Parameter] public GetImpulseChartsQuery TRequest { get; set; } = null!;
+    [EditorRequired][Parameter] public GetImpulseChartsQuery TRequest { get; set; } = null!;
     [EditorRequired][Parameter] public EventCallback<string> OnFilterCriteriaChanged { get; set; }
 
     private bool _advancedSearchExpanded;

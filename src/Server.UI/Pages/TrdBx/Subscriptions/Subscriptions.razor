@@ -120,6 +120,7 @@
         try
         {
             _loading = true;
+            Query.ServiceLogId = ServiceLogId;
             Query.TrackingUnitId = TrackingUnitId;
             Query.OrderBy = state.SortDefinitions.FirstOrDefault()?.SortBy ?? "Id";
             Query.SortDirection = state.SortDefinitions.FirstOrDefault()?.Descending ?? true

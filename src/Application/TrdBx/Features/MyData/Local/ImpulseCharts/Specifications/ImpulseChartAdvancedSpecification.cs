@@ -15,8 +15,8 @@ public class ImpulseChartAdvancedSpecification : Specification<TrackingUnit>
                 {
                     Query
                    .Where(x => x.CustomerId.Equals(filter.CustomerId), filter.CustomerId is not null)
-                   .Where(x => x.SimCard.ExDate == null || x.SimCard.ExDate >= filter.FromDate, (filter.FromDate is not null))
-                   .Where(x => x.SimCard.ExDate == null || x.SimCard.ExDate <= filter.ToDate, (filter.ToDate is not null))
+                   .Where(x => x.SimCard.ExDate == null || x.SimCard.ExDate >= filter.FromDate, filter.FromDate is not null)
+                   .Where(x => x.SimCard.ExDate == null || x.SimCard.ExDate <= filter.ToDate, filter.ToDate is not null)
                    .Where(x => x.UStatus == UStatus.InstalledActiveGprs
                                          || x.UStatus == UStatus.InstalledActiveHosting
                                          || x.UStatus == UStatus.InstalledActive);

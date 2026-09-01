@@ -65,10 +65,10 @@ public enum SLStatus
 public enum TicketStatus
 {
     //All = 0,
-    [Display(Name = "Opened")] Opened = 2,
-    [Display(Name = "Accepted")] Accepted = 3,
-    [Display(Name = "Rejected")] Rejected = 5,
-    [Display(Name = "Closed")] Closed = 7
+    [Display(Name = "Opened")] Opened =1,
+    [Display(Name = "Accepted")] Accepted =2,
+    [Display(Name = "Rejected")] Rejected =3,
+    [Display(Name = "Closed")] Closed =4
 }
 
 // public enum TicketTask

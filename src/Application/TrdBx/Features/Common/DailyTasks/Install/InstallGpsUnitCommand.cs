@@ -152,6 +152,12 @@ public class InstallTrackingUnitCommandHandler : SubscriptionSharedLogic, IReque
         unit.SimCardId = request.SimCardId;
         unit.InsMode = request.InsMode;
 
+        // request.SubPackage switch
+        //         {
+        //             SubPackage.Active => Activate(unit, serviceLog, request.TsDate, price,true),
+        //             SubPackage.ActiveHosting => ActivateForHosting(unit, serviceLog, request.TsDate, price,true),
+        //             SubPackage.ActiveGprs => ActivateForGprs(unit, serviceLog, request.TsDate, price,true)
+        //         };
 
         switch (request.SubPackage)
         {
