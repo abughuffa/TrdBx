@@ -2,43 +2,31 @@
 using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.ImpulseCharts.Caching;
 using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.ImpulseCharts.DTOs;
 using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.ImpulseCharts.Specifications;
-using CleanArchitecture.Blazor.Application.Common.Interfaces;
-using Microsoft.Extensions.Logging;
+
 
 namespace CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.ImpulseCharts.Queries.GetImpulseCharts;
 
-public class GetImpulseChartsQuery : ImpulseChartAdvancedFilter, ICacheableRequest<IEnumerable<ImpulseChartDto>>
+public class GetImpulseChartsQuery : ImpulseChartAdvancedFilter, ICacheableRequest<IEnumerable<Impulse>>
 {
-    private const int MAX_DAY_RANGE = 365 * 2; // Maximum 2 years
+
 
     public IEnumerable<string>? Tags => ImpulseChartCacheKey.Tags;
     public ImpulseChartAdvancedSpecification Specification => new(this);
     public string CacheKey => ImpulseChartCacheKey.GetPaginationCacheKey($"{this}");
 
-    public int MaxDayRange { get; init; } = MAX_DAY_RANGE;
 
     public override string ToString()
     {
         return $"Listview:{ListView}, Customer:{CustomerId} StartDate:{FromDate}, EndDate:{ToDate}";
     }
 
-    public void Validate()
-    {
-        if (FromDate.HasValue && ToDate.HasValue)
-        {
-            var days = (ToDate.Value.DayNumber - FromDate.Value.DayNumber) + 1;
-            if (days > MaxDayRange)
-            {
-                throw new ValidationException($"Date range exceeds maximum allowed of {MaxDayRange} days");
-            }
-        }
-    }
+
 }
 
 
 
 // Handler Implementation
-public class GetImpulseChartsQueryHandler : IRequestHandler<GetImpulseChartsQuery, IEnumerable<ImpulseChartDto>>
+public class GetImpulseChartsQueryHandler : IRequestHandler<GetImpulseChartsQuery, IEnumerable<Impulse>>
 {
     private readonly IApplicationDbContextFactory _dbContextFactory;
     private readonly ILogger<GetImpulseChartsQueryHandler> _logger;
@@ -51,7 +39,7 @@ public class GetImpulseChartsQueryHandler : IRequestHandler<GetImpulseChartsQuer
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async ValueTask<IEnumerable<ImpulseChartDto>> Handle(GetImpulseChartsQuery request, CancellationToken cancellationToken)
+    public async ValueTask<IEnumerable<Impulse>> Handle(GetImpulseChartsQuery request, CancellationToken cancellationToken)
     {
         try
         {
@@ -67,7 +55,7 @@ public class GetImpulseChartsQueryHandler : IRequestHandler<GetImpulseChartsQuer
                 ImpulseChartListView.UnitSubExpiryDate => 
                     await GetUnitSubscriptionExpiryDataAsync(context, request, cancellationToken),
                 
-                _ => new List<ImpulseChartDto>()
+                _ => new List<Impulse>()
             };
         }
         catch (ValidationException ex)
@@ -84,7 +72,7 @@ public class GetImpulseChartsQueryHandler : IRequestHandler<GetImpulseChartsQuer
 
     #region Private Helper Methods
 
-    private async Task<List<ImpulseChartDto>> GetSimCardExpiryDataAsync(
+    private async Task<List<Impulse>> GetSimCardExpiryDataAsync(
         IApplicationDbContext context,
         GetImpulseChartsQuery request,
         CancellationToken cancellationToken)
@@ -93,88 +81,24 @@ public class GetImpulseChartsQueryHandler : IRequestHandler<GetImpulseChartsQuer
 
         // Optimized query - load only necessary data
         var query = context.TrackingUnits
-            .Include(U=>U.SimCard)
-            .Include(U=>U.Customer).ThenInclude(c=>c.Parent) 
+            .Include(t=>t.SimCard)
+            .Include(t=>t.Customer).ThenInclude(c=>c.Parent) 
             .ApplySpecification(request.Specification)  
             .Where(t => t.SimCard != null)
             .AsNoTracking()
-            // && t.SimCard.ExDate.HasValue
-            .Select(t => new SimCardExpiryProjection
+            .Select(t => new ExpiryObject
             {
+                ObjectId = t.SimCardId! ?? 0,
                 ExDate = t.SimCard!.ExDate ?? currentDate,
-                ParentName = t.Customer != null && t.Customer.Parent != null 
-                    ? t.Customer.Parent.Name 
-                    : string.Empty,
-                ChildName = t.Customer != null 
-                    ? t.Customer.Name 
-                    : string.Empty,
+
+                CustomerName = t.Customer != null && t.Customer.Parent != null 
+                    ? string.Format("{0} - {1}",t.Customer.Parent.Name,t.Customer.Name)
+                    : t.Customer!.Name ?? string.Empty,
                 SNo = t.SNo ?? string.Empty,
                 SimNo = t.SimCard!.SimCardNo ?? string.Empty,
-                Status = t.UStatus.ToString()
-            });
-
-        var projectionList = await query.ToListAsync(cancellationToken);
-
-        if (!projectionList.Any() && !request.FromDate.HasValue && !request.ToDate.HasValue)
-        {
-            return new List<ImpulseChartDto>();
-        }
-
-        return BuildDateRangeResult(
-            projectionList,
-            request,
-            currentDate,
-            p => p.ExDate,
-            p => new ItemDto
-            {
-                Id = 0, // No Id available in projection
-                ParentName = p.ParentName,
-                ChildName = p.ChildName,
-                SNo = p.SNo,
-                SimNo = p.SimNo,
-                Status = p.Status
-            });
-    }
-
-    private async Task<List<ImpulseChartDto>> GetUnitSubscriptionExpiryDataAsync(
-        IApplicationDbContext context,
-        GetImpulseChartsQuery request,
-        CancellationToken cancellationToken)
-    {
-        var currentDate = DateOnly.FromDateTime(DateTime.Today);
-
-        // Optimized query using subquery for latest subscription
-        var query = context.TrackingUnits
-            .Include(U=>U.SimCard)
-            .Include(U=>U.Customer).ThenInclude(c=>c.Parent)
-            .Include(U=>U.Subscriptions)
-            .ApplySpecification(request.Specification)
-            .Where(t => t.Subscriptions.Any())
-            .AsNoTracking()
-            .Select(t => new
-            {
-                TrackingUnit = t,
-                LatestSubscription = t.Subscriptions
-                    .OrderByDescending(s => s.SeDate)
-                    .FirstOrDefault()
-            })
-            .Where(x => x.LatestSubscription != null && x.LatestSubscription.SeDate != default)
-            .Select(x => new SubscriptionExpiryProjection
-            {
-                SeDate = x.LatestSubscription!.SeDate,
-                ParentName = x.TrackingUnit.Customer != null && x.TrackingUnit.Customer.Parent != null
-                    ? x.TrackingUnit.Customer.Parent.Name
-                    : string.Empty,
-                ChildName = x.TrackingUnit.Customer != null
-                    ? x.TrackingUnit.Customer.Name
-                    : string.Empty,
-                SNo = x.TrackingUnit.SNo ?? string.Empty,
-                SimNo = x.TrackingUnit.SimCard != null
-                    ? x.TrackingUnit.SimCard.SimCardNo ?? string.Empty
-                    : string.Empty,
-                Status = x.TrackingUnit.UStatus.ToString(),
-                DaysRemaining = (int?)(x.LatestSubscription.SeDate.ToDateTime(TimeOnly.MinValue) - DateTime.Today).TotalDays,
-                SubscriptionStatus = x.LatestSubscription.SeDate < DateOnly.FromDateTime(DateTime.Today)
+                Status = t.UStatus.ToString(),
+                DaysRemaining = 0, // (int?)(t.SimCard!.ExDate!.ToDateTime(TimeOnly.MinValue) - DateTime.Today).TotalDays,
+                ObjectStatus = t.SimCard.ExDate < DateOnly.FromDateTime(DateTime.Today)
                     ? "Expired"
                     : "Active"
             });
@@ -183,37 +107,122 @@ public class GetImpulseChartsQueryHandler : IRequestHandler<GetImpulseChartsQuer
 
         if (!projectionList.Any() && !request.FromDate.HasValue && !request.ToDate.HasValue)
         {
-            return new List<ImpulseChartDto>();
+            return new List<Impulse>();
         }
 
         return BuildDateRangeResult(
             projectionList,
             request,
             currentDate,
-            p => p.SeDate,
-            p => new ItemDto
+            p => p.ExDate,
+            p => new ExpiryObject
             {
-                Id = 0,
-                ParentName = p.ParentName,
-                ChildName = p.ChildName,
+                
+
+                ObjectId = p.ObjectId,
+                CustomerName = p.CustomerName,
                 SNo = p.SNo,
                 SimNo = p.SimNo,
                 Status = p.Status,
                 DaysRemaining = p.DaysRemaining,
-                SubscriptionStatus = p.SubscriptionStatus
+                ObjectStatus = p.ObjectStatus
+                
             });
     }
 
-    private List<ImpulseChartDto> BuildDateRangeResult<T>(
+    private async Task<List<Impulse>> GetUnitSubscriptionExpiryDataAsync(
+        IApplicationDbContext context,
+        GetImpulseChartsQuery request,
+        CancellationToken cancellationToken)
+    {
+        var currentDate = DateOnly.FromDateTime(DateTime.Today);
+
+        // Optimized query using subquery for latest subscription
+        var query = context.TrackingUnits
+            .Include(t=>t.SimCard)
+            .Include(t=>t.Customer).ThenInclude(c=>c.Parent)
+            .Include(t=>t.Subscriptions)
+            .ApplySpecification(request.Specification)
+            .Where(t => t.Subscriptions.Any())
+            .AsNoTracking()
+            .Select(t => new
+            {
+                //Id = t.Id,
+                TrackingUnit = t,
+                LatestSubscription = t.Subscriptions
+                    .OrderByDescending(s => s.SeDate)
+                    .FirstOrDefault()
+            })
+            .Where(x => x.LatestSubscription != null && x.LatestSubscription.SeDate != default)
+            .Select(x => new ExpiryObject
+            {
+                ObjectId = x.TrackingUnit.Id,
+                ExDate = x.LatestSubscription!.SeDate,
+
+                CustomerName = x.TrackingUnit.Customer != null && x.TrackingUnit.Customer.Parent != null 
+                    ? string.Format("{0} - {1}",x.TrackingUnit.Customer.Parent.Name,x.TrackingUnit.Customer.Name)
+                    : x.TrackingUnit.Customer!.Name ?? string.Empty,
+
+                SNo = x.TrackingUnit.SNo ?? string.Empty,
+                SimNo = x.TrackingUnit.SimCard != null
+                    ? x.TrackingUnit.SimCard.SimCardNo ?? string.Empty
+                    : string.Empty,
+                Status = x.TrackingUnit.UStatus.ToString(),
+                DaysRemaining = (int?)(x.LatestSubscription.SeDate.ToDateTime(TimeOnly.MinValue) - DateTime.Today).TotalDays,
+                ObjectStatus = x.LatestSubscription.SeDate < DateOnly.FromDateTime(DateTime.Today)
+                    ? "Expired"
+                    : "Active"
+            });
+
+        var projectionList = await query.ToListAsync(cancellationToken);
+
+        if (!projectionList.Any() && !request.FromDate.HasValue && !request.ToDate.HasValue)
+        {
+            return new List<Impulse>();
+        }
+
+        return BuildDateRangeResult(
+            projectionList,
+            request,
+            currentDate,
+            p => p.ExDate,
+            p => new ExpiryObject
+            {
+                
+
+                ObjectId = p.ObjectId,
+                CustomerName = p.CustomerName,
+                SNo = p.SNo,
+                SimNo = p.SimNo,
+                Status = p.Status,
+                DaysRemaining = p.DaysRemaining,
+                ObjectStatus = p.ObjectStatus
+                
+            });
+            // p => p.SeDate,
+            // p => new ItemDto
+            // {
+            //     Id = 0,
+            //     ParentName = p.ParentName,
+            //     ChildName = p.ChildName,
+            //     SNo = p.SNo,
+            //     SimNo = p.SimNo,
+            //     Status = p.Status,
+            //     DaysRemaining = p.DaysRemaining,
+            //     SubscriptionStatus = p.SubscriptionStatus
+            // });
+    }
+
+    private List<Impulse> BuildDateRangeResult<T>(
         List<T> items,
         GetImpulseChartsQuery request,
         DateOnly currentDate,
         Func<T, DateOnly> dateSelector,
-        Func<T, ItemDto> itemMapper)
+        Func<T, ExpiryObject> itemMapper)
     {
         if (!items.Any())
         {
-            return new List<ImpulseChartDto>();
+            return new List<Impulse>();
         }
 
         var groupedData = items
@@ -235,15 +244,17 @@ public class GetImpulseChartsQueryHandler : IRequestHandler<GetImpulseChartsQuer
         var dayRange = (endDate.DayNumber - startDate.DayNumber) + 1;
 
         // Check for excessive date range
-        if (dayRange > request.MaxDayRange)
-        {
-            _logger.LogWarning(
-                "Date range of {DayRange} days exceeds maximum of {MaxDays}",
-                dayRange,
-                request.MaxDayRange);
-        }
+        // if (dayRange > request.MaxDayRange)
+        // {
+        //     _logger.LogWarning(
+        //         "Date range of {DayRange} days exceeds maximum of {MaxDays}",
+        //         dayRange,
+        //         request.MaxDayRange);
+        // }
 
-        var result = new List<ImpulseChartDto>(dayRange);
+        var result = new List<Impulse>();
+
+
 
         for (int offset = 0; offset < dayRange; offset++)
         {
@@ -251,19 +262,19 @@ public class GetImpulseChartsQueryHandler : IRequestHandler<GetImpulseChartsQuer
             
             if (groupedData.TryGetValue(date, out var dateItems))
             {
-                result.Add(new ImpulseChartDto
+                result.Add(new Impulse
                 {
                     Date = date,
-                    Items = dateItems,
+                    ExpiryObjects = dateItems,
                     Summary = $"Count: {dateItems.Count}"
                 });
             }
             else
             {
-                result.Add(new ImpulseChartDto
+                result.Add(new Impulse
                 {
                     Date = date,
-                    Items = new List<ItemDto>(),
+                    ExpiryObjects = new List<ExpiryObject>(),
                     Summary = "No items"
                 });
             }
@@ -274,31 +285,23 @@ public class GetImpulseChartsQueryHandler : IRequestHandler<GetImpulseChartsQuer
 
     #endregion
 
-    #region Projection Classes
+    // #region Projection Classes
 
-    private class SimCardExpiryProjection
-    {
-        public DateOnly ExDate { get; set; }
-        public string ParentName { get; set; } = string.Empty;
-        public string ChildName { get; set; } = string.Empty;
-        public string SNo { get; set; } = string.Empty;
-        public string SimNo { get; set; } = string.Empty;
-        public string Status { get; set; } = string.Empty;
-    }
 
-    private class SubscriptionExpiryProjection
-    {
-        public DateOnly SeDate { get; set; }
-        public string ParentName { get; set; } = string.Empty;
-        public string ChildName { get; set; } = string.Empty;
-        public string SNo { get; set; } = string.Empty;
-        public string SimNo { get; set; } = string.Empty;
-        public string Status { get; set; } = string.Empty;
-        public int? DaysRemaining { get; set; }
-        public string? SubscriptionStatus { get; set; }
-    }
 
-    #endregion
+    // // private class SubscriptionExpiryProjection
+    // // {
+    // //     public int ObjectId { get; set; }
+    // //     public DateOnly ExDate { get; set; }
+    // //     public string CustomerName { get; set; } = string.Empty;
+    // //     public string SNo { get; set; } = string.Empty;
+    // //     public string SimNo { get; set; } = string.Empty;
+    // //     public string Status { get; set; } = string.Empty;
+    // //     public int? DaysRemaining { get; set; }
+    // //     public string? ObjectStatus { get; set; }
+    // // }
+
+    // #endregion
 }
 
 // // Extensions for better query performance

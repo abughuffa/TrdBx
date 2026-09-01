@@ -6,7 +6,7 @@ namespace CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Impul
 
 public class ExportImpulseChartsQuery : ICacheableRequest<Result<byte[]>>
 {
-    public List<ImpulseChartDto> ImpulseCharts { get; set; } = new();
+    public List<Impulse> ImpulseCharts { get; set; } = new();
 
     public IEnumerable<string>? Tags => ImpulseChartCacheKey.Tags;
     public string CacheKey => ImpulseChartCacheKey.GetExportCacheKey($"{this}");
@@ -43,7 +43,7 @@ public class ExportImpulseChartsQueryHandler :
     //private readonly IApplicationDbContext _context;
     private readonly IExcelService _excelService;
     private readonly IStringLocalizer<ExportImpulseChartsQueryHandler> _localizer;
-    private readonly ImpulseChartDto _dto = new();
+    private readonly Impulse _dto = new();
     public ExportImpulseChartsQueryHandler(
         //IApplicationDbContext context,
         IExcelService excelService,
@@ -65,12 +65,12 @@ public class ExportImpulseChartsQueryHandler :
         }   
 
         var result = await _excelService.ExportAsync(data,
-            new Dictionary<string, Func<ImpulseChartDto, object?>>()
+            new Dictionary<string, Func<Impulse, object?>>()
             {
                     {_localizer["Day Of Week"],item => item.Date.DayOfWeek.ToString()},
                     {_localizer["Expairy Date"],item => item.Date.ToString("yyyy-MM-dd")},
-                    {_localizer["SIMs Count"],item => item.Items.Count},
-                    {_localizer["Amount"],item => (item.Items.Count)*50},
+                    {_localizer["SIMs Count"],item => item.ExpiryObjects.Count},
+                    {_localizer["Amount"],item => (item.ExpiryObjects.Count)*50},
             }
             , _localizer[_dto.GetClassDescription()]);
 

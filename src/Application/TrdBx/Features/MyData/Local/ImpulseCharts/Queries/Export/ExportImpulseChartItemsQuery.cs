@@ -6,7 +6,7 @@ namespace CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Impul
 
 public class ExportImpulseChartItemsQuery : ICacheableRequest<Result<byte[]>>
 {
-    public ImpulseChartDto ImpulseChart { get; set; } = new();
+    public Impulse ImpulseChart { get; set; } = new();
 
     public IEnumerable<string>? Tags => ImpulseChartCacheKey.Tags;
     public string CacheKey => ImpulseChartCacheKey.GetExportCacheKey($"{this}");
@@ -44,7 +44,7 @@ public class ExportImpulseChartItemsQueryHandler :
         private readonly IApplicationDbContextFactory _dbContextFactory;
     private readonly IExcelService _excelService;
     private readonly IStringLocalizer<ExportImpulseChartItemsQueryHandler> _localizer;
-    private readonly ItemDto _dto = new();
+    private readonly ExpiryObject _dto = new();
         public ExportImpulseChartItemsQueryHandler(
             TypeAdapterConfig typeAdapterConfig,
 
@@ -60,7 +60,7 @@ public class ExportImpulseChartItemsQueryHandler :
 #nullable disable warnings
     public async ValueTask<Result<byte[]>> Handle(ExportImpulseChartItemsQuery request, CancellationToken cancellationToken)
     {
-        var data = request.ImpulseChart.Items;
+        var data = request.ImpulseChart.ExpiryObjects;
 
         if (data == null || !data.Any())
         {
@@ -68,13 +68,15 @@ public class ExportImpulseChartItemsQueryHandler :
         }   
 
         var result = await _excelService.ExportAsync(data,
-            new Dictionary<string, Func<ItemDto, object?>>()
+            new Dictionary<string, Func<ExpiryObject, object?>>()
             {
-                    {_localizer[_dto.GetMemberDisplayName(x=>x.ParentName)],item => item.ParentName},
-                    {_localizer[_dto.GetMemberDisplayName(x=>x.ChildName)],item => item.ChildName},
+                    {_localizer[_dto.GetMemberDisplayName(x=>x.CustomerName)],item => item.CustomerName},
+                    {_localizer[_dto.GetMemberDisplayName(x=>x.ExDate)],item => item.ExDate},
                     {_localizer[_dto.GetMemberDisplayName(x=>x.SNo)],item => item.SNo},
                     {_localizer[_dto.GetMemberDisplayName(x=>x.SimNo)],item => item.SimNo},
                     {_localizer[_dto.GetMemberDisplayName(x=>x.Status)],item => item.Status},
+                    {_localizer[_dto.GetMemberDisplayName(x=>x.DaysRemaining)],item => item.DaysRemaining},
+                    {_localizer[_dto.GetMemberDisplayName(x=>x.ObjectStatus)],item => item.ObjectStatus}
 
             }
             , _localizer[_dto.GetClassDescription()]);

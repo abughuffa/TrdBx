@@ -58,7 +58,7 @@
                             <MudStack Row Spacing="2" Justify="Justify.SpaceBetween">
                                 <MudStack Spacing="1">
                                     <MudText Typo="Typo.caption" Color="Color.Secondary">@L["Total Items"]</MudText>
-                                    <MudText Typo="Typo.h6">@FilteredTable.Sum(x => x.Items.Count).ToString("N0")</MudText>
+                                    <MudText Typo="Typo.h6">@FilteredTable.Sum(x => x.ExpiryObjects.Count).ToString("N0")</MudText>
                                 </MudStack>
                                 <MudStack Spacing="1">
                                     <MudText Typo="Typo.caption" Color="Color.Secondary">@L["Number of Groups"]</MudText>
@@ -66,11 +66,11 @@
                                 </MudStack>
                                 <MudStack Spacing="1">
                                     <MudText Typo="Typo.caption" Color="Color.Secondary">@L["Lowest Group Count"]</MudText>
-                                    <MudText Typo="Typo.body2" Color="Color.Success">@(FilteredTable.Min(x => x.Items.Count).ToString("N0"))</MudText>
+                                    <MudText Typo="Typo.body2" Color="Color.Success">@(FilteredTable.Min(x => x.ExpiryObjects.Count).ToString("N0"))</MudText>
                                 </MudStack>
                                 <MudStack Spacing="1">
                                     <MudText Typo="Typo.caption" Color="Color.Secondary">@L["Highest Group Count"]</MudText>
-                                    <MudText Typo="Typo.body2" Color="Color.Error">@(FilteredTable.Max(x => x.Items.Count).ToString("N0"))</MudText>
+                                    <MudText Typo="Typo.body2" Color="Color.Error">@(FilteredTable.Max(x => x.ExpiryObjects.Count).ToString("N0"))</MudText>
                                  </MudStack>
                                  <MudStack Spacing="1">
                                     <MudButton Variant="Variant.Filled"
@@ -204,12 +204,12 @@
                                     {
                                         var item = FilteredTable[i];
                                         var x = 80 + (i * _itemSpacing);
-                                        var height = CalculateImpulseHeight((int)item.Items.Count);
+                                        var height = CalculateImpulseHeight((int)item.ExpiryObjects.Count);
                                         var isCurrent = item == _currentImpulse;
                                         var isHighlighted = IsDateHighlighted(item.Date);
-                                        var fillColor = GetImpulseColor(item.Items.Count, isCurrent, isHighlighted);
+                                        var fillColor = GetImpulseColor(item.ExpiryObjects.Count, isCurrent, isHighlighted);
 
-                                        <g @key="@($"{item.Date}_{item.Items.Count}_{i}")"
+                                        <g @key="@($"{item.Date}_{item.ExpiryObjects.Count}_{i}")"
                                            class="impulse-group"
                                            @onclick="@(() => OnImpulseClick(i))"
                                            style="cursor: pointer;">
@@ -245,7 +245,7 @@
                                                   font-size="9" fill="@fillColor"
                                                   class="value-label"
                                                   style="opacity: 0;">
-                                                @FormatValueLabel((int)item.Items.Count)
+                                                @FormatValueLabel((int)item.ExpiryObjects.Count)
                                             </text>
 
                                             <!-- Tooltip Content -->
@@ -258,14 +258,14 @@
                                                   font-size="9" fill="#1976d2" font-weight="bold"
                                                   class="tooltip-value"
                                                   style="opacity: 0; pointer-events: none;">
-                                                @item.Items.Count.ToString("N0")
+                                                @item.ExpiryObjects.Count.ToString("N0")
                                             </text>
                                             <!-- Add items count to tooltip -->
                                             <text x="@x" y="@(250 - height - 25)" text-anchor="middle"
                                                   font-size="8" fill="#4CAF50"
                                                   class="tooltip-objects"
                                                   style="opacity: 0; pointer-events: none;">
-                                                @(item.Items?.Count ?? 0) @L["items"]
+                                                @(item.ExpiryObjects?.Count ?? 0) @L["items"]
                                             </text>
                                             <text x="@x" y="@(250 - height - 15)" text-anchor="middle"
                                                   font-size="8" fill="#666"
@@ -326,8 +326,8 @@
                                 (_currentFilteredIndex + 1), 
                                 FilteredTable.Count, 
                                 (_currentImpulse?.Date.ToString("MMM dd, yyyy") ?? @L["No data"]), 
-                                (_currentImpulse?.Items?.Count.ToString("N0") ?? "0"), 
-                                (_currentImpulse?.Items?.Count.ToString() ?? "0"))
+                                (_currentImpulse?.ExpiryObjects?.Count.ToString("N0") ?? "0"), 
+                                (_currentImpulse?.ExpiryObjects?.Count.ToString() ?? "0"))
                             </MudText>
                         </MudStack>
                     </MudItem>
@@ -358,7 +358,7 @@
                                         <MudItem xs="12" md="4">
                                             <MudTextField Label=@L["Items Count"]
                                                           Variant="Variant.Outlined"
-                                                          Value="@(_currentImpulse?.Items?.Count.ToString() ?? "0")"
+                                                          Value="@(_currentImpulse?.ExpiryObjects?.Count.ToString() ?? "0")"
                                                           ReadOnly="true" />
                                         </MudItem>
                                     </MudGrid>
@@ -380,7 +380,7 @@
                 }
 
                 <!-- Current Impulse Items Table (Only shown when Impulse is selected) -->
-                @if (_currentImpulse != null && _currentImpulse.Items?.Any() == true)
+                @if (_currentImpulse != null && _currentImpulse.ExpiryObjects?.Any() == true)
                 {
                     <MudGrid Class="mt-3">
                         <MudItem xs="12">
@@ -389,33 +389,32 @@
                                     <CardHeaderContent>
                                         <MudStack Row Spacing="2" AlignItems="AlignItems.Center">
                                             <MudIcon Icon="@Icons.Material.Filled.List" />
-                                            <MudText Typo="Typo.h6">@string.Format(@L["Items of Selected Impulse: {0}: Count: {1}"], @_currentImpulse.Date.ToString("yyyy-MM-dd"), @_currentImpulse.Items.Count)</MudText>
+                                            <MudText Typo="Typo.h6">@string.Format(@L["Items of Selected Impulse: {0}: Count: {1}"], @_currentImpulse.Date.ToString("yyyy-MM-dd"), @_currentImpulse.TotalCount.ToString())</MudText>
                                         </MudStack>
                                     </CardHeaderContent>
                                 </MudCardHeader>
                                 <MudCardContent>
                                     <!-- Items Table -->
-                                    <MudTable Items="@_currentImpulse.Items" Hover="true" Dense="true" FixedHeader="true" Height="300px">
+                                    <MudTable Items="@_currentImpulse.ExpiryObjects" Hover="true" Dense="true" FixedHeader="true" Height="300px">
                                         <HeaderContent>
                                             <MudTh>#</MudTh>
-                                            <MudTh>@L["Parent"]</MudTh>
-                                            <MudTh>@L["Child"]</MudTh>
+                                            <MudTh>@L["CustomerName"]</MudTh>
                                             <MudTh>@L["SNo"]</MudTh>
                                             <MudTh>@L["SimNo"]</MudTh>
                                             <MudTh>@L["Status"]</MudTh>
+                                            <MudTh>@L["DaysRemaining"]</MudTh>
+                                            <MudTh>@L["ObjectStatus"]</MudTh>
                                             <MudTh>@L["Actions"]</MudTh>
                                         </HeaderContent>
                                         <RowTemplate>
                                             @{
-                                                var index = _currentImpulse.Items.IndexOf(context);
+                                                var index = _currentImpulse.ExpiryObjects.IndexOf(context);
                                             }
                                             <MudTd>@(index + 1)</MudTd>
                                             <MudTd>
-                                                <MudText>@context.ParentName.ToString()</MudText>
+                                                <MudText>@context.CustomerName.ToString()</MudText>
                                             </MudTd>
-                                            <MudTd>
-                                                <MudText>@context.ChildName.ToString()</MudText>
-                                            </MudTd>
+ 
                                             <MudTd>
                                                 <MudText>@context.SNo.ToString()</MudText>
                                             </MudTd>
@@ -425,10 +424,16 @@
                                                    <MudTd>
                                                 <MudText>@context.Status.ToString()</MudText>
                                             </MudTd>
+                                  
+                                                   <MudTd>
+                                                <MudText>@context.DaysRemaining.ToString()</MudText>
+                                            </MudTd>
+                                            <MudTd>
+                                                <MudText>@context.ObjectStatus.ToString()</MudText>
+                                            </MudTd>
                                             <MudTd>
                                                <MudIconButton Icon="@Icons.Material.Filled.Money" Color="Color.Warning"
-
-                                                               OnClick="() => OnExeAction(context.Id)" Class="ml-2" />
+                                                OnClick="() => OnExeAction(context.ObjectId)" Class="ml-2" />
                                             </MudTd>
                                         </RowTemplate>
                                         <PagerContent>
@@ -443,7 +448,7 @@
                                                 <MudStack Row Spacing="3" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
                                                     <MudStack Spacing="1">
                                                         <MudText Typo="Typo.caption" Color="Color.Secondary">@L["Total Items"]</MudText>
-                                                        <MudText Typo="Typo.h6">@_currentImpulse.Items.Count</MudText>
+                                                        <MudText Typo="Typo.h6">@_currentImpulse.ExpiryObjects.Count</MudText>
                                                     </MudStack>
                                                     <MudStack>
                                                         <MudButton Variant="Variant.Outlined"
@@ -629,8 +634,8 @@
     private ImpulseChartsAccessRights _accessRights = new();
 
     // Data
-    private List<ImpulseChartDto> _originalTable = new();
-    private List<ImpulseChartDto> _filteredTable = new();
+    private List<Impulse> _originalTable = new();
+    private List<Impulse> _filteredTable = new();
     private GetImpulseChartsQuery Query { get; set; } = new();
 
     // UI State 
@@ -641,7 +646,7 @@
 
     // Current selection
     private int _currentFilteredIndex = 0;
-    private ImpulseChartDto? _currentImpulse = null;
+    private Impulse? _currentImpulse = null;
 
     // ImpulseChart settings
     private double _zoomLevel = 1.0;
@@ -659,7 +664,7 @@
     private const double ZOOM_STEP = 0.25;
 
     // Computed properties
-    private List<ImpulseChartDto> FilteredTable => _filteredTable;
+    private List<Impulse> FilteredTable => _filteredTable;
     private bool ShowCurrentDateLine => CurrentDateXPosition > 0;
     private double CurrentDateXPosition { get; set; }
 
@@ -805,11 +810,11 @@
         try
         {
             var result = await Mediator.Send(Query).ConfigureAwait(false);
-            _originalTable = result?.ToList() ?? new List<ImpulseChartDto>();
+            _originalTable = result?.ToList() ?? new List<Impulse>();
 
             if (_originalTable.Any())
             {
-                _maxCount = _originalTable.Max(x => x.Items.Count);
+                _maxCount = _originalTable.Max(x => x.ExpiryObjects.Count);
                 await ApplyFilter();
 
                 await ShowNotification(string.Format(@L["Loaded {0} data points"], _originalTable.Count), Severity.Success);
@@ -827,8 +832,8 @@
         {
 
             Console.WriteLine(string.Format(@L["Error loading data: {0}", ex.Message], _originalTable.Count));
-            _originalTable = new List<ImpulseChartDto>();
-            _filteredTable = new List<ImpulseChartDto>();
+            _originalTable = new List<Impulse>();
+            _filteredTable = new List<Impulse>();
             _currentImpulse = null;
             await ShowNotification(string.Format(@L["Error loading data: {0}", ex.Message], _originalTable.Count), Severity.Error);
         }
@@ -840,10 +845,10 @@
     }
     private async Task ApplyFilter()
     {
-        _filteredTable = _originalTable.Where(x => x.Items.Count > 0).ToList();
+        _filteredTable = _originalTable.Where(x => x.ExpiryObjects.Count > 0).ToList();
 
         // Update max count for visualization
-        _maxCount = _filteredTable.Any() ? _filteredTable.Max(x => x.Items.Count) : 1;
+        _maxCount = _filteredTable.Any() ? _filteredTable.Max(x => x.ExpiryObjects.Count) : 1;
 
         // Reset current selection
         if (_filteredTable.Any())
@@ -925,7 +930,7 @@
             double normalized;
                 var logCountValue = Math.Log10(countValue);
                 var logMax = Math.Log10(_maxCount);
-                var logMin = Math.Log10(Math.Max(1, _filteredTable.Min(x => x.Items.Count)));
+                var logMin = Math.Log10(Math.Max(1, _filteredTable.Min(x => x.ExpiryObjects.Count)));
 
                 normalized = (logCountValue - logMin) / (logMax - logMin);
 
@@ -1030,7 +1035,7 @@
             : null;
         if (_currentImpulse != null)
         {
-            Console.WriteLine(string.Format(@L["Selected impulse: {0} with {1} items", _currentImpulse.Date, _currentImpulse.Items.Count]));
+            Console.WriteLine(string.Format(@L["Selected impulse: {0} with {1} items", _currentImpulse.Date, _currentImpulse.ExpiryObjects.Count]));
         }
     }
 
@@ -1089,7 +1094,7 @@
 
   private async Task ExportItems()
     {
-         if (_currentImpulse?.Items?.Any() != true)
+         if (_currentImpulse?.ExpiryObjects?.Any() != true)
             return;
         _itmexporting = true;
         try
@@ -1102,7 +1107,7 @@
             await result.MatchAsync(
             async data =>
             {
-                await BlazorDownloadFileService.DownloadFileAsync($"{_currentImpulse.Items.Count.ToString()}-SimCardsExpiersOn-{_currentImpulse.Date:yyyyMMdd}.xlsx", data, contentType:"application/octet-stream");
+                await BlazorDownloadFileService.DownloadFileAsync($"{_currentImpulse.ExpiryObjects.Count.ToString()}-SimCardsExpiersOn-{_currentImpulse.Date:yyyyMMdd}.xlsx", data, contentType:"application/octet-stream");
                 Snackbar.Add($"{AppStrings.ExportSuccess}", MudBlazor.Severity.Info);
             },
             errors =>

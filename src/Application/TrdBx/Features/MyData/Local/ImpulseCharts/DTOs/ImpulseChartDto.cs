@@ -41,25 +41,38 @@ namespace CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Impul
 
 
 
-public class ImpulseChartDto
+public class Impulse
 {
     public DateOnly Date { get; set; }
-    public List<ItemDto> Items { get; set; } = new();
-    public int TotalCount => Items?.Count ?? 0;
+    public List<ExpiryObject> ExpiryObjects { get; set; } = new();
+    public int TotalCount => ExpiryObjects?.Count ?? 0;
     public string? Summary { get; set; }
 }
 
-public class ItemDto
-{
-    public int Id { get; set; }
-    public string ParentName { get; set; } = string.Empty;
-    public string ChildName { get; set; } = string.Empty;
-    public string SNo { get; set; } = string.Empty;
-    public string SimNo { get; set; } = string.Empty;
-    public string Status { get; set; } = string.Empty;
-    public string? CustomerName { get; set; }
-    public string? SubscriptionStatus { get; set; }
-    public int? DaysRemaining { get; set; }
-}
+    public class ExpiryObject
+    {
+        public int ObjectId { get; set; }
+        public DateOnly ExDate { get; set; }
+        public string CustomerName { get; set; } = string.Empty;
+        public string SNo { get; set; } = string.Empty;
+        public string SimNo { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
+        public int? DaysRemaining { get; set; }
+        public string? ObjectStatus { get; set; }  
+        
+    }
+
+// public class ItemDto
+// {
+//     public int Id { get; set; }
+//     public string ParentName { get; set; } = string.Empty;
+//     public string ChildName { get; set; } = string.Empty;
+//     public string SNo { get; set; } = string.Empty;
+//     public string SimNo { get; set; } = string.Empty;
+//     public string Status { get; set; } = string.Empty;
+//     public string? CustomerName { get; set; }
+//     public string? SubscriptionStatus { get; set; }
+//     public int? DaysRemaining { get; set; }
+// }
 
 
