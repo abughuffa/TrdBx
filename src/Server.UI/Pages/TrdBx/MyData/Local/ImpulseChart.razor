@@ -1,4 +1,4 @@
-﻿@page "/pages/TrdBx/MyData/Local/ImpulseCharts"
+﻿@page "/pages/TrdBx/MyData/Local/ImpulseChart"
 
 @using System.Globalization
 @using System.Threading.Tasks
@@ -139,10 +139,8 @@
 
                             <!-- Unit Impulse Visualization -->
                             <div class="impulse-container"
-                                 id="impulseChartContainer"
-                                 style="position: relative; height: 300px; width: 100%; overflow-x: auto; overflow-y: hidden;">
+                                 style="position: relative; height: 300px; width: 100%; overflow-x: auto;">
                                 <svg class="impulse-svg"
-                                     id="impulseChartSvg"
                                      style="width: @(_zoomLevel * 100)%; height: 100%; min-width: @(Math.Max(800, FilteredTable.Count * _itemSpacing))px;">
 
                                     <!-- Y-Axis -->
@@ -213,7 +211,6 @@
 
                                         <g @key="@($"{item.Date}_{item.ExpiryObjects.Count}_{i}")"
                                            class="impulse-group"
-                                           data-index="@i"
                                            @onclick="@(() => OnImpulseClick(i))"
                                            style="cursor: pointer;">
 
@@ -527,7 +524,7 @@
     }
 
     .impulse-group:hover .value-label {
-        opacity: 1 !important;
+        opacity: 1;
         font-weight: bold;
     }
 
@@ -536,7 +533,7 @@
     .impulse-group:hover .tooltip-value,
     .impulse-group:hover .tooltip-objects,
     .impulse-group:hover .tooltip-day {
-        opacity: 1 !important;
+        opacity: 1;
     }
 
     .x-axis-label {
@@ -646,6 +643,7 @@
     private bool _itmexporting = false;
     private bool _loading = false;
 
+
     // Current selection
     private int _currentFilteredIndex = 0;
     private Impulse? _currentImpulse = null;
@@ -657,7 +655,6 @@
 
     // Services
     private CancellationTokenSource _refreshCts = new();
-    private DotNetObjectReference<ImpulseCharts>? _dotNetRef;
 
     // Constants
     private const int MIN_ITEM_SPACING = 40;
@@ -671,9 +668,12 @@
     private bool ShowCurrentDateLine => CurrentDateXPosition > 0;
     private double CurrentDateXPosition { get; set; }
 
+
     protected override async Task OnInitializedAsync()
     {
+        //Title =L[_currentDto.GetClassDescription()];
         _accessRights = await PermissionService.GetAccessRightsAsync<ImpulseChartsAccessRights>();
+
         await LoadDataAsync();
         CalculateCurrentDatePosition();
     }
@@ -687,7 +687,7 @@
             {
                 _currentFilteredIndex = value;
                 UpdateCurrentImpulse();
-                StateHasChanged();
+                StateHasChanged(); // Ensure UI updates when selection changes
             }
         }
     }
@@ -703,7 +703,9 @@
                     if (result.Succeeded)
                     {
                         Snackbar.Add(AppStrings.SaveSuccess, MudBlazor.Severity.Info);
-                        await InvokeAsync(async () => { });
+                        await InvokeAsync(async () =>
+                                                       {
+                                                       });
                     }
                     else
                     {
@@ -716,19 +718,20 @@
                     break;
                 }
         }
+
+
+
+        
+
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+
+
+    protected override void OnAfterRender(bool firstRender)
     {
         if (firstRender)
         {
             InitializeImpulseChartSettings();
-            await InitializeJavaScriptInterop();
-        }
-        else if (FilteredTable.Any())
-        {
-            // Re-initialize interactions after data updates
-            await InitializeImpulseInteractions();
         }
     }
 
@@ -736,84 +739,7 @@
     {
         _refreshCts?.Cancel();
         _refreshCts?.Dispose();
-        _dotNetRef?.Dispose();
     }
-
-    #region JavaScript Interop
-    private async Task InitializeJavaScriptInterop()
-    {
-        try
-        {
-            _dotNetRef = DotNetObjectReference.Create(this);
-            await JSRuntime.InvokeVoidAsync("initializeImpulseChart", _dotNetRef);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error initializing JavaScript interop: {ex.Message}");
-        }
-    }
-
-    private async Task InitializeImpulseInteractions()
-    {
-        try
-        {
-            await JSRuntime.InvokeVoidAsync("initializeImpulseInteraction");
-            await JSRuntime.InvokeVoidAsync("resizeImpulseChart");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error initializing impulse interactions: {ex.Message}");
-        }
-    }
-
-    [JSInvokable]
-    public async Task OnImpulseHover(int index, bool isHovering)
-    {
-        await InvokeAsync(() =>
-        {
-            // Update UI state if needed
-            StateHasChanged();
-        });
-    }
-
-    [JSInvokable]
-    public async Task OnImpulseClicked(int index)
-    {
-        await InvokeAsync(() =>
-        {
-            SetCurrentIndex(index);
-            StateHasChanged();
-        });
-    }
-
-    private async Task ScrollToImpulse(int index)
-    {
-        try
-        {
-            await JSRuntime.InvokeVoidAsync("centerImpulseAtIndex", index, _itemSpacing, _zoomLevel);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error scrolling to impulse: {ex.Message}");
-        }
-    }
-
-    private async Task EnsureImpulseVisible(int index)
-    {
-        try
-        {
-            var isVisible = await JSRuntime.InvokeAsync<bool>("isImpulseVisible", index, _itemSpacing);
-            if (!isVisible)
-            {
-                await ScrollToImpulse(index);
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error checking impulse visibility: {ex.Message}");
-        }
-    }
-    #endregion
 
     #region Event Handlers
     private void FilterCriteriaChanged(string condition) => _ = RefreshDataAsync();
@@ -831,41 +757,36 @@
     private void OnImpulseClick(int index)
     {
         SetCurrentIndex(index);
-        _ = ScrollToImpulse(index);
+
+        // Ensure the impulse is visible in the viewport
+        ScrollToImpulse(index);
     }
 
     private void NavigatePrevious() => SetCurrentIndex(CurrentFilteredIndex - 1);
     private void NavigateNext() => SetCurrentIndex(CurrentFilteredIndex + 1);
     private void GoToFirst() => SetCurrentIndex(0);
     private void GoToLast() => SetCurrentIndex(FilteredTable.Count - 1);
-
     private async Task ZoomIn()
     {
         _zoomLevel = Math.Min(MAX_ZOOM, _zoomLevel + ZOOM_STEP);
-        UpdateItemSpacing();
+        UpdateItemSpacing(); // Update spacing based on new zoom level
         await InvokeAsync(StateHasChanged);
         await ShowNotification(string.Format(@L["Zoom level: {0}x"], $"{_zoomLevel:F1}"), Severity.Info);
-        await InitializeImpulseInteractions();
     }
-
     private async Task ZoomOut()
     {
         _zoomLevel = Math.Max(MIN_ZOOM, _zoomLevel - ZOOM_STEP);
-        UpdateItemSpacing();
+        UpdateItemSpacing(); // Update spacing based on new zoom level
         await InvokeAsync(StateHasChanged);
         await ShowNotification(string.Format(@L["Zoom level: {0}x"], $"{_zoomLevel:F1}"), Severity.Info);
-        await InitializeImpulseInteractions();
     }
-
     private async Task ResetZoom()
     {
         _zoomLevel = 1.0;
-        UpdateItemSpacing();
+        UpdateItemSpacing(); // Reset to default spacing
         await InvokeAsync(StateHasChanged);
         await ShowNotification(@L["Zoom reset to default"], Severity.Info);
-        await InitializeImpulseInteractions();
     }
-
     private async Task FocusOnCurrentItem()
     {
         if (_currentImpulse != null)
@@ -895,6 +816,7 @@
             {
                 _maxCount = _originalTable.Max(x => x.ExpiryObjects.Count);
                 await ApplyFilter();
+
                 await ShowNotification(string.Format(@L["Loaded {0} data points"], _originalTable.Count), Severity.Success);
             }
             else
@@ -908,6 +830,7 @@
         }
         catch (Exception ex)
         {
+
             Console.WriteLine(string.Format(@L["Error loading data: {0}", ex.Message], _originalTable.Count));
             _originalTable = new List<Impulse>();
             _filteredTable = new List<Impulse>();
@@ -917,15 +840,17 @@
         finally
         {
             _loading = false;
+            // StateHasChanged();
         }
     }
-
     private async Task ApplyFilter()
     {
         _filteredTable = _originalTable.Where(x => x.ExpiryObjects.Count > 0).ToList();
 
+        // Update max count for visualization
         _maxCount = _filteredTable.Any() ? _filteredTable.Max(x => x.ExpiryObjects.Count) : 1;
 
+        // Reset current selection
         if (_filteredTable.Any())
         {
             CurrentFilteredIndex = 0;
@@ -939,19 +864,15 @@
         CalculateCurrentDatePosition();
         UpdateItemSpacing();
         await InvokeAsync(StateHasChanged);
-        
-        // Initialize JavaScript interactions after data is loaded
-        await InitializeImpulseInteractions();
     }
 
     private async Task RefreshDataAsync()
-    {
+        {
         _refreshCts?.Cancel();
         _refreshCts = new CancellationTokenSource();
-        await AppCache.RemoveByTagsAsync(ImpulseChartCacheKey.Tags);
-        await LoadDataAsync();
-    }
-
+            await AppCache.RemoveByTagsAsync(ImpulseChartCacheKey.Tags);
+            await LoadDataAsync();
+        }
     private void SetCurrentIndex(int newIndex)
     {
         if (newIndex >= 0 && newIndex < FilteredTable.Count && newIndex != CurrentFilteredIndex)
@@ -967,7 +888,6 @@
     {
         UpdateItemSpacing();
     }
-
     private void UpdateItemSpacing()
     {
         if (!_filteredTable.Any())
@@ -976,6 +896,7 @@
             return;
         }
 
+        // Base item spacing based on data count
         var count = _filteredTable.Count;
         int baseSpacing;
 
@@ -988,12 +909,18 @@
         else
             baseSpacing = MAX_ITEM_SPACING;
 
+        // Apply zoom factor to spacing
+        // When zoomed in, increase spacing for better visibility
+        // When zoomed out, decrease spacing to fit more items
         _itemSpacing = (int)(baseSpacing * _zoomLevel);
+
+        // Ensure spacing stays within reasonable bounds
         _itemSpacing = Math.Max(MIN_ITEM_SPACING, Math.Min(MAX_ITEM_SPACING, _itemSpacing));
+
+
 
         Console.WriteLine(string.Format(@L["Updated item spacing: {0}px (base: {1}, zoom: {2}x)"], _itemSpacing, baseSpacing, $"{_zoomLevel:F1}"));
     }
-
     private double CalculateImpulseHeight(int countValue)
     {
         if (!_filteredTable.Any() || _maxCount <= 0) return 0;
@@ -1001,12 +928,13 @@
         try
         {
             double normalized;
-            var logCountValue = Math.Log10(countValue);
-            var logMax = Math.Log10(_maxCount);
-            var logMin = Math.Log10(Math.Max(1, _filteredTable.Min(x => x.ExpiryObjects.Count)));
+                var logCountValue = Math.Log10(countValue);
+                var logMax = Math.Log10(_maxCount);
+                var logMin = Math.Log10(Math.Max(1, _filteredTable.Min(x => x.ExpiryObjects.Count)));
 
-            normalized = (logCountValue - logMin) / (logMax - logMin);
-            return Math.Max(10, normalized * 200);
+                normalized = (logCountValue - logMin) / (logMax - logMin);
+
+            return Math.Max(10, normalized * 200); // 200px max height
         }
         catch
         {
@@ -1019,24 +947,22 @@
         if (isCurrent) return "#ff4444";
         if (isHighlighted) return "#ff6b35";
 
+        // Color based on value percentile
         var percentile = count / _maxCount;
         return percentile switch
         {
-            >= 0.8 => "#1976d2",
-            >= 0.5 => "#4caf50",
-            >= 0.3 => "#ff9800",
-            _ => "#9e9e9e"
+            >= 0.8 => "#1976d2",  // High values - blue
+            >= 0.5 => "#4caf50",  // Medium-high - green
+            >= 0.3 => "#ff9800",  // Medium - orange
+            _ => "#9e9e9e"        // Low values - gray
         };
     }
-
     private bool IsDateHighlighted(DateOnly date)
     {
         return DateOnly.FromDateTime(DateTime.Now) == date;
     }
-
     private string FormatValueLabel(int countValue) => countValue.ToString("N0");
     private string FormatDateLabel(DateOnly date) => date.ToString("dd-MM", CultureInfo.InvariantCulture);
-
     private void CalculateCurrentDatePosition()
     {
         if (!FilteredTable.Any())
@@ -1050,6 +976,7 @@
         var ImpulseChartStartX = 60;
         var ImpulseChartEndX = ImpulseChartStartX + (FilteredTable.Count * _itemSpacing);
 
+        // Find current date in filtered items
         var todayItem = FilteredTable.FirstOrDefault(x => x.Date == today);
         if (todayItem != null)
         {
@@ -1058,6 +985,7 @@
         }
         else
         {
+            // Interpolate position based on date range
             var minDate = FilteredTable.Min(x => x.Date);
             var maxDate = FilteredTable.Max(x => x.Date);
 
@@ -1078,7 +1006,24 @@
             }
         }
 
+        // Ensure within visible bounds
         CurrentDateXPosition = Math.Max(ImpulseChartStartX - 50, Math.Min(ImpulseChartEndX + 50, CurrentDateXPosition));
+    }
+    private async Task ScrollToImpulse(int index)
+    {
+        try
+        {
+            // Calculate approximate scroll position
+            var scrollPosition = (index * _itemSpacing * _zoomLevel) - 200;
+            scrollPosition = Math.Max(0, scrollPosition);
+
+            // Use JS interop to scroll the container
+            await JSRuntime.InvokeVoidAsync("scrollImpulseChartToPosition", scrollPosition);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(string.Format(@L["Error scrolling to impulse: {0}", ex.Message]));
+        }
     }
     #endregion
 
@@ -1112,22 +1057,23 @@
     #endregion
 
     #region Export Impulses
+
     private async Task OnExportImpulses()
     {
-        if (FilteredTable?.Any() != true)
+         if (FilteredTable?.Any() != true)
             return;
         _impexporting = true;
         try
-        {
+		{
             var request = new ExportImpulseChartsQuery()
-            {
-                ImpulseCharts = FilteredTable,
-            };
+                {
+                    ImpulseCharts = FilteredTable,
+                };
             var result = await Mediator.Send(request);
             await result.MatchAsync(
             async data =>
             {
-                await BlazorDownloadFileService.DownloadFileAsync($"Grouped-SimCardsExpiery-{DateTime.Now}.xlsx", data, contentType: "application/octet-stream");
+                await BlazorDownloadFileService.DownloadFileAsync($"Grouped-SimCardsExpiery-{DateTime.Now}.xlsx", data, contentType:"application/octet-stream");
                 Snackbar.Add($"{AppStrings.ExportSuccess}", MudBlazor.Severity.Info);
             },
             errors =>
@@ -1136,32 +1082,32 @@
                 return Task.CompletedTask;
             });
         }
-        catch (Exception ex)
-        {
-            Snackbar.Add($"Export failed: {ex.Message}", MudBlazor.Severity.Error);
-        }
-        finally
-        {
-            _impexporting = false;
-        }
+		catch (Exception ex)
+		{
+			Snackbar.Add($"Export failed: {ex.Message}", MudBlazor.Severity.Error);
+		}
+		finally
+		{
+			_impexporting = false;
+		}
     }
 
-    private async Task ExportItems()
+  private async Task ExportItems()
     {
-        if (_currentImpulse?.ExpiryObjects?.Any() != true)
+         if (_currentImpulse?.ExpiryObjects?.Any() != true)
             return;
         _itmexporting = true;
         try
-        {
+		{
             var request = new ExportImpulseChartItemsQuery()
-            {
-                ImpulseChart = _currentImpulse,
-            };
+        {
+            ImpulseChart = _currentImpulse,
+        };
             var result = await Mediator.Send(request);
             await result.MatchAsync(
             async data =>
             {
-                await BlazorDownloadFileService.DownloadFileAsync($"{_currentImpulse.ExpiryObjects.Count.ToString()}-SimCardsExpiersOn-{_currentImpulse.Date:yyyyMMdd}.xlsx", data, contentType: "application/octet-stream");
+                await BlazorDownloadFileService.DownloadFileAsync($"{_currentImpulse.ExpiryObjects.Count.ToString()}-SimCardsExpiersOn-{_currentImpulse.Date:yyyyMMdd}.xlsx", data, contentType:"application/octet-stream");
                 Snackbar.Add($"{AppStrings.ExportSuccess}", MudBlazor.Severity.Info);
             },
             errors =>
@@ -1170,14 +1116,16 @@
                 return Task.CompletedTask;
             });
         }
-        catch (Exception ex)
-        {
-            Snackbar.Add($"Export failed: {ex.Message}", MudBlazor.Severity.Error);
-        }
-        finally
-        {
-            _itmexporting = false;
-        }
+		catch (Exception ex)
+		{
+			Snackbar.Add($"Export failed: {ex.Message}", MudBlazor.Severity.Error);
+		}
+		finally
+		{
+			_itmexporting = false;
+		}
     }
+
     #endregion
+
 }
