@@ -58,7 +58,7 @@ public class CreateInvoiceCommandHandler : SerialForSharedLogic, IRequestHandler
         var customer = await context.Customers.Where(c => c.Id == request.CustomerId).Include(c => c.Parent).FirstAsync(cancellationToken);
 
         // Validate customer exists in database
-        if (customer == null) throw new ArgumentException($"Customer with ID {(int)request.CustomerId} not found.");
+        if (customer == null) throw new ArgumentException($"Customer with ID {(int)request.CustomerId!} not found.");
 
         List<ServiceLog> serviceLogs = [];
 

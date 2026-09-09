@@ -73,7 +73,7 @@ public class CheckTrackingUnitCommandHandler : PriceSharedLogic, IRequestHandler
             Description = string.Format("كشف على الوحدة ({0}).", unit.SNo),
             ServiceNo = serviceNo,
             ServiceTask = ServiceTask.Check,
-            CustomerId = (int)unit.CustomerId,
+            CustomerId = (int)unit.CustomerId!,
             SerDate = request.TsDate,
             Amount = sprice,
             IsDeserved = request.CreateDeservedServices,

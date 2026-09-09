@@ -71,7 +71,7 @@ namespace CleanArchitecture.Blazor.Application.TrdBx.Services
         {
             try
             {
-                return await _mediator.Send(new GetAvaliableTrackingUnitsQuery() { Id = (int)customerId });
+                return await _mediator.Send(new GetAvaliableTrackingUnitsQuery() { Id = (int)customerId! });
             }
             catch (Exception ex)
             {

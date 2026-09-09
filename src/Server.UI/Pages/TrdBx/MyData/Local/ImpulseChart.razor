@@ -402,8 +402,6 @@
                                             <MudTh>@L["SNo"]</MudTh>
                                             <MudTh>@L["SimNo"]</MudTh>
                                             <MudTh>@L["Status"]</MudTh>
-                                            <MudTh>@L["DaysRemaining"]</MudTh>
-                                            <MudTh>@L["ObjectStatus"]</MudTh>
                                             <MudTh>@L["Actions"]</MudTh>
                                         </HeaderContent>
                                         <RowTemplate>
@@ -423,13 +421,6 @@
                                             </MudTd>
                                                    <MudTd>
                                                 <MudText>@context.Status.ToString()</MudText>
-                                            </MudTd>
-                                  
-                                                   <MudTd>
-                                                <MudText>@context.DaysRemaining.ToString()</MudText>
-                                            </MudTd>
-                                            <MudTd>
-                                                <MudText>@context.ObjectStatus.ToString()</MudText>
                                             </MudTd>
                                             <MudTd>
                                                <MudIconButton Icon="@Icons.Material.Filled.Money" Color="Color.Warning"

@@ -65,7 +65,7 @@ public class DeactivateTrackingUnitCommandHandler : SubscriptionSharedLogic, IRe
             return await Result<int>.FailureAsync("Tracking Unit status should be InstalledActive, InstalledActiveGprs Or InstalledActiveHosting to Deactivate it.");
         }
 
-        var price = await  GetCPrice(context, (int)unit.CustomerId, unit.TrackingUnitModelId);
+        var price = await  GetCPrice(context, (int)unit.CustomerId!, unit.TrackingUnitModelId);
 
         var serviceNo = await GenSerialNo(context, "ServiceLog", request.TsDate);
 

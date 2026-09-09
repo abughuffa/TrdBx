@@ -58,7 +58,7 @@
                             <MudStack Row Spacing="2" Justify="Justify.SpaceBetween">
                                 <MudStack Spacing="1">
                                     <MudText Typo="Typo.caption" Color="Color.Secondary">@L["Total Items"]</MudText>
-                                    <MudText Typo="Typo.h6">@FilteredTable.Sum(x => x.ExpiryObjects.Count).ToString("N0")</MudText>
+                                    <MudText Typo="Typo.h6">@FilteredTable.Sum(x => x.TotalCount).ToString("N0")</MudText>
                                 </MudStack>
                                 <MudStack Spacing="1">
                                     <MudText Typo="Typo.caption" Color="Color.Secondary">@L["Number of Groups"]</MudText>
@@ -66,11 +66,11 @@
                                 </MudStack>
                                 <MudStack Spacing="1">
                                     <MudText Typo="Typo.caption" Color="Color.Secondary">@L["Lowest Group Count"]</MudText>
-                                    <MudText Typo="Typo.body2" Color="Color.Success">@(FilteredTable.Min(x => x.ExpiryObjects.Count).ToString("N0"))</MudText>
+                                    <MudText Typo="Typo.body2" Color="Color.Success">@(FilteredTable.Min(x => x.TotalCount).ToString("N0"))</MudText>
                                 </MudStack>
                                 <MudStack Spacing="1">
                                     <MudText Typo="Typo.caption" Color="Color.Secondary">@L["Highest Group Count"]</MudText>
-                                    <MudText Typo="Typo.body2" Color="Color.Error">@(FilteredTable.Max(x => x.ExpiryObjects.Count).ToString("N0"))</MudText>
+                                    <MudText Typo="Typo.body2" Color="Color.Error">@(FilteredTable.Max(x => x.TotalCount).ToString("N0"))</MudText>
                                  </MudStack>
                                  <MudStack Spacing="1">
                                     <MudButton Variant="Variant.Filled"
@@ -329,8 +329,8 @@
                                 (_currentFilteredIndex + 1), 
                                 FilteredTable.Count, 
                                 (_currentImpulse?.Date.ToString("MMM dd, yyyy") ?? @L["No data"]), 
-                                (_currentImpulse?.ExpiryObjects?.Count.ToString("N0") ?? "0"), 
-                                (_currentImpulse?.ExpiryObjects?.Count.ToString() ?? "0"))
+                                (_currentImpulse?.TotalCount.ToString("N0") ?? "0"), 
+                                (_currentImpulse?.TotalCount.ToString() ?? "0"))
                             </MudText>
                         </MudStack>
                     </MudItem>
@@ -361,7 +361,7 @@
                                         <MudItem xs="12" md="4">
                                             <MudTextField Label=@L["Items Count"]
                                                           Variant="Variant.Outlined"
-                                                          Value="@(_currentImpulse?.ExpiryObjects?.Count.ToString() ?? "0")"
+                                                          Value="@(_currentImpulse?.TotalCount.ToString() ?? "0")"
                                                           ReadOnly="true" />
                                         </MudItem>
                                     </MudGrid>
@@ -405,8 +405,6 @@
                                             <MudTh>@L["SNo"]</MudTh>
                                             <MudTh>@L["SimNo"]</MudTh>
                                             <MudTh>@L["Status"]</MudTh>
-                                            <MudTh>@L["DaysRemaining"]</MudTh>
-                                            <MudTh>@L["ObjectStatus"]</MudTh>
                                             <MudTh>@L["Actions"]</MudTh>
                                         </HeaderContent>
                                         <RowTemplate>
@@ -427,13 +425,7 @@
                                                    <MudTd>
                                                 <MudText>@context.Status.ToString()</MudText>
                                             </MudTd>
-                                  
-                                                   <MudTd>
-                                                <MudText>@context.DaysRemaining.ToString()</MudText>
-                                            </MudTd>
-                                            <MudTd>
-                                                <MudText>@context.ObjectStatus.ToString()</MudText>
-                                            </MudTd>
+                             
                                             <MudTd>
                                                <MudIconButton Icon="@Icons.Material.Filled.Money" Color="Color.Warning"
                                                 OnClick="() => OnExeAction(context.ObjectId)" Class="ml-2" />
@@ -451,7 +443,7 @@
                                                 <MudStack Row Spacing="3" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
                                                     <MudStack Spacing="1">
                                                         <MudText Typo="Typo.caption" Color="Color.Secondary">@L["Total Items"]</MudText>
-                                                        <MudText Typo="Typo.h6">@_currentImpulse.ExpiryObjects.Count</MudText>
+                                                        <MudText Typo="Typo.h6">@_currentImpulse.TotalCount</MudText>
                                                     </MudStack>
                                                     <MudStack>
                                                         <MudButton Variant="Variant.Outlined"
@@ -500,7 +492,7 @@
 </MudContainer>
 
 <style>
-    .ImpulseChart-container {
+    @* .ImpulseChart-container {
         border: 1px solid #e0e0e0;
         border-radius: 8px;
         background: white;
@@ -628,7 +620,7 @@
     .selected-object-row {
         background-color: #e8f4fd !important;
         border-left: 3px solid #2196f3;
-    }
+    } *@
 </style>
 
 @code {

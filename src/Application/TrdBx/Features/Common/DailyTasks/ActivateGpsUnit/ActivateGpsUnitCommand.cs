@@ -56,7 +56,7 @@ public class ActivateTrackingUnitCommandHandler : SubscriptionSharedLogic, IRequ
             return await Result<int>.FailureAsync("Tracking Unit status should be InstalledInactive, InstalledActiveGprs Or InstalledActiveHosting to Activate it.");
         }
 
-        var price = await GetCPrice(context,(int)unit.CustomerId, unit.TrackingUnitModelId);
+        var price = await GetCPrice(context,(int)unit.CustomerId!, unit.TrackingUnitModelId);
 
         var serviceNo = await GenSerialNo(context, "ServiceLog", request.TsDate);
 

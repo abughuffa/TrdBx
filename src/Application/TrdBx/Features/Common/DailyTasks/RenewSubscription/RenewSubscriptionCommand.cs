@@ -57,13 +57,13 @@ public class RenewSubscriptionCommandHandler : PriceSharedLogic, IRequestHandler
         var dailyFees = 0.0m;
         var OLF = SubPackageFees.ZeroFees;
 
-        var price = await GetCPrice(context,(int)unit.CustomerId, unit.TrackingUnitModelId);
+        var price = await GetCPrice(context,(int)unit.CustomerId!, unit.TrackingUnitModelId);
 
         var serviceNo = await GenSerialNo(context, "ServiceLog", request.TsDate);
 
         var currentSubscription = unit.Subscriptions?.OrderBy(x => x.Id).LastOrDefault();
 
-            var startDate = currentSubscription.SeDate.AddDays(1);
+            var startDate = currentSubscription!.SeDate.AddDays(1);
 
             var endDate = request.CreateAnnualSub == true? currentSubscription.SeDate.AddDays(366) : DateOnly.FromDateTime(new DateTime(request.TsDate.Year, 12, 31));
 

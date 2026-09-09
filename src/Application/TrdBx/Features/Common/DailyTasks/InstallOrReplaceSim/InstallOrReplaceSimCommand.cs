@@ -72,7 +72,7 @@ public class InstallOrReplaceSimCommandHandler :PriceSharedLogic, IRequestHandle
         var serviceLog = new ServiceLog()
         {
             ServiceNo = await GenSerialNo(context, "ServiceLog", request.TsDate),
-            CustomerId = (int)unit.CustomerId,
+            CustomerId = (int)unit.CustomerId!,
             SerDate = request.TsDate,
             IsDeserved = request.CreateDeservedServices,
             IsBilled = false,

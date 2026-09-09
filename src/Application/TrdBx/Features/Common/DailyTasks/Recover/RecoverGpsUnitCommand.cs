@@ -37,9 +37,9 @@ public class RecoverTrackingUnitCommandHandler : SubscriptionSharedLogic, IReque
             return await Result<int>.FailureAsync("Tracking Unit status should be Installed to Recover it.");
         }
 
-        var asset = await context.TrackedAssets.Where(x => x.Id == (int)unit.TrackedAssetId).FirstAsync();
+        var asset = await context.TrackedAssets.Where(x => x.Id == (int)unit.TrackedAssetId!).FirstAsync();
 
-        var price = await GetCPrice(context,(int)unit.CustomerId, unit.TrackingUnitModelId);
+        var price = await GetCPrice(context,(int)unit.CustomerId!, unit.TrackingUnitModelId);
 
         var serviceNo = await GenSerialNo(context, "ServiceLog", request.TsDate);
 

@@ -79,7 +79,7 @@ public class TransferTrackingUnitCommandHandler : SubscriptionSharedLogic, IRequ
 
         var asset = await context.TrackedAssets.FindAsync(new object[] { request.TrackedAssetId }, cancellationToken) ?? throw new NotFoundException($"TrackedAsset with id: [{request.TrackedAssetId}] not found.");
 
-        var price = await GetCPrice(context, (int)unit.CustomerId, unit.TrackingUnitModelId);
+        var price = await GetCPrice(context, (int)unit.CustomerId!, unit.TrackingUnitModelId);
 
         var serviceNo = await GenSerialNo(context, "ServiceLog", request.TsDate);
 
@@ -107,7 +107,7 @@ public class TransferTrackingUnitCommandHandler : SubscriptionSharedLogic, IRequ
         }
 
 
-        var oasset = context.TrackedAssets.Where(a => a.Id == (int)unit.TrackedAssetId).FirstOrDefault();
+        var oasset = context.TrackedAssets.Where(a => a.Id == (int)unit.TrackedAssetId!).FirstOrDefault();
 
         oasset.IsAvailable = true;
 

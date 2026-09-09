@@ -75,8 +75,8 @@ public class ExportImpulseChartItemsQueryHandler :
                     {_localizer[_dto.GetMemberDisplayName(x=>x.SNo)],item => item.SNo},
                     {_localizer[_dto.GetMemberDisplayName(x=>x.SimNo)],item => item.SimNo},
                     {_localizer[_dto.GetMemberDisplayName(x=>x.Status)],item => item.Status},
-                    {_localizer[_dto.GetMemberDisplayName(x=>x.DaysRemaining)],item => item.DaysRemaining},
-                    {_localizer[_dto.GetMemberDisplayName(x=>x.ObjectStatus)],item => item.ObjectStatus}
+                    // {_localizer[_dto.GetMemberDisplayName(x=>x.DaysRemaining)],item => item.DaysRemaining},
+                    // {_localizer[_dto.GetMemberDisplayName(x=>x.ObjectStatus)],item => item.ObjectStatus}
 
             }
             , _localizer[_dto.GetClassDescription()]);

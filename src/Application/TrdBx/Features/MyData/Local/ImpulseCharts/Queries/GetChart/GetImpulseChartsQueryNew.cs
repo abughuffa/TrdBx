@@ -97,10 +97,10 @@ public class GetImpulseChartsQueryHandler : IRequestHandler<GetImpulseChartsQuer
                 SNo = t.SNo ?? string.Empty,
                 SimNo = t.SimCard!.SimCardNo ?? string.Empty,
                 Status = t.UStatus.ToString(),
-                DaysRemaining = 0, // (int?)(t.SimCard!.ExDate!.ToDateTime(TimeOnly.MinValue) - DateTime.Today).TotalDays,
-                ObjectStatus = t.SimCard.ExDate < DateOnly.FromDateTime(DateTime.Today)
-                    ? "Expired"
-                    : "Active"
+                //DaysRemaining =  (int)((t.SimCard!.ExDate ?? currentDate).ToDateTime(TimeOnly.MinValue) - DateTime.Today).TotalDays,
+                // ObjectStatus = (t.SimCard!.ExDate ?? currentDate) < DateOnly.FromDateTime(DateTime.Today)
+                //     ? "Expired"
+                //     : "Active"
             });
 
         var projectionList = await query.ToListAsync(cancellationToken);
@@ -117,15 +117,14 @@ public class GetImpulseChartsQueryHandler : IRequestHandler<GetImpulseChartsQuer
             p => p.ExDate,
             p => new ExpiryObject
             {
-                
-
                 ObjectId = p.ObjectId,
                 CustomerName = p.CustomerName,
                 SNo = p.SNo,
                 SimNo = p.SimNo,
+                ExDate = p.ExDate,
                 Status = p.Status,
-                DaysRemaining = p.DaysRemaining,
-                ObjectStatus = p.ObjectStatus
+                //DaysRemaining = p.DaysRemaining,
+                // ObjectStatus = p.ObjectStatus
                 
             });
     }
@@ -168,10 +167,10 @@ public class GetImpulseChartsQueryHandler : IRequestHandler<GetImpulseChartsQuer
                     ? x.TrackingUnit.SimCard.SimCardNo ?? string.Empty
                     : string.Empty,
                 Status = x.TrackingUnit.UStatus.ToString(),
-                DaysRemaining = (int?)(x.LatestSubscription.SeDate.ToDateTime(TimeOnly.MinValue) - DateTime.Today).TotalDays,
-                ObjectStatus = x.LatestSubscription.SeDate < DateOnly.FromDateTime(DateTime.Today)
-                    ? "Expired"
-                    : "Active"
+                //DaysRemaining = (int)(x.LatestSubscription.SeDate.ToDateTime(TimeOnly.MinValue) - DateTime.Today).TotalDays,
+                // ObjectStatus = x.LatestSubscription.SeDate < DateOnly.FromDateTime(DateTime.Today)
+                //     ? "Expired"
+                //     : "Active"
             });
 
         var projectionList = await query.ToListAsync(cancellationToken);
@@ -188,15 +187,15 @@ public class GetImpulseChartsQueryHandler : IRequestHandler<GetImpulseChartsQuer
             p => p.ExDate,
             p => new ExpiryObject
             {
-                
 
                 ObjectId = p.ObjectId,
                 CustomerName = p.CustomerName,
                 SNo = p.SNo,
                 SimNo = p.SimNo,
+                ExDate = p.ExDate,
                 Status = p.Status,
-                DaysRemaining = p.DaysRemaining,
-                ObjectStatus = p.ObjectStatus
+                //DaysRemaining = p.DaysRemaining,
+                // ObjectStatus = p.ObjectStatus
                 
             });
             // p => p.SeDate,

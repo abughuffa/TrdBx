@@ -69,7 +69,7 @@ public class ExportImpulseChartsQueryHandler :
             {
                     {_localizer["Day Of Week"],item => item.Date.DayOfWeek.ToString()},
                     {_localizer["Expairy Date"],item => item.Date.ToString("yyyy-MM-dd")},
-                    {_localizer["SIMs Count"],item => item.ExpiryObjects.Count},
+                    {_localizer["Objects Count"],item => item.ExpiryObjects.Count},
                     {_localizer["Amount"],item => (item.ExpiryObjects.Count)*50},
             }
             , _localizer[_dto.GetClassDescription()]);

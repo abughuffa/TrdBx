@@ -44,6 +44,7 @@ namespace CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.Impul
 public class Impulse
 {
     public DateOnly Date { get; set; }
+    //
     public List<ExpiryObject> ExpiryObjects { get; set; } = new();
     public int TotalCount => ExpiryObjects?.Count ?? 0;
     public string? Summary { get; set; }
@@ -57,8 +58,8 @@ public class Impulse
         public string SNo { get; set; } = string.Empty;
         public string SimNo { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
-        public int? DaysRemaining { get; set; }
-        public string? ObjectStatus { get; set; }  
+        
+        //public int DaysRemaining { get; set; }
         
     }
 

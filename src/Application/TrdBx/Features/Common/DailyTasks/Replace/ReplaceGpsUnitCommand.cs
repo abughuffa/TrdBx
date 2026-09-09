@@ -66,11 +66,11 @@ public class ReplaceTrackingUnitCommandHandler : SubscriptionSharedLogic, IReque
 
         var sim = await context.SimCards.FindAsync(new object[] { request.SimCardId }, cancellationToken) ?? throw new NotFoundException($"SimCard with id: [{request.SimCardId}] not found.");
 
-        var asset = await context.TrackedAssets.FindAsync(new object[] { runit.TrackedAssetId }, cancellationToken) ?? throw new NotFoundException($"TrackedAsset with id: [{runit.TrackedAssetId}] not found.");
+        var asset = await context.TrackedAssets.FindAsync(new object[] { runit.TrackedAssetId! }, cancellationToken) ?? throw new NotFoundException($"TrackedAsset with id: [{runit.TrackedAssetId}] not found.");
 
-        var rprice = await GetCPrice(context,  (int)runit.CustomerId, runit.TrackingUnitModelId);
+        var rprice = await GetCPrice(context,  (int)runit.CustomerId!, runit.TrackingUnitModelId);
 
-        var sprice = await GetCPrice(context,  (int)sunit.CustomerId, sunit.TrackingUnitModelId);
+        var sprice = await GetCPrice(context,  (int)sunit.CustomerId!, sunit.TrackingUnitModelId);
 
         List<CPrice> prices = new() { rprice, sprice };
 

@@ -1,0 +1,129 @@
+.ImpulseChart-container {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        background: white;
+        padding: 16px;
+    }
+
+    .impulse-container {
+        border-radius: 4px;
+        background: #fafafa;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .impulse-line {
+        transition: all 0.2s ease;
+    }
+
+    .impulse-head {
+        transition: all 0.2s ease;
+    }
+
+    .impulse-group:hover .impulse-line {
+        stroke-width: 3;
+        filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1));
+    }
+
+    .impulse-group:hover .value-label {
+        opacity: 1 !important;
+        font-weight: bold;
+    }
+
+    .impulse-group:hover .tooltip-bg,
+    .impulse-group:hover .tooltip-title,
+    .impulse-group:hover .tooltip-value,
+    .impulse-group:hover .tooltip-objects,
+    .impulse-group:hover .tooltip-day {
+        opacity: 1 !important;
+    }
+
+    .x-axis-label {
+        transition: all 0.2s ease;
+        user-select: none;
+    }
+
+    .impulse-group:hover .x-axis-label {
+        font-weight: bold;
+        fill: #333;
+        transform: translateY(-2px);
+    }
+
+    .current-date-indicator {
+        pointer-events: none;
+    }
+
+    .current-date-line {
+        animation: pulse 2s infinite;
+    }
+
+    .y-axis text {
+        user-select: none;
+    }
+
+    .trend-line {
+        pointer-events: none;
+    }
+
+    .selected-row {
+        background-color: #e3f2fd !important;
+        font-weight: 500;
+    }
+
+    .tooltip-bg {
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    }
+
+    @@keyframes pulse {
+        0%, 100% {
+            opacity: 0.7;
+        }
+
+        50% {
+            opacity: 1;
+        }
+    }
+
+    /* Smooth scrolling for ImpulseChart container */
+    .impulse-container::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    .impulse-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+
+    .impulse-container::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 4px;
+    }
+
+        .impulse-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+    /* Object table specific styles */
+    .object-table-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .object-row:hover {
+        background-color: #f5f7fa;
+    }
+
+    .object-actions {
+        min-width: 120px;
+    }
+
+    /* Badge styling for object types */
+    .mud-badge.object-type-badge {
+        font-size: 0.65rem;
+        padding: 2px 6px;
+    }
+
+    /* Selected row highlight */
+    .selected-object-row {
+        background-color: #e8f4fd !important;
+        border-left: 3px solid #2196f3;
+    }
