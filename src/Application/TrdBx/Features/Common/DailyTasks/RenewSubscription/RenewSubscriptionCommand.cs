@@ -48,7 +48,7 @@ public class RenewSubscriptionCommandHandler : PriceSharedLogic, IRequestHandler
             return await Result<int>.FailureAsync("StatusControlException");
         }
 
-        if (!(unit.Subscriptions?.OrderBy(x => x.Id).LastOrDefault().SeDate < DateOnly.FromDateTime(new DateTime(request.TsDate.Year, 12, 31))))
+        if (!(unit.Subscriptions?.OrderBy(x => x.Id).LastOrDefault()?.SeDate < DateOnly.FromDateTime(new DateTime(request.TsDate.Year, 12, 31))))
         {
             //throw new Exception("Tracking Unit Subscription End date should be less than current period end date to Renew it.");
             return await Result<int>.FailureAsync("Selected unit Subscription greater than current period end date");

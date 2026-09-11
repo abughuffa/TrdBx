@@ -62,7 +62,7 @@
         try
         {
             _saving = true;
-            await _form.ValidateAsync();
+            await _form!.ValidateAsync().ConfigureAwait(false);
             if (!_form.IsValid)
                 return;
             var result = await Mediator.Send(_command);

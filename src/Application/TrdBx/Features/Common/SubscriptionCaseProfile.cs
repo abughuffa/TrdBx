@@ -13,7 +13,7 @@ internal class SubscriptionCaseProfile
         {
             SeDt = subscription.SeDate;
             LPF = subscription.LastPaidFees;
-            IsBilled = subscription.ServiceLog.IsBilled;   /// TODO: YOU HAVE TO BIND SERVICELOG.ISBILLED VALUE HERE
+            IsBilled = subscription.ServiceLog!.IsBilled;   /// TODO: YOU HAVE TO BIND SERVICELOG.ISBILLED VALUE HERE
 
             CaseCode = CodeIncrement + (IsBilled is null ? 0 : (bool)IsBilled ? 64 : 0) +
                                         (us == UStatus.InstalledActive ? 48 : us == UStatus.InstalledActiveHosting ? 32 : us == UStatus.InstalledActiveGprs ? 16 : us == UStatus.InstalledInactive ? 0 : 0) +

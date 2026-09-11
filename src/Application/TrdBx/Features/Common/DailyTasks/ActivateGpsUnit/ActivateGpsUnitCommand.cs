@@ -89,7 +89,13 @@ public class ActivateTrackingUnitCommandHandler : SubscriptionSharedLogic, IRequ
 
         if (result > 0)
         {
-            return await Result<int>.SuccessAsync(unit.Id);
+            if (request.ApplyChangesOnWialon)
+                    {
+                        //ExcuteRegistredTasks Here
+                        return await Result<int>.SuccessAsync(unit.Id);
+                    }
+            
+            return await Result<int>.SuccessAsync(unit.Id); 
         }
         else
             return await Result<int>.FailureAsync("ActivateTrackingUnit Faild!");

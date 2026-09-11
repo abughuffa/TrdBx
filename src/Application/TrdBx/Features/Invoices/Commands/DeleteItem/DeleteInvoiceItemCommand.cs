@@ -50,7 +50,7 @@ public class DeleteInvoiceItemCommandHandler :
             if (invoiceItem == null) await Result<int>.FailureAsync($"Faild to delete Item with id: [{request.Id}].");
 
 
-            if (invoiceItem.InvoiceItemGroup.Invoice.IStatus == IStatus.SentToTax
+            if (invoiceItem!.InvoiceItemGroup!.Invoice!.IStatus == IStatus.SentToTax
                   || invoiceItem.InvoiceItemGroup.Invoice.IsTaxable && (invoiceItem.InvoiceItemGroup.Invoice.IStatus == IStatus.Ready
                                       || invoiceItem.InvoiceItemGroup.Invoice.IStatus == IStatus.Billed
                                       || invoiceItem.InvoiceItemGroup.Invoice.IStatus == IStatus.Canceled)

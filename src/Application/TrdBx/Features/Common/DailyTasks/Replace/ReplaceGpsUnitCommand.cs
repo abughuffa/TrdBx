@@ -109,7 +109,7 @@ public class ReplaceTrackingUnitCommandHandler : SubscriptionSharedLogic, IReque
                     if (sunit.SimCardId != null && sim.Id != sunit.SimCardId)
                     {
                         var oldSimCard = context.SimCards.Where(a => a.Id == (int)sunit.SimCardId).FirstOrDefault();
-                        oldSimCard.SStatus = SStatus.Recovered; //Set as Recovered
+                        oldSimCard!.SStatus = SStatus.Recovered; //Set as Recovered
                         oldSimCard.AddDomainEvent(new SimCardUpdatedEvent(oldSimCard));
                     }
 
@@ -185,9 +185,11 @@ public class ReplaceTrackingUnitCommandHandler : SubscriptionSharedLogic, IReque
         if (result > 0)
         {
             if (request.ApplyChangesOnWialon)
-            {
-                //ExcuteRegistredTasks Here
-            }
+                    {
+                        //ExcuteRegistredTasks Here
+                        return await Result<int>.SuccessAsync(sunit.Id);
+                    }
+            
             return await Result<int>.SuccessAsync(sunit.Id);
         }
         else

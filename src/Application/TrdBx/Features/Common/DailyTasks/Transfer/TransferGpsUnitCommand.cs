@@ -99,7 +99,7 @@ public class TransferTrackingUnitCommandHandler : SubscriptionSharedLogic, IRequ
         if (unit.SimCardId != null && sim.Id != unit.SimCardId)
         {
             var oldSimCard = context.SimCards.Where(a => a.Id == (int)unit.SimCardId).FirstOrDefault();
-            oldSimCard.SStatus = SStatus.Recovered; //Set as Recovered
+            oldSimCard!.SStatus = SStatus.Recovered; //Set as Recovered
             oldSimCard.AddDomainEvent(new SimCardUpdatedEvent(oldSimCard));
 
             sim.SStatus = SStatus.Installed; //Set as Installed
@@ -109,7 +109,7 @@ public class TransferTrackingUnitCommandHandler : SubscriptionSharedLogic, IRequ
 
         var oasset = context.TrackedAssets.Where(a => a.Id == (int)unit.TrackedAssetId!).FirstOrDefault();
 
-        oasset.IsAvailable = true;
+        oasset!.IsAvailable = true;
 
         oasset.AddDomainEvent(new TrackedAssetUpdatedEvent(oasset));
 
@@ -168,9 +168,11 @@ public class TransferTrackingUnitCommandHandler : SubscriptionSharedLogic, IRequ
         if (result > 0)
         {
             if (request.ApplyChangesOnWialon)
-            {
-                //ExcuteRegistredTasks Here
-            }
+                    {
+                        //ExcuteRegistredTasks Here
+                        return await Result<int>.SuccessAsync(unit.Id);
+                    }
+            
             return await Result<int>.SuccessAsync(unit.Id);
         }
         else

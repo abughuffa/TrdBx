@@ -60,7 +60,7 @@ namespace CleanArchitecture.Blazor.Application.TrdBx.Services
             {
                 return await _mediator.Send(new GetAvaliableChildsByParentIdQuery() { Id = customerId });
             }
-            catch (Exception ex)
+            catch 
             {
                // _snackbar.Add($"Failed to load customers: {ex.Message}", Severity.Warning);
                 return Enumerable.Empty<CustomerDto>();
@@ -73,7 +73,7 @@ namespace CleanArchitecture.Blazor.Application.TrdBx.Services
             {
                 return await _mediator.Send(new GetAvaliableTrackingUnitsQuery() { Id = (int)customerId! });
             }
-            catch (Exception ex)
+            catch 
             {
                // _snackbar.Add($"Failed to load customers: {ex.Message}", Severity.Warning);
                 return Enumerable.Empty<TrackingUnitDto>();

@@ -190,10 +190,12 @@ public class InstallTrackingUnitCommandHandler : SubscriptionSharedLogic, IReque
         if (result > 0)
         {
             if (request.ApplyChangesOnWialon)
-            {
-                //ExcuteRegistredTasks Here
-            }
-            return await Result<int>.SuccessAsync(unit.Id);
+                    {
+                        //ExcuteRegistredTasks Here
+                        return await Result<int>.SuccessAsync(unit.Id);
+                    }
+            
+            return await Result<int>.SuccessAsync(unit.Id); 
         }
         else
             return await Result<int>.FailureAsync("TransferTrackingUnit Faild!");

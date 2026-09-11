@@ -100,13 +100,13 @@ public class DeactivateTrackingUnitCommandHandler : SubscriptionSharedLogic, IRe
 
             if (rowsAffected > 0)
             {
-                if (request.ApplyChangesOnWialon)
-                {
-                  //  (int itemId, string active);
-                  ///  await  _wialonService.ActivateUnit((int)unit.WUnitId, "false");
-                    //ExcuteRegistredTasks Here
-                }
-                return await Result<int>.SuccessAsync(unit.Id);
+            if (request.ApplyChangesOnWialon)
+                    {
+                        //ExcuteRegistredTasks Here
+                        return await Result<int>.SuccessAsync(unit.Id);
+                    }
+            
+            return await Result<int>.SuccessAsync(unit.Id);
             }
             else
                 return await Result<int>.FailureAsync(result);

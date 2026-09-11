@@ -233,7 +233,7 @@
     {
         if (!(dto.TrackingUnits is null))
         {
-            var id = dto.TrackingUnits.FirstOrDefault().Id;
+            var id = dto.TrackingUnits.FirstOrDefault()?.Id;
             Navigation.NavigateTo($"/pages/TrdBx/TrackingUnits/{id}/view?returnUrl={Uri.EscapeDataString(Navigation.Uri)}");
         }
     }

@@ -340,7 +340,7 @@ private async Task<int> GenerateInvoiceAsync(IApplicationDbContext _context,Invo
         return await _context.SaveChangesAsync(cancellationToken);
 
     }
-    catch (Exception ex)
+    catch 
     {
         //await transaction.RollbackAsync(); // Rollback on error to maintain data consistency
         //_logger.LogError(ex, $"Error generating invoice for customer {customerId}");

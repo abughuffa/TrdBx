@@ -92,7 +92,7 @@ public class DeleteInvoiceCommandHandler :
             var result = await context.SaveChangesAsync(cancellationToken); // Save all deletions
             return await Result<int>.SuccessAsync(result);
         }
-        catch (Exception ex)
+        catch 
         {
             //await transaction.RollbackAsync(); // Rollback on error
 

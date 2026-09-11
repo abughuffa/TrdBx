@@ -101,9 +101,11 @@ public class ActivateTrackingUnitForHostingCommandHandler : SubscriptionSharedLo
         if (result > 0)
         {
             if (request.ApplyChangesOnWialon)
-            {
-                //ExcuteRegistredTasks Here
-            }
+                    {
+                        //ExcuteRegistredTasks Here
+                        return await Result<int>.SuccessAsync(unit.Id);
+                    }
+            
             return await Result<int>.SuccessAsync(unit.Id);
         }
         else
