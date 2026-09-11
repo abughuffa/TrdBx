@@ -101,8 +101,6 @@ public class ActivateTrackingUnitForGprsCommandHandler : SubscriptionSharedLogic
         if (result > 0)
         {
             if (request.ApplyChangesOnWialon)
-            {
-            if (request.ApplyChangesOnWialon)
                     {
                         //ExcuteRegistredTasks Here
                         return await Result<int>.SuccessAsync(unit.Id);
