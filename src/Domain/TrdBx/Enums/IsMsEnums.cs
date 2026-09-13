@@ -53,6 +53,25 @@ public enum SStatus
     [Display(Name = "Lost")] Lost = 4
 }
 
+public enum SmsStatus
+{
+    [Display(Name = "Pending")]Pending = 0,
+    [Display(Name = "Sending")]Sending = 1,
+    [Display(Name = "Sent")]Sent = 2,
+    [Display(Name = "Delivered")]Delivered = 3,
+    [Display(Name = "Failed")]Failed = 4,
+    [Display(Name = "Rejected")]Rejected = 5,
+    [Display(Name = "Expired")]Expired = 6,
+    [Display(Name = "Cancelled")]Cancelled = 7
+}
+
+
+public enum SmsProvider
+{
+   [Display(Name = "GsmModem")] GsmModem = 0,
+   [Display(Name = "Smpp")] Smpp = 1,
+   [Display(Name = "Manual")] Manual = 2
+}
 public enum SLStatus
 {
     [Display(Name = "Active")] Active = 0,

@@ -21,6 +21,7 @@ public static partial class DependencyInjection
     {
         services.AddWialonServices(configuration);
         services.AddBackupRestoreServices(configuration);
+        services.AddSmsServices(configuration);
         return services;
     }
 
@@ -87,4 +88,31 @@ public static partial class DependencyInjection
 
         return services;
     }
+
+
+    // Register based on configuration selection
+    private static IServiceCollection AddSmsServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        //var databaseSettings = configuration.GetSection("DatabaseSettings").Get<DatabaseSettings>();
+        var smsProvider = configuration.GetSection("SmsSettings:Provider").Value;
+        // Register the appropriate strategy based on DBProvider
+        switch (smsProvider!.ToLowerInvariant())
+        {
+            case "gsmmodem":
+                services.AddScoped<ISmsService, GsmModemSmsService>();
+                break;
+            case "smpp":
+                  services.AddScoped<ISmsService, SmppSmsService>();
+                break;
+            default:
+                throw new InvalidOperationException($"SMS Provider {smsProvider} is not supported.");
+        }
+        return services;
+    }
+
+
+
+
+
+
 }

@@ -3,7 +3,6 @@ using CleanArchitecture.Blazor.Application.TrdBx.Features.MyData.Local.RestoreBa
 using CleanArchitecture.Blazor.Infrastructure.Configurations;
 using Microsoft.AspNetCore.Hosting;
 
-namespace CleanArchitecture.Blazor.Infrastructure.Services;
 public class BackupRestoreService : IBackupRestoreService
 {
     private readonly IDatabaseBackupRestoreStrategy _strategy;

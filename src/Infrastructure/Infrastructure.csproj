@@ -9,6 +9,8 @@
     </PropertyGroup>
     <ItemGroup>
     
+        <PackageReference Include="HeboTech.ATLib" Version="8.0.0" />
+    
         <PackageReference Include="Microsoft.Agents.AI.OpenAI" Version="1.20.0" />
         <PackageReference Include="OpenAI" Version="2.13.0" />
         <PackageReference Include="MaxMind.GeoIP2" Version="6.1.0" />

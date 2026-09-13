@@ -14,6 +14,7 @@ public partial class ApplicationDbContext
     public DbSet<SProvider> SProviders { get; set; }
     public DbSet<SPackage> SPackages { get; set; }
     public DbSet<SimCard> SimCards { get; set; }
+    public DbSet<SmsMessage> SmsMessages { get; set; }
     public DbSet<TrackedAsset> TrackedAssets { get; set; }
     public DbSet<ServiceLog> ServiceLogs { get; set; }
     public DbSet<Subscription> Subscriptions { get; set; }
