@@ -5,14 +5,14 @@ using Microsoft.Extensions.Configuration; // Assuming you use ATLib
 
 namespace CleanArchitecture.Blazor.Infrastructure.Services;
 
-public class GsmModemSmsService : ISmsService
+public class GsmModemSmsSender : ISmsSender
 {
     private readonly string _portName;
     private readonly int _baudRate;
 
     public SmsProvider SmsProvider => SmsProvider.GsmModem;
 
-    public GsmModemSmsService(IConfiguration configuration)
+    public GsmModemSmsSender(IConfiguration configuration)
     {
         // Read COM port and baud rate from configuration
         _portName = configuration["SmsSettings:GsmModem:PortName"] ?? "COM3";

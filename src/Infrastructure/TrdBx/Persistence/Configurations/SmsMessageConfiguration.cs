@@ -24,6 +24,11 @@ public class SmsMessageConfiguration : IEntityTypeConfiguration<SmsMessage>
             .HasMaxLength(1600) // 10 concatenated parts
             .HasColumnName("Message");
 
+        builder.Property(x => x.Direction)
+            .HasConversion<int>()
+            .IsRequired()
+            .HasColumnName("Direction");
+
         builder.Property(x => x.SmsProvider)
             .HasConversion<int>()
             .IsRequired()
@@ -56,6 +61,7 @@ public class SmsMessageConfiguration : IEntityTypeConfiguration<SmsMessage>
 
         // Indexes for common queries
         builder.HasIndex(x => x.PhoneNumber);
+        builder.HasIndex(x => x.Direction);
         builder.HasIndex(x => x.SmsStatus);
         builder.HasIndex(x => x.SmsProvider);
         // builder.HasIndex(x => x.Created);

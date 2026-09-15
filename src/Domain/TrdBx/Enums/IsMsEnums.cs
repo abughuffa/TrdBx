@@ -65,12 +65,17 @@ public enum SmsStatus
     [Display(Name = "Cancelled")]Cancelled = 7
 }
 
-
+public enum SmsDirection
+{
+    [Display(Name = "Incoming")] Incoming = 0,
+    [Display(Name = "Outgoing")] Outgoing = 1
+}
 public enum SmsProvider
 {
-   [Display(Name = "GsmModem")] GsmModem = 0,
-   [Display(Name = "Smpp")] Smpp = 1,
-   [Display(Name = "Manual")] Manual = 2
+   [Display(Name = "Manual")] Manual = 0,
+   [Display(Name = "TpLinkLte")] TpLinkLte = 1,
+   [Display(Name = "GsmModem")] GsmModem = 2,
+   [Display(Name = "Smpp")] Smpp = 3
 }
 public enum SLStatus
 {

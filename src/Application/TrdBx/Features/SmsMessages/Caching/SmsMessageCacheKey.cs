@@ -18,9 +18,5 @@ public static class SmsMessageCacheKey
         return $"SmsMessageCacheKey:GetByIdCacheKey,{parameters}";
     }
     public static IEnumerable<string> Tags => new string[] { "smsmessage" };
-    // public static void Refresh()
-    // {
-    //     FusionCacheFactory.RemoveByTags(Tags);
-    // }
 }
 

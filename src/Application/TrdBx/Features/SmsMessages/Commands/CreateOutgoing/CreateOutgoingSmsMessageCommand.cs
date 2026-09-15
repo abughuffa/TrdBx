@@ -2,9 +2,9 @@
 using CleanArchitecture.Blazor.Application.Features.SmsMessages.DTOs;
 using CleanArchitecture.Blazor.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
-namespace CleanArchitecture.Blazor.Application.Features.SmsMessages.Commands.Send;
+namespace CleanArchitecture.Blazor.Application.Features.SmsMessages.Commands.CreateOutgoing;
 
-public class SendSmsMessageCommand : ICacheInvalidatorRequest<Result<int>>
+public class CreateOutgoingSmsMessageCommand : ICacheInvalidatorRequest<Result<int>>
 {
 
     [Display(Name = "PhoneNumber")]
@@ -14,47 +14,41 @@ public class SendSmsMessageCommand : ICacheInvalidatorRequest<Result<int>>
 
     public string CacheKey => SmsMessageCacheKey.GetAllCacheKey;
      public IEnumerable<string> Tags => SmsMessageCacheKey.Tags;
-    //private class Mapping : Profile
-    //{
-    //    public Mapping()
-    //    {
-    //        CreateMap<CreateSimCardCommand, SimCard>(MemberList.None);
-    //    }
-    //}
 }
 
-public class SendSmsMessageCommandHandler : IRequestHandler<SendSmsMessageCommand, Result<int>>
+public class CreateOutgoingSmsMessageCommandHandler : IRequestHandler<CreateOutgoingSmsMessageCommand, Result<int>>
 {
         private readonly IObjectMapper _objectMapper;
-        private readonly ISmsService _smsService;
+        private readonly ISmsSender _smsSender;
         private readonly IApplicationDbContextFactory _dbContextFactory;
-        public SendSmsMessageCommandHandler(
+        public CreateOutgoingSmsMessageCommandHandler(
             IObjectMapper objectMapper,
-            ISmsService smsService,
+            ISmsSender smsSender,
             IApplicationDbContextFactory dbContextFactory)
         {
             _objectMapper = objectMapper;
-            _smsService = smsService;
+            _smsSender = smsSender;
             _dbContextFactory = dbContextFactory;
         }
 
-    public async ValueTask<Result<int>> Handle(SendSmsMessageCommand request, CancellationToken cancellationToken)
+    public async ValueTask<Result<int>> Handle(CreateOutgoingSmsMessageCommand request, CancellationToken cancellationToken)
     {
 
         var itemDto = new SmsMessageDto
                 {
-                    SmsProvider = _smsService.SmsProvider,
+                    Direction = SmsDirection.Outgoing,
+                    SmsProvider = _smsSender.SmsProvider,
                     PhoneNumber = request.PhoneNumber,
                     Message = request.Message,
                     SmsStatus = SmsStatus.Sent,
-                    SentAt = DateTime.UtcNow
+                    SMSDate = DateTime.UtcNow
                 };
 
         await using var context = await _dbContextFactory.CreateAsync(cancellationToken);
 
         try
         {
-            var result = await _smsService.SendAsync(request.PhoneNumber, request.Message, cancellationToken);
+            var result = await _smsSender.SendAsync(request.PhoneNumber, request.Message, cancellationToken);
 
             if (result.Success)
             {

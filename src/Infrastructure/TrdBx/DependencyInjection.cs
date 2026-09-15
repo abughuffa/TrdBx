@@ -3,6 +3,7 @@ using CleanArchitecture.Blazor.Domain;
 using CleanArchitecture.Blazor.Infrastructure.Configurations;
 //using CleanArchitecture.Blazor.Infrastructure.Constants.Database;
 using CleanArchitecture.Blazor.Infrastructure.Services.RestoreBackupStrategies;
+using CleanArchitecture.Blazor.Infrastructure.Services.TpLink;
 using Microsoft.Extensions.Configuration;
 namespace CleanArchitecture.Blazor.Infrastructure;
 
@@ -69,7 +70,7 @@ public static partial class DependencyInjection
         var databaseSettings = configuration.GetSection("DatabaseSettings").Get<DatabaseSettings>();
 
         // Register the appropriate strategy based on DBProvider
-        switch (databaseSettings.DBProvider.ToLowerInvariant())
+        switch (databaseSettings!.DBProvider.ToLowerInvariant())
         {
             case DbProviderKeys.SqLite:
                 services.AddScoped<IDatabaseBackupRestoreStrategy, SqliteBackupRestoreStrategy>();
@@ -95,19 +96,55 @@ public static partial class DependencyInjection
     {
         //var databaseSettings = configuration.GetSection("DatabaseSettings").Get<DatabaseSettings>();
         var smsProvider = configuration.GetSection("SmsSettings:Provider").Value;
-        // Register the appropriate strategy based on DBProvider
-        switch (smsProvider!.ToLowerInvariant())
-        {
-            case "gsmmodem":
-                services.AddScoped<ISmsService, GsmModemSmsService>();
-                break;
-            case "smpp":
-                  services.AddScoped<ISmsService, SmppSmsService>();
-                break;
-            default:
-                throw new InvalidOperationException($"SMS Provider {smsProvider} is not supported.");
-        }
-        return services;
+
+    switch (smsProvider!.ToLowerInvariant())
+    {
+        case "tplinklte":
+                {
+                    services.AddHttpClient<TpLinkLteClient>((sp, client) =>
+                    {
+                        var cfg = sp.GetRequiredService<IConfiguration>();
+                        var baseUrl = cfg["SmsSettings:TpLinkLte:BaseUrl"] ?? "http://192.168.1.1";
+                        client.BaseAddress = new Uri(baseUrl);
+                        client.Timeout = TimeSpan.FromSeconds(30);
+                    });
+
+                    services.AddScoped<ISmsSender, TpLinkLteSmsSender>();
+                    services.AddSingleton<TpLinkLteSmsReceiver>();
+                    services.AddSingleton<ISmsReceiver>(sp =>
+                        sp.GetRequiredService<TpLinkLteSmsReceiver>());
+                    services.AddHostedService<SmsReceiverBackgroundService>();
+                    break;
+                }
+
+    
+        case "gsmmodem":
+                {
+                              services.AddScoped<ISmsSender, GsmModemSmsSender>();
+            services.AddSingleton<GsmModemSmsReceiver>();
+            services.AddSingleton<ISmsReceiver>(sp =>
+                sp.GetRequiredService<GsmModemSmsReceiver>());
+            services.AddHostedService<SmsReceiverBackgroundService>();
+            break;  
+                }
+
+
+        case "smpp":
+                {
+                                services.AddScoped<ISmsSender, SmppSmsSender>();
+            // When implemented:
+            // services.AddSingleton<ISmsReceiver, SmppSmsService>();
+            // services.AddHostedService<SmsReceiverBackgroundService>();
+            break;
+                }
+
+
+
+        default:
+            throw new InvalidOperationException($"SMS Provider {smsProvider} is not supported.");
+    }
+
+    return services;
     }
 
 

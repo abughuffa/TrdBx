@@ -141,73 +141,19 @@ public class SimCard : BaseAuditableEntity
 
 public class SmsMessage : BaseAuditableEntity //, IHasDomainEvent
 {
-    /// <summary>
-    /// Recipient phone number in international format (e.g., +2189XXXXXXXX)
-    /// </summary>
     public string PhoneNumber { get; set; } = null!;
-
-    /// <summary>
-    /// The message body content
-    /// </summary>
     public string Message { get; set; } = null!;
-
-    /// <summary>
-    /// Sending provider used: GsmModem | Smpp | Manual
-    /// </summary>
+    public SmsDirection Direction { get; set; } = SmsDirection.Outgoing;  // NEW
     public SmsProvider SmsProvider { get; set; }
-
-    /// <summary>
-    /// Current status of the SMS
-    /// </summary>
     public SmsStatus SmsStatus { get; set; } = SmsStatus.Pending;
-
-    /// <summary>
-    /// Provider-assigned message ID (SMPP message_id or modem reference)
-    /// </summary>
     public string? ProviderMessageId { get; set; }
-
-    /// <summary>
-    /// Number of parts (for concatenated/long SMS)
-    /// </summary>
     public int PartsCount { get; set; } = 1;
-
-    /// <summary>
-    /// Encoding used (GSM7, UCS2, etc.)
-    /// </summary>
     public string? Encoding { get; set; }
-
-    /// <summary>
-    /// When the message was actually sent to the provider
-    /// </summary>
-    public DateTime? SentAt { get; set; }
-
-    /// <summary>
-    /// When the delivery report was received
-    /// </summary>
+    public DateTime?    SMSDate { get; set; }
     public DateTime? DeliveredAt { get; set; }
-
-    /// <summary>
-    /// Error message if sending failed
-    /// </summary>
     public string? ErrorMessage { get; set; }
-
-    /// <summary>
-    /// Number of retry attempts made
-    /// </summary>
     public int RetryCount { get; set; }
 
-    /// <summary>
-    /// Related business entity (optional) - e.g., CustomerId, OrderId
-    /// </summary>
-    //public string? RelatedEntityType { get; set; }
-    //public int? RelatedEntityId { get; set; }
-
-    /// <summary>
-    /// Optional: who initiated this SMS
-    /// </summary>
-    // public string? SentByUserId { get; set; }
-
-    //public List<DomainEvent> DomainEvents { get; set; } = new();
 }
 
 #endregion

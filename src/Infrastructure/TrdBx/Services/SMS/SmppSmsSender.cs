@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 namespace CleanArchitecture.Blazor.Infrastructure.Services;
 
 
-public class SmppSmsService : ISmsService
+public class SmppSmsSender : ISmsSender
 {
     private readonly string _host;
     private readonly int _port;
@@ -14,7 +14,7 @@ public class SmppSmsService : ISmsService
     public SmsProvider SmsProvider => SmsProvider.Smpp;
 
 
-    public SmppSmsService(IConfiguration configuration)
+    public SmppSmsSender(IConfiguration configuration)
     {
         // Read SMPP credentials from configuration (provided by Libyana or aggregator)
         _host = configuration["SmsSettings:Smpp:Host"];
