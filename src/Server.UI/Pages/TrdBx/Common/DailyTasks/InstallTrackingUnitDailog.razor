@@ -179,6 +179,7 @@
         try
         {
             _isLoading = true;
+            @* await LoadSimCardsAsync(_model.SimCardId == null ? new[] { _model.SimCardId } : null); *@
             await LoadSimCardsAsync(new[] { _model.SimCardId });
             await LoadTrackedAssetsAsync();
             await LoadCustomersAsync(_model.CustomerId);
@@ -197,7 +198,10 @@
         {
             _isDataLoading = true;
             // The service uses the cached query automatically
-            SimCards = await DropdownDataService.GetAvailableSimCardsAsync(ids);
+
+            int[]? simCardIds = ids is [0] ? null : ids;
+
+            SimCards = await DropdownDataService.GetAvailableSimCardsAsync(simCardIds);
         }
         catch (Exception ex)
         {
@@ -229,7 +233,11 @@
         try
         {
             _isDataLoading = true;
-            Customers = await DropdownDataService.GetAvailableCustomersAsync(parentId);
+
+            int? customerId = parentId == 0 ? null : parentId;
+
+
+            Customers = await DropdownDataService.GetAvailableCustomersAsync(customerId);
         }
         catch (Exception ex)
         {

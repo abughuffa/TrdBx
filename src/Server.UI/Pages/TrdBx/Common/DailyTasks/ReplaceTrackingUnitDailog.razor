@@ -200,31 +200,17 @@
             StateHasChanged();
 
             // catch SimCardIds and CustomerIds
-            SimCardIds = new[] { _model.SimCardId } ;
+            @* SimCardIds = new[] { _model.SimCardId } ;
             CustomerId = _model.CustomerId;
 
-            // Get existing data if this is an edit
-            //var result = await Mediator.Send(new GetTrackingUnitByIdQuery() { Id = _model.Id });
-
-
-            //if (result.Succeeded && result.Data != null)
-            //{
-                // Load dropdown data using the service - leverages caching automatically
-                //var loadTasks = new List<Task>
-                //{
                await     LoadSimCardsAsync(_model.SimCardId > 0 ? SimCardIds : null);
                await     LoadTrackingUnitsAsync(_model.CustomerId > 0 ? CustomerId : null);
-               await     LoadCustomersAsync(_model.CustomerId > 0 ? CustomerId : null);
-                //};
+               await     LoadCustomersAsync(_model.CustomerId > 0 ? CustomerId : null); *@
 
-                //await Task.WhenAll(loadTasks);
-            //}
-            //else
-            //{
-                // If no existing data, load all dropdowns
-                //_errorMessage = $"Tracking unit not found.";
-                //Snackbar.Add(_errorMessage, Severity.Error);
-            //}
+
+            await LoadSimCardsAsync(new[] { _model.SimCardId });
+            await LoadTrackingUnitsAsync(_model.CustomerId);
+            await LoadCustomersAsync(_model.CustomerId);
         }
         catch (Exception ex)
         {
@@ -244,7 +230,9 @@
         {
             _isDataLoading = true;
             // The service uses the cached query automatically
-            SimCards = await DropdownDataService.GetAvailableSimCardsAsync(ids);
+            int[]? simCardIds = ids is [0] ? null : ids;
+
+            SimCards = await DropdownDataService.GetAvailableSimCardsAsync(simCardIds);
         }
         catch (Exception ex)
         {
@@ -256,11 +244,16 @@
         }
     }
 
-    private async Task LoadTrackingUnitsAsync(int? customerId = null)
+    private async Task LoadTrackingUnitsAsync(int? cid = null)
     {
         try
         {
             _isDataLoading = true;
+            @* Units = await DropdownDataService.GetAvailableTrackingUnitsAsync(customerId); *@
+
+            int? customerId = cid == 0 ? null : cid;
+
+
             Units = await DropdownDataService.GetAvailableTrackingUnitsAsync(customerId);
         }
         catch (Exception ex)
@@ -273,11 +266,15 @@
         }
     }
 
-    private async Task LoadCustomersAsync(int? customerId = null)
+    private async Task LoadCustomersAsync(int? id = null)
     {
         try
         {
             _isDataLoading = true;
+
+            int? customerId = id == 0 ? null : id;
+
+
             Customers = await DropdownDataService.GetAvailableCustomersAsync(customerId);
         }
         catch (Exception ex)

@@ -6,6 +6,7 @@
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.DeactivateTrackingUnit
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.RenewSubscription
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.InstallOrReplaceSim;
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.RecoverSim;
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Install
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Transfer
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.Replace
@@ -116,7 +117,7 @@
     }
     private async Task OnExecute()
     {
-      var result = await Mediator.Send(new GetTrackingUnitByIdQuery(){Id = _model.TrackingUnitId });
+      var result = await Mediator.Send(new GetTrackingUnitByIdQuery(){Id = _model!.TrackingUnitId });
         result.Map(data =>
         { 
             var tdto = data;
@@ -134,7 +135,7 @@
     {
       try
         {
-            switch (_model.ServiceTask)
+            switch (_model!.ServiceTask)
             {
                 case ServiceTask.Check:
                     {
@@ -218,7 +219,7 @@
                 case ServiceTask.RecoverSimCard:
                     {
 
-                        //Execute
+                        await OnRecoverSim(dto);
                         break;
                     }
             }
@@ -243,7 +244,7 @@
             title,
             async (res) =>
             {
-                await OnExecuted(_model.Id);
+                await OnExecuted(_model!.Id);
             },
             para =>
 			{
@@ -264,7 +265,7 @@
             title,
             async (res) =>
             {
-                await OnExecuted(_model.Id);
+                await OnExecuted(_model!.Id);
             },
             para =>
 			{
@@ -285,7 +286,7 @@
             title,
             async (res) =>
             {
-                await OnExecuted(_model.Id);
+                await OnExecuted(_model!.Id);
             },
             para =>
 			{
@@ -306,7 +307,7 @@
             title,
             async (res) =>
             {
-                await OnExecuted(_model.Id);
+                await OnExecuted(_model!.Id);
             },
             para =>
 			{
@@ -320,9 +321,9 @@
             var command = new InstallTrackingUnitCommand()
             {
                 Id = dto.Id,
-                SimCardId = (int)dto.SimCardId,
-                TrackedAssetId = (int)dto.TrackedAssetId,
-                CustomerId= (int)dto.CustomerId
+                SimCardId = dto.SimCardId is null ? 0 : (int)dto.SimCardId,
+                TrackedAssetId = dto.TrackedAssetId is null ? 0 : (int)dto.TrackedAssetId,
+                CustomerId= dto.CustomerId is null ? 0 : (int)dto.CustomerId
             };
             var title = L["Install TrackingUnit"];
 
@@ -332,7 +333,7 @@
             title,
             async (res) =>
             {
-                await OnExecuted(_model.Id);
+                await OnExecuted(_model!.Id);
             },
             para =>
 			{
@@ -346,9 +347,9 @@
             var command = new TransferTrackingUnitCommand()
             {
                 Id = dto.Id,
-                SimCardId = (int)dto.SimCardId,
-                TrackedAssetId = (int)dto.TrackedAssetId,
-                CustomerId= (int)dto.CustomerId
+                SimCardId = dto.SimCardId is null ? 0 : (int)dto.SimCardId,
+                TrackedAssetId = dto.TrackedAssetId is null ? 0 : (int)dto.TrackedAssetId,
+                CustomerId= dto.CustomerId is null ? 0 : (int)dto.CustomerId
             };
             var title = L["Transfer TrackingUnit"];
 
@@ -358,7 +359,7 @@
             title,
             async (res) =>
             {
-                await OnExecuted(_model.Id);
+                await OnExecuted(_model!.Id);
             },
             para =>
 			{
@@ -372,8 +373,8 @@
              var command = new ReplaceTrackingUnitCommand()
             {
                 Id = dto.Id,
-                SimCardId = (int)dto.SimCardId,
-                CustomerId= (int)dto.CustomerId
+                SimCardId = dto.SimCardId is null ? 0 : (int)dto.SimCardId,
+                CustomerId= dto.CustomerId is null ? 0 : (int)dto.CustomerId
             };
             var title = L["Replace TrackingUnit"];
 
@@ -383,7 +384,7 @@
             title,
             async (res) =>
             {
-                await OnExecuted(_model.Id);
+                await OnExecuted(_model!.Id);
             },
             para =>
 			{
@@ -404,7 +405,7 @@
             title,
             async (res) =>
             {
-                await OnExecuted(_model.Id);
+                await OnExecuted(_model!.Id);
             },
             para =>
 			{
@@ -425,7 +426,7 @@
             title,
             async (res) =>
             {
-                await OnExecuted(_model.Id);
+                await OnExecuted(_model!.Id);
             },
             para =>
 			{
@@ -451,7 +452,7 @@
             title,
             async (res) =>
             {
-                await OnExecuted(_model.Id);
+                await OnExecuted(_model!.Id);
             },
             para =>
 			{
@@ -476,7 +477,7 @@
             title,
             async (res) =>
             {
-                await OnExecuted(_model.Id);
+                await OnExecuted(_model!.Id);
             },
             para =>
 			{
@@ -498,7 +499,7 @@
             title,
             async (res) =>
             {
-                await OnExecuted(_model.Id);
+                await OnExecuted(_model!.Id);
             },
             para =>
 			{
@@ -510,6 +511,27 @@
 
     }
 
+    private Task OnRecoverSim(TrackingUnitDto dto)
+    {
+            var command = new RecoverSimCommand(){Id = dto.Id};
+
+            var title = L["Recover Sim Card"];
+
+            var contentText = string.Format(L["Recover Sim Card from TrackingUnit {0}"], dto.SNo);
+
+             return DialogServiceHelper.ShowFormDialogAsync<RecoverSimCardDialog, RecoverSimCommand>(
+            title,
+            async (res) =>
+            {
+                await OnExecuted(_model!.Id);
+            },
+            para =>
+			{
+				para.Add(x => x._model, command);
+                para.Add(x => x._contentText, contentText);
+			}
+            );
+    }
     private async Task OnExecuted(int id)
     {
          var result = await Mediator.Send(new MarkAsExecutedTicketCommand(){Id = id});

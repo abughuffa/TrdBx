@@ -15,7 +15,7 @@ public class InstallTrackingUnitCommand : ICacheInvalidatorRequest<Result<int>>
     [Display(Name = "SimCardId")] public int SimCardId { get; set; }
     [Display(Name = "TrackedAssetId")] public int TrackedAssetId { get; set; }
     [Display(Name = "CustomerId")] public int CustomerId { get; set; }
-    
+
     //[Display(Name = "InstallerId")] public string InstallerId { get; set; } = string.Empty;
     [Display(Name = "SubPackage")] public SubPackage SubPackage { get; set; } = SubPackage.Active;
     [Display(Name = "InsMode")] public InsMode InsMode { get; set; } = InsMode.Advanced;
