@@ -2,9 +2,9 @@
 using CleanArchitecture.Blazor.Application.Features.SmsMessages.DTOs;
 using CleanArchitecture.Blazor.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
-namespace CleanArchitecture.Blazor.Application.Features.SmsMessages.Commands.CreateOutgoing;
+namespace CleanArchitecture.Blazor.Application.Features.SmsMessages.Commands.Send;
 
-public class CreateOutgoingSmsMessageCommand : ICacheInvalidatorRequest<Result<int>>
+public class SendSmsMessageCommand : ICacheInvalidatorRequest<Result<int>>
 {
 
     [Display(Name = "PhoneNumber")]
@@ -16,12 +16,12 @@ public class CreateOutgoingSmsMessageCommand : ICacheInvalidatorRequest<Result<i
      public IEnumerable<string> Tags => SmsMessageCacheKey.Tags;
 }
 
-public class CreateOutgoingSmsMessageCommandHandler : IRequestHandler<CreateOutgoingSmsMessageCommand, Result<int>>
+public class SendSmsMessageCommandHandler : IRequestHandler<SendSmsMessageCommand, Result<int>>
 {
         private readonly IObjectMapper _objectMapper;
         private readonly ISmsSender _smsSender;
         private readonly IApplicationDbContextFactory _dbContextFactory;
-        public CreateOutgoingSmsMessageCommandHandler(
+        public SendSmsMessageCommandHandler(
             IObjectMapper objectMapper,
             ISmsSender smsSender,
             IApplicationDbContextFactory dbContextFactory)
@@ -31,7 +31,7 @@ public class CreateOutgoingSmsMessageCommandHandler : IRequestHandler<CreateOutg
             _dbContextFactory = dbContextFactory;
         }
 
-    public async ValueTask<Result<int>> Handle(CreateOutgoingSmsMessageCommand request, CancellationToken cancellationToken)
+    public async ValueTask<Result<int>> Handle(SendSmsMessageCommand request, CancellationToken cancellationToken)
     {
 
         var itemDto = new SmsMessageDto

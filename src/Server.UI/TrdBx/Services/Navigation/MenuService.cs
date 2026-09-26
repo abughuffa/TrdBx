@@ -115,6 +115,12 @@ public class MenuService : IMenuService
                         },
                         new()
                         {
+                            Title = "SMS Messages",
+                            Href = "/pages/TrdBx/SmsMessages",
+                            PageStatus = PageStatus.Completed
+                        },
+                        new()
+                        {
                             Title = "Backup & Restore",
                             Href = "/pages/TrdBx/MyData/Local/RestoreBackup",
                             PageStatus = PageStatus.Completed

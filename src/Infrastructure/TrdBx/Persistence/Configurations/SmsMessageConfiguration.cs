@@ -39,6 +39,9 @@ public class SmsMessageConfiguration : IEntityTypeConfiguration<SmsMessage>
             .IsRequired()
             .HasColumnName("SmsStatus");
 
+        builder.Property(e => e.SMSDate)
+            .HasColumnName("SMSDate");
+
         builder.Property(x => x.ProviderMessageId)
             .HasMaxLength(100)
             .HasColumnName("ProviderMessageId");

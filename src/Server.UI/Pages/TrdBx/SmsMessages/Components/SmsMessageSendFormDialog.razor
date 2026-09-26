@@ -1,0 +1,93 @@
+﻿@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.SmsMessages
+@using CleanArchitecture.Blazor.Application.Features.SmsMessages.Commands.Send
+
+@inherits MudComponentBase
+@inject IValidationService Validator
+@inject IStringLocalizer<SmsMessages> L
+@attribute [Authorize(Policy = Permissions.SmsMessages.Send)]
+
+<MudDialog>
+    <DialogContent>
+        <MudForm Model="@_model" @ref="@_form" Validation="@(Validator.ValidateValue(_model))">
+                            <MudGrid Spacing="2">
+
+                    <MudItem md="12">
+                        <MudTextField Label="@L[_model.GetMemberDisplayName(x=>x.PhoneNumber)]" @bind-Value="_model.PhoneNumber" For="@(() => _model.PhoneNumber)" Required="false" RequiredError="@L["PhoneNumber is required!"]"></MudTextField>
+                    </MudItem>
+
+                    <MudItem md="12">
+                        <MudTextField Label="@L[_model.GetMemberDisplayName(x=>x.Message)]" @bind-Value="_model.Message" For="@(() => _model.Message)" Required="false" RequiredError="@L["Message is required!"]"></MudTextField>
+                    </MudItem>
+                    
+                </MudGrid>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudLoadingButton Loading="@_savingnew" OnClick="OnSaveAndNew">@AppStrings.SaveAndNew</MudLoadingButton>
+        <MudLoadingButton Loading="@_saving" OnClick="OnSave">@AppStrings.Save</MudLoadingButton>
+        <MudButton OnClick="Cancel">@AppStrings.Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    MudForm _form = new();
+    private bool _saving = false;
+    private bool _savingnew = false;
+    [CascadingParameter]
+    IMudDialogInstance MudDialog { get; set; } = default!;
+    [EditorRequired][Parameter] public SendSmsMessageCommand _model { get; set; } = null!;
+
+
+    async Task OnSave()
+    {
+       try
+        {
+            _saving = true;
+            await _form.ValidateAsync();
+            if (!_form.IsValid)
+                return;
+            var result = await Mediator.Send(_model);
+            result.Match(data =>
+            {
+                MudDialog.Close(DialogResult.Ok(true));
+                Snackbar.Add(AppStrings.SaveSuccess, MudBlazor.Severity.Info);
+            }, errors =>
+            {
+                Snackbar.Add(errors, MudBlazor.Severity.Error);
+            });
+        }
+        finally
+        {
+            _saving = false;
+        }
+    }
+    async Task OnSaveAndNew()
+    {
+        try
+        {
+            _savingnew = true;
+            await _form.ValidateAsync();
+            if (!_form.IsValid)
+                return;
+            var result = await Mediator.Send(_model);
+            result.Match(data =>
+            { 
+                Snackbar.Add(AppStrings.SaveSuccess, MudBlazor.Severity.Info);
+
+                 Task.Delay(300);
+
+                _model = new SendSmsMessageCommand() {PhoneNumber =_model.PhoneNumber, Message=_model.Message};
+            }, errors =>
+            {
+                Snackbar.Add(errors, MudBlazor.Severity.Error);
+            });
+        }
+        finally
+        {
+            _savingnew = false;
+        }
+
+    }
+
+    void Cancel() => MudDialog.Cancel();
+}
