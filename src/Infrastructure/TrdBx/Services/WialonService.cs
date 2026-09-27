@@ -378,6 +378,6 @@ public class WialonService : IWialonService, IDisposable
     
     public void Dispose()
        {
-         throw new NotImplementedException();
+         //throw new NotImplementedException();
     }
 }

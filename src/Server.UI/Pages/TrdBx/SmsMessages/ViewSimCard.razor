@@ -24,10 +24,13 @@
             <MudCardContent>
                 <MudGrid Spacing="3" Class="readonly-grid">
                     <MudItem md="12">
-                        <ReadOnlyField Label="@L[model.GetMemberDisplayName(x=>x.PhoneNumber)]" Value="model.PhoneNumber"></ReadOnlyField>
+                        <ReadOnlyField Label="@L[model.GetMemberDisplayName(x=>x.From)]" Value="model.From"></ReadOnlyField>
                     </MudItem>
                     <MudItem md="12">
-                        <ReadOnlyField Label="@L[model.GetMemberDisplayName(x=>x.Message)]" Value="model.Message"></ReadOnlyField>
+                        <ReadOnlyField Label="@L[model.GetMemberDisplayName(x=>x.To)]" Value="model.To"></ReadOnlyField>
+                    </MudItem>
+                    <MudItem md="12">
+                        <ReadOnlyField Label="@L[model.GetMemberDisplayName(x=>x.Body)]" Value="model.Body"></ReadOnlyField>
                     </MudItem>
 
                 </MudGrid>

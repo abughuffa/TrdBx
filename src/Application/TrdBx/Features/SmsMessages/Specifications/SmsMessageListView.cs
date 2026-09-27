@@ -23,8 +23,8 @@ public class SmsMessageAdvancedFilter: PaginationFilter
     
     
 
-    public SmsStatus SmsStatus { get; set; }
+    public SmsStatus? SmsStatus { get; set; }
     public TimeSpan LocalTimezoneOffset { get; set; }
     public SmsMessageListView ListView { get; set; } = SmsMessageListView.All;
-    //public UserProfile? CurrentUser { get; set; }
+    public UserProfile? CurrentUser { get; set; }
 }

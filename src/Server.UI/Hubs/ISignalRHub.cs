@@ -1,4 +1,5 @@
 using CleanArchitecture.Blazor.Application.Common.Interfaces.Identity;
+using CleanArchitecture.Blazor.Application.Features.SmsMessages.DTOs;
 
 namespace CleanArchitecture.Blazor.Server.UI.Hubs;
 
@@ -16,11 +17,16 @@ public interface ISignalRHub
     Task SendPrivateMessage(string from, string to, string message);
     Task SendNotification(string message);
 
-    // Active page-component session signaling
     Task PageComponentOpened(string pageComponent, string userId, string userName);
     Task PageComponentClosed(string pageComponent, string userId, string userName);
 
-    // Snapshot method: fetch current online users with profile data
-    // Note: invoked via HubConnection.InvokeAsync from clients
     Task<List<UserContext>> GetOnlineUsers();
+
+    // ── NEW: SMS events ────────────────────────────────────────────────
+    /// <summary>Fired when an inbound SMS is stored (webhook or poller path).</summary>
+    Task SmsReceived(SmsReceivedPayload payload);
+
+    /// <summary>Fired when an outbound SMS changes state (queued→sent→delivered/failed).</summary>
+    Task SmsStatusChanged(SmsStatusChangedPayload payload);
 }
+

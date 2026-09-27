@@ -8,6 +8,7 @@ using System.Security.Claims;
 using CleanArchitecture.Blazor.Application.Common.Interfaces.Identity;
 using CleanArchitecture.Blazor.Domain.Identity;
 using Microsoft.AspNetCore.Identity;
+using CleanArchitecture.Blazor.Application.Features.SmsMessages.DTOs;
 
 namespace CleanArchitecture.Blazor.Server.UI.Hubs;
 
@@ -140,4 +141,5 @@ public class ServerHub : Hub<ISignalRHub>
         }
         return result;
     }
+
 }

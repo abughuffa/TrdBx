@@ -139,20 +139,26 @@ public class SimCard : BaseAuditableEntity
     public  TrackingUnit? TrackingUnit { get; set; }=null;
 }
 
-public class SmsMessage : BaseAuditableEntity //, IHasDomainEvent
+public class SmsMessage : BaseAuditableEntity
 {
-    public string PhoneNumber { get; set; } = null!;
-    public string Message { get; set; } = null!;
-    public SmsDirection Direction { get; set; } = SmsDirection.Outgoing;  // NEW
-    public SmsProvider SmsProvider { get; set; }
-    public SmsStatus SmsStatus { get; set; } = SmsStatus.Pending;
-    public string? ProviderMessageId { get; set; }
-    public int PartsCount { get; set; } = 1;
-    public string? Encoding { get; set; }
-    public DateTime?    SMSDate { get; set; }
+    public string  To          { get; set; } = null!;
+    public string? From        { get; set; }
+    public string  Body        { get; set; } = null!;
+    public int     SimSlot     { get; set; }
+
+    // ── used by both directions ─────────────────────────
+    public string? Reference   { get; set; }   // client-supplied id (outbound)
+    public string? GatewayId   { get; set; }   // id returned by /inbox or webhook  ← inbound dedupe key
+
+    public SmsDirection Direction { get; set; } = SmsDirection.Outbound;
+    public SmsStatus    Status    { get; set; } = SmsStatus.Queued;
+    public string? Error       { get; set; }
+
+    public DateTime? SentAt      { get; set; }
     public DateTime? DeliveredAt { get; set; }
-    public string? ErrorMessage { get; set; }
-    public int RetryCount { get; set; }
+    public DateTime? ReceivedAt  { get; set; }   // ← set on inbound
+
+    //public string? TenantId       { get; set; }
 
 }
 

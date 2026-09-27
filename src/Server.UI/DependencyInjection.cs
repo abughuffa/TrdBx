@@ -27,7 +27,7 @@ namespace CleanArchitecture.Blazor.Server.UI;
 /// <summary>
 /// Provides dependency injection configuration for the server UI.
 /// </summary>
-public static class DependencyInjection
+public static partial class DependencyInjection
 {
     /// <summary>
     /// Adds server UI services to the service collection.
@@ -109,7 +109,6 @@ public static class DependencyInjection
                 service.Preload();
                 return service;
             });
-
 
         return services;
     }

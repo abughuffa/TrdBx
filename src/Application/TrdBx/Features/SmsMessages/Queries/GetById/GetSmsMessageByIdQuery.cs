@@ -17,16 +17,7 @@ public class GetSmsMessageByIdQuery : ICacheableRequest<Result<SmsMessageDto>>
 public class GetSmsMessageByIdQueryHandler :
      IRequestHandler<GetSmsMessageByIdQuery, Result<SmsMessageDto>>
 {
-    //private readonly IApplicationDbContextFactory _dbContextFactory;
-    //private readonly IMapper _mapper;
-    //public GetSmsMessageByIdQueryHandler(
-    //    IApplicationDbContextFactory dbContextFactory,
-    //    IMapper mapper
-    //)
-    //{
-    //    _dbContextFactory = dbContextFactory;
-    //    _mapper = mapper;
-    //}
+   
 
         private readonly IApplicationDbContextFactory _dbContextFactory;
     private readonly TypeAdapterConfig _typeAdapterConfig;

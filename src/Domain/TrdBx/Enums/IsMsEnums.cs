@@ -55,20 +55,17 @@ public enum SStatus
 
 public enum SmsStatus
 {
-    [Display(Name = "Pending")]Pending = 0,
-    [Display(Name = "Sending")]Sending = 1,
-    [Display(Name = "Sent")]Sent = 2,
-    [Display(Name = "Delivered")]Delivered = 3,
-    [Display(Name = "Failed")]Failed = 4,
-    [Display(Name = "Rejected")]Rejected = 5,
-    [Display(Name = "Expired")]Expired = 6,
-    [Display(Name = "Cancelled")]Cancelled = 7
-}
+    [Display(Name = "Queued")]Queued = 0,
+    [Display(Name = "Sent")]Sent = 1,
+    [Display(Name = "Delivered")]Delivered = 2,
+    [Display(Name = "Failed")]Failed = 3,
+    [Display(Name = "Unknown")]Unknown = 4
+    }
 
 public enum SmsDirection
 {
-    [Display(Name = "Incoming")] Incoming = 0,
-    [Display(Name = "Outgoing")] Outgoing = 1
+    [Display(Name = "Outbound")] Outbound = 0,
+    [Display(Name = "Inbound")] Inbound = 1
 }
 public enum SmsProvider
 {

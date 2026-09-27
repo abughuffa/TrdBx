@@ -1,13 +1,20 @@
 ﻿@page "/pages/TrdBx/SmsMessages"
-@using CleanArchitecture.Blazor.Application.Features.SmsMessages.DTOs
 @using CleanArchitecture.Blazor.Application.Features.SmsMessages.Caching
-@using CleanArchitecture.Blazor.Application.Features.SmsMessages.Commands.Send
 @using CleanArchitecture.Blazor.Application.Features.SmsMessages.Commands.Delete
+@using CleanArchitecture.Blazor.Application.Features.SmsMessages.Commands.Resend
+@using CleanArchitecture.Blazor.Application.Features.SmsMessages.Commands.SendAndPersist
+@using CleanArchitecture.Blazor.Application.Features.SmsMessages.DTOs
 @using CleanArchitecture.Blazor.Application.Features.SmsMessages.Queries.Export
 @using CleanArchitecture.Blazor.Application.Features.SmsMessages.Queries.Pagination
 @using CleanArchitecture.Blazor.Application.Features.SmsMessages.Specifications
 @using CleanArchitecture.Blazor.Domain.Enums
+@using CleanArchitecture.Blazor.Server.UI.Hubs
 @using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.SmsMessages.Components
+@using static CleanArchitecture.Blazor.Server.UI.Hubs.HubClient
+
+@implements IDisposable
+
+@inject HubClient Hub
 
 @inject IStringLocalizer<SmsMessages> L
 @inject BlazorDownloadFileService BlazorDownloadFileService
@@ -85,13 +92,22 @@
         <SelectColumn ShowInFooter="false"></SelectColumn>
         <TemplateColumn HeaderStyle="width:60px" Title="@AppStrings.Actions" Sortable="false">
             <CellTemplate>
-                @if (_accessRights.Delete)
+                @if (_accessRights.Send)
                 {
-                    <MudMenu Icon="@Icons.Material.Filled.Edit" Variant="Variant.Filled" Size="Size.Small"
+
+
+                    <MudMenu Icon="@Icons.Material.Filled.Send" Variant="Variant.Filled" Size="Size.Small"
+                             Dense="true"
+                             EndIcon="@Icons.Material.Filled.KeyboardArrowDown" IconColor="Color.Info" AnchorOrigin="Origin.CenterLeft">
+                             <MudMenuItem Disabled="(!((context.Item.Status != SmsStatus.Failed) || (context.Item.Status != SmsStatus.Unknown)))"
+                             OnClick="@(()=>OnResend(context.Item))">Resend</MudMenuItem>
+                    </MudMenu>
+
+                    @* <MudMenu Icon="@Icons.Material.Filled.Edit" Variant="Variant.Filled" Size="Size.Small"
                              Dense="true"
                              EndIcon="@Icons.Material.Filled.KeyboardArrowDown" IconColor="Color.Info" AnchorOrigin="Origin.CenterLeft">
                             <MudMenuItem OnClick="@(()=>OnDelete(context.Item))">@AppStrings.Delete</MudMenuItem>
-                    </MudMenu>
+                    </MudMenu> *@
                 }
                 else
                 {
@@ -106,12 +122,13 @@
             </CellTemplate>
         </TemplateColumn>
         @*TODO: Define the fields that should be displayed in data table*@
-        <PropertyColumn Property="x => x.PhoneNumber" Title="@L[_currentDto.GetMemberDisplayName(x=>x.PhoneNumber)]" />
-<PropertyColumn Property="x => x.Message" Title="@L[_currentDto.GetMemberDisplayName(x=>x.Message)]" />
-<PropertyColumn Property="x => x.Direction" Title="@L[_currentDto.GetMemberDisplayName(x => x.Direction)]" />
-<PropertyColumn Property="x => x.SmsStatus" Title="@L[_currentDto.GetMemberDisplayName(x=>x.SmsStatus)]" />
+                <PropertyColumn Property="x => x.From" Title="@L[_currentDto.GetMemberDisplayName(x=>x.From)]" />
+                <PropertyColumn Property="x => x.To" Title="@L[_currentDto.GetMemberDisplayName(x=>x.To)]" />
+                <PropertyColumn Property="x => x.Error" Title="@L[_currentDto.GetMemberDisplayName(x=>x.Error)]" />
 
-
+                <PropertyColumn Property="x => x.Body" Title="@L[_currentDto.GetMemberDisplayName(x=>x.Body)]" />
+                <PropertyColumn Property="x => x.Direction" Title="@L[_currentDto.GetMemberDisplayName(x => x.Direction)]" />
+                <PropertyColumn Property="x => x.Status" Title="@L[_currentDto.GetMemberDisplayName(x=>x.Status)]" />
     </Columns>
     <NoRecordsContent>
         <MudText>@AppStrings.NoRecords</MudText>
@@ -124,8 +141,6 @@
     </PagerContent>
 </MudDataGrid>
 
-
-
 @code {
     [CascadingParameter] private Task<AuthenticationState> AuthState { get; set; } = default!;
     private UserProfile UserProfile => UserProfileState.Value;
@@ -136,30 +151,103 @@
     private SmsMessageDto _currentDto = new();
     private int _defaultPageSize = 15;
     private bool _loading;
-    private bool _uploading;
     private bool _exporting;
     private SmsMessagesWithPaginationQuery Query { get; set; } = new();
 
+    // Guard so a burst of inbound events doesn't trigger N concurrent reloads.
+    private int _pendingReload;
+    private readonly SemaphoreSlim _reloadGate = new(1, 1);
 
-
-  protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        Title =L[_currentDto.GetClassDescription()];
+        Title = L[_currentDto.GetClassDescription()];
         _accessRights = await PermissionService.GetAccessRightsAsync<SmsMessagesAccessRights>();
+
+        // Subscribe once, at page init.
+        Hub.SmsReceivedEvent += OnSmsReceived;
+        Hub.SmsStatusChangedEvent += OnSmsStatusChanged;
+        await Hub.StartAsync();
     }
-    private async Task<GridData<SmsMessageDto>> ServerReload(GridState<SmsMessageDto> state, CancellationToken cancellationToken)
+
+    public void Dispose()
+    {
+        Hub.SmsReceivedEvent -= OnSmsReceived;
+        Hub.SmsStatusChangedEvent -= OnSmsStatusChanged;
+        _reloadGate.Dispose();
+    }
+
+    // ── Live inbound: ask the grid to re-query ─────────────────────
+    private void OnSmsReceived(object? sender, SmsReceivedEventArgs e)
+    {
+        // Coalesce: mark pending; a single reload will pick up all new rows.
+        Interlocked.Exchange(ref _pendingReload, 1);
+        _ = InvokeAsync(async () =>
+        {
+            await _reloadGate.WaitAsync();
+            try
+            {
+                if (Interlocked.Exchange(ref _pendingReload, 0) == 0) return;
+                await _table.ReloadServerData();
+                Snackbar.Add($"SMS from {e.Payload.From}", Severity.Info);
+            }
+            finally { _reloadGate.Release(); }
+        });
+    }
+
+    // ── Live outbound status: just refresh so Status column updates ─
+    private void OnSmsStatusChanged(object? sender, SmsStatusChangedEventArgs e)
+    {
+        _ = InvokeAsync(async () =>
+        {
+            await _reloadGate.WaitAsync();
+            try { await _table.ReloadServerData(); }
+            finally { _reloadGate.Release(); }
+        });
+    }
+
+   private async Task OnResend(SmsMessageDto dto)
+    {
+
+        var command = new ResendSmsCommand() { Id = dto.Id };
+        var result = await Mediator.Send(command);
+
+        if (result.Succeeded)
+        {
+            Snackbar.Add(AppStrings.SaveSuccess, MudBlazor.Severity.Info);
+            await InvokeAsync(async () =>
+                                           {
+                                               await _table.ReloadServerData();
+                                               _selectedItems.Clear();
+                                           });
+        }
+        else
+        {
+            Snackbar.Add(result.ErrorMessage, MudBlazor.Severity.Error);
+        }
+    }
+
+    private async Task<GridData<SmsMessageDto>> ServerReload(
+        GridState<SmsMessageDto> state, CancellationToken cancellationToken)
     {
         try
         {
             _loading = true;
-            Query.OrderBy = state.SortDefinitions.FirstOrDefault()?.SortBy ?? "Id";
-            Query.SortDirection = state.SortDefinitions.FirstOrDefault()?.Descending ?? true
-                                              ? SortDirection.Descending.ToString()
-                                              : SortDirection.Ascending.ToString();
-            Query.PageNumber = state.Page + 1;
-            Query.PageSize = state.PageSize;
-            var result = await Mediator.Send(Query).ConfigureAwait(false);
-            return new GridData<SmsMessageDto> { TotalItems = result.TotalItems, Items = result.Items };
+            Query.CurrentUser = UserProfile;
+            Query.OrderBy       = state.SortDefinitions.FirstOrDefault()?.SortBy ?? "Id";
+            var descending      = state.SortDefinitions.FirstOrDefault()?.Descending ?? true;
+            Query.SortDirection = descending
+                ? SortDirection.Descending.ToString()
+                : SortDirection.Ascending.ToString();
+            Query.PageNumber    = state.Page + 1;
+            Query.PageSize      = state.PageSize;
+
+            var result = await Mediator.Send(Query, cancellationToken).ConfigureAwait(false);
+
+            return new GridData<SmsMessageDto>
+            {
+                TotalItems = result.TotalItems,
+                Items      = result.Items
+            };
         }
         finally
         {
@@ -167,17 +255,18 @@
         }
     }
 
-  private async Task OnRefresh()
+    private async Task OnRefresh()
     {
         await AppCache.RemoveByTagsAsync(SmsMessageCacheKey.Tags);
         _selectedItems = new HashSet<SmsMessageDto>();
         Query.Keyword  = string.Empty;
         await _table.ReloadServerData();
     }
+
     private async Task OnSearch(string text)
     {
         _selectedItems = new HashSet<SmsMessageDto>();
-        Query.Keyword = text;
+        Query.Keyword  = text;
         await _table.ReloadServerData();
     }
 
@@ -187,105 +276,98 @@
         await _table.ReloadServerData();
     }
 
-
     private Task OnView(SmsMessageDto dto)
     {
-        Navigation.NavigateTo($"/pages/TrdBx/SmsMessages/{dto.Id}/view?returnUrl={Uri.EscapeDataString(Navigation.Uri)}");
+        Navigation.NavigateTo(
+            $"/pages/TrdBx/SmsMessages/{dto.Id}/view?returnUrl={Uri.EscapeDataString(Navigation.Uri)}");
         return Task.CompletedTask;
     }
 
-
-
-
-
-
     private Task OnSend()
     {
-         var command = new SendSmsMessageCommand();
-  
-        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        var command = new SendAndPersistSmsCommand();
+        var options = new DialogOptions
+        {
+            CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true
+        };
 
         return DialogServiceHelper.ShowDialogAsync<SmsMessageSendFormDialog>(
             L["Send SmsMessage"],
             async _ =>
             {
                 await _table.ReloadServerData();
-                 _selectedItems.Clear();
+                _selectedItems.Clear();
             },
-			p =>
-			{
-				p.Add(x => x._model, command);
-			},
-			options);
+            p => { p.Add(x => x._model, command); },
+            options);
     }
-
 
     private Task OnDelete(SmsMessageDto dto)
     {
         var contentText = string.Format(AppStrings.DeleteConfirmationWithId, dto.Id);
-        var command = new DeleteSmsMessageCommand(new int[] { dto.Id });
-          return DialogServiceHelper.ShowDeleteConfirmationDialogAsync(
+        var command     = new DeleteSmsMessageCommand(new[] { dto.Id });
+        return DialogServiceHelper.ShowDeleteConfirmationDialogAsync(
             command,
             AppStrings.DeleteConfirmationTitle,
             contentText,
             async () =>
             {
-                 await _table.ReloadServerData();
-                _selectedItems.Clear();
-            });
-    }
-    private Task OnDeleteChecked()
-    {
-        var contentText = string.Format(AppStrings.DeleteConfirmWithSelected, _selectedItems.Count);
-        var command = new DeleteSmsMessageCommand(_selectedItems.Select(x => x.Id).ToArray());
-        return DialogServiceHelper.ShowDeleteConfirmationDialogAsync(
-            command, 
-            AppStrings.DeleteConfirmationTitle, 
-            contentText, 
-            async () =>
-        {
-            await InvokeAsync(async () =>
-            {
                 await _table.ReloadServerData();
                 _selectedItems.Clear();
             });
-        });
+    }
+
+    private Task OnDeleteChecked()
+    {
+        var contentText = string.Format(AppStrings.DeleteConfirmWithSelected, _selectedItems.Count);
+        var command     = new DeleteSmsMessageCommand(_selectedItems.Select(x => x.Id).ToArray());
+        return DialogServiceHelper.ShowDeleteConfirmationDialogAsync(
+            command,
+            AppStrings.DeleteConfirmationTitle,
+            contentText,
+            async () =>
+            {
+                await InvokeAsync(async () =>
+                {
+                    await _table.ReloadServerData();
+                    _selectedItems.Clear();
+                });
+            });
     }
 
     private async Task OnExport()
     {
         _exporting = true;
         try
-		{
-            var request = new ExportSmsMessagesQuery()
-                {
-                    Keyword = Query.Keyword,
-                    ListView = Query.ListView,
-                    OrderBy = _table.SortDefinitions.Values.FirstOrDefault()?.SortBy ?? "Id",
-                    SortDirection = (_table.SortDefinitions.Values.FirstOrDefault()?.Descending ?? true) ? SortDirection.Descending.ToString() : SortDirection.Ascending.ToString()
-                };
+        {
+            var request = new ExportSmsMessagesQuery
+            {
+                Keyword       = Query.Keyword,
+                ListView      = Query.ListView,
+                OrderBy       = _table.SortDefinitions.Values.FirstOrDefault()?.SortBy ?? "Id",
+                SortDirection = (_table.SortDefinitions.Values.FirstOrDefault()?.Descending ?? true)
+                    ? SortDirection.Descending.ToString()
+                    : SortDirection.Ascending.ToString()
+            };
             var result = await Mediator.Send(request);
             await result.MatchAsync(
-            async data =>
-            {
-                await BlazorDownloadFileService.DownloadFileAsync($"{L["SmsMessages"]}.xlsx", data, contentType:"application/octet-stream");
-                Snackbar.Add($"{AppStrings.ExportSuccess}", MudBlazor.Severity.Info);
-            },
-            errors =>
-            {
-                Snackbar.Add($"{errors}", MudBlazor.Severity.Error);
-                return Task.CompletedTask;
-            });
+                async data =>
+                {
+                    await BlazorDownloadFileService.DownloadFileAsync(
+                        $"{L["SmsMessages"]}.xlsx", data,
+                        contentType: "application/octet-stream");
+                    Snackbar.Add(AppStrings.ExportSuccess, Severity.Info);
+                },
+                errors =>
+                {
+                    Snackbar.Add($"{errors}", Severity.Error);
+                    return Task.CompletedTask;
+                });
         }
-		catch (Exception ex)
-		{
-			Snackbar.Add($"Export failed: {ex.Message}", MudBlazor.Severity.Error);
-		}
-		finally
-		{
-			_exporting = false;
-		}
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Export failed: {ex.Message}", Severity.Error);
+        }
+        finally { _exporting = false; }
     }
-
-
 }

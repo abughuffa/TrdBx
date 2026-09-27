@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using CleanArchitecture.Blazor.Application.Features.SmsMessages.DTOs;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
 
@@ -38,8 +39,29 @@ public sealed class HubClient : IAsyncDisposable
 
         _hubConnection.On<string, string, string>(nameof(ISignalRHub.PageComponentClosed),
             async (pageComponent, userId, userName) => await OnPageComponentClosedAsync(pageComponent, userId, userName).ConfigureAwait(false));
+
+
+            _hubConnection.On<SmsReceivedPayload>(
+            nameof(ISignalRHub.SmsReceived),
+            p => { SmsReceivedEvent?.Invoke(this, new SmsReceivedEventArgs(p)); return Task.CompletedTask; });
+
+        _hubConnection.On<SmsStatusChangedPayload>(
+            nameof(ISignalRHub.SmsStatusChanged),
+            p => { SmsStatusChangedEvent?.Invoke(this, new SmsStatusChangedEventArgs(p)); return Task.CompletedTask; });
    
     }
+
+public sealed class SmsReceivedEventArgs : EventArgs
+{
+    public SmsReceivedEventArgs(SmsReceivedPayload payload) => Payload = payload;
+    public SmsReceivedPayload Payload { get; }
+}
+
+public sealed class SmsStatusChangedEventArgs : EventArgs
+{
+    public SmsStatusChangedEventArgs(SmsStatusChangedPayload payload) => Payload = payload;
+    public SmsStatusChangedPayload Payload { get; }
+}
 
     // Handle the result of async event invocations
     private Task OnLoginEventAsync(string connectionId, string userName)
@@ -111,6 +133,9 @@ public sealed class HubClient : IAsyncDisposable
     public event EventHandler<MessageReceivedEventArgs>? MessageReceivedEvent;
     public event EventHandler<PageComponentEventArgs>? PageComponentOpenedEvent;
     public event EventHandler<PageComponentEventArgs>? PageComponentClosedEvent;
+
+    public event EventHandler<SmsReceivedEventArgs>?      SmsReceivedEvent;
+    public event EventHandler<SmsStatusChangedEventArgs>? SmsStatusChangedEvent;
 
     public async Task StartAsync(CancellationToken cancellation = default)
     {

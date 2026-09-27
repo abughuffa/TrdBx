@@ -1,5 +1,5 @@
 ﻿@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.SmsMessages
-@using CleanArchitecture.Blazor.Application.Features.SmsMessages.Commands.Send
+@using CleanArchitecture.Blazor.Application.Features.SmsMessages.Commands.SendAndPersist
 
 @inherits MudComponentBase
 @inject IValidationService Validator
@@ -11,12 +11,23 @@
         <MudForm Model="@_model" @ref="@_form" Validation="@(Validator.ValidateValue(_model))">
                             <MudGrid Spacing="2">
 
-                    <MudItem md="12">
-                        <MudTextField Label="@L[_model.GetMemberDisplayName(x=>x.PhoneNumber)]" @bind-Value="_model.PhoneNumber" For="@(() => _model.PhoneNumber)" Required="false" RequiredError="@L["PhoneNumber is required!"]"></MudTextField>
+                    <MudItem md="9">
+                        <MudTextField Label="@L[_model.GetMemberDisplayName(x=>x.To)]" @bind-Value="_model.To" For="@(() => _model.To)" Required="false" RequiredError="@L["PhoneNumber is required!"]"></MudTextField>
+                    </MudItem>
+
+                    <MudItem md="9">
+                        <MudTextField Label="@L[_model.GetMemberDisplayName(x=>x.SimSlot)]" @bind-Value="_model.SimSlot" For="@(() => _model.SimSlot)" Required="false" RequiredError="@L["SimSlot is required!"]"></MudTextField>
                     </MudItem>
 
                     <MudItem md="12">
-                        <MudTextField Label="@L[_model.GetMemberDisplayName(x=>x.Message)]" @bind-Value="_model.Message" For="@(() => _model.Message)" Required="false" RequiredError="@L["Message is required!"]"></MudTextField>
+                        <MudTextField 
+                                 Label="@L[_model.GetMemberDisplayName(x=>x.Body)]" 
+                                 @bind-Value="_model.Body" For="@(() => _model.Body)" 
+                                 Required="true" 
+                                 RequiredError="@L["Message is required!"]"
+                                 Lines="5"
+                                 Variant="Variant.Outlined">    
+                        </MudTextField>
                     </MudItem>
                     
                 </MudGrid>
@@ -35,7 +46,7 @@
     private bool _savingnew = false;
     [CascadingParameter]
     IMudDialogInstance MudDialog { get; set; } = default!;
-    [EditorRequired][Parameter] public SendSmsMessageCommand _model { get; set; } = null!;
+    [EditorRequired][Parameter] public SendAndPersistSmsCommand _model { get; set; } = null!;
 
 
     async Task OnSave()
@@ -76,7 +87,7 @@
 
                  Task.Delay(300);
 
-                _model = new SendSmsMessageCommand() {PhoneNumber =_model.PhoneNumber, Message=_model.Message};
+                _model = new SendAndPersistSmsCommand() {To =_model.To,SimSlot = _model.SimSlot, Body=_model.Body};
             }, errors =>
             {
                 Snackbar.Add(errors, MudBlazor.Severity.Error);

@@ -29,4 +29,6 @@ public partial interface IApplicationDbContext
     DbSet<Invoice> Invoices { get; set; }
     DbSet<InvoiceItemGroup> InvoiceItemGroups { get; set; }
     DbSet<InvoiceItem> InvoiceItems { get; set; }
+
+    DbSet<SmsCursor> SmsCursors { get; set; }
 }

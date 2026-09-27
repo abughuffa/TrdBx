@@ -1,7 +1,6 @@
 ﻿using CleanArchitecture.Blazor.Application.Features.SmsMessages.Caching;
 using CleanArchitecture.Blazor.Domain.Events;
 
-
 namespace CleanArchitecture.Blazor.Application.Features.SmsMessages.Commands.Delete;
 
 public class DeleteSmsMessageCommand : ICacheInvalidatorRequest<Result>
@@ -28,13 +27,6 @@ public class DeleteSmsMessageCommandHandler :
        //_mapper = mapper;
     }
 
-    // private readonly IApplicationDbContext _context;
-    // public DeleteSmsMessageCommandHandler(
-    //     IApplicationDbContext context
-    // )
-    // {
-    //     _context = context;
-    // }
     public async ValueTask<Result> Handle(DeleteSmsMessageCommand request, CancellationToken cancellationToken)
     {
 
@@ -48,16 +40,6 @@ public class DeleteSmsMessageCommandHandler :
         }
         await context.SaveChangesAsync(cancellationToken);
         return await Result.SuccessAsync();
-
-        // var items = await _context.SmsMessages.Where(x => request.Id.Contains(x.Id)).ToListAsync(cancellationToken);
-        // foreach (var item in items)
-        // {
-        //     // raise a delete domain event
-        //     item.AddDomainEvent(new SmsMessageDeletedEvent(item));
-        //     _context.SmsMessages.Remove(item);
-        // }
-        // var result = await _context.SaveChangesAsync(cancellationToken);
-        // return await Result<int>.SuccessAsync(result);
     }
 
 }

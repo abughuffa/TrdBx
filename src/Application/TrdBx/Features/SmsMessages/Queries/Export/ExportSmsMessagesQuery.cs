@@ -55,11 +55,11 @@ public class ExportSmsMessagesQueryHandler :
 
         var result = await _excelService.ExportAsync(data, new Dictionary<string, Func<SmsMessageDto, object?>>()
             {
-                   {_localizer[_dto.GetMemberDisplayName(x=>x.Id)],item => item.Id},
-                    {_localizer[_dto.GetMemberDisplayName(x=>x.PhoneNumber)],item => item.PhoneNumber},
-{_localizer[_dto.GetMemberDisplayName(x=>x.Message)],item => item.Message},
+                    {_localizer[_dto.GetMemberDisplayName(x=>x.Id)],item => item.Id},
+                    {_localizer[_dto.GetMemberDisplayName(x=>x.To)],item => item.To},
+                    {_localizer[_dto.GetMemberDisplayName(x=>x.Body)],item => item.Body},
 
-                    }
+            }
                     , _localizer[_dto.GetClassDescription()]);
 
         return await Result<byte[]>.SuccessAsync(result);
