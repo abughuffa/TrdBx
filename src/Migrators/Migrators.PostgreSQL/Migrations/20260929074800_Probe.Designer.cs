@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260926172514_SMSModelEnhanced")]
-    partial class SMSModelEnhanced
+    [Migration("20260929074800_Probe")]
+    partial class Probe
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1087,16 +1087,16 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .IsRequired()
                         .HasMaxLength(450)
                         .HasColumnType("character varying(450)")
-                        .HasColumnName("key");
+                        .HasColumnName("Key");
 
                     b.Property<long>("Value")
                         .HasColumnType("bigint")
-                        .HasColumnName("value");
+                        .HasColumnName("Value");
 
                     b.HasKey("Id")
                         .HasName("pk_sms_cursors");
 
-                    b.ToTable("sms_cursors", (string)null);
+                    b.ToTable("SmsCursors", (string)null);
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SmsMessage", b =>

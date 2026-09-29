@@ -30,5 +30,6 @@ public partial class ApplicationDbContext
     public DbSet<InvoiceItem> InvoiceItems { get; set; }
 
     public DbSet<SmsCursor> SmsCursors { get; set; }
+    public DbSet<SmsGatewaySettings> SmsGatewaySettings { get; set; }
 
 }

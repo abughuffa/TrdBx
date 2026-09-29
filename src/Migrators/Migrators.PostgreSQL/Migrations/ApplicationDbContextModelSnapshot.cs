@@ -1084,16 +1084,82 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .IsRequired()
                         .HasMaxLength(450)
                         .HasColumnType("character varying(450)")
-                        .HasColumnName("key");
+                        .HasColumnName("Key");
 
                     b.Property<long>("Value")
                         .HasColumnType("bigint")
-                        .HasColumnName("value");
+                        .HasColumnName("Value");
 
                     b.HasKey("Id")
                         .HasName("pk_sms_cursors");
 
-                    b.ToTable("sms_cursors", (string)null);
+                    b.ToTable("SmsCursors", (string)null);
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SmsGatewaySettings", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApiKey")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("ApiKey");
+
+                    b.Property<string>("BaseUrl")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("BaseUrl");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("CreatedById")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("created_by_id");
+
+                    b.Property<bool>("EnableInboundPolling")
+                        .HasColumnType("boolean")
+                        .HasColumnName("enable_inbound_polling");
+
+                    b.Property<DateTime?>("LastModifiedAt")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("last_modified_at");
+
+                    b.Property<string>("LastModifiedById")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("last_modified_by_id");
+
+                    b.Property<int>("PollingIntervalSeconds")
+                        .HasColumnType("integer")
+                        .HasColumnName("polling_interval_seconds");
+
+                    b.Property<int>("TimeoutSeconds")
+                        .HasColumnType("integer")
+                        .HasColumnName("timeout_seconds");
+
+                    b.Property<string>("WebhookPublicUrl")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("WebhookPublicUrl");
+
+                    b.Property<string>("WebhookSecret")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("WebhookSecret");
+
+                    b.HasKey("Id")
+                        .HasName("pk_sms_gateway_settings");
+
+                    b.ToTable("SmsGatewaySettings", (string)null);
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SmsMessage", b =>

@@ -97,19 +97,31 @@ public static partial class DependencyInjection
     private static IServiceCollection AddSmsServices(this IServiceCollection services, IConfiguration configuration)
     {
     //SMS Gateway ─────────────────────────────────────────────
-    services.Configure<SmsGatewayOptions>(
-             configuration.GetSection(SmsGatewayOptions.SectionName));
+services.Configure<SmsGatewayOptions>(
+    configuration.GetSection(SmsGatewayOptions.SectionName));
 
-    services.AddHttpClient<ISmsGatewayClient, SmsGatewayClient>((sp, http) =>
-{
-    var o = sp.GetRequiredService<IOptions<SmsGatewayOptions>>().Value;
-    http.BaseAddress = new Uri(o.BaseUrl);
-    http.Timeout     = TimeSpan.FromSeconds(o.TimeoutSeconds);
-    if (!string.IsNullOrWhiteSpace(o.ApiKey))
-        http.DefaultRequestHeaders.Add("X-Api-Key", o.ApiKey);
-    });
+// Singleton cache holds the current values + Changed event.
+services.AddSingleton<ISmsGatewaySettingsCache, SmsGatewaySettingsCache>();
 
-    services.AddScoped<ISmsCursorStore, EfSmsCursorStore>();
+// Scoped provider does DB reads/writes and publishes to the cache.
+services.AddScoped<ISmsGatewaySettingsProvider, SmsGatewaySettingsProvider>();
+
+// Typed HTTP client — no config lambda needed; the client reads from cache.
+services.AddHttpClient<ISmsGatewayClient, SmsGatewayClient>();
+
+services.AddScoped<ISmsCursorStore, EfSmsCursorStore>();
+
+
+//     services.AddHttpClient<ISmsGatewayClient, SmsGatewayClient>((sp, http) =>
+// {
+//     var o = sp.GetRequiredService<IOptions<SmsGatewayOptions>>().Value;
+//     http.BaseAddress = new Uri(o.BaseUrl);
+//     http.Timeout     = TimeSpan.FromSeconds(o.TimeoutSeconds);
+//     if (!string.IsNullOrWhiteSpace(o.ApiKey))
+//         http.DefaultRequestHeaders.Add("X-Api-Key", o.ApiKey);
+//     });
+
+//     services.AddScoped<ISmsCursorStore, EfSmsCursorStore>();
 
     return services;
 

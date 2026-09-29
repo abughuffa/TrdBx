@@ -31,4 +31,6 @@ public partial interface IApplicationDbContext
     DbSet<InvoiceItem> InvoiceItems { get; set; }
 
     DbSet<SmsCursor> SmsCursors { get; set; }
+
+    DbSet<SmsGatewaySettings> SmsGatewaySettings { get; } 
 }

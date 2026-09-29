@@ -1,0 +1,205 @@
+@page "/pages/TrdBx/SmsGatewaySettings"
+@using CleanArchitecture.Blazor.Application.Common.Interfaces
+@using CleanArchitecture.Blazor.Application.Features.SmsGatewaySettings.Commands
+@using CleanArchitecture.Blazor.Application.Features.SmsGatewaySettings.DTOs
+@using CleanArchitecture.Blazor.Application.Features.SmsGatewaySettings.Queries
+@using CleanArchitecture.Blazor.Application.Features.SmsMessages.DTOs
+@* @inject IMediator Mediator *@
+@inject ISmsGatewayClient Gateway
+@* @inject ISnackbar Snackbar *@
+@attribute [Authorize(Policy = Permissions.SmsMessages.UpdateSettings)]
+
+<PageTitle>SMS Gateway Settings</PageTitle>
+
+<MudGrid>
+    <MudItem xs="12" md="8">
+        <MudPaper Class="pa-4">
+            <MudText Typo="Typo.h6" Class="mb-4">SMS Gateway Settings</MudText>
+
+            @if (_loading)
+            {
+                <MudProgressCircular Indeterminate="true" />
+            }
+            else
+            {
+                <EditForm Model="_model" OnValidSubmit="SaveAsync">
+
+     <MudGrid>
+
+        <MudItem xs="12" md="12">
+              <MudTextField @bind-Value="_model.BaseUrl"
+                Label="Base URL"
+                HelperText="http://127.0.0.1:8081 for ADB forward, or http://<phone-ip>:8080 for Wi-Fi"
+                Required="true"
+                Class="mb-3" />
+        </MudItem>
+
+        <MudItem xs="12" md="12">
+              <MudTextField @bind-Value="_model.ApiKey"
+                Label="API key (optional)"
+                HelperText="Sent as X-Api-Key header. Must match the phone's configured key."
+                Class="mb-3" />
+        </MudItem>
+
+        <MudItem xs="4" md="4">
+              <MudNumericField @bind-Value="_model.PollingIntervalSeconds"
+                Label="Polling interval (seconds)"
+                Min="5" Max="3600"
+                Class="mb-3" />
+        </MudItem>
+
+        <MudItem xs="4" md="4">
+              <MudNumericField @bind-Value="_model.TimeoutSeconds"
+                 Label="HTTP timeout (seconds)"
+                 Min="1" Max="120"
+                 Class="mb-3" />
+        </MudItem>
+
+        <MudItem xs="4" md="4">
+            <MudSwitch @bind-Value="_model.EnableInboundPolling"
+                Label="Enable inbound polling"
+                Color="Color.Primary"
+                Class="mb-3" />
+        </MudItem>
+
+        <MudItem xs="12" md="12">
+            <MudTextField @bind-Value="_model.WebhookPublicUrl"
+                Label="Webhook public URL (optional)"
+                HelperText="Public URL the phone can reach; leave empty if using polling only."
+                Class="mb-3" />
+        </MudItem>
+
+        <MudItem xs="12" md="12">
+            <MudTextField @bind-Value="_model.WebhookSecret"
+                Label="Webhook secret (optional)"
+                InputType="InputType.Password"
+                Class="mb-3" />
+        </MudItem>
+
+        <MudItem xs="12" md="12">
+            <MudStack Row Spacing="2" Class="mt-4">
+                    <MudButton ButtonType="ButtonType.Submit"
+                        Variant="Variant.Filled"
+                        Color="Color.Primary"
+                        Disabled="_saving">
+                        Save
+                    </MudButton>
+                    <MudButton Variant="Variant.Outlined"
+                        OnClick="TestConnectionAsync"
+                        Disabled="_testing">
+                        Test connection
+                    </MudButton>
+                    <MudButton Variant="Variant.Text"
+                        OnClick="ReloadAsync"
+                        Disabled="_loading">
+                        Reload
+                    </MudButton>
+            </MudStack>
+        </MudItem>
+    </MudGrid>
+</EditForm>
+
+                @if (_model.UpdatedAt is not null)
+                {
+                    <MudText Typo="Typo.caption" Class="mt-4">
+                        Last updated @_model.UpdatedAt.Value.ToLocalTime()
+                        @if (!string.IsNullOrEmpty(_model.UpdatedBy))
+                        {
+                            <text>by @_model.UpdatedBy</text>
+                        }
+                    </MudText>
+                }
+            }
+        </MudPaper>
+    </MudItem>
+
+    <MudItem xs="12" md="4">
+        <MudPaper Class="pa-4">
+            <MudText Typo="Typo.h6" Class="mb-4">Live status</MudText>
+            @if (_status is null)
+            {
+                <MudText>Press "Test connection" to fetch gateway status.</MudText>
+            }
+            else
+            {
+                <MudList T="string" Dense="true">
+                    <MudListItem T="string">Mode: <b>@_status.Mode</b></MudListItem>
+                    <MudListItem T="string">SIM ready: <b>@_status.SimReady</b></MudListItem>
+                    <MudListItem T="string">Uptime: <b>@_status.UptimeSec s</b></MudListItem>
+                    <MudListItem T="string">Sent: <b>@_status.SentCount</b></MudListItem>
+                    <MudListItem T="string">Received: <b>@_status.ReceivedCount</b></MudListItem>
+                </MudList>
+            }
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+@code {
+    private SmsGatewaySettingsDto _model = new();
+    private SmsGatewayStatusDto? _status;
+
+    private bool _loading = true;
+    private bool _saving;
+    private bool _testing;
+
+    protected override async Task OnInitializedAsync() => await ReloadAsync();
+
+    private async Task ReloadAsync()
+    {
+        _loading = true;
+        try
+        {
+            var result = await Mediator.Send(new GetSmsGatewaySettingsQuery());
+            if (result.Succeeded) _model = result.Data;
+            else Snackbar.Add("Failed to load settings.", Severity.Error);
+        }
+        finally { _loading = false; }
+    }
+
+    private async Task SaveAsync()
+    {
+        _saving = true;
+        try
+        {
+            var cmd = new UpdateSmsGatewaySettingsCommand
+            {
+                BaseUrl                = _model.BaseUrl,
+                ApiKey                 = _model.ApiKey,
+                EnableInboundPolling   = _model.EnableInboundPolling,
+                PollingIntervalSeconds = _model.PollingIntervalSeconds,
+                WebhookPublicUrl       = _model.WebhookPublicUrl,
+                WebhookSecret          = _model.WebhookSecret,
+                TimeoutSeconds         = _model.TimeoutSeconds,
+            };
+
+            var result = await Mediator.Send(cmd);
+            if (result.Succeeded)
+            {
+                _model = result.Data;
+                Snackbar.Add("Settings saved.", Severity.Success);
+            }
+            else
+            {
+                Snackbar.Add(string.Join("; ", result.Errors ?? new List<string>()),
+                             Severity.Error);
+            }
+        }
+        finally { _saving = false; }
+    }
+
+    private async Task TestConnectionAsync()
+    {
+        _testing = true;
+        try
+        {
+            _status = await Gateway.GetStatusAsync();
+            Snackbar.Add("Gateway reachable.", Severity.Success);
+        }
+        catch (Exception ex)
+        {
+            _status = null;
+            Snackbar.Add($"Gateway unreachable: {ex.Message}", Severity.Error);
+        }
+        finally { _testing = false; }
+    }
+}

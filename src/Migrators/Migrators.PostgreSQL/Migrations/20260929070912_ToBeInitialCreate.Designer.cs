@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260915120013_SMSModelCreated")]
-    partial class SMSModelCreated
+    [Migration("20260929070912_ToBeInitialCreate")]
+    partial class ToBeInitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1074,6 +1074,31 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     b.ToTable("SimCards", (string)null);
                 });
 
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SmsCursor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("key");
+
+                    b.Property<long>("Value")
+                        .HasColumnType("bigint")
+                        .HasColumnName("value");
+
+                    b.HasKey("Id")
+                        .HasName("pk_sms_cursors");
+
+                    b.ToTable("SmsCursors", (string)null);
+                });
+
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SmsMessage", b =>
                 {
                     b.Property<int>("Id")
@@ -1082,6 +1107,12 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasMaxLength(1600)
+                        .HasColumnType("character varying(1600)")
+                        .HasColumnName("Body");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp without time zone")
@@ -1094,21 +1125,26 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 
                     b.Property<DateTime?>("DeliveredAt")
                         .HasColumnType("timestamp without time zone")
-                        .HasColumnName("delivered_at");
+                        .HasColumnName("DeliveredAt");
 
                     b.Property<int>("Direction")
                         .HasColumnType("integer")
                         .HasColumnName("Direction");
 
-                    b.Property<string>("Encoding")
+                    b.Property<string>("Error")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)")
+                        .HasColumnName("Error");
+
+                    b.Property<string>("From")
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)")
-                        .HasColumnName("Encoding");
+                        .HasColumnName("From");
 
-                    b.Property<string>("ErrorMessage")
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)")
-                        .HasColumnName("ErrorMessage");
+                    b.Property<string>("GatewayId")
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)")
+                        .HasColumnName("GatewayId");
 
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp without time zone")
@@ -1119,42 +1155,32 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasColumnType("character varying(450)")
                         .HasColumnName("last_modified_by_id");
 
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasMaxLength(1600)
-                        .HasColumnType("character varying(1600)")
-                        .HasColumnName("Message");
+                    b.Property<DateTime?>("ReceivedAt")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("ReceivedAt");
 
-                    b.Property<int>("PartsCount")
+                    b.Property<string>("Reference")
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)")
+                        .HasColumnName("Reference");
+
+                    b.Property<DateTime?>("SentAt")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("SentAt");
+
+                    b.Property<int>("SimSlot")
                         .HasColumnType("integer")
-                        .HasColumnName("parts_count");
+                        .HasColumnName("SimSlot");
 
-                    b.Property<string>("PhoneNumber")
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
+                        .HasColumnName("Status");
+
+                    b.Property<string>("To")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)")
-                        .HasColumnName("PhoneNumber");
-
-                    b.Property<string>("ProviderMessageId")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("ProviderMessageId");
-
-                    b.Property<int>("RetryCount")
-                        .HasColumnType("integer")
-                        .HasColumnName("retry_count");
-
-                    b.Property<DateTime?>("SMSDate")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("sms_date");
-
-                    b.Property<int>("SmsProvider")
-                        .HasColumnType("integer")
-                        .HasColumnName("SmsProvider");
-
-                    b.Property<int>("SmsStatus")
-                        .HasColumnType("integer")
-                        .HasColumnName("SmsStatus");
+                        .HasColumnName("To");
 
                     b.HasKey("Id")
                         .HasName("pk_sms_messages");
@@ -1162,17 +1188,13 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     b.HasIndex("Direction")
                         .HasDatabaseName("ix_sms_messages_direction");
 
-                    b.HasIndex("PhoneNumber")
-                        .HasDatabaseName("ix_sms_messages_phone_number");
+                    b.HasIndex("GatewayId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_sms_messages_gateway_id")
+                        .HasFilter("\"GatewayId\" IS NOT NULL AND \"Direction\" = 1");
 
-                    b.HasIndex("ProviderMessageId")
-                        .HasDatabaseName("ix_sms_messages_provider_message_id");
-
-                    b.HasIndex("SmsProvider")
-                        .HasDatabaseName("ix_sms_messages_sms_provider");
-
-                    b.HasIndex("SmsStatus")
-                        .HasDatabaseName("ix_sms_messages_sms_status");
+                    b.HasIndex("Status")
+                        .HasDatabaseName("ix_sms_messages_status");
 
                     b.ToTable("SmsMessages", (string)null);
                 });

@@ -119,6 +119,13 @@ public class MenuService : IMenuService
                             Href = "/pages/TrdBx/SmsMessages",
                             PageStatus = PageStatus.Completed
                         },
+
+                        new()
+                        {
+                            Title = "SMS Gateway Settings",
+                            Href  = "/pages/TrdBx/SmsGatewaySettings",
+                            PageStatus = PageStatus.Completed
+                        },
                         new()
                         {
                             Title = "Backup & Restore",
