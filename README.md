@@ -35,17 +35,29 @@ The solution is intended to serve both as a **reference implementation** for Bla
 
 Experience the application in action:
 
-[![Application Demo](doc/blazorstudio.png)](https://www.youtube.com/watch?v=hCsHSNAs-70)
+[![Blazor Studio application demo](doc/blazor-studio-showcase.png)](https://www.youtube.com/watch?v=hCsHSNAs-70)
 
 **Live Demo**: [architecture.blazorserver.com](https://architecture.blazorserver.com/)
 
 ### Featured Projects Built with This Template
 
-[![HSE Management System](doc/094346.png)](https://hse.blazorserver.com/)
-**HSE Management System** - [GitHub](https://github.com/neozhu/workflow) | [Live Demo](https://hse.blazorserver.com/)
+[![Fabric Quotation](doc/fabric-quotation-showcase.png)](https://fabric-quotation.blazorserver.com/)
 
-[![Digital Product Passport](doc/094553.png)](https://materialpassport.blazorserver.com/)
-**EU Digital Product Passport** - [Live Demo](https://materialpassport.blazorserver.com/)
+**Fabric Quotation** is a modern textile quotation management platform for coordinating product structures, price books, business partners, quotation workflows, and approvals in one place. Built with this Clean Architecture Blazor Server template, it demonstrates how the foundation can support a polished, data-rich business application.
+
+**[Explore the Live Demo](https://fabric-quotation.blazorserver.com/)**
+
+[![HSE Management System](doc/hse-management-showcase.png)](https://hse.blazorserver.com/)
+
+**HSE Management System** is a workflow-driven operations platform for managing permits to work, visitor and gate-pass requests, access control, and task approvals.
+
+**[GitHub](https://github.com/neozhu/workflow)** | **[Explore the Live Demo](https://hse.blazorserver.com/)**
+
+[![Digital Product Passport](doc/digital-product-passport-showcase.png)](https://materialpassport.blazorserver.com/)
+
+**EU Digital Product Passport** helps teams structure product material data, manage passport content, and prepare traceable digital product records through a clear, guided workflow.
+
+**[Explore the Live Demo](https://materialpassport.blazorserver.com/)**
 
 ## 🛠️ Technology Stack
 
