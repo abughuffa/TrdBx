@@ -1,4 +1,5 @@
 ﻿
+using System.Runtime.CompilerServices;
 using CleanArchitecture.Blazor.Application.Features.SmsMessages.DTOs;
 using CleanArchitecture.Blazor.Domain.Enums;
 
@@ -68,8 +69,11 @@ public class SendAndPersistSmsCommandHandler
         };
 
         // ── Phase 1: persist "Queued" ─────────────────────────────
-        await using (var db = await _dbFactory.CreateAsync(ct))
-        {
+        //await using (var db = await _dbFactory.CreateAsync(ct));
+
+     await using var db = await _dbFactory.CreateAsync(ct);
+
+        
             if (req.Reference is not null)
             {
                 var dup = await db.SmsMessages
@@ -86,92 +90,80 @@ public class SendAndPersistSmsCommandHandler
             db.SmsMessages.Add(item);
             await db.SaveChangesAsync(ct);
 
-            entity.Id = item.Id;
+            //entity.Id = item.Id;
 
-        }
+        
 
         // ── Phase 2: call the gateway (no DbContext held) ─────────
         SendSmsResult result;
+
         try
         {
             result = await _gateway.SendAsync(req.To, req.Body, req.SimSlot, reference, ct);
-            entity.GatewayId = result.Id;
-            entity.Status    = MapStatus(result.Status);
-            entity.Error     = result.Error;
-            if (entity.Status is SmsStatus.Sent or SmsStatus.Delivered)
-                entity.SentAt = DateTime.UtcNow;
+            item.GatewayId = result.Id;
+            item.Status    = MapStatus(result.Status);
+            item.Error     = result.Error;
+            if (item.Status is SmsStatus.Sent or SmsStatus.Delivered)
+                item.SentAt = DateTime.UtcNow;
         }
         catch (Exception ex)
         {
             _log.LogError(ex, "SMS send failed for reference={Reference}", reference);
-            entity.Status = SmsStatus.Failed;
-            entity.Error  = ex.Message;
+            item.Status = SmsStatus.Failed;
+            item.Error  = ex.Message;
 
-            await PersistUpdateAsync(entity, ct);
-            await SafeBroadcastAsync(entity);
+            await PersistUpdateAsync(db, item, ct);
+            await SafeBroadcastAsync(item);
 
             return await Result<SendSmsResult>.FailureAsync(ex.Message);
         }
 
         // ── Phase 3: persist the final state ──────────────────────
-        await PersistUpdateAsync(entity, ct);
-        await SafeBroadcastAsync(entity);
+        await PersistUpdateAsync(db, item, ct);
+        await SafeBroadcastAsync(item);
 
         return await Result<SendSmsResult>.SuccessAsync(result);
     }
 
-private async Task PersistUpdateAsync(SmsMessageDto entity, CancellationToken ct)
+private async Task PersistUpdateAsync(IApplicationDbContext cnx ,SmsMessage onsentsms, CancellationToken ct)
 {
     try
     {
-        await using var db = await _dbFactory.CreateAsync(ct);
-        var item = await db.SmsMessages.FindAsync(entity.Id, ct);
-        if (item is null)
-        {
-            _log.LogWarning(
-                "SmsMessage id={Id} not found while persisting final state.", entity.Id);
-            return;
-        }
+        //var item = _objectMapper.Map<SmsMessage>(entity);
 
-        item.Status       = entity.Status;
-        item.Error        = entity.Error;
-        item.GatewayId    = entity.GatewayId;
-        item.SentAt       = entity.SentAt;
-        item.DeliveredAt  = entity.DeliveredAt;
-
-        item.AddDomainEvent(new SmsMessageUpdatedEvent(item));
-        await db.SaveChangesAsync(ct);
+        onsentsms.AddDomainEvent(new SmsMessageUpdatedEvent(onsentsms));
+        await cnx.SaveChangesAsync(ct);
     }
     catch (Exception ex)
     {
         _log.LogError(ex,
-            "Failed to persist final state for reference={Reference}", entity.Reference);
+            "Failed to persist final state for reference={Reference}", onsentsms.Reference);
     }
 }
 
 
-    private async Task SafeBroadcastAsync(SmsMessageDto entity)
+    private async Task SafeBroadcastAsync(SmsMessage onsentsms)
     {
         try
         {
             await _hub.SmsStatusChanged(new SmsStatusChangedPayload(
-                Id:          entity.Id,
-                Reference:   entity.Reference ?? string.Empty,
-                Status:      entity.Status.ToString(),
-                Error:       entity.Error,
-                SentAt:      entity.SentAt,
-                DeliveredAt: entity.DeliveredAt));
+                Id:          onsentsms.Id,
+                Reference:   onsentsms.Reference ?? string.Empty,
+                Status:      onsentsms.Status.ToString(),
+                Error:       onsentsms.Error,
+                SentAt:      onsentsms.SentAt,
+                DeliveredAt: onsentsms.DeliveredAt));
         }
         catch (Exception ex)
         {
             _log.LogWarning(ex,
-                "Broadcast SmsStatusChanged failed for reference={Reference}", entity.Reference);
+                "Broadcast SmsStatusChanged failed for reference={Reference}", onsentsms.Reference);
         }
     }
 
     private static SmsStatus MapStatus(string status) => status switch
     {
-        "queued" => SmsStatus.Queued,
+        "queued" => SmsStatus.Sent,
         "sent"   => SmsStatus.Sent,
         "failed" => SmsStatus.Failed,
         _        => SmsStatus.Unknown

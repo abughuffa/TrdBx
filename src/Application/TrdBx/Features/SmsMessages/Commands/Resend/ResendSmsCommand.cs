@@ -56,8 +56,9 @@ public class ResendSmsCommandHandler
         // independently addressable in the gateway and in our DB.
         // ──────────────────────────────────────────────────────────
         SmsMessage original;
-        await using (var db = await _dbFactory.CreateAsync(ct))
-        {
+
+        await using var db = await _dbFactory.CreateAsync(ct);
+
             original = await db.SmsMessages
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == req.Id, ct)
@@ -67,15 +68,11 @@ public class ResendSmsCommandHandler
                 return await Result<SendSmsResult>.FailureAsync(
                     $"SMS id {req.Id} not found.");
 
-            // if (original.Direction != SmsDirection.Outbound)
-            //     return await Result<SendSmsResult>.FailureAsync(
-            //         $"SMS id {req.Id} is not an outbound message; only outbound can be resent.");
-
             if (original.Status is not (SmsStatus.Failed or SmsStatus.Unknown))
                 return await Result<SendSmsResult>.FailureAsync(
                     $"SMS id {req.Id} has status '{original.Status}'; only Failed or Unknown can be resent.");
 
-        }
+        
 
         var to        = req.OverrideTo        ?? original.To;
         var body      = req.OverrideBody      ?? original.Body;
@@ -91,8 +88,7 @@ public class ResendSmsCommandHandler
         // gateway, so the UI immediately reflects "in flight" and
         // concurrent resends can't both fire for the same row.
         // ──────────────────────────────────────────────────────────
-        await using (var db = await _dbFactory.CreateAsync(ct))
-        {
+        
             var tracked = await db.SmsMessages.FirstOrDefaultAsync(x => x.Id == req.Id, ct);
             if (tracked is null)
                 return await Result<SendSmsResult>.FailureAsync(
@@ -113,7 +109,7 @@ public class ResendSmsCommandHandler
 
             tracked.AddDomainEvent(new SmsMessageUpdatedEvent(tracked));
             await db.SaveChangesAsync(ct);
-        }
+        
 
         // ──────────────────────────────────────────────────────────
         // Phase 2' — call the gateway (no DbContext held).
@@ -141,7 +137,7 @@ public class ResendSmsCommandHandler
             finalStatus = SmsStatus.Failed;
             finalError  = ex.Message;
 
-            await PersistFinalStateAsync(req.Id, finalStatus, finalError, null, null, ct);
+            await PersistFinalStateAsync(db,req.Id, finalStatus, finalError, null, null, ct);
             await SafeBroadcastAsync(req.Id, newReference, finalStatus, finalError, null, null);
 
             return await Result<SendSmsResult>.FailureAsync(ex.Message);
@@ -150,19 +146,19 @@ public class ResendSmsCommandHandler
         // ──────────────────────────────────────────────────────────
         // Phase 3' — persist the final state.
         // ──────────────────────────────────────────────────────────
-        await PersistFinalStateAsync(req.Id, finalStatus, finalError, sentAt, result, ct);
+        await PersistFinalStateAsync(db,req.Id, finalStatus, finalError, sentAt, result, ct);
         await SafeBroadcastAsync(req.Id, newReference, finalStatus, finalError, sentAt, null);
 
         return await Result<SendSmsResult>.SuccessAsync(result);
     }
 
-    private async Task PersistFinalStateAsync(
+    private async Task PersistFinalStateAsync( IApplicationDbContext db,
         int id, SmsStatus status, string? error, DateTime? sentAt,
         SendSmsResult? result, CancellationToken ct)
     {
         try
         {
-            await using var db = await _dbFactory.CreateAsync(ct);
+            //await using var db = await _dbFactory.CreateAsync(ct);
             var entity = await db.SmsMessages.FindAsync(new object?[] { id }, ct);
             if (entity is null)
             {
@@ -205,7 +201,7 @@ public class ResendSmsCommandHandler
 
     private static SmsStatus MapStatus(string status) => status switch
     {
-        "queued" => SmsStatus.Queued,
+        "queued" => SmsStatus.Sent,
         "sent"   => SmsStatus.Sent,
         "failed" => SmsStatus.Failed,
         _        => SmsStatus.Unknown
