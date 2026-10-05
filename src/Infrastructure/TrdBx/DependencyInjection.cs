@@ -8,6 +8,7 @@ using CleanArchitecture.Blazor.Infrastructure.TrdBx.Services;
 // using CleanArchitecture.Blazor.Infrastructure.Services.TpLink;
 
 using Microsoft.Extensions.Configuration;
+using QuestPDF.Drawing;
 namespace CleanArchitecture.Blazor.Infrastructure;
 
 /// <summary>
@@ -23,6 +24,7 @@ public static partial class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
+        AddFonts();
         services.AddWialonServices(configuration);
         services.AddBackupRestoreServices(configuration);
         services.AddSmsServices(configuration);
@@ -130,7 +132,28 @@ services.AddScoped<ISmsCursorStore, EfSmsCursorStore>();
 
 
 
+    private static void AddFonts()
+    {
+        // Register fonts before building the app
 
+       var fontsDir = Path.Combine(AppContext.BaseDirectory, "TrdBx/Resources/Fonts");
+if (Directory.Exists(fontsDir))
+{
+    foreach (var ttf in Directory.GetFiles(fontsDir, "*.ttf"))
+    {
+        FontManager.RegisterFontFromFile(ttf);
+    }
+}
+
+//        var logosDir = Path.Combine(AppContext.BaseDirectory, "Logos");
+// if (Directory.Exists(logosDir))
+// {
+//     foreach (var png in Directory.GetFiles(logosDir, "*.png"))
+//     {
+//         resoursem.RegisterFontFromFile(ttf);
+//     }
+// }
+    }
 
 
 }

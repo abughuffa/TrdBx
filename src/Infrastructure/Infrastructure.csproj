@@ -34,4 +34,16 @@
     <ItemGroup>
         <ProjectReference Include="..\Application\Application.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+  <None Update="TrdBx\Resources\Fonts\NotoSansArabic-Regular.ttf">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </None>
+  <None Update="TrdBx\Resources\Fonts\NotoSansArabic-Bold.ttf">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </None>
+    <None Update="TrdBx\Resources\Logos\Invlogo.png">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </None>
+</ItemGroup>
 </Project>

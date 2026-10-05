@@ -52,10 +52,10 @@ public class UpdateParentCommandHandler : IRequestHandler<UpdateParentCommand, R
 
        await using var context = await _dbContextFactory.CreateAsync(cancellationToken);
 
-        var item = await context.Customers.Include(p => p.Childs).FirstAsync(p => p.Id == request.Id, cancellationToken);
+        var item = await context.Customers.Include(p => p.Children).FirstAsync(p => p.Id == request.Id, cancellationToken);
         if (item == null) return await Result<int>.FailureAsync("Customer not found");
 
-        foreach (var c in item.Childs)
+        foreach (var c in item.Children)
         {
             c.Account = item.Account;
             c.IsTaxable = item.IsTaxable;

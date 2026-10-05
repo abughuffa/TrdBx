@@ -7,6 +7,15 @@ using CleanArchitecture.Blazor.Domain.Identity;
 namespace CleanArchitecture.Blazor.Domain.Entities;
 
 #region TrackingUnit
+
+// public class SmsConfigCommand : BaseEntity
+// {
+//     public string Name { get; set; } = string.Empty;
+//     public string SmsTemplate { get; set; } = string.Empty;   
+//     public int TrackingUnitModelId { get; set; }
+//     public TrackingUnitModel? TrackingUnitModel { get; set; } = null;
+// }
+
 public class TrackingUnitModel : BaseEntity
 {
     public string WialonName { get; set; } = string.Empty;
@@ -20,6 +29,8 @@ public class TrackingUnitModel : BaseEntity
     public int? OldId { get; set; } = null;
     
     // Navigation Properties
+    
+   // public  List<SmsConfigCommand> SmsConfigCommands { get; set; } = null;
     public  List<TrackingUnit> TrackingUnits { get; set; } = null;
     public  List<CusPrice> CusPrices { get; set; } = null;
 }
@@ -78,7 +89,7 @@ public class Customer : BaseAuditableEntity
     
     // Navigation Properties
     public  Customer? Parent { get; set; }
-    public  List<Customer> Childs { get; set; } = null;
+    public  List<Customer> Children { get; set; } = null;
     public  List<Invoice> Invoices { get; set; } = null;
     public  List<CusPrice> CusPrices { get; set; } = null;
     public  List<ServiceLog> ServiceLogs { get; set; } = null;

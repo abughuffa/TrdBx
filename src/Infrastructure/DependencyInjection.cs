@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
+using QuestPDF.Drawing;
 using ZiggyCreatures.Caching.Fusion;
 
 namespace CleanArchitecture.Blazor.Infrastructure;
@@ -368,6 +369,10 @@ public static partial class DependencyInjection
         return services;
     }
     #endregion
+
+
+
+
 
 
 }

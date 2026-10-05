@@ -1,13 +1,14 @@
 ﻿@page "/pages/TrdBx/Customers"
-@using CleanArchitecture.Blazor.Application.Features.Customers.DTOs
-@using CleanArchitecture.Blazor.Application.Features.Customers.Caching
-@using CleanArchitecture.Blazor.Application.Features.Customers.Specifications
-@using CleanArchitecture.Blazor.Application.Features.Customers.Commands.Update;
 @using CleanArchitecture.Blazor.Application.Features.CusPrices.Commands.Create
+@using CleanArchitecture.Blazor.Application.Features.Customers.Caching
 @using CleanArchitecture.Blazor.Application.Features.Customers.Commands.Create
 @using CleanArchitecture.Blazor.Application.Features.Customers.Commands.Delete
+@using CleanArchitecture.Blazor.Application.Features.Customers.Commands.SwitchAvailability
+@using CleanArchitecture.Blazor.Application.Features.Customers.Commands.Update;
+@using CleanArchitecture.Blazor.Application.Features.Customers.DTOs
 @using CleanArchitecture.Blazor.Application.Features.Customers.Queries.Export
 @using CleanArchitecture.Blazor.Application.Features.Customers.Queries.Pagination
+@using CleanArchitecture.Blazor.Application.Features.Customers.Specifications
 @using CleanArchitecture.Blazor.Domain.Enums
 @using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.CusPrices.Components
 @using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Customers.Components
@@ -104,6 +105,10 @@
                         @if (_accessRights.Edit)
                         {
                             <MudMenuItem OnClick="@(() => OnEdit(context.Item))">@AppStrings.Edit</MudMenuItem>
+
+                            <MudMenuItem OnClick="@(() => OnSwitchAvailability(context.Item))">Switch Availability</MudMenuItem>
+
+                            
                         }
                         @if (_accessRights.Delete)
                         {
@@ -134,6 +139,18 @@
         <PropertyColumn Property="x => x.IsTaxable" Title="@L[_currentDto.GetMemberDisplayName(x => x.IsTaxable)]" />
         <PropertyColumn Property="x => x.IsRenewable" Title="@L[_currentDto.GetMemberDisplayName(x => x.IsRenewable)]" />
         <PropertyColumn Property="x => x.IsAvailable" Title="@L[_currentDto.GetMemberDisplayName(x => x.IsAvailable)]" />
+
+   @* <TemplateColumn HeaderStyle="width:60px" Title="@L[_currentDto.GetMemberDisplayName(x => x.IsAvailable)]" Sortable="false">
+            <CellTemplate>
+                               <MudToggleIconButton @bind-Toggled="context.Item.IsAvailable"
+                                 Icon="@Icons.Material.Outlined.CheckCircle"
+                                 ToggledIcon="@Icons.Material.Filled.CheckCircle"
+                                 Color="Color.Success"
+                                 ToggledColor="Color.Default"
+                                 Size="Size.Small"
+                                 ToggledChanged="OnAvailabilityChanged" />
+            </CellTemplate>
+        </TemplateColumn> *@
 
     </Columns>
     <NoRecordsContent>
@@ -402,6 +419,26 @@
 		{
 			_exporting = false;
 		}
+    }
+
+       private async Task OnSwitchAvailability(CustomerDto dto)
+    {
+        var command = new SwitchCustomerAvailabilityCommand() { Id = dto.Id };
+        var result = await Mediator.Send(command);
+
+        if (result.Succeeded)
+        {
+            Snackbar.Add(AppStrings.SaveSuccess, MudBlazor.Severity.Info);
+            await InvokeAsync(async () =>
+                                           {
+                                               await _table.ReloadServerData();
+                                               _selectedItems.Clear();
+                                           });
+        }
+        else
+        {
+            Snackbar.Add(result.ErrorMessage, MudBlazor.Severity.Error);
+        }
     }
 
 }

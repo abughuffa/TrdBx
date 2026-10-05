@@ -13,7 +13,7 @@ public class AddPaymentCommand : ICacheInvalidatorRequest<Result<int>>
     public int Id { get; set; }
     public decimal Amount { get; set; }
     [Display(Name = "PaymentDate")]
-    public DateOnly PaymentDate { get; set; }
+    public DateOnly PaymentDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 
 
     public string CacheKey => InvoiceCacheKey.GetAllCacheKey;
@@ -58,11 +58,15 @@ public class AddPaymentCommandHandler : IRequestHandler<AddPaymentCommand, Resul
 
         if (item == null) return await Result<int>.FailureAsync("Invoice not found");
 
-
-        if (item.IStatus != IStatus.Billed || item.IStatus != IStatus.PartaillyPaid)
+        if (item.IStatus is not (IStatus.Billed or IStatus.PartaillyPaid))
         {
-            return await Result<int>.FailureAsync($"Faild to add payment to Invoice with id: [{request.Id}].");
+            return await Result<int>.FailureAsync($"Failed to add payment to Invoice with id: [{request.Id}].");
         }
+
+        // if (item.IStatus != IStatus.Billed || item.IStatus != IStatus.PartaillyPaid)
+        // {
+        //     return await Result<int>.FailureAsync($"Faild to add payment to Invoice with id: [{request.Id}].");
+        // }
 
         var OldBalanceDue = item.GrandTotal - item.PaidAmount;
 

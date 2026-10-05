@@ -108,7 +108,7 @@ public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
         
         // Relationships
         builder.HasOne(e => e.Parent)
-            .WithMany(e => e.Childs)
+            .WithMany(e => e.Children)
             .HasForeignKey(e => e.ParentId)
             .OnDelete(DeleteBehavior.Restrict);
         

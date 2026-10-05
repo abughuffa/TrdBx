@@ -15,6 +15,9 @@ public partial class PDFService : IPDFService
 
         await Task.Run(() =>
         {
+
+           // Console.WriteLine(string.Join("\n", FontManager.GetRegisteredFonts()));
+            
             Document.Create(container =>
             {
                 container.Page(page =>
@@ -22,6 +25,7 @@ public partial class PDFService : IPDFService
                     page.Margin(10, Unit.Millimetre);
                     page.Size(PageSizes.A4);
                     page.PageColor(Colors.White);
+                    page.ContentFromRightToLeft();
                     page.DefaultTextStyle(x => x
                         .FontFamily(ChFontFamilyName)
                         .FontSize(12)
@@ -34,46 +38,68 @@ public partial class PDFService : IPDFService
                         column.Item().Table(invoiceHeaderTable =>
                         {
                             invoiceHeaderTable.ColumnsDefinition(columns =>
-                            {
-                                columns.ConstantColumn(70);
-                                columns.ConstantColumn(70);
+                            {               
                                 columns.RelativeColumn();
-                                columns.ConstantColumn(85);
+                                columns.ConstantColumn(30, Unit.Millimetre);
+                                columns.ConstantColumn(25, Unit.Millimetre);
                             });
 
+                            // Add logo Aligned to left
+                            invoiceHeaderTable.Cell().Row(1).Column(2).ColumnSpan(2)
+                            .AlignLeft().AlignMiddle()
+                            .Height(15, Unit.Millimetre)
+                            .Image("TrdBx/Resources/Logos/Invlogo.png") // <-- Replace with your logo path
+                            .FitArea();
+
                             invoiceHeaderTable.Cell().Row(1).Column(1).Text(text =>
-                            {
-                                text.AlignLeft();
-                                text.Span($"{xinvoice.InvoiceNo:d}");
-                            });
-                            invoiceHeaderTable.Cell().Row(1).Column(2).Text(text =>
-                            {
-                                text.AlignRight();
-                                text.Span("ر. الفاتورة: ");
-                            });
-                            invoiceHeaderTable.Cell().Row(2).Column(1).Text(text =>
-                            {
-                                text.AlignLeft();
-                                text.Span($"{xinvoice.InvoiceDate:d}");
-                            });
-                            invoiceHeaderTable.Cell().Row(2).Column(2).Text(text =>
-                            {
-                                text.AlignRight();
-                                text.Span("ت. الفاتورة: ");
-                            });
-                            invoiceHeaderTable.Cell().Row(1).RowSpan(2).Column(3).ColumnSpan(2).Text(text =>
                             {
                                 text.AlignRight();
                                 text.Span(xinvoice.Description)
                                     .SemiBold()
-                                    .FontSize(24)
+                                    .FontSize(20)
                                     .FontColor(Colors.DeepOrange.Darken1);
                             });
-                            invoiceHeaderTable.Cell().Row(3).Column(1).ColumnSpan(4).PaddingTop(5); /// empty line
-                            invoiceHeaderTable.Cell().Row(4).Column(4).Text(": إلـــــــــى").Bold().AlignRight();
-                            invoiceHeaderTable.Cell().Row(4).Column(1).ColumnSpan(3).Text(xinvoice.DisplayCusName).AlignRight();
-                            invoiceHeaderTable.Cell().Row(5).Column(1).ColumnSpan(4).PaddingTop(5).LineHorizontal(1, Unit.Point);
-                            invoiceHeaderTable.Cell().Row(6).Column(1).ColumnSpan(4).PaddingTop(5); /// empty line
+
+                            //invoiceHeaderTable.Cell().Row(2).Column(1).ColumnSpan(3).PaddingTop(5); /// empty line
+
+                            invoiceHeaderTable.Cell().Row(2).Column(2).Text(text =>
+                            {
+                                text.AlignRight();
+                                text.Span("رقــم الفاتورة: ").FontSize(10);
+                            });
+                            invoiceHeaderTable.Cell().Row(2).Column(3).Text(text =>
+                            {
+                                text.AlignLeft();
+                                text.Span(xinvoice.InvoiceNo).FontSize(10);
+                            });
+                            invoiceHeaderTable.Cell().Row(3).Column(2).Text(text =>
+                            {
+                                text.AlignRight();
+                                text.Span("تاريخ الفاتورة: ").FontSize(10);
+                                
+                            });
+                            invoiceHeaderTable.Cell().Row(3).Column(3).Text(text =>
+                            {
+                                text.AlignLeft();
+                                text.Span($"{xinvoice.InvoiceDate:yyyy-MM-dd}").FontSize(10);
+                            });
+
+                            invoiceHeaderTable.Cell().Row(4).Column(1).ColumnSpan(3)
+                            .Text($"إلــــى // {xinvoice.DisplayCusName}.")
+                            .AlignRight()
+                            .FontSize(12);
+
+        
+                            invoiceHeaderTable.Cell().Row(5).Column(1).ColumnSpan(3).PaddingTop(5).LineHorizontal(1, Unit.Point);
+                           // invoiceHeaderTable.Cell().Row(6).Column(1).ColumnSpan(3).PaddingTop(5); /// empty line
+                            invoiceHeaderTable.Cell().Row(6).ColumnSpan(3).PaddingTop(10).AlignCenter().Text(text =>
+                            {
+                                text.CurrentPageNumber();
+                                text.Span(" من ");
+                                text.TotalPages();
+                               // text.AlignCenter();
+                                //text.Span($"({text.CurrentPageNumber}) من ({text.TotalPages})");
+                            });
                         });
 
                         // Repeating Table Header - This will appear on every page
@@ -81,18 +107,27 @@ public partial class PDFService : IPDFService
                         {
                             tableHeader.ColumnsDefinition(columns =>
                             {
-                                columns.ConstantColumn(25, Unit.Millimetre);
-                                columns.ConstantColumn(25, Unit.Millimetre);
-                                columns.ConstantColumn(30, Unit.Millimetre);
-                                columns.RelativeColumn();
                                 columns.ConstantColumn(15, Unit.Millimetre);
+                                columns.RelativeColumn();
+                                // columns.ConstantColumn(30, Unit.Millimetre);
+                                // columns.ConstantColumn(25, Unit.Millimetre);
+                                columns.ConstantColumn(25, Unit.Millimetre);
                             });
 
-                            tableHeader.Cell().ColumnSpan(5).PaddingTop(10); /// empty line
+                            // tableHeader.Cell().ColumnSpan(5).PaddingTop(10).AlignCenter().Text(text =>
+                            // {
+                            //     text.CurrentPageNumber();
+                            //     text.Span(" من ");
+                            //     text.TotalPages();
+                            //    // text.AlignCenter();
+                            //    // text.Span($"({text.CurrentPageNumber}) من ({text.TotalPages})");
+                            // });
+
+                           // tableHeader.Cell().ColumnSpan(5).PaddingTop(10); /// empty line
                             // Table Header Row
-                            tableHeader.Cell().Element(HeaderCellStyle).Text("القيمة").FontSize(10).Bold().AlignCenter();
-                            tableHeader.Cell().ColumnSpan(3).Element(HeaderCellStyle).Text("البيــــــــــــــــــــــــــــــــــــــان").FontSize(10).Bold().AlignRight();
                             tableHeader.Cell().Element(HeaderCellStyle).Text("ت").FontSize(10).Bold().AlignCenter();
+                            tableHeader.Cell().Element(HeaderCellStyle).Text("البيــــــــــــــــــــــــــــــــــــــان").FontSize(10).Bold().AlignRight();
+                            tableHeader.Cell().Element(HeaderCellStyle).Text("القيمة").FontSize(10).Bold().AlignCenter();
                         });
                     });
 
@@ -103,11 +138,11 @@ public partial class PDFService : IPDFService
                         {
                             itemsTable.ColumnsDefinition(columns =>
                             {
-                                columns.ConstantColumn(25, Unit.Millimetre);
-                                columns.ConstantColumn(25, Unit.Millimetre);
-                                columns.ConstantColumn(30, Unit.Millimetre);
-                                columns.RelativeColumn();
                                 columns.ConstantColumn(15, Unit.Millimetre);
+                                columns.RelativeColumn();
+                                // columns.ConstantColumn(30, Unit.Millimetre);
+                                // columns.ConstantColumn(25, Unit.Millimetre);
+                                columns.ConstantColumn(25, Unit.Millimetre);
                             });
 
                             // Add all groups to the main table
@@ -123,18 +158,16 @@ public partial class PDFService : IPDFService
                         {
                             totalsTable.ColumnsDefinition(columns =>
                             {
-                                columns.ConstantColumn(25, Unit.Millimetre);
-                                columns.ConstantColumn(25, Unit.Millimetre);
-                                columns.ConstantColumn(30, Unit.Millimetre);
                                 columns.RelativeColumn();
-                                columns.ConstantColumn(15, Unit.Millimetre);
+                                columns.ConstantColumn(30, Unit.Millimetre);
+                                columns.ConstantColumn(50, Unit.Millimetre);
                             });
-                            AddTotalRow(totalsTable, xinvoice.Total, ":المجموع");
-                            AddTotalRow(totalsTable, xinvoice.DiscountAmount, ":التخفيض");
-                            AddTotalRow(totalsTable, xinvoice.TaxableAmount, ":الاجمالي");
-                            AddTotalRow(totalsTable, xinvoice.TaxAmount, ":الضريبة");
-                            AddTotalRow(totalsTable, xinvoice.GrandTotal, ":الاجمالي الكلي");
-                            totalsTable.Cell().ColumnSpan(5).PaddingTop(10).Element(CellStyle).Text(ToWord.ConvertToWord(xinvoice.GrandTotal)).AlignCenter().Bold();
+                            AddTotalRow(totalsTable, xinvoice.Total, "المجموع :");
+                            AddTotalRow(totalsTable, xinvoice.DiscountAmount, "التخفيض :");
+                            AddTotalRow(totalsTable, xinvoice.TaxableAmount, "الاجمالي :");
+                            AddTotalRow(totalsTable, xinvoice.TaxAmount, "الضريبة :");
+                            AddTotalRow(totalsTable, xinvoice.GrandTotal, "الاجمالي الكلي :");
+                            totalsTable.Cell().ColumnSpan(3).PaddingTop(10).Element(CellStyle).Text(ToWord.ConvertToWord(xinvoice.GrandTotal)).AlignCenter().Bold();
                         });
                     });
 
@@ -166,6 +199,7 @@ public partial class PDFService : IPDFService
                                 text.CurrentPageNumber();
                                 text.Span(" من ");
                                 text.TotalPages();
+                                // text.Span($"الصفحة ({text.CurrentPageNumber}) من ({text.TotalPages}).");
                             });
                         });
                     });
@@ -181,37 +215,37 @@ public partial class PDFService : IPDFService
     private static void AddGroupToTable(TableDescriptor table, InvoiceItemGroupDto group)
     {
         // Group header
-        table.Cell().Element(GroupHeaderCellStyle).Text(group.Amount.ToString("N3")).Bold().AlignCenter().FontSize(8);
-        table.Cell().ColumnSpan(3).Element(GroupHeaderCellStyle).Text(group.Description).Bold().AlignRight().FontSize(8);
         table.Cell().Element(GroupHeaderCellStyle).Text(group.SerialIndex.ToString()).FontSize(10).Bold().AlignCenter();
+        table.Cell().Element(GroupHeaderCellStyle).Text(group.Description).Bold().AlignRight().FontSize(8);
+        table.Cell().Element(GroupHeaderCellStyle).Text(group.Amount.ToString("N3")).Bold().AlignCenter().FontSize(8);
 
         // Group items
-        var reorderedItems = group.InvoiceItems.OrderBy(x => x.SubSerialIndex);
+        var reorderedItems = group.InvoiceItems!.OrderBy(x => x.SubSerialIndex);
         foreach (var item in reorderedItems)
         {
             // Keep items together with their group header
-            table.Cell().Element(CellStyle).Text(item.Amount.ToString("N3")).FontSize(8).AlignCenter();
-            table.Cell().ColumnSpan(3).Element(CellStyle).Text(item.Description).FontSize(8).AlignRight();
             table.Cell().Element(CellStyle).Text($"{item.SubSerialIndex}-{group.SerialIndex}").FontSize(10).Bold().AlignCenter();
+            table.Cell().Element(CellStyle).Text(item.Description).FontSize(8).AlignRight();
+            table.Cell().Element(CellStyle).Text(item.Amount.ToString("N3")).FontSize(8).AlignCenter();
         }
 
         // Group subtotal
         if (group.InvoiceItems.Any())
         {
-            table.Cell().Element(GroupHeaderCellStyle).Text(group.SubTotal.ToString("N3")).Bold().AlignCenter().FontSize(8);
-            table.Cell().ColumnSpan(3).Element(CellStyle);
             table.Cell().Element(CellStyle).Text("--").FontSize(8).AlignCenter();
+            table.Cell().Element(CellStyle);
+            table.Cell().Element(GroupHeaderCellStyle).Text(group.SubTotal.ToString("N3")).Bold().AlignCenter().FontSize(8);
         }
     }
 
     // Helper method for total rows
     private static void AddTotalRow(TableDescriptor table, decimal amount, string label)
     {
-        table.Cell().ColumnSpan(2).Element(TotalCellStyle).Text(amount.ToString("N3") + "د.ل").AlignCenter().Bold();
-        table.Cell().Element(TotalCellStyle).Text(label).AlignRight().Bold();
-
         // Empty cells for the rest of the row
-        table.Cell().ColumnSpan(2);
+        table.Cell();
+        table.Cell().Element(TotalCellStyle).Text(label).FontSize(10).AlignRight().Bold();
+        table.Cell().Element(TotalCellStyle).Text($"{amount.ToString("N3")} د.ل").FontSize(10).AlignCenter().Bold();
+
     }
 
     // Cell style definitions
@@ -232,6 +266,6 @@ public partial class PDFService : IPDFService
 
     private static IContainer TotalCellStyle(IContainer container)
     {
-        return container.PaddingVertical(5).Background(Colors.Grey.Lighten3).BorderBottom(1).BorderColor(Colors.Black);
+        return container.PaddingVertical(1).Background(Colors.Grey.Lighten3).BorderBottom(1).BorderColor(Colors.Black);
     }
 }
