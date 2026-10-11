@@ -23,4 +23,4 @@ dotnet ef database update --project src/Migrators/Migrators.PostgreSQL --startup
 #************************************************
 
 
-dotnet ef migrations add TrackingUnitModelModfied --project src/Migrators/Migrators.PostgreSQL --startup-project src/Server.UI --context ApplicationDbContext
+dotnet ef migrations add SMSTemplatesAdded --project src/Migrators/Migrators.PostgreSQL --startup-project src/Server.UI --context ApplicationDbContext

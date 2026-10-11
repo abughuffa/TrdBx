@@ -1,0 +1,158 @@
+﻿@using CleanArchitecture.Blazor.Application.Features.SmsConfigTemplates.DTOs
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.SendConfig
+
+@inherits MudComponentBase
+@inject IValidationService Validator
+@inject IDropdownDataService DropdownDataService
+@inject IStringLocalizer<TrackingUnits> L
+@attribute [Authorize(Policy = Permissions.TrackingUnits.SendConfig)]
+
+
+<MudDialog>
+    <DialogContent>
+        @if (_isLoading)
+        {
+            <div style="position: relative; min-height: 400px;">
+                <MudOverlay Visible="true" />
+                <MudProgressCircular 
+                    Class="d-flex justify-center align-center" 
+                    Style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"
+                    Color="Color.Primary" 
+                    Size="Size.Large" />
+                <MudText Class="text-center mt-4" Style="position: absolute; bottom: 30%; left: 0; right: 0;">
+                    Loading installation data...
+                </MudText>
+            </div>
+        }
+        else
+        {
+            <MudForm Model="@_command" @ref="@_form" Validation="@(Validator.ValidateValue(_command))">
+                <MudGrid Spacing="2">
+                    <MudItem md="12">
+                        @* <MudText>@_contentText</MudText> *@
+                    </MudItem>
+
+                   
+                    <MudItem md="10">
+                        <MudSelect 
+                            For="@(() => _command.SmsConfigTemplateId)"
+                            Label="@L["SmsConfigTemplate"]"
+                            Required="true"
+                            RequiredError="@L["SmsConfigTemplate Is Required!"]"
+                            @bind-Value="_command.SmsConfigTemplateId"
+                            Disabled="@_isDataLoading">
+                            <MudSelectItem T="int" Value="0">@L["Select SmsConfigTemplate"]</MudSelectItem>
+                            @foreach (var smsConfigTemplate in SmsConfigTemplates)
+                            {
+                                <MudSelectItem Value="@smsConfigTemplate.Id">@smsConfigTemplate.Name</MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudItem>
+
+                <MudItem md="2">
+                    <MudNumericField 
+                    Label="@L[_command.GetMemberDisplayName(x=>x.SimSlot)]" 
+                    @bind-Value="_command.SimSlot" For="@(() => _command.SimSlot)" 
+                    Required="false" 
+                    RequiredError="@L["SimSlot is required!"]"
+                    Min="0"
+                    Max="1">
+                    </MudNumericField>
+                </MudItem>
+                </MudGrid>
+            </MudForm>
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" DropShadow="false" OnClick="Cancel" Disabled="@_isLoading">@AppStrings.Cancel</MudButton>
+        <MudLoadingButton 
+            Color="Color.Primary" 
+            DropShadow="false" 
+            Loading="@_sending" 
+            OnClick="OnSend"
+            Disabled="_isLoading || _isDataLoading">
+            @AppStrings.Send
+        </MudLoadingButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] private UserProfile? UserProfile { get; set; }
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;  
+    [EditorRequired][Parameter] public SendConfigCommand _command { get; set; } = default!;
+    [Parameter] public string? _contentText { get; set; } = default!;
+    [Parameter] public int TrackingUnitModelId { get; set; } = default!;
+
+    private MudForm? _form;
+    private bool _sending = false;
+    private bool _isLoading = true;
+     private bool _isDataLoading = false;
+
+
+    private IEnumerable<SmsConfigTemplateDto> SmsConfigTemplates = Enumerable.Empty<SmsConfigTemplateDto>();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDataAsync();
+        await base.OnInitializedAsync();
+    }
+
+    private async Task LoadDataAsync()
+    {
+        try
+        {
+            _isLoading = true;
+            @* await LoadSimCardsAsync(_model.SimCardId == null ? new[] { _model.SimCardId } : null); *@
+            await LoadSmsConfigTemplateAsync(TrackingUnitModelId);
+        }
+        finally
+        {
+            _isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task LoadSmsConfigTemplateAsync(int id)
+    {
+        try
+        {
+            _isDataLoading = true;
+            SmsConfigTemplates = await DropdownDataService.GetSmsConfigTemplatesAsync(id);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Failed to load SIM cards: {ex.Message}", Severity.Warning);
+        }
+        finally
+        {
+            _isDataLoading = false;
+        }
+    }
+
+    async Task OnSend()
+    {
+        try
+        {
+            _sending = true;
+            await _form.ValidateAsync();
+            if (!_form.IsValid)
+                return;
+            var result = await Mediator.Send(_command);
+            result.Match(data =>
+            {
+                MudDialog.Close(DialogResult.Ok(true));
+                Snackbar.Add(AppStrings.SaveSuccess, MudBlazor.Severity.Info);
+            }, errors =>
+            {
+                Snackbar.Add(errors, MudBlazor.Severity.Error);
+            });
+        }
+        finally
+        {
+            _sending = false;
+        }
+    }
+
+    void Cancel() => MudDialog.Cancel();
+}

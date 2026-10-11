@@ -1,0 +1,95 @@
+﻿@page "/pages/TrdBx/SmsConfigTemplates/{id:int}/view"
+@using CleanArchitecture.Blazor.Application.Features.SmsConfigTemplates.DTOs
+@using CleanArchitecture.Blazor.Application.Features.SmsConfigTemplates.Queries.GetById
+
+@inherits MudComponentBase
+@inject IStringLocalizer<SmsConfigTemplates> L
+@attribute [Authorize(Policy = Permissions.SmsConfigTemplates.View)]
+
+
+<PageTitle>@Title</PageTitle>
+
+<MudContainer Class="mt-3" MaxWidth="MaxWidth.Medium">
+@if (_model != null)
+{
+    <MudCard Class="pa-2">
+        <MudCardHeader>
+            <CardHeaderContent>
+                 <MudText Typo="Typo.h6">@Title</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+
+        <MudCardContent>
+
+            <MudGrid Spacing="3" Class="readonly-grid">
+                    <MudItem md="6">
+                        <ReadOnlyField Label="@L[_model.GetMemberDisplayName(x => x.TrackingUnitModel)]" Value="_model.TrackingUnitModel"></ReadOnlyField>
+                    </MudItem>
+                    <MudItem md="6">
+                        <ReadOnlyField Label="@L[_model.GetMemberDisplayName(x=>x.Name)]" Value="_model.Name"></ReadOnlyField>
+                    </MudItem>
+                    <MudItem md="12">
+                             <MudTextField 
+                                 Label="@L[_model.GetMemberDisplayName(x=>x.SmsTemplate)]" 
+                                 Value="_model.SmsTemplate" 
+                                 Lines="5"
+                                 ReadOnly="true">    
+                        </MudTextField>
+                    </MudItem>
+            </MudGrid>
+
+        </MudCardContent>
+
+            <MudCardActions Class="d-flex justify-end gap-2">
+
+                <MudButton Color="Color.Primary" DropShadow="false" OnClick="Cancel">@AppStrings.GoBack</MudButton>
+
+        </MudCardActions>
+
+    </MudCard>
+ }
+</MudContainer>
+ 
+
+@code {
+    public string? Title { get; private set; }
+    [Parameter]
+    public int Id { get; set; }
+    private SmsConfigTemplateDto? _model;
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string? ReturnUrl { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Title = L["SmsConfigTemplate details"];
+
+        var result = await Mediator.Send(new GetSmsConfigTemplateByIdQuery() { Id = Id });
+
+        result.Map(data =>
+        {
+            _model = data;
+            return data;
+        }).Match(data =>
+        {
+        }, errors =>
+        {
+            Snackbar.Add(errors, MudBlazor.Severity.Error);
+        });
+    }
+
+
+    void Cancel()
+    {
+        ReturnBack();
+    }
+
+    void ReturnBack()
+    {
+        var target = !string.IsNullOrWhiteSpace(ReturnUrl)
+            ? ReturnUrl
+            : Navigation.ToBaseRelativePath(Navigation.Uri);
+        Navigation.NavigateTo(target);
+    }
+}

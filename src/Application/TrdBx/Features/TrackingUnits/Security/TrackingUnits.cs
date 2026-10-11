@@ -42,6 +42,11 @@ public static partial class Permissions
         [Description("Allows SyncUnitNames of TrackingUnit records.")]
         public const string SyncUnitNames = "Permissions.TrackingUnits.SyncUnitNames";
 
+        [Description("Allows Sending SMS Config. command to TrackingUnit.")]
+        public const string SendConfig = "Permissions.TrackingUnits.SendConfig";
+
+        
+
     }
 }
 
@@ -63,6 +68,9 @@ public class TrackingUnitsAccessRights
     public bool ReassignOwner { get; set; }
 
       public bool SyncUnitNames { get; set; }
+
+public bool SendConfig { get; set; }
+      
 
     
 

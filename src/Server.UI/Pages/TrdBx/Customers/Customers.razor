@@ -130,27 +130,16 @@
                 }
             </CellTemplate>
         </TemplateColumn>
-
-        <PropertyColumn Property="x => x.Name" Title="@L[_currentDto.GetMemberDisplayName(x => x.Name)]" Sortable="true"/>
-        <PropertyColumn Property="x => x.Parent" Title="@L[_currentDto.GetMemberDisplayName(x => x.Parent)]" Sortable="false" Groupable="true" />
-        <PropertyColumn Property="x => x.Account" Title="@L[_currentDto.GetMemberDisplayName(x => x.Account)]" Groupable="true" />
+        @* <PropertyColumn Property="x => x.ParentChild" Title="@L[_currentDto.GetMemberDisplayName(x => x.ParentChild)]" Sortable="true"/> *@
+        <PropertyColumn Property="x => x.Parent" Title="@L[_currentDto.GetMemberDisplayName(x => x.Parent)]" Sortable="false" Groupable="true"/> 
+        <PropertyColumn Property="x => x.Name" Title="@L[_currentDto.GetMemberDisplayName(x => x.Name)]" Sortable="true"/> 
+        <PropertyColumn Property="x => x.Account" Title="@L[_currentDto.GetMemberDisplayName(x => x.Account)]" Groupable="true"/>
         <PropertyColumn Property="x => x.UserName" Title="@L[_currentDto.GetMemberDisplayName(x => x.UserName)]" />
         <PropertyColumn Property="x => x.BillingPlan" Title="@L[_currentDto.GetMemberDisplayName(x => x.BillingPlan)]" />
         <PropertyColumn Property="x => x.IsTaxable" Title="@L[_currentDto.GetMemberDisplayName(x => x.IsTaxable)]" />
         <PropertyColumn Property="x => x.IsRenewable" Title="@L[_currentDto.GetMemberDisplayName(x => x.IsRenewable)]" />
         <PropertyColumn Property="x => x.IsAvailable" Title="@L[_currentDto.GetMemberDisplayName(x => x.IsAvailable)]" />
 
-   @* <TemplateColumn HeaderStyle="width:60px" Title="@L[_currentDto.GetMemberDisplayName(x => x.IsAvailable)]" Sortable="false">
-            <CellTemplate>
-                               <MudToggleIconButton @bind-Toggled="context.Item.IsAvailable"
-                                 Icon="@Icons.Material.Outlined.CheckCircle"
-                                 ToggledIcon="@Icons.Material.Filled.CheckCircle"
-                                 Color="Color.Success"
-                                 ToggledColor="Color.Default"
-                                 Size="Size.Small"
-                                 ToggledChanged="OnAvailabilityChanged" />
-            </CellTemplate>
-        </TemplateColumn> *@
 
     </Columns>
     <NoRecordsContent>

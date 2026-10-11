@@ -33,12 +33,12 @@ public class SetPreviousStatusInvoiceCommandHandler : IRequestHandler<SetPreviou
         var item = await context.Invoices.FindAsync(request.Id, cancellationToken);
         if (item == null) return await Result<int>.FailureAsync("Invoice not found");
 
-        if (!(item.IStatus != IStatus.SentToTax || item.IStatus != IStatus.Ready
-            || item.IStatus != IStatus.Billed || item.IStatus != IStatus.PartaillyPaid 
-            || item.IStatus != IStatus.Paid || item.IStatus != IStatus.Canceled))
-        {
-            return await Result<int>.FailureAsync($"Faild to set Invoice with id: [{request.Id}] to previous status.");
-        }
+
+        if (item.IStatus is not (IStatus.SentToTax or IStatus.Ready or IStatus.Billed))
+            {
+                return await Result<int>.FailureAsync(
+                    $"Failed to set Invoice with id: [{request.Id}] to previous status.");
+            }
 
         switch (item.IStatus)
         {
@@ -51,7 +51,7 @@ public class SetPreviousStatusInvoiceCommandHandler : IRequestHandler<SetPreviou
                 {
                     if (item.IsTaxable)
                     {
-                        return await Result<int>.FailureAsync($"Faild to set Invoice with id: [{request.Id}] to previous status.");
+                        item.IStatus = IStatus.SentToTax;
                     }
                     else
                     {
@@ -62,16 +62,6 @@ public class SetPreviousStatusInvoiceCommandHandler : IRequestHandler<SetPreviou
             case IStatus.Billed:
                 {
                     item.IStatus = IStatus.Ready;
-                    break;
-                }
-            case IStatus.Paid:
-                {
-                    item.IStatus = IStatus.Billed;
-                    break;
-                }
-            case IStatus.Canceled:
-                {
-                    item.IStatus = IStatus.Billed;
                     break;
                 }
         }

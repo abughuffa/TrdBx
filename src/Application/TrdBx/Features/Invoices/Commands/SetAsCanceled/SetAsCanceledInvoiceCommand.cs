@@ -32,10 +32,20 @@ public class SetAsCanceledInvoiceCommandHandler : IRequestHandler<SetAsCanceledI
         await using var context = await _dbContextFactory.CreateAsync(cancellationToken);
         var item = await context.Invoices.FindAsync(request.Id, cancellationToken);
         if (item == null) return await Result<int>.FailureAsync("Invoice not found");
-        if (!(item.IStatus != IStatus.Billed || item.IStatus != IStatus.PartaillyPaid || item.IStatus != IStatus.Paid))
-        {
-            return await Result<int>.FailureAsync($"Faild to set Invoice with id: [{request.Id}] as Canceled.");
-        }
+
+
+        // if (!(item.IStatus != IStatus.Billed || item.IStatus != IStatus.PartaillyPaid || item.IStatus != IStatus.Paid))
+        // {
+        //     return await Result<int>.FailureAsync($"Faild to set Invoice with id: [{request.Id}] as Canceled.");
+        // }
+
+        if (item.IStatus is not IStatus.Billed)
+            {
+                return await Result<int>.FailureAsync(
+                    $"Failed to set Invoice with id: [{request.Id}]  as Canceled.");
+            }
+
+
 
         item.IStatus = IStatus.Canceled;
 

@@ -11,6 +11,8 @@ using CleanArchitecture.Blazor.Application.Features.SimCards.Caching;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Caching;
 using CleanArchitecture.Blazor.Application.Features.TrackedAssets.Caching;
 using CleanArchitecture.Blazor.Application.Features.Customers.Caching;
+using CleanArchitecture.Blazor.Application.Features.SmsConfigTemplates.DTOs;
+using CleanArchitecture.Blazor.Application.Features.SmsConfigTemplates.Queries.GetByModelId;
 //using MediatR;
 //using MudBlazor;
 
@@ -80,6 +82,22 @@ namespace CleanArchitecture.Blazor.Application.TrdBx.Services
             }
         }
 
+        public async Task<IEnumerable<SmsConfigTemplateDto>> GetSmsConfigTemplatesAsync(int modelId)
+        {
+            try
+            {
+                return await _mediator.Send(new GetSmsConfigTemplatesByModelIdQuery() { Id = modelId });
+            }
+            catch 
+            {
+               // _snackbar.Add($"Failed to load customers: {ex.Message}", Severity.Warning);
+                return Enumerable.Empty<SmsConfigTemplateDto>();
+            }
+        }
+
+
+        
+
         public async Task ClearSimCardsCacheAsync()
         {
             //SimCardCacheKey.Tags.Clear();
@@ -94,10 +112,13 @@ namespace CleanArchitecture.Blazor.Application.TrdBx.Services
 
         public async Task ClearCustomersCacheAsync()
         {
-
                 //TrackedAssetCacheKey.Refresh();
                 await Task.CompletedTask;
-
+        }
+        public async Task ClearSmsConfigTemplatesCacheAsync()
+        {
+                //TrackingUnitCacheKey.Refresh();
+                await Task.CompletedTask;
         }
         public async Task ClearTrackingUnitsCacheAsync()
         {

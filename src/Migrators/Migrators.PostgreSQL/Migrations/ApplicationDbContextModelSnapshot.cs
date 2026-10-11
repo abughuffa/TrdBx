@@ -18,7 +18,7 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.11")
+                .HasAnnotation("ProductVersion", "10.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -1069,6 +1069,61 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasDatabaseName("IX_SimCard_SimCardNo");
 
                     b.ToTable("SimCards", (string)null);
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SmsConfigTemplate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("CreatedById")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("created_by_id");
+
+                    b.Property<DateTime?>("LastModifiedAt")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("last_modified_at");
+
+                    b.Property<string>("LastModifiedById")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("last_modified_by_id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("Name");
+
+                    b.Property<string>("SmsTemplate")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("SmsTemplate");
+
+                    b.Property<int>("TrackingUnitModelId")
+                        .HasColumnType("integer")
+                        .HasColumnName("TrackingUnitModelId");
+
+                    b.HasKey("Id")
+                        .HasName("pk_sms_config_templates");
+
+                    b.HasIndex("Name")
+                        .HasDatabaseName("IX_SmsConfigTemplate_Name");
+
+                    b.HasIndex("TrackingUnitModelId")
+                        .HasDatabaseName("ix_sms_config_templates_tracking_unit_model_id");
+
+                    b.ToTable("SmsConfigTemplates", (string)null);
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SmsCursor", b =>
@@ -2362,7 +2417,7 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Customer", b =>
                 {
                     b.HasOne("CleanArchitecture.Blazor.Domain.Entities.Customer", "Parent")
-                        .WithMany("Childs")
+                        .WithMany("Children")
                         .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .HasConstraintName("fk_customers_customers_parent_id");
@@ -2492,6 +2547,18 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasConstraintName("fk_sim_cards_s_packages_s_package_id");
 
                     b.Navigation("SPackage");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SmsConfigTemplate", b =>
+                {
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.TrackingUnitModel", "TrackingUnitModel")
+                        .WithMany("SmsConfigTemplates")
+                        .HasForeignKey("TrackingUnitModelId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_sms_config_templates_tracking_unit_models_tracking_unit_model");
+
+                    b.Navigation("TrackingUnitModel");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Subscription", b =>
@@ -2761,7 +2828,7 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Customer", b =>
                 {
-                    b.Navigation("Childs");
+                    b.Navigation("Children");
 
                     b.Navigation("CusPrices");
 
@@ -2833,6 +2900,8 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.TrackingUnitModel", b =>
                 {
                     b.Navigation("CusPrices");
+
+                    b.Navigation("SmsConfigTemplates");
 
                     b.Navigation("TrackingUnits");
                 });

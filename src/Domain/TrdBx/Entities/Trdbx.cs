@@ -8,13 +8,13 @@ namespace CleanArchitecture.Blazor.Domain.Entities;
 
 #region TrackingUnit
 
-// public class SmsConfigCommand : BaseEntity
-// {
-//     public string Name { get; set; } = string.Empty;
-//     public string SmsTemplate { get; set; } = string.Empty;   
-//     public int TrackingUnitModelId { get; set; }
-//     public TrackingUnitModel? TrackingUnitModel { get; set; } = null;
-// }
+public class SmsConfigTemplate : BaseAuditableEntity
+{
+    public string Name { get; set; } = string.Empty;
+    public string SmsTemplate { get; set; } = string.Empty;   
+    public int TrackingUnitModelId { get; set; }
+    public TrackingUnitModel? TrackingUnitModel { get; set; } = null;
+}
 
 public class TrackingUnitModel : BaseEntity
 {
@@ -30,7 +30,7 @@ public class TrackingUnitModel : BaseEntity
     
     // Navigation Properties
     
-   // public  List<SmsConfigCommand> SmsConfigCommands { get; set; } = null;
+    public  List<SmsConfigTemplate> SmsConfigTemplates { get; set; } = null;
     public  List<TrackingUnit> TrackingUnits { get; set; } = null;
     public  List<CusPrice> CusPrices { get; set; } = null;
 }

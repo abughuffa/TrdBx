@@ -5,6 +5,7 @@ using CleanArchitecture.Blazor.Application.Features.Identity.DTOs;
 using CleanArchitecture.Blazor.Application.Features.Invoices.DTOs;
 using CleanArchitecture.Blazor.Application.Features.ServiceLogs.DTOs;
 using CleanArchitecture.Blazor.Application.Features.SimCards.DTOs;
+using CleanArchitecture.Blazor.Application.Features.SmsConfigTemplates.DTOs;
 using CleanArchitecture.Blazor.Application.Features.Subscriptions.DTOs;
 using CleanArchitecture.Blazor.Application.Features.Tickets.DTOs;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.DTOs;
@@ -76,6 +77,10 @@ public static partial class MapsterConfiguration
 
         config.NewConfig<Invoice, InvoiceDto>()
             .Map(dest => dest.Customer, src => src.Customer == null ? null : src.Customer.Name);
+
+        config.NewConfig<SmsConfigTemplate, SmsConfigTemplateDto>()
+            .Map(dest => dest.TrackingUnitModel, src => src.TrackingUnitModel == null ? null : src.TrackingUnitModel.Name);
+
 
 
         return config;

@@ -55,6 +55,12 @@ public class MenuService : IMenuService
                             Title = "Tracking Units",
                             Href = "/pages/TrdBx/TrackingUnits",
                             PageStatus = PageStatus.Completed
+                        },
+                        new ()
+                        {
+                            Title = "Services's Prices",
+                            Href = "/pages/TrdBx/ServicePrices",
+                            PageStatus = PageStatus.Completed
                         }
                     }
                 },
@@ -83,13 +89,7 @@ public class MenuService : IMenuService
                            Title = "Invoices",
                             Href = "/pages/TrdBx/Invoices",
                             PageStatus = PageStatus.Completed
-                        },
-                        new ()
-                        {
-                            Title = "Services's Prices",
-                            Href = "/pages/TrdBx/ServicePrices",
-                            PageStatus = PageStatus.Completed
-                        }
+                        } 
                     }
                 },
                 new()
@@ -126,6 +126,13 @@ public class MenuService : IMenuService
                             Href  = "/pages/TrdBx/SmsGatewaySettings",
                             PageStatus = PageStatus.Completed
                         },
+                        new()
+                        {
+                            Title = "SMS Templates",
+                            Href  = "/pages/TrdBx/SmsConfigTemplates",
+                            PageStatus = PageStatus.Completed
+                        },
+                        
                         new()
                         {
                             Title = "Backup & Restore",

@@ -35,10 +35,16 @@ public class SetNextStatusInvoiceCommandHandler : IRequestHandler<SetNextStatusI
         var item = await context.Invoices.FindAsync(request.Id, cancellationToken);
         if (item == null) return await Result<int>.FailureAsync("Invoice not found");
 
-        if (!(item.IStatus != IStatus.Draft || item.IStatus != IStatus.SentToTax || item.IStatus != IStatus.Ready || item.IStatus != IStatus.PartaillyPaid || item.IStatus != IStatus.Paid))
-        {
-            return await Result<int>.FailureAsync($"Faild to set Invoice with id: [{request.Id}] to next status.");
-        }
+        // if (!(item.IStatus != IStatus.Draft || item.IStatus != IStatus.SentToTax || item.IStatus != IStatus.Ready || item.IStatus != IStatus.PartaillyPaid || item.IStatus != IStatus.Paid))
+        // {
+        //     return await Result<int>.FailureAsync($"Faild to set Invoice with id: [{request.Id}] to next status.");
+        // }
+
+        if (item.IStatus is not (IStatus.Draft or IStatus.SentToTax or IStatus.Ready))
+            {
+                return await Result<int>.FailureAsync(
+                    $"Failed to set Invoice with id: [{request.Id}] to next status.");
+            }
 
         switch (item.IStatus)
         {

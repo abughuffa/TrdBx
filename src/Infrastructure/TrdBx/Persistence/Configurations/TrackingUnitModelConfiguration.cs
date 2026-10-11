@@ -77,7 +77,47 @@ public class TrackingUnitModelConfiguration : IEntityTypeConfiguration<TrackingU
             .WithOne(e => e.TrackingUnitModel)
             .HasForeignKey(e => e.TrackingUnitModelId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(e => e.SmsConfigTemplates)
+            .WithOne(e => e.TrackingUnitModel)
+            .HasForeignKey(e => e.TrackingUnitModelId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
 
+
+
+public class SmsConfigTemplateConfiguration : IEntityTypeConfiguration<SmsConfigTemplate>
+{
+    public void Configure(EntityTypeBuilder<SmsConfigTemplate> builder)
+    {
+        builder.ToTable("SmsConfigTemplates");
+
+        builder.Ignore(e => e.DomainEvents);
+        
+        builder.HasKey(e => e.Id);
+        
+        builder.Property(e => e.Id)
+            .UseIdentityColumn();
+        
+        builder.Property(e => e.TrackingUnitModelId)
+            .IsRequired()
+            .HasColumnName("TrackingUnitModelId");
+            
+        builder.Property(e => e.Name)
+            .IsRequired()
+            .HasMaxLength(50)
+            .HasColumnName("Name");
+        
+        builder.Property(e => e.SmsTemplate)
+            .IsRequired()
+            .HasMaxLength(256)
+            .HasColumnName("SmsTemplate");
+        
+        
+        // Indexes
+        builder.HasIndex(e => e.Name)
+            .HasDatabaseName("IX_SmsConfigTemplate_Name");
+        }
+}
 

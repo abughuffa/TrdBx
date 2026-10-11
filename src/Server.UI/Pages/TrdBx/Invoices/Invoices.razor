@@ -1,16 +1,17 @@
 ﻿@page "/pages/TrdBx/Invoices"
-@using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.Create
-@using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.Update
+@using CleanArchitecture.Blazor.Application.Features.Invoices.Caching
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.AddPayment
-@using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.SetPreviousStatus
-@using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.SetNextStatus
+@using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.Create
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.SetAsCanceled
+@using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.SetNextStatus
+@using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.SetPreviousStatus
+@using CleanArchitecture.Blazor.Application.Features.Invoices.Commands.Update
+@using CleanArchitecture.Blazor.Application.Features.Invoices.DTOs
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Queries.Download
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Queries.Export
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Queries.Pagination
-@using CleanArchitecture.Blazor.Application.Features.Invoices.Caching
-@using CleanArchitecture.Blazor.Application.Features.Invoices.DTOs
 @using CleanArchitecture.Blazor.Application.Features.Invoices.Specifications
+@using CleanArchitecture.Blazor.Domain.Enums
 @using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Invoices.Components
 
 @inject IStringLocalizer<Invoices> L
@@ -81,73 +82,76 @@
     </ToolBarContent>
     <Columns>
         <SelectColumn ShowInFooter="false"></SelectColumn>
-        <TemplateColumn Title="@AppStrings.Actions" Sortable="false" HeaderStyle="width:180px">
+
+        <TemplateColumn Title=@AppStrings.Edit Sortable="false" HeaderStyle="width:180px">
             <CellTemplate>
-                @* --- Menu (Edit / Status) --- *@
-                @if (_accessRights.Edit || _accessRights.ChangeStatus)
-                {
-                    <MudMenu Icon="@Icons.Material.Filled.MoreVert"
-                            Variant="Variant.Filled"
-                            Size="Size.Small"
-                            Dense="true"
-                            IconColor="Color.Info"
-                            AnchorOrigin="Origin.CenterLeft"
-                            Class="ml-1">
-                        @if (_accessRights.Edit)
-                        {
-                            <MudMenuItem OnClick="@(() => OnEdit(context.Item))">@AppStrings.Edit</MudMenuItem>
-                        }
-                        @if (_accessRights.ChangeStatus)
-                        {
-                            <MudMenuItem OnClick="@(() => OnSetNextStatus(context.Item))">@L["Set Next Status"]</MudMenuItem>
-                            <MudMenuItem OnClick="@(() => OnSetPreviousStatus(context.Item))">@L["Set Previous Status"]</MudMenuItem>
-                        }
-                    </MudMenu>
-                }
-
-                @* --- Download --- *@
-                @if (_accessRights.Download)
-                {
-                    <MudIconButton Icon="@Icons.Material.Filled.Download"
+                  <MudIconButton Icon="@Icons.Material.Filled.Edit"
                                 Color="Color.Default"
                                 Size="Size.Small"
-                                OnClick="@(() => OnDownLoad(context.Item))"
+                                Disabled="(!_accessRights.Edit)"
+                                OnClick="@(() => OnEdit(context.Item))"
                                 Class="ml-1" />
-                }
-
-                @* --- Add Payment --- *@
-                @if (_accessRights.AddPayment)
-                {
-                    <MudIconButton Icon="@Icons.Material.Filled.Money"
-                                Color="Color.Default"
-                                Size="Size.Small"
-                                OnClick="@(() => OnAddPayment(context.Item))"
-                                Class="ml-1" />
-                }
-
-                @* --- Fallback if nothing allowed --- *@
-                @if (!_accessRights.Edit && !_accessRights.ChangeStatus
-                    && !_accessRights.Download && !_accessRights.AddPayment)
-                {
-                    <MudIconButton Variant="Variant.Filled"
-                                Disabled="true"
-                                Icon="@Icons.Material.Filled.DoNotTouch"
-                                Size="Size.Small"
-                                Color="Color.Surface">
-                        @AppStrings.NoAllowed
-                    </MudIconButton>
-                }
             </CellTemplate>
         </TemplateColumn>
+
+        <TemplateColumn Title=@AppStrings.Download Sortable="false" headerStyle="width:180px">
+            <CellTemplate>
+                  <MudIconButton Icon="@Icons.Material.Filled.Download"
+                                Color="Color.Default"
+                                Size="Size.Small"
+                                Disabled="!_accessRights.Download"
+                                OnClick="@(() => OnDownLoad(context.Item))"
+                                Class="ml-1" />
+            </CellTemplate>
+        </TemplateColumn>
+
+
         <PropertyColumn Property="x => x.InvoiceNo" Title="@L[_currentDto.GetMemberDisplayName(x=>x.InvoiceNo)]" />
+
+        <TemplateColumn Title="@L["Previous"]" Sortable="false" headerStyle="width:180px">
+            <CellTemplate>
+                      <MudIconButton Icon="@Icons.Material.Filled.SkipPrevious"
+                                Color="Color.Default"
+                                Size="Size.Small"
+                                Disabled="!(_accessRights.ChangeStatus && (context.Item.IStatus is (IStatus.SentToTax or IStatus.Ready or IStatus.Billed)))"
+                                OnClick="@(() => OnSetPreviousStatus(context.Item))"
+                                Class="ml-1" />
+            </CellTemplate> 
+        </TemplateColumn>
+
         <PropertyColumn Property="x => x.IStatus" Title="@L[_currentDto.GetMemberDisplayName(x=>x.IStatus)]" />
-        <PropertyColumn Property="x => x.InvoiceDate" Title="@L[_currentDto.GetMemberDisplayName(x=>x.InvoiceDate)]" />
-        <PropertyColumn Property="x => x.DueDate" Title="@L[_currentDto.GetMemberDisplayName(x=>x.DueDate)]" />
+
+        <TemplateColumn Title="@L["Next"]" Sortable="false" headerStyle="width:180px">
+            <CellTemplate>
+                @* --- Change to Previous Status) --- *@
+                      <MudIconButton Icon="@Icons.Material.Filled.SkipNext"
+                                Color="Color.Default"
+                                Size="Size.Small"
+                                Disabled="!(_accessRights.ChangeStatus && (context.Item.IStatus is (IStatus.Draft or IStatus.SentToTax or IStatus.Ready)))"
+
+                                OnClick="@(() => OnSetNextStatus(context.Item))"
+                                Class="ml-1" />
+            </CellTemplate>
+        </TemplateColumn>
+
+
+        <PropertyColumn Property="x => x.InvoiceDate" Format="yyyy-MM-dd" Title="@L[_currentDto.GetMemberDisplayName(x=>x.InvoiceDate)]" />
+        <PropertyColumn Property="x => (x.DueDate)" Format="yyyy-MM-dd" Title="@L[_currentDto.GetMemberDisplayName(x=>x.DueDate)]" />
         <PropertyColumn Property="x => x.DisplayCusName" Title="@L[_currentDto.GetMemberDisplayName(x => x.DisplayCusName)]" />
         <PropertyColumn Property="x => x.Description" Title="@L[_currentDto.GetMemberDisplayName(x=>x.Description)]" />
-        <PropertyColumn Property="x => x.GrandTotal" Format="0.000" Title="@L[_currentDto.GetMemberDisplayName(x=>x.GrandTotal)]">
+        <PropertyColumn Property="x => x.GrandTotal" Format="0.000" Title="@L[_currentDto.GetMemberDisplayName(x=>x.GrandTotal)]"/>
 
-        </PropertyColumn>
+        <TemplateColumn Title="@L["Payment"]" Sortable="false" headerStyle="width:180px">
+            <CellTemplate>
+                       <MudIconButton Icon="@Icons.Material.Filled.Money"
+                                Color="Color.Default"
+                                Size="Size.Small"
+                                Disabled="!(_accessRights.AddPayment && (context.Item.IStatus is (IStatus.Billed or IStatus.PartaillyPaid)))"
+                                OnClick="@(() => OnAddPayment(context.Item))"
+                                Class="ml-1" />
+            </CellTemplate>
+        </TemplateColumn>
+
     </Columns>
     <NoRecordsContent>
         <MudText>@AppStrings.NoRecords</MudText>

@@ -1,22 +1,21 @@
 @page "/pages/TrdBx/TrackingUnits"
 
+@using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Create
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Caching
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.Create
-@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.Update
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.MarkTrackingUnitAsDamaged
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.DailyTasks.MarkTrackingUnitAsUsed
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.Delete
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.Import
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.SendConfig
+@using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Commands.Update
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.DTOs
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Queries.Export
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Queries.Pagination
 @using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Specifications
-
-@using CleanArchitecture.Blazor.Application.Features.Tickets.Commands.Create
 @using CleanArchitecture.Blazor.Domain.Enums
-
-@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.TrackingUnits.Components
 @using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.Tickets.Components
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.TrackingUnits.Components
 
 
 @inject IStringLocalizer<TrackingUnits> L
@@ -159,6 +158,15 @@
                              EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
                              IconColor="Color.Info"
                              AnchorOrigin="Origin.BottomLeft">
+
+                        @if (_accessRights.SendConfig)
+                        {
+                            <MudMenuItem OnClick="@(() => OnSendConfig(context.Item))"
+                                         Disabled="(!((context.Item.UStatus == UStatus.InstalledActiveGprs) || (context.Item.UStatus == UStatus.InstalledActiveHosting)|| (context.Item.UStatus == UStatus.InstalledActive)))">
+                                @L["Send Config."]
+
+                            </MudMenuItem>
+                        }
                         @if (_accessRights.Edit)
                         {
                             <MudMenuItem OnClick="@(()=>OnEdit(context.Item))">@AppStrings.Edit</MudMenuItem>
@@ -268,7 +276,7 @@
         @* <PropertyColumn Property="x => x.TrackedAssetId" Title="@L[_currentDto.GetMemberDisplayName(x => x.TrackedAssetId)]" /> *@
         <PropertyColumn Property="x => x.TrackedAsset" Title="@L[_currentDto.GetMemberDisplayName(x => x.TrackedAsset)]" />
         <PropertyColumn Property="x => x.InsMode" Title="@L[_currentDto.GetMemberDisplayName(x=>x.InsMode)]" />
-        <PropertyColumn Property="x => x.WryDate" Title="@L[_currentDto.GetMemberDisplayName(x=>x.WryDate)]" />
+        <PropertyColumn Property="x => x.WryDate" Format="yyyy-MM-dd" Title="@L[_currentDto.GetMemberDisplayName(x=>x.WryDate)]" />
         <PropertyColumn Property="x => x.IsOnWialon" Title="@L[_currentDto.GetMemberDisplayName(x=>x.IsOnWialon)]" />
         <PropertyColumn Property="x => x.WStatus" Title="@L[_currentDto.GetMemberDisplayName(x=>x.WStatus)]" />
 
@@ -518,25 +526,28 @@
 			},
 			options);
     }
-
-    @* private Task OnEdit(TrackingUnitDto dto)
+    private Task OnSendConfig(TrackingUnitDto dto)
     {
-        var command = ObjectMapper.Map<UpdateTrackingUnitCommand>(dto);
-  
-        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+            var command = new SendConfigCommand(){Id = dto.Id};
+            
+            var title = L["Send SMS config. command"];
 
-        return DialogServiceHelper.ShowDialogAsync<TrackingUnitEditFormDialog>(
-            L["Update TrackingUnit"],
-            async _ =>
+           // var contentText = string.Format(L["Select command to be send to the unit {0}"], dto.SNo);
+
+            return DialogServiceHelper.ShowFormDialogAsync<SendConfigDialog, SendConfigCommand>(
+            title,
+            async (res) =>
             {
-                await _table.ReloadServerData();
+                @* await OnExecuted(_model!.Id); *@
             },
-			p =>
+            para =>
 			{
-				p.Add(x => x._command, command);
-			},
-			options);
-    } *@
+                para.Add(x => x.TrackingUnitModelId, dto.TrackingUnitModelId);
+				para.Add(x => x._command, command);
+                
+			}
+            );
+    }
 
     private async Task OnMarkAsUsed(TrackingUnitDto dto)
     {

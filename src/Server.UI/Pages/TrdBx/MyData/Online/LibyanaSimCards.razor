@@ -117,12 +117,12 @@
                 <PropertyColumn Property="x => x.SimCardNo" Title="@L[_currentDto.GetMemberDisplayName(x=>x.SimCardNo)]" />
         <PropertyColumn Property="x => x.SimCardStatus" Title="@L[_currentDto.GetMemberDisplayName(x=>x.SimCardStatus)]" Groupable="true" />
                 <PropertyColumn Property="x => x.Balance" Title="@L[_currentDto.GetMemberDisplayName(x=>x.Balance)]" />
-                <PropertyColumn Property="x => x.BExDate" Title="@L[_currentDto.GetMemberDisplayName(x=>x.BExDate)]" />
-                <PropertyColumn Property="x => x.JoinDate" Title="@L[_currentDto.GetMemberDisplayName(x=>x.JoinDate)]" />
+                <PropertyColumn Property="x => x.BExDate" Format="yyyy-MM-dd" Title="@L[_currentDto.GetMemberDisplayName(x=>x.BExDate)]" />
+                <PropertyColumn Property="x => x.JoinDate" Format="yyyy-MM-dd" Title="@L[_currentDto.GetMemberDisplayName(x=>x.JoinDate)]" />
                 <PropertyColumn Property="x => x.Package" Title="@L[_currentDto.GetMemberDisplayName(x=>x.Package)]" />
-                <PropertyColumn Property="x => x.DExDate" Title="@L[_currentDto.GetMemberDisplayName(x=>x.DExDate)]" />
+                <PropertyColumn Property="x => x.DExDate" Format="yyyy-MM-dd" Title="@L[_currentDto.GetMemberDisplayName(x=>x.DExDate)]" />
                 <PropertyColumn Property="x => x.DataOffer" Title="@L[_currentDto.GetMemberDisplayName(x=>x.DataOffer)]" />
-                <PropertyColumn Property="x => x.DOExpired" Title="@L[_currentDto.GetMemberDisplayName(x=>x.DOExpired)]" />
+                <PropertyColumn Property="x => x.DOExpired" Format="yyyy-MM-dd" Title="@L[_currentDto.GetMemberDisplayName(x=>x.DOExpired)]" />
             </Columns>
     <NoRecordsContent>
         <MudText>@AppStrings.NoRecords</MudText>

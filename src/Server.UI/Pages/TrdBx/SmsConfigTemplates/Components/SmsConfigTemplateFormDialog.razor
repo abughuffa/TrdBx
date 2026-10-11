@@ -1,0 +1,72 @@
+﻿@using CleanArchitecture.Blazor.Application.Features.SmsConfigTemplates.Commands.AddEdit
+@using CleanArchitecture.Blazor.Server.UI.Pages.TrdBx.TrackingUnitModels
+
+
+@inherits MudComponentBase
+@inject IValidationService Validator
+@inject IStringLocalizer<SmsConfigTemplates> L
+
+<MudDialog>
+    <DialogContent>
+        <MudForm Model="@_command" @ref="@_SmsConfigTemplateForm" Validation="@(Validator.ValidateValue(_command))">
+            <MudGrid>
+                 <MudItem md="12">
+                    <TrackingUnitModels @bind-SelectedItemId="_command.TrackingUnitModelId"></TrackingUnitModels>
+                </MudItem>
+                <MudItem xs="12" md="12"> 
+                        <MudTextField Label="@L[_command.GetMemberDisplayName(x=>x.Name)]" @bind-Value="_command.Name" For="@(() => _command.Name)" Required="true" RequiredError="@L["name is required."]" Placeholder="@L["Enter name"]"></MudTextField>
+                </MudItem> 
+
+                <MudItem xs="12" md="12"> 
+                         <MudTextField 
+                                 Label="@L[_command.GetMemberDisplayName(x=>x.SmsTemplate)]" 
+                                 @bind-Value="_command.SmsTemplate" For="@(() => _command.SmsTemplate)" 
+                                 Required="true" 
+                                 RequiredError="@L["SmsTemplate is required!"]"
+                                 Lines="5"
+                                 Variant="Variant.Outlined"
+                                 Placeholder="@L["Enter SMS Template"]">    
+                        </MudTextField>
+                </MudItem> 
+            </MudGrid>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">@AppStrings.Cancel</MudButton>
+        <MudLoadingButton OnClick="OnSubmit" Color="Color.Primary" Loading="@_saving">@AppStrings.Save</MudLoadingButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    MudForm _SmsConfigTemplateForm = new();
+    private bool _saving = false;
+    [CascadingParameter]
+    IMudDialogInstance DialogInstance { get; set; } = default!;
+    [EditorRequired]
+    [Parameter]
+    public AddEditSmsConfigTemplateCommand _command { get; set; } = null!;
+    async Task OnSubmit()
+    {
+        try
+        {
+            _saving = true;
+            await _SmsConfigTemplateForm.ValidateAsync();
+            if (!_SmsConfigTemplateForm.IsValid)
+                return;
+            var result = await Mediator.Send(_command);
+            result.Match(data =>
+            {
+                DialogInstance.Close(DialogResult.Ok(true));
+                Snackbar.Add(AppStrings.SaveSuccess, MudBlazor.Severity.Info);
+            }, errors =>
+            {
+                Snackbar.Add(errors, MudBlazor.Severity.Error);
+            });
+        }
+        finally
+        {
+            _saving = false;
+        }
+    }
+    void Cancel() => DialogInstance.Cancel();
+}

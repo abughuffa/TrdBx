@@ -5,6 +5,7 @@ namespace CleanArchitecture.Blazor.Application.Common.Interfaces;
 
 public partial interface IApplicationDbContext
 {
+    DbSet<SmsConfigTemplate> SmsConfigTemplates { get; set; }
     DbSet<TrackingUnitModel> TrackingUnitModels { get; set; }
     DbSet<TrackingUnit> TrackingUnits { get; set; }
     DbSet<Customer> Customers { get; set; }
@@ -12,9 +13,7 @@ public partial interface IApplicationDbContext
     DbSet<SProvider> SProviders { get; set; }
     DbSet<SPackage> SPackages { get; set; }
     DbSet<SimCard> SimCards { get; set; }
-
-    DbSet<SmsMessage> SmsMessages { get; set; }
-    
+    DbSet<SmsMessage> SmsMessages { get; set; } 
     DbSet<TrackedAsset> TrackedAssets { get; set; }
     DbSet<ServiceLog> ServiceLogs { get; set; }
     DbSet<Subscription> Subscriptions { get; set; }
