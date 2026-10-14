@@ -64,13 +64,35 @@ public class SmsMessageConfiguration : IEntityTypeConfiguration<SmsMessage>
         builder.Property(e => e.ReceivedAt)
             .HasColumnName("ReceivedAt");
 
+        builder.Property(x => x.AssemblyKey)
+                    .HasColumnName("AssemblyKey")
+                    .HasMaxLength(200);
+        builder.Property(x => x.PartsGatewayIds)
+                .HasColumnName("PartsGatewayIds")
+                .HasMaxLength(2000);
+
 
         // Indexes for common queries
-        builder.HasIndex(x => x.Direction);
-        builder.HasIndex(x => x.Status);
+        // builder.HasIndex(x => x.Direction);
+        // builder.HasIndex(x => x.Status);
 
-        builder.HasIndex(x => x.GatewayId)
-            .IsUnique()
-            .HasFilter("\"GatewayId\" IS NOT NULL AND \"Direction\" = 1"); 
+        // builder.HasIndex(x => x.GatewayId)
+        //     .IsUnique()
+        //     .HasFilter("\"GatewayId\" IS NOT NULL AND \"Direction\" = 1"); 
+
+
+              // Single-part dedupe: unchanged.
+        builder.HasIndex(x => new { x.Direction, x.GatewayId })
+         .IsUnique()
+        .HasFilter("\"GatewayId\" IS NOT NULL");
+
+        // Multipart assembly claim: at most one SmsMessage per
+        // (From, ConcatRef, TotalParts). Filtered so NULL never collides.
+        builder.HasIndex(x => x.AssemblyKey)
+         .IsUnique()
+         .HasFilter("\"AssemblyKey\" IS NOT NULL")
+         .HasDatabaseName("UX_SmsMessage_AssemblyKey");
+
+
     }
 }

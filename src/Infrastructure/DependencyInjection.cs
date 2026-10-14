@@ -49,8 +49,9 @@ public static partial class DependencyInjection
             .AddBusinessServices(configuration)
             .AddCachingServices()
             .AddNotificationServices(configuration)
-            .AddSessionManagement();
+            .AddSessionManagement()
 
+            .AddTrdBxInfrastructure(configuration);
     }
 
     #region Configuration and Settings

@@ -7,26 +7,18 @@ using CleanArchitecture.Blazor.Application.Features.SimCards.DTOs;
 using CleanArchitecture.Blazor.Application.Features.TrackedAssets.DTOs;
 using CleanArchitecture.Blazor.Application.Features.TrackingUnits.DTOs;
 using CleanArchitecture.Blazor.Application.Features.Customers.DTOs;
-using CleanArchitecture.Blazor.Application.Features.SimCards.Caching;
-using CleanArchitecture.Blazor.Application.Features.TrackingUnits.Caching;
-using CleanArchitecture.Blazor.Application.Features.TrackedAssets.Caching;
-using CleanArchitecture.Blazor.Application.Features.Customers.Caching;
 using CleanArchitecture.Blazor.Application.Features.SmsConfigTemplates.DTOs;
 using CleanArchitecture.Blazor.Application.Features.SmsConfigTemplates.Queries.GetByModelId;
-//using MediatR;
-//using MudBlazor;
 
 namespace CleanArchitecture.Blazor.Application.TrdBx.Services
 {
     public class DropdownDataService : IDropdownDataService
     {
         private readonly IMediator _mediator;
-        //private readonly ISnackbar _snackbar;
 
-        public DropdownDataService(IMediator mediator)//, ISnackbar snackbar)
+        public DropdownDataService(IMediator mediator)
         {
             _mediator = mediator;
-           // _snackbar = snackbar;
         }
 
         public async Task<IEnumerable<SimCardDto>> GetAvailableSimCardsAsync(int[]? ids = null)

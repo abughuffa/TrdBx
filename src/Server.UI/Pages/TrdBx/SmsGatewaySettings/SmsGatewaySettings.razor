@@ -62,6 +62,44 @@
                 Class="mb-3" />
         </MudItem>
 
+        <MudItem xs="2" md="2">
+              <MudNumericField @bind-Value="_model.SweeperIntervalSeconds"
+                 Label="SweeperIntervalSeconds"
+                 Min="10" Max="3600"
+                 Class="mb-3" />
+        </MudItem>
+
+        <MudItem xs="2" md="2">
+              <MudNumericField @bind-Value="_model.AssemblyWindowMinutes"
+                 Label="AssemblyWindowMinutes"
+                 Min="1" Max="1440"
+                 Class="mb-3" />
+        </MudItem>
+
+        <MudItem xs="4" md="4">
+              <MudNumericField @bind-Value="_model.OrphanThresholdMinutes"
+                 Label="OrphanThresholdMinutes"
+                 Min="1" Max="1440"
+                 Class="mb-3" />
+        </MudItem>
+
+        <MudItem xs="2" md="2">
+              <MudNumericField @bind-Value="_model.RetentionDays"
+                 Label="RetentionDays"
+                 Min="1" Max="365"
+                 Class="mb-3" />
+        </MudItem>
+
+        <MudItem xs="2" md="2">
+              <MudNumericField @bind-Value="_model.MaxGroupsPerSweep"
+                 Label="MaxGroupsPerSweep"
+                 Min="1" Max="1000"
+                 Class="mb-3" />
+        </MudItem>
+
+        
+
+
         <MudItem xs="12" md="12">
             <MudTextField @bind-Value="_model.WebhookPublicUrl"
                 Label="Webhook public URL (optional)"
@@ -170,8 +208,12 @@
                 WebhookPublicUrl       = _model.WebhookPublicUrl,
                 WebhookSecret          = _model.WebhookSecret,
                 TimeoutSeconds         = _model.TimeoutSeconds,
+                SweeperIntervalSeconds = _model.SweeperIntervalSeconds,
+                AssemblyWindowMinutes = _model.AssemblyWindowMinutes,
+                OrphanThresholdMinutes = _model.OrphanThresholdMinutes,
+                RetentionDays = _model.RetentionDays,
+                MaxGroupsPerSweep = _model.MaxGroupsPerSweep
             };
-
             var result = await Mediator.Send(cmd);
             if (result.Succeeded)
             {

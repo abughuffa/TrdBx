@@ -70,7 +70,7 @@ public static partial class DependencyInjection
         return services;
     }
 
-            private static IServiceCollection AddBackupRestoreServices(this IServiceCollection services, IConfiguration configuration)
+    private static IServiceCollection AddBackupRestoreServices(this IServiceCollection services, IConfiguration configuration)
     {
         var databaseSettings = configuration.GetSection("DatabaseSettings").Get<DatabaseSettings>();
 
@@ -98,36 +98,23 @@ public static partial class DependencyInjection
     // Register based on configuration selection
     private static IServiceCollection AddSmsServices(this IServiceCollection services, IConfiguration configuration)
     {
-    //SMS Gateway ─────────────────────────────────────────────
-services.Configure<SmsGatewayOptions>(
-    configuration.GetSection(SmsGatewayOptions.SectionName));
+        //SMS Gateway ─────────────────────────────────────────────
+        services.Configure<SmsGatewayOptions>(
+        configuration.GetSection(SmsGatewayOptions.SectionName));
 
-// Singleton cache holds the current values + Changed event.
-services.AddSingleton<ISmsGatewaySettingsCache, SmsGatewaySettingsCache>();
+        // Singleton cache holds the current values + Changed event.
+        services.AddSingleton<ISmsGatewaySettingsCache, SmsGatewaySettingsCache>();
 
-// Scoped provider does DB reads/writes and publishes to the cache.
-services.AddScoped<ISmsGatewaySettingsProvider, SmsGatewaySettingsProvider>();
+        // Scoped provider does DB reads/writes and publishes to the cache.
+        services.AddScoped<ISmsGatewaySettingsProvider, SmsGatewaySettingsProvider>();
 
-// Typed HTTP client — no config lambda needed; the client reads from cache.
-services.AddHttpClient<ISmsGatewayClient, SmsGatewayClient>();
+        // Typed HTTP client — no config lambda needed; the client reads from cache.
+        services.AddHttpClient<ISmsGatewayClient, SmsGatewayClient>();
 
-services.AddScoped<ISmsCursorStore, EfSmsCursorStore>();
-
-
-//     services.AddHttpClient<ISmsGatewayClient, SmsGatewayClient>((sp, http) =>
-// {
-//     var o = sp.GetRequiredService<IOptions<SmsGatewayOptions>>().Value;
-//     http.BaseAddress = new Uri(o.BaseUrl);
-//     http.Timeout     = TimeSpan.FromSeconds(o.TimeoutSeconds);
-//     if (!string.IsNullOrWhiteSpace(o.ApiKey))
-//         http.DefaultRequestHeaders.Add("X-Api-Key", o.ApiKey);
-//     });
-
-//     services.AddScoped<ISmsCursorStore, EfSmsCursorStore>();
+        services.AddScoped<ISmsCursorStore, EfSmsCursorStore>();
 
     return services;
 
-    // return services;
     }
 
 
@@ -137,22 +124,14 @@ services.AddScoped<ISmsCursorStore, EfSmsCursorStore>();
         // Register fonts before building the app
 
        var fontsDir = Path.Combine(AppContext.BaseDirectory, "TrdBx/Resources/Fonts");
-if (Directory.Exists(fontsDir))
-{
-    foreach (var ttf in Directory.GetFiles(fontsDir, "*.ttf"))
-    {
-        FontManager.RegisterFontFromFile(ttf);
-    }
-}
+        if (Directory.Exists(fontsDir))
+        {
+            foreach (var ttf in Directory.GetFiles(fontsDir, "*.ttf"))
+            {
+                FontManager.RegisterFontFromFile(ttf);
+            }
+        }
 
-//        var logosDir = Path.Combine(AppContext.BaseDirectory, "Logos");
-// if (Directory.Exists(logosDir))
-// {
-//     foreach (var png in Directory.GetFiles(logosDir, "*.png"))
-//     {
-//         resoursem.RegisterFontFromFile(ttf);
-//     }
-// }
     }
 
 

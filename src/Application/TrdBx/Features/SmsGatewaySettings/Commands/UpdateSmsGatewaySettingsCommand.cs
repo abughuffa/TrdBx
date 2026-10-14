@@ -13,6 +13,11 @@ public class UpdateSmsGatewaySettingsCommand : IRequest<Result<SmsGatewaySetting
     public string? WebhookPublicUrl      { get; set; }
     public string? WebhookSecret         { get; set; }
     public int     TimeoutSeconds        { get; set; }
+    public int SweeperIntervalSeconds { get; set; } 
+    public int AssemblyWindowMinutes { get; set; }
+    public int OrphanThresholdMinutes { get; set; } 
+    public int RetentionDays { get; set; }
+    public int MaxGroupsPerSweep { get; set; }
 }
 
 public class UpdateSmsGatewaySettingsCommandValidator
@@ -66,6 +71,12 @@ public class UpdateSmsGatewaySettingsCommandHandler
             WebhookPublicUrl      = string.IsNullOrWhiteSpace(req.WebhookPublicUrl) ? null : req.WebhookPublicUrl.Trim(),
             WebhookSecret         = string.IsNullOrWhiteSpace(req.WebhookSecret) ? null : req.WebhookSecret,
             TimeoutSeconds        = req.TimeoutSeconds,
+            SweeperIntervalSeconds = req.SweeperIntervalSeconds,
+            AssemblyWindowMinutes = req.AssemblyWindowMinutes,
+            OrphanThresholdMinutes = req.OrphanThresholdMinutes,
+            RetentionDays = req.RetentionDays,
+            MaxGroupsPerSweep = req.MaxGroupsPerSweep
+
         };
 
         await _provider.UpdateAsync(updated, ct);

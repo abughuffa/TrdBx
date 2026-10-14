@@ -2,9 +2,7 @@ using CleanArchitecture.Blazor.Application;
 using CleanArchitecture.Blazor.Infrastructure;
 using CleanArchitecture.Blazor.Infrastructure.Extensions;
 using CleanArchitecture.Blazor.Server.UI;
-using CleanArchitecture.Blazor.Server.UI.Endpoints;
-using CleanArchitecture.Blazor.Server.UI.Hubs;
-using CleanArchitecture.Blazor.Server.UI.Services;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,12 +12,9 @@ builder.WebHost.UseStaticWebAssets();
 builder.Services
     .AddApplication()
     .AddInfrastructure(builder.Configuration)
-    .AddTrdBxInfrastructure(builder.Configuration)
     .AddServerUI(builder.Configuration)
 
-    // 1. SMS: hosted poller (must be before Build())
-    .AddSmsGatewayServices(builder.Configuration);
-
+    .AddSmsGatewayServices();
 
 var app = builder.Build();
 

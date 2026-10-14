@@ -152,25 +152,42 @@ public class SimCard : BaseAuditableEntity
 
 public class SmsMessage : BaseAuditableEntity
 {
-    public string  To          { get; set; } = null!;
-    public string? From        { get; set; }
-    public string  Body        { get; set; } = null!;
-    public int     SimSlot     { get; set; }
-
-    // ── used by both directions ─────────────────────────
-    public string? Reference   { get; set; }   // client-supplied id (outbound)
-    public string? GatewayId   { get; set; }   // id returned by /inbox or webhook  ← inbound dedupe key
-
+    public string   To           { get; set; } = null!;
+    public string?  From         { get; set; }
+    public string   Body         { get; set; } = null!;
+    public int      SimSlot      { get; set; }
+    public string?  Reference    { get; set; }
+    public string?  GatewayId    { get; set; }
     public SmsDirection Direction { get; set; } = SmsDirection.Outbound;
     public SmsStatus    Status    { get; set; } = SmsStatus.Queued;
-    public string? Error       { get; set; }
-
+    public string?  Error        { get; set; }
     public DateTime? SentAt      { get; set; }
     public DateTime? DeliveredAt { get; set; }
-    public DateTime? ReceivedAt  { get; set; }   // ← set on inbound
+    public DateTime? ReceivedAt  { get; set; }
 
-    //public string? TenantId       { get; set; }
+    // ── multipart ────────────────────────────────────────────
+    public bool    IsMultipart      { get; set; }
+    public int?    ConcatRef        { get; set; }
+    public int?    TotalParts       { get; set; }
+    public string? AssemblyKey      { get; set; }   // nullable, unique when set
+    public string? PartsGatewayIds  { get; set; }   // "|124|125|126|"
 
+}
+
+
+public class SmsInboundPart : BaseEntity
+{
+    public string   From                 { get; set; } = null!;
+    public int      ConcatRef            { get; set; }
+    public int      PartNumber           { get; set; }
+    public int      TotalParts           { get; set; }
+    public string   Body                 { get; set; } = null!;
+    public long     GatewayId            { get; set; }
+    public long     Ts                   { get; set; }
+    public int      SimSlot              { get; set; }
+    public DateTime CreatedAt            { get; set; }
+    public int?     AssembledSmsMessageId { get; set; }
+    public SmsMessage? AssembledSmsMessage { get; set; }
 }
 
 #endregion

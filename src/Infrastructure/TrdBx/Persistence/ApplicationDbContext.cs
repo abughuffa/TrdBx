@@ -7,6 +7,10 @@ namespace CleanArchitecture.Blazor.Infrastructure.Persistence;
 public partial class ApplicationDbContext 
 {
     #region TrdBx
+
+    
+    public DbSet<SmsInboundPart> SmsInboundParts { get; set; }
+
     public DbSet<SmsConfigTemplate> SmsConfigTemplates { get; set; }
     public DbSet<TrackingUnitModel> TrackingUnitModels { get; set; }
     public DbSet<TrackingUnit> TrackingUnits { get; set; }

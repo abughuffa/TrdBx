@@ -19,18 +19,25 @@ public class SmsCursor : BaseEntity
 /// afterwards the DB row is the source of truth.
 /// </summary>
 public class SmsGatewaySettings : BaseAuditableEntity
-{
+{   
+    // ── connection ───────────────────────────────────────────────
     public string  BaseUrl { get; set; } = "http://127.0.0.1:8081";
+    public string? ApiKey                 { get; set; }
+    public int     TimeoutSeconds         { get; set; } = 30;
 
-    /// <summary>Optional shared secret sent as X-Api-Key.</summary>
-    public string? ApiKey { get; set; }
+    // ── inbound master switch + poll cadence ─────────────────────
+    public bool    EnableInboundPolling   { get; set; } = true;
+    public int     PollingIntervalSeconds { get; set; } = 30;
 
-    public bool EnableInboundPolling     { get; set; } = true;
-    public int  PollingIntervalSeconds   { get; set; } = 30;
+    // ── webhook push (independent of the polling switch) ─────────
+    public string? WebhookPublicUrl       { get; set; }
+    public string? WebhookSecret          { get; set; }
 
-    public string? WebhookPublicUrl { get; set; }
-    public string? WebhookSecret    { get; set; }
-
-    public int TimeoutSeconds { get; set; } = 5;
+    // ── multipart sweeper tuning (only runs while polling is on) ─
+    public int     SweeperIntervalSeconds { get; set; } = 60;
+    public int     AssemblyWindowMinutes  { get; set; } = 10;
+    public int     OrphanThresholdMinutes { get; set; } = 30;
+    public int     RetentionDays          { get; set; } = 30;
+    public int     MaxGroupsPerSweep      { get; set; } = 50;
 }
 

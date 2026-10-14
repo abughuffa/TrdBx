@@ -5,8 +5,7 @@ using CleanArchitecture.Blazor.Application.Common.Mappings;
 using CleanArchitecture.Blazor.Application.Common.PublishStrategies;
 using CleanArchitecture.Blazor.Application.Pipeline;
 using Microsoft.Extensions.DependencyInjection;
-using Mediator;
-using CleanArchitecture.Blazor.Application.TrdBx.Services;
+
 
 namespace CleanArchitecture.Blazor.Application;
 
@@ -15,7 +14,6 @@ public static partial class DependencyInjection
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.AddSingleton(_ => MapsterConfiguration.Create());
-        //services.AddSingleton(_ => MapsterConfiguration.CreateTrdBx());
         services.AddScoped<IObjectMapper, MapsterObjectMapper>();
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddMediator(options =>
@@ -24,7 +22,9 @@ public static partial class DependencyInjection
             options.NotificationPublisherType = typeof(ChannelBasedNoWaitPublisher);
             options.ServiceLifetime = ServiceLifetime.Scoped;
             options.PipelineBehaviors = [
-                 typeof(FallbackExceptionHandler<,>),
+                typeof(FallbackExceptionHandler<,>),
+                typeof(SmsGatewayExceptionHandler<,>),      // ← NEW: gateway-specific
+
                 typeof(ValidationExceptionHandler<,>),
                 typeof(NotFoundExceptionHandler<,>),
                 typeof(DbExceptionHandler<,>),
@@ -36,7 +36,8 @@ public static partial class DependencyInjection
 
         });
        
-        services.AddScoped<IDropdownDataService, DropdownDataService>();
+        services.AddDropDownServices();
+
         return services;
     }
 }

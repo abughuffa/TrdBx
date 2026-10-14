@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using CleanArchitecture.Blazor.Domain.Enums;
 
 namespace CleanArchitecture.Blazor.Application.Features.SmsMessages.DTOs;
@@ -24,16 +25,33 @@ public class SmsMessageDto
     //public string? TenantId       { get; set; }
 }
 
+
+
 public record SmsInboundListItem(
     int Id, string From, string Body,
     long GatewayId, DateTime ReceivedAt);
 
-public record InboundSmsDto(
+
+// public record InboundSmsDto(
+//     long   GatewayId,
+//     string From,
+//     string Body,
+//     long   Ts,
+//     int?   SimSlot = null);
+
+    public sealed record InboundSmsDto(
     long   GatewayId,
     string From,
     string Body,
     long   Ts,
-    int?   SimSlot = null);
+    int?   SimSlot    = null,
+    int?   ConcatRef  = null,
+    int?   PartNumber = null,
+    int?   TotalParts = null);
+
+
+
+
 
 
 // ── NEW: strongly-typed payloads (client + server share these) ──────
@@ -43,7 +61,9 @@ public sealed record SmsReceivedPayload(
     string From,
     string Body,
     long Ts,
-    DateTime ReceivedAt);
+    DateTime ReceivedAt);  
+
+
 
 public sealed record SmsStatusChangedPayload(
     int Id,
@@ -58,12 +78,21 @@ public sealed record SmsStatusChangedPayload(
 /// Mirrors: { "mode": "WIFI", "uptimeSec": 123, "simReady": true,
 ///            "sentCount": 4, "receivedCount": 9 }
 /// </summary>
-public record SmsGatewayStatusDto(
+// public record SmsGatewayStatusDto(
+//     string Mode,
+//     long   UptimeSec,
+//     bool   SimReady,
+//     int    SentCount,
+//     int    ReceivedCount);
+
+    public sealed record SmsGatewayStatusDto(
     string Mode,
     long   UptimeSec,
     bool   SimReady,
     int    SentCount,
-    int    ReceivedCount);
+    int    ReceivedCount,
+    int    SchemaVersion = 0);   // 0 = old gateway, no field emitted
+
 
 /// <summary>
 /// Response of POST /send on the Android SMS Gateway.
@@ -81,8 +110,32 @@ public record SendSmsResult(
 /// One row from GET /inbox?since=&amp;limit=.
 /// Mirrors: { "id": 42, "from": "+123", "body": "hi", "ts": 1699999999999 }
 /// </summary>
-public record SmsInboxItemDto(
+// public record SmsInboxItemDto(
+//     long   Id,
+//     string From,
+//     string Body,
+//     long   Ts);
+// public sealed record SmsInboxItemDto(
+//     long   Id,
+//     string From,
+//     string Body,
+//     long   Ts,
+//     int?   SimSlot    = null,
+//     int?   ConcatRef  = null,
+//     int?   PartNumber = null,
+//     int?   TotalParts = null);
+
+    public sealed record SmsInboxItemDto(
     long   Id,
     string From,
     string Body,
-    long   Ts);
+    long   Ts,
+    int?   SimSlot    = null,
+    [property: JsonPropertyName("refNumber")]  int? ConcatRef  = null,
+    int?   PartNumber = null,
+    int?   TotalParts = null);
+
+
+
+
+

@@ -5,6 +5,7 @@ namespace CleanArchitecture.Blazor.Application.Common.Interfaces;
 
 public partial interface IApplicationDbContext
 {
+    DbSet<SmsInboundPart> SmsInboundParts { get; set; }
     DbSet<SmsConfigTemplate> SmsConfigTemplates { get; set; }
     DbSet<TrackingUnitModel> TrackingUnitModels { get; set; }
     DbSet<TrackingUnit> TrackingUnits { get; set; }

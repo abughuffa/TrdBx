@@ -13,24 +13,39 @@ public class SmsGatewaySettingsConfiguration : IEntityTypeConfiguration<SmsGatew
 
         builder.HasKey(x => x.Id);
 
-        
         builder.Property(x => x.BaseUrl)
-            .IsRequired()
-            .HasMaxLength(450)
-            .HasColumnName("BaseUrl"); 
+        .HasColumnName("BaseUrl")
+        .HasMaxLength(500).IsRequired();
+        builder.Property(x => x.ApiKey)
+        .HasColumnName("ApiKey")
+        .HasMaxLength(500);
 
-       builder.Property(x => x.ApiKey)
-            .HasMaxLength(128)
-            .HasColumnName("ApiKey");
+        // Existing defaults for pre-existing installs.
+        builder.Property(x => x.EnableInboundPolling)
+        .HasColumnName("EnableInboundPolling")
+        .HasDefaultValue(true);
+        builder.Property(x => x.PollingIntervalSeconds)
+        .HasColumnName("PollingIntervalSeconds")
+        .HasDefaultValue(30);
+        builder.Property(x => x.TimeoutSeconds)
+        .HasColumnName("TimeoutSeconds")
+        .HasDefaultValue(30);
 
-          builder.Property(x => x.WebhookPublicUrl)
-            .HasMaxLength(128)
-            .HasColumnName("WebhookPublicUrl");
-          builder.Property(x => x.WebhookPublicUrl)
-            .HasMaxLength(128)
-            .HasColumnName("WebhookPublicUrl");
-          builder.Property(x => x.WebhookSecret)
-            .HasMaxLength(128)
-            .HasColumnName("WebhookSecret");
+        // Sweeper defaults — mirror the DTO/entity initializers.
+        builder.Property(x => x.SweeperIntervalSeconds)
+        .HasColumnName("SweeperIntervalSeconds")
+        .HasDefaultValue(60);
+        builder.Property(x => x.AssemblyWindowMinutes)
+        .HasColumnName("AssemblyWindowMinutes")
+        .HasDefaultValue(10);
+        builder.Property(x => x.OrphanThresholdMinutes)
+        .HasColumnName("OrphanThresholdMinutes")
+        .HasDefaultValue(30);
+        builder.Property(x => x.RetentionDays)
+        .HasColumnName("RetentionDays")
+        .HasDefaultValue(30);
+        builder.Property(x => x.MaxGroupsPerSweep)
+        .HasColumnName("MaxGroupsPerSweep")
+        .HasDefaultValue(50);
     }
 }

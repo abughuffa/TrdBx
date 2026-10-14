@@ -1,6 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using CleanArchitecture.Blazor.Application.Features.SmsMessages.Commands.PersistSms;
 using CleanArchitecture.Blazor.Application.Features.SmsMessages.DTOs;
 using Mediator;
@@ -48,8 +49,19 @@ public static class SmsWebhookEndpoints
             if (payload is null || string.IsNullOrWhiteSpace(payload.From))
                 return Results.BadRequest();
 
-            var result = await mediator.Send(new PersistInboundSmsCommand(
-                new InboundSmsDto(payload.Id, payload.From, payload.Body ?? "", payload.Ts)));
+            // var result = await mediator.Send(new PersistInboundSmsCommand(
+            //     new InboundSmsDto(payload.Id, payload.From, payload.Body ?? "", payload.Ts)));
+
+                var result = await mediator.Send(new PersistInboundSmsCommand(
+    new InboundSmsDto(
+        GatewayId:  payload.Id,
+        From:       payload.From,
+        Body:       payload.Body ?? "",
+        Ts:         payload.Ts,
+        SimSlot:    payload.SimSlot,
+        ConcatRef:  payload.ConcatRef,
+        PartNumber: payload.PartNumber,
+        TotalParts: payload.TotalParts)));
 
             return result.Succeeded
                 ? Results.Ok(new { stored = result.Data })
@@ -72,5 +84,15 @@ public static class SmsWebhookEndpoints
             Encoding.UTF8.GetBytes(hex.ToLowerInvariant()));
     }
 
-    private record InboundPayload(long Id, string From, string? Body, long Ts);
+   // private record InboundPayload(long Id, string From, string? Body, long Ts);
+
+    public record InboundPayload(
+    long   Id,
+    string From,
+    string? Body,
+    long   Ts,
+    int?   SimSlot    = null,
+    [property: JsonPropertyName("refNumber")]  int? ConcatRef  = null,
+    [property: JsonPropertyName("partNumber")] int? PartNumber = null,
+    [property: JsonPropertyName("totalParts")] int? TotalParts = null);
 }

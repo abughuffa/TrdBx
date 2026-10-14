@@ -106,6 +106,9 @@ public static partial class DependencyInjection
                 return service;
             });
 
+       // services.AddSmsGatewayServices(config);
+
+
         return services;
     }
 
@@ -133,7 +136,6 @@ public static partial class DependencyInjection
         app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
         app.UseForwardedHeaders();
         app.MapHealthChecks("/health");
-        //app.UseDataProtectionKeyCheck();
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseAntiforgery();
