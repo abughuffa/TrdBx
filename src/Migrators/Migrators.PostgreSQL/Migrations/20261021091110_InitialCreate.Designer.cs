@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20261011080223_SMSPartsCreated")]
-    partial class SMSPartsCreated
+    [Migration("20261021091110_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1164,14 +1164,20 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ApiKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
                         .HasColumnName("ApiKey");
+
+                    b.Property<int>("AssemblyWindowMinutes")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(10)
+                        .HasColumnName("AssemblyWindowMinutes");
 
                     b.Property<string>("BaseUrl")
                         .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
                         .HasColumnName("BaseUrl");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -1184,8 +1190,10 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasColumnName("created_by_id");
 
                     b.Property<bool>("EnableInboundPolling")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
-                        .HasColumnName("enable_inbound_polling");
+                        .HasDefaultValue(true)
+                        .HasColumnName("EnableInboundPolling");
 
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp without time zone")
@@ -1196,23 +1204,51 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasColumnType("character varying(450)")
                         .HasColumnName("last_modified_by_id");
 
-                    b.Property<int>("PollingIntervalSeconds")
+                    b.Property<int>("MaxGroupsPerSweep")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("polling_interval_seconds");
+                        .HasDefaultValue(50)
+                        .HasColumnName("MaxGroupsPerSweep");
+
+                    b.Property<int>("OrphanThresholdMinutes")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(30)
+                        .HasColumnName("OrphanThresholdMinutes");
+
+                    b.Property<int>("PollingIntervalSeconds")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(30)
+                        .HasColumnName("PollingIntervalSeconds");
+
+                    b.Property<int>("RetentionDays")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(30)
+                        .HasColumnName("RetentionDays");
+
+                    b.Property<int>("SweeperIntervalSeconds")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(60)
+                        .HasColumnName("SweeperIntervalSeconds");
 
                     b.Property<int>("TimeoutSeconds")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("timeout_seconds");
+                        .HasDefaultValue(30)
+                        .HasColumnName("TimeoutSeconds");
 
                     b.Property<string>("WebhookPublicUrl")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)")
-                        .HasColumnName("WebhookPublicUrl");
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("webhook_public_url");
 
                     b.Property<string>("WebhookSecret")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)")
-                        .HasColumnName("WebhookSecret");
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("webhook_secret");
 
                     b.HasKey("Id")
                         .HasName("pk_sms_gateway_settings");
@@ -1237,7 +1273,7 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .IsRequired()
                         .HasMaxLength(450)
                         .HasColumnType("character varying(450)")
-                        .HasColumnName("body");
+                        .HasColumnName("Body");
 
                     b.Property<int>("ConcatRef")
                         .HasColumnType("integer")
@@ -1251,7 +1287,7 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .IsRequired()
                         .HasMaxLength(32)
                         .HasColumnType("character varying(32)")
-                        .HasColumnName("from");
+                        .HasColumnName("From");
 
                     b.Property<long>("GatewayId")
                         .HasColumnType("bigint")
@@ -1276,12 +1312,15 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                     b.HasKey("Id")
                         .HasName("pk_sms_inbound_parts");
 
-                    b.HasIndex("AssembledSmsMessageId", "CreatedAt")
-                        .HasDatabaseName("ix_sms_inbound_parts_assembled_sms_message_id_created_at");
+                    b.HasIndex("AssembledSmsMessageId")
+                        .HasDatabaseName("ix_sms_inbound_parts_assembled_sms_message_id");
 
-                    b.HasIndex("From", "ConcatRef", "PartNumber")
+                    b.HasIndex("From", "ConcatRef", "AssembledSmsMessageId")
+                        .HasDatabaseName("IX_SmsInboundPart_Group");
+
+                    b.HasIndex("From", "ConcatRef", "PartNumber", "TotalParts")
                         .IsUnique()
-                        .HasDatabaseName("ix_sms_inbound_parts_from_concat_ref_part_number");
+                        .HasDatabaseName("UX_SmsInboundPart_Exact");
 
                     b.ToTable("SmsInboundParts", (string)null);
                 });
@@ -1295,11 +1334,20 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AssemblyKey")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("AssemblyKey");
+
                     b.Property<string>("Body")
                         .IsRequired()
                         .HasMaxLength(1600)
                         .HasColumnType("character varying(1600)")
                         .HasColumnName("Body");
+
+                    b.Property<int?>("ConcatRef")
+                        .HasColumnType("integer")
+                        .HasColumnName("concat_ref");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp without time zone")
@@ -1333,6 +1381,10 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasColumnType("character varying(512)")
                         .HasColumnName("GatewayId");
 
+                    b.Property<bool>("IsMultipart")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_multipart");
+
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("last_modified_at");
@@ -1341,6 +1393,11 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasMaxLength(450)
                         .HasColumnType("character varying(450)")
                         .HasColumnName("last_modified_by_id");
+
+                    b.Property<string>("PartsGatewayIds")
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)")
+                        .HasColumnName("PartsGatewayIds");
 
                     b.Property<DateTime?>("ReceivedAt")
                         .HasColumnType("timestamp without time zone")
@@ -1369,19 +1426,22 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasColumnType("character varying(20)")
                         .HasColumnName("To");
 
+                    b.Property<int?>("TotalParts")
+                        .HasColumnType("integer")
+                        .HasColumnName("total_parts");
+
                     b.HasKey("Id")
                         .HasName("pk_sms_messages");
 
-                    b.HasIndex("Direction")
-                        .HasDatabaseName("ix_sms_messages_direction");
-
-                    b.HasIndex("GatewayId")
+                    b.HasIndex("AssemblyKey")
                         .IsUnique()
-                        .HasDatabaseName("ix_sms_messages_gateway_id")
-                        .HasFilter("\"GatewayId\" IS NOT NULL AND \"Direction\" = 1");
+                        .HasDatabaseName("UX_SmsMessage_AssemblyKey")
+                        .HasFilter("\"AssemblyKey\" IS NOT NULL");
 
-                    b.HasIndex("Status")
-                        .HasDatabaseName("ix_sms_messages_status");
+                    b.HasIndex("Direction", "GatewayId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_sms_messages_direction_gateway_id")
+                        .HasFilter("\"GatewayId\" IS NOT NULL");
 
                     b.ToTable("SmsMessages", (string)null);
                 });
@@ -2628,6 +2688,17 @@ namespace CleanArchitecture.Blazor.Migrators.PostgreSQL.Migrations
                         .HasConstraintName("fk_sms_config_templates_tracking_unit_models_tracking_unit_model");
 
                     b.Navigation("TrackingUnitModel");
+                });
+
+            modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.SmsInboundPart", b =>
+                {
+                    b.HasOne("CleanArchitecture.Blazor.Domain.Entities.SmsMessage", "AssembledSmsMessage")
+                        .WithMany()
+                        .HasForeignKey("AssembledSmsMessageId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("fk_sms_inbound_parts_sms_messages_assembled_sms_message_id");
+
+                    b.Navigation("AssembledSmsMessage");
                 });
 
             modelBuilder.Entity("CleanArchitecture.Blazor.Domain.Entities.Subscription", b =>
