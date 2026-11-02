@@ -3,45 +3,6 @@ using System.Text.RegularExpressions;
 using CleanArchitecture.Blazor.Domain.Enums;
 
 namespace CleanArchitecture.Blazor.Application.Features.Common;
-public class PriceSharedLogic : SerialForSharedLogic
-{
-    #region MyRegion
-
-
-    public static async Task<CPrice>  GetCPrice(IApplicationDbContext cnx, int customerId, int umId)
-    {
-        // Get the Ccs record
-        var cc = await cnx.Customers.SingleOrDefaultAsync(c => c.Id == customerId) ?? throw new Exception("Cc record not found");
-        var um = await cnx.TrackingUnitModels.SingleOrDefaultAsync(c => c.Id == umId) ?? throw new Exception("TrackingUnitModel record not found");
-        // Determine which Id to use based on the BillingPlan
-        var cId = cc.BillingPlan == BillingPlan.Advanced ? (int)cc.ParentId! : cc.Id;
-
-        var cusPrice = await cnx.CusPrices
-            .SingleOrDefaultAsync(cp => cp.CustomerId == cId && cp.TrackingUnitModelId == umId);
-
-        if (cusPrice != null)
-        {
-            return new CPrice
-            {
-                TrackingUnitModelId = cusPrice.TrackingUnitModelId,
-                Price = cusPrice.Price,
-                Host = cusPrice.Host,
-                Gprs = cusPrice.Gprs
-            };
-        }
-        else
-        {
-            return new CPrice
-            {
-                TrackingUnitModelId = um.Id,
-                Price = um.DefaultPrice,
-                Host = um.DefaultHost,
-                Gprs = um.DefaultGprs
-            };
-        }
-    }
-    #endregion
-}
 public partial class SubscriptionSharedLogic : PriceSharedLogic 
 {
 
@@ -54,11 +15,11 @@ public partial class SubscriptionSharedLogic : PriceSharedLogic
         var r = currentSubscription;
         //var CSeDt = currentSubscription.SeDate;
 
-        int[] osLFPG1 = {490, 426, 470, 406, 457, 393, 458, 394, 453, 389, 454, 390, 461, 397, 462, 398, 384};//	*
-        int[] osLFPG2 = {407, 391, 469, 405, 471, 455};//	G									
-        int[] osLFPG3 = {427, 395, 489, 425, 491, 459};//	H										
-        int[] osLFPG4 = {};//	H+G
-
+        // int[] osLFPG1 = {490, 426, 470, 406, 457, 393, 458, 394, 453, 389, 454, 390, 461, 397, 462, 398, 384};//	*
+        // int[] osLFPG2 = {471, 455, 469, 405, 407, 391};//	G									
+        // int[] osLFPG3 = {491, 459,489, 425, 427, 395};//	H										
+        // int[] osLFPG4 = {};//	H+G
+        //463, 399,
         int[] osG1 = {463, 399, 490, 426, 470, 406, 457, 393, 458, 394, 453, 389, 454, 390, 461, 397, 462, 398, 384};//*	*	*	*	*
         int[] osG2 = {471, 455};//Desc10010	G	*	TsDt	"تحديث - إنهاء دورة اشتراك ف1 السابقة"												
         int[] osG3 = {491, 459};//Desc10011	H	*	TsDt	"تحديث – إنهاء دورة اشتراك ف2 السابقة"												
@@ -67,8 +28,9 @@ public partial class SubscriptionSharedLogic : PriceSharedLogic
         int[] osG6 = {489, 425};//Desc10023	H	SeDt	TsDt	"قيمة اشتراك ف2 مستحقة عن الدورة السابقة"										
         int[] osG7 = {427, 395};//Desc10015	H	*	TsDt	"تحديث – قيمة اشتراك ف2 مستحقة عن دورة سابقة غير مسددة"
 
-        int[] rsLFPG1 = {463,399,490,426,470,406,457,393,458,394,453,389,454,390,461,397,462,398,384}; //	*									
-        int[] rsLFPG2 = {407,391,427,395,469,405,489,425,490,426,470,406,457,393,458,394,453,389,454,390,461,397,462,398,384,491,459,471,455}; //	H+G	
+        //490, 426, 470,406,457,393,458,394,453,389,454,390,461,397,462,398,384
+        // int[] rsLFPG1 = {463,399}; //	*									
+        // int[] rsLFPG2 = {407,391,427,395,469,405,489,425,490,426,470,406,457,393,458,394,453,389,454,390,461,397,462,398,384,491,459,471,455}; //	H+G	
 													
         int[] rsG1 = {463, 399};//*	*	*	*	*																
         int[] rsG2 = {407, 391, 427, 395};//Desc10021	H+G	TsDt	SeDt	"دورة اشتراك ف3 من تاريخ التفعيل حتى تاريخ نهاية الدورة السابقة الغير مسددة"													
@@ -83,21 +45,21 @@ public partial class SubscriptionSharedLogic : PriceSharedLogic
         if (APCC.Contains(caseProfile.CaseCode))
         {
             // Get the observed sub. last paid fees by CaseCode
-            var oLF = caseProfile.CaseCode switch
-                {
-                    var x when osLFPG1.Contains(x) => SubPackageFees.ZeroFees, //	*
-                    var x when osLFPG2.Contains(x) => SubPackageFees.GprsFees, //	G	
-                    var x when osLFPG3.Contains(x) => SubPackageFees.HostFees, //	H
-                    var x when osLFPG4.Contains(x) => SubPackageFees.FullFees, //	H+G
-                    _ => SubPackageFees.ZeroFees // Default case when none match
-                };
+            // var oLF = caseProfile.CaseCode switch
+            //     {
+            //         var x when osLFPG1.Contains(x) => SubPackageFees.ZeroFees, //	*
+            //         var x when osLFPG2.Contains(x) => SubPackageFees.GprsFees, //	G	
+            //         var x when osLFPG3.Contains(x) => SubPackageFees.HostFees, //	H
+            //         var x when osLFPG4.Contains(x) => SubPackageFees.FullFees, //	H+G
+            //         _ => SubPackageFees.ZeroFees // Default case when none match
+            //     };
             // Get the required sub. last paid fees by CaseCode
-            var rLF = caseProfile.CaseCode switch
-                {
-                    var x when rsLFPG1.Contains(x) => SubPackageFees.ZeroFees, //	*
-                    var x when rsLFPG2.Contains(x) => SubPackageFees.FullFees,  //	H+G	
-                    _ => SubPackageFees.ZeroFees // Default case when none match
-                };
+            // var rLF = caseProfile.CaseCode switch
+            //     {
+            //         var x when rsLFPG1.Contains(x) => SubPackageFees.ZeroFees, //	*
+            //         var x when rsLFPG2.Contains(x) => SubPackageFees.FullFees,  //	H+G	
+            //         _ => SubPackageFees.ZeroFees // Default case when none match
+            //     };
 
             if (applyChangesToDatabase)//ApplyChangesToDatabaseFlag
             {
@@ -140,7 +102,9 @@ public partial class SubscriptionSharedLogic : PriceSharedLogic
                             var dailyFees = Math.Round((price.Gprs / 365), 3, MidpointRounding.AwayFromZero);
                             //var days = (((endDate).ToDateTime(TimeOnly.MinValue)) - (startDate).ToDateTime(TimeOnly.MinValue)).Days;
 
-                            currentSubscription.LastPaidFees = (SubPackageFees)oLF;
+                           // currentSubscription.LastPaidFees = (SubPackageFees)oLF;
+
+                            currentSubscription.LastPaidFees = SubPackageFees.GprsFees;
                             currentSubscription.CaseCode = caseProfile.CaseCode;
                             currentSubscription.Description = string.Format(SubscriptionDescs.Desc10010, startDate, endDate);
                             //currentSubscription.SsDate -- Not Affected here
@@ -157,7 +121,9 @@ public partial class SubscriptionSharedLogic : PriceSharedLogic
                             var endDate = caseProfile.TsDt;
                             var dailyFees = Math.Round((price.Host / 365), 3, MidpointRounding.AwayFromZero);
 
-                            currentSubscription.LastPaidFees = (SubPackageFees)oLF;
+                            // currentSubscription.LastPaidFees = (SubPackageFees)oLF;
+                            currentSubscription.LastPaidFees = SubPackageFees.HostFees;
+
                             currentSubscription.CaseCode = caseProfile.CaseCode;
                             currentSubscription.Description = string.Format(SubscriptionDescs.Desc10011, startDate, endDate);
                             //currentSubscription.SsDate -- Not Affected here
@@ -177,7 +143,9 @@ public partial class SubscriptionSharedLogic : PriceSharedLogic
 
                             servcieLog.Subscriptions?.Add(new Subscription
                             {
-                                LastPaidFees = (SubPackageFees)oLF,
+                                // LastPaidFees = (SubPackageFees)oLF,
+                                LastPaidFees = SubPackageFees.GprsFees,
+
                                 CaseCode = caseProfile.CaseCode,
                                 Description = string.Format(SubscriptionDescs.Desc10022, startDate, endDate),
                                 TrackingUnitId = unit.Id,
@@ -195,7 +163,9 @@ public partial class SubscriptionSharedLogic : PriceSharedLogic
                             var startDate = currentSubscription!.SsDate;
                             var endDate = caseProfile.TsDt;
                             var dailyFees = Math.Round((price.Gprs / 365), 3, MidpointRounding.AwayFromZero);
-                            currentSubscription.LastPaidFees = (SubPackageFees)oLF;
+                            // currentSubscription.LastPaidFees = (SubPackageFees)oLF;
+                            currentSubscription.LastPaidFees = SubPackageFees.GprsFees;
+
                             currentSubscription.CaseCode = caseProfile.CaseCode;
                             currentSubscription.Description = string.Format(SubscriptionDescs.Desc10014, startDate, endDate);
                             //currentSubscription.SsDate -- Not Affected here
@@ -215,7 +185,9 @@ public partial class SubscriptionSharedLogic : PriceSharedLogic
 
                             servcieLog.Subscriptions?.Add(new Subscription
                             {
-                                LastPaidFees = (SubPackageFees)oLF,
+                                // LastPaidFees = (SubPackageFees)oLF,
+                                LastPaidFees = SubPackageFees.HostFees,
+
                                 CaseCode = caseProfile.CaseCode,
                                 Description = string.Format(SubscriptionDescs.Desc10023, startDate, endDate),
                                 TrackingUnitId = unit.Id,
@@ -236,7 +208,9 @@ public partial class SubscriptionSharedLogic : PriceSharedLogic
                             var endDate = caseProfile.TsDt;
                             var dailyFees = Math.Round((price.Host / 365), 3, MidpointRounding.AwayFromZero);
 
-                            currentSubscription.LastPaidFees = (SubPackageFees)oLF;
+                            // currentSubscription.LastPaidFees = (SubPackageFees)oLF;
+                            currentSubscription.LastPaidFees = SubPackageFees.HostFees;
+
                             currentSubscription.CaseCode = caseProfile.CaseCode;
                             currentSubscription.Description = string.Format(SubscriptionDescs.Desc10015, startDate, endDate);
                             //currentSubscription.SsDate -- Not Affected here
@@ -275,7 +249,9 @@ public partial class SubscriptionSharedLogic : PriceSharedLogic
 
                             servcieLog.Subscriptions?.Add(new Subscription
                             {
-                                LastPaidFees = (SubPackageFees)rLF,
+                                // LastPaidFees = (SubPackageFees)rLF,
+                                LastPaidFees = SubPackageFees.FullFees,
+
                                 CaseCode = caseProfile.CaseCode,
                                 Description = string.Format(SubscriptionDescs.Desc10021, startDate, endDate),
                                 TrackingUnitId = unit.Id,
@@ -296,7 +272,9 @@ public partial class SubscriptionSharedLogic : PriceSharedLogic
 
                             servcieLog.Subscriptions?.Add(new Subscription
                             {
-                                LastPaidFees = (SubPackageFees)rLF,
+                                // LastPaidFees = (SubPackageFees)rLF,
+                                LastPaidFees = SubPackageFees.FullFees,
+
                                 CaseCode = caseProfile.CaseCode,
                                 Description = string.Format(SubscriptionDescs.Desc10020, startDate, endDate),
                                 TrackingUnitId = unit.Id,
@@ -318,7 +296,9 @@ public partial class SubscriptionSharedLogic : PriceSharedLogic
 
                             servcieLog.Subscriptions?.Add(new Subscription
                             {
-                                LastPaidFees = (SubPackageFees)rLF,
+                                // LastPaidFees = (SubPackageFees)rLF,
+                                LastPaidFees = SubPackageFees.FullFees,
+
                                 CaseCode = caseProfile.CaseCode,
                                 Description = string.Format(SubscriptionDescs.Desc10009, startDate, endDate),
                                 TrackingUnitId = unit.Id,
@@ -346,7 +326,9 @@ public partial class SubscriptionSharedLogic : PriceSharedLogic
 
                             servcieLog.Subscriptions?.Add(new Subscription
                             {
-                                LastPaidFees = (SubPackageFees)rLF,
+                                // LastPaidFees = (SubPackageFees)rLF,
+                                LastPaidFees = SubPackageFees.FullFees,
+
                                 CaseCode = caseProfile.CaseCode,
                                 Description = string.Format(SubscriptionDescs.Desc10006, startDate, endDate),
                                 TrackingUnitId = unit.Id,
@@ -374,7 +356,9 @@ public partial class SubscriptionSharedLogic : PriceSharedLogic
 
                             servcieLog.Subscriptions?.Add(new Subscription
                             {
-                                LastPaidFees = (SubPackageFees)rLF,
+                                // LastPaidFees = (SubPackageFees)rLF,
+                                LastPaidFees = SubPackageFees.FullFees,
+
                                 CaseCode = caseProfile.CaseCode,
                                 Description = string.Format(SubscriptionDescs.Desc10005, startDate, endDate),
                                 TrackingUnitId = unit.Id,
